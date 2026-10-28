@@ -1,0 +1,9 @@
+{
+  "mode": "outbox",
+  "recipients": ["admin@corp.example"],
+  "recipients_configured": true,
+  "smtp_host": null,
+  "min_risk": 70,
+  "max_per_hour": 10,
+  "sent_last_hour": 1
+}

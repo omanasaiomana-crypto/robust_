@@ -1,16 +1,12 @@
 // static/js/scan.js — Live scan: watch all 15 agents check for malicious activity, step by step.
 // Full-color console + full JSON of the current step + agent strip + threat list.
 // Uses only: api.js (api, esc), ui.js (toast), layout.js (renderLayout), jsonview.js.
-import { api } from "./api.js";
-import { toast } from "./ui.js";
-import { renderLayout } from "./layout.js";
+import { api, toast, renderLayout, MOCK, keepMock } from "./v21kit.js";
 import { highlightJson, consoleLine, LAYER_STYLE, escHtml as esc } from "./jsonview.js";
 
-const MOCK = new URLSearchParams(location.search).get("mock") === "1";
 const DELAY = { "0.5": 280, "1": 140, "2": 70, "4": 35, instant: 0 };
 const SCAN_STEPS = 13;
 const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
-const keepMock = (url) => (MOCK ? url + (url.includes("?") ? "&" : "?") + "mock=1" : url);
 
 const S = {
   agents: [], queue: [], shown: [], lastSeq: 0, runId: null, runState: "idle",
@@ -18,7 +14,7 @@ const S = {
   selectedSeq: null, agentState: {}, threats: [], completed: new Set(), current: null, firstTs: null,
 };
 
-const root = renderLayout("scan", "Live scan", "Watch all 15 agents check for malicious activity, step by step");
+const root = await renderLayout("scan", "Live scan", "Watch all 15 agents check for malicious activity, step by step");
 
 root.innerHTML = `
 <section class="bg-panel border border-line rounded-xl p-5">
@@ -309,7 +305,7 @@ async function startScan() {
     try { prev = (await api("/scan/status")).run_id; } catch { /* first run */ }
     resetView("running");
     try {
-      await api("/pipeline/run", { method: "POST", body: mode === "dataset" ? {} : { input_mode: mode } });
+      await api("/scan/start", { method: "POST", body: mode === "dataset" ? {} : { input_mode: mode } });
     } catch (err) {
       if (!/already|409|conflict/i.test(err.message || "")) { toast(err.message, "error"); setPill("failed"); return; }
       toast("A scan is already running, attaching to it", "error");

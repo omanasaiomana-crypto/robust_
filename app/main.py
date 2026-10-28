@@ -71,4 +71,7 @@ def root():
 
 
 STATIC_DIR.mkdir(parents=True, exist_ok=True)
+from app.api import v21 as _v21_api  # v2.1 kit
+app.include_router(_v21_api.router, prefix="/api")
+
 app.mount("/", StaticFiles(directory=STATIC_DIR, html=True), name="static")

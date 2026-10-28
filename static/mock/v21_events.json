@@ -1,0 +1,20 @@
+[
+  {
+    "event_id": "ct-1a7f",
+    "source": "cloudtrail",
+    "timestamp": "2026-10-28T04:16:02Z",
+    "identity_id": "svc-report",
+    "session_id": "okta:102svcR7",
+    "action": "AttachUserPolicy",
+    "category": "api",
+    "outcome": "success",
+    "src_ip": "185.220.101.4",
+    "country": "NL",
+    "city": "Amsterdam",
+    "region": "ap-south-1",
+    "resource": "arn:aws:iam::aws:policy/AdministratorAccess",
+    "resource_sensitivity": 5,
+    "privilege_level": 5,
+    "label": "privilege_escalation"
+  }
+]

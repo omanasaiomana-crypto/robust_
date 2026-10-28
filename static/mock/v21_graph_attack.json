@@ -1,0 +1,280 @@
+{
+  "identity_id": "svc-report",
+  "identity": {
+    "identity_id": "svc-report",
+    "risk": 94.0,
+    "alerts": 2,
+    "privilege_level": 5,
+    "blast_radius": 4
+  },
+  "graph": {
+    "identity_id": "svc-report",
+    "nodes": [
+      {
+        "id": "user:svc-report",
+        "label": "svc-report",
+        "kind": "user",
+        "risk": 94.0
+      },
+      {
+        "id": "session:okta:102svcR7",
+        "label": "okta:102svcR7",
+        "kind": "session",
+        "risk": 94.0
+      },
+      {
+        "id": "session:okta:88svcA1",
+        "label": "okta:88svcA1",
+        "kind": "session",
+        "risk": 0.0
+      },
+      {
+        "id": "ip:185.220.101.4",
+        "label": "185.220.101.4",
+        "kind": "ip",
+        "risk": 0.0
+      },
+      {
+        "id": "ip:49.207.12.8",
+        "label": "49.207.12.8",
+        "kind": "ip",
+        "risk": 0.0
+      },
+      {
+        "id": "key:AKIA...R7Q2",
+        "label": "AKIA\u2026R7Q2",
+        "kind": "key",
+        "risk": 0.0
+      },
+      {
+        "id": "policy:AdministratorAccess",
+        "label": "AdministratorAccess",
+        "kind": "policy",
+        "risk": 0.0
+      },
+      {
+        "id": "role:AdminRole",
+        "label": "AdminRole",
+        "kind": "role",
+        "risk": 0.0
+      },
+      {
+        "id": "role:ReportReader",
+        "label": "ReportReader",
+        "kind": "role",
+        "risk": 0.0
+      },
+      {
+        "id": "res:arn:aws:secretsmanager:ap-south-1:123456789012:secret:prod/db",
+        "label": "secret:prod/db",
+        "kind": "resource",
+        "risk": 0.0
+      },
+      {
+        "id": "res:s3://finance-backup",
+        "label": "s3://finance-backup",
+        "kind": "resource",
+        "risk": 0.0
+      },
+      {
+        "id": "res:s3://reports-public",
+        "label": "s3://reports-public",
+        "kind": "resource",
+        "risk": 0.0
+      },
+      {
+        "id": "res:arn:aws:kms:ap-south-1:123456789012:key/7f1c",
+        "label": "kms:key/7f1c",
+        "kind": "resource",
+        "risk": 0.0
+      },
+      {
+        "id": "res:cloudtrail:org-trail",
+        "label": "cloudtrail:org-trail",
+        "kind": "resource",
+        "risk": 0.0
+      }
+    ],
+    "edges": [
+      {
+        "source": "user:svc-report",
+        "target": "session:okta:88svcA1",
+        "label": "login",
+        "event_id": "okta-0a11",
+        "suspicious": false
+      },
+      {
+        "source": "session:okta:88svcA1",
+        "target": "ip:49.207.12.8",
+        "label": "from_ip",
+        "event_id": "okta-0a11",
+        "suspicious": false
+      },
+      {
+        "source": "session:okta:88svcA1",
+        "target": "role:ReportReader",
+        "label": "assumed",
+        "event_id": "ct-0b20",
+        "suspicious": false
+      },
+      {
+        "source": "role:ReportReader",
+        "target": "res:s3://reports-public",
+        "label": "accessed",
+        "event_id": "ct-0b21",
+        "suspicious": false
+      },
+      {
+        "source": "user:svc-report",
+        "target": "session:okta:102svcR7",
+        "label": "login",
+        "event_id": "okta-8f1d",
+        "suspicious": true
+      },
+      {
+        "source": "session:okta:102svcR7",
+        "target": "ip:185.220.101.4",
+        "label": "from_ip",
+        "event_id": "okta-8f1d",
+        "suspicious": true
+      },
+      {
+        "source": "user:svc-report",
+        "target": "key:AKIA...R7Q2",
+        "label": "created_key",
+        "event_id": "ct-1a2c",
+        "suspicious": true
+      },
+      {
+        "source": "user:svc-report",
+        "target": "policy:AdministratorAccess",
+        "label": "attached",
+        "event_id": "ct-1a7f",
+        "suspicious": true
+      },
+      {
+        "source": "session:okta:102svcR7",
+        "target": "role:AdminRole",
+        "label": "assumed",
+        "event_id": "ct-1b03",
+        "suspicious": true
+      },
+      {
+        "source": "role:AdminRole",
+        "target": "res:arn:aws:secretsmanager:ap-south-1:123456789012:secret:prod/db",
+        "label": "accessed",
+        "event_id": "ct-1b19",
+        "suspicious": true
+      },
+      {
+        "source": "role:AdminRole",
+        "target": "res:s3://finance-backup",
+        "label": "can_access",
+        "event_id": null,
+        "suspicious": false
+      },
+      {
+        "source": "role:AdminRole",
+        "target": "res:arn:aws:kms:ap-south-1:123456789012:key/7f1c",
+        "label": "can_access",
+        "event_id": null,
+        "suspicious": false
+      },
+      {
+        "source": "role:AdminRole",
+        "target": "res:cloudtrail:org-trail",
+        "label": "can_access",
+        "event_id": null,
+        "suspicious": false
+      }
+    ],
+    "escalation_paths": [
+      [
+        "user:svc-report",
+        "policy:AdministratorAccess"
+      ],
+      [
+        "user:svc-report",
+        "session:okta:102svcR7",
+        "role:AdminRole"
+      ]
+    ]
+  },
+  "alert": {
+    "alert_id": "AL-0001",
+    "level": "session",
+    "identity_id": "svc-report",
+    "session_id": "okta:102svcR7",
+    "risk": 94.0,
+    "confidence": 0.9,
+    "blast_radius": 4,
+    "band": "revoke",
+    "patterns": [
+      "P3",
+      "P2",
+      "P1"
+    ],
+    "mitre": [
+      "T1098",
+      "T1548",
+      "T1078.004"
+    ],
+    "reasons": [
+      "Escalation chain: CreateAccessKey -> AttachUserPolicy -> AssumeRole -> GetSecretValue within 11 min.",
+      "Account inactive for 47 days before this activity."
+    ],
+    "evidence_event_ids": [
+      "okta-8f1d",
+      "ct-1a2c",
+      "ct-1a7f",
+      "ct-1b03",
+      "ct-1b19"
+    ],
+    "chain": [
+      {
+        "event_id": "ct-1a2c",
+        "action": "CreateAccessKey",
+        "state": "CredCreate",
+        "timestamp": "2026-10-28T04:12:40Z"
+      },
+      {
+        "event_id": "ct-1a7f",
+        "action": "AttachUserPolicy",
+        "state": "PermGrant",
+        "timestamp": "2026-10-28T04:16:02Z"
+      },
+      {
+        "event_id": "ct-1b03",
+        "action": "AssumeRole",
+        "state": "RoleAssume",
+        "timestamp": "2026-10-28T04:19:31Z"
+      },
+      {
+        "event_id": "ct-1b19",
+        "action": "GetSecretValue",
+        "state": "Impact",
+        "timestamp": "2026-10-28T04:23:55Z"
+      }
+    ],
+    "prediction": {
+      "next_state": "Impact",
+      "probability": 0.71
+    },
+    "counterfactuals": [
+      {
+        "without": "P3",
+        "risk": 44.0
+      },
+      {
+        "without": "P2",
+        "risk": 61.0
+      }
+    ],
+    "recommended_action": "revoke",
+    "action_status": "pending",
+    "feedback": null,
+    "first_seen": "2026-10-28T04:10:11Z",
+    "last_seen": "2026-10-28T04:23:55Z"
+  },
+  "blast_radius": 4
+}

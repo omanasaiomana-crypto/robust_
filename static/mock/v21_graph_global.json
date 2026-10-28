@@ -1,0 +1,206 @@
+{
+  "identities": [
+    "svc-report",
+    "meera.n",
+    "anita.rao"
+  ],
+  "nodes": [
+    {
+      "id": "user:svc-report",
+      "label": "svc-report",
+      "kind": "user",
+      "risk": 94.0
+    },
+    {
+      "id": "user:meera.n",
+      "label": "meera.n",
+      "kind": "user",
+      "risk": 88.0
+    },
+    {
+      "id": "user:anita.rao",
+      "label": "anita.rao",
+      "kind": "user",
+      "risk": 78.0
+    },
+    {
+      "id": "session:okta:102svcR7",
+      "label": "okta:102svcR7",
+      "kind": "session",
+      "risk": 94.0
+    },
+    {
+      "id": "session:okta:77meeQ2",
+      "label": "okta:77meeQ2",
+      "kind": "session",
+      "risk": 88.0
+    },
+    {
+      "id": "session:okta:55aniK9",
+      "label": "okta:55aniK9",
+      "kind": "session",
+      "risk": 78.0
+    },
+    {
+      "id": "key:AKIA...R7Q2",
+      "label": "AKIA\u2026R7Q2",
+      "kind": "key",
+      "risk": 0.0
+    },
+    {
+      "id": "key:AKIA...Q7",
+      "label": "AKIA\u2026Q7",
+      "kind": "key",
+      "risk": 0.0
+    },
+    {
+      "id": "policy:AdministratorAccess",
+      "label": "AdministratorAccess",
+      "kind": "policy",
+      "risk": 0.0
+    },
+    {
+      "id": "role:AdminRole",
+      "label": "AdminRole",
+      "kind": "role",
+      "risk": 0.0
+    },
+    {
+      "id": "ip:185.220.101.4",
+      "label": "185.220.101.4",
+      "kind": "ip",
+      "risk": 0.0
+    },
+    {
+      "id": "ip:177.71.200.9",
+      "label": "177.71.200.9",
+      "kind": "ip",
+      "risk": 0.0
+    },
+    {
+      "id": "ip:49.207.12.8",
+      "label": "49.207.12.8",
+      "kind": "ip",
+      "risk": 0.0
+    },
+    {
+      "id": "ip:91.64.18.2",
+      "label": "91.64.18.2",
+      "kind": "ip",
+      "risk": 0.0
+    },
+    {
+      "id": "res:secret:prod/db",
+      "label": "secret:prod/db",
+      "kind": "resource",
+      "risk": 0.0
+    },
+    {
+      "id": "res:s3://finance-backup",
+      "label": "s3://finance-backup",
+      "kind": "resource",
+      "risk": 0.0
+    }
+  ],
+  "edges": [
+    {
+      "source": "user:svc-report",
+      "target": "session:okta:102svcR7",
+      "label": "login",
+      "event_id": "okta-8f1d",
+      "suspicious": true
+    },
+    {
+      "source": "user:svc-report",
+      "target": "key:AKIA...R7Q2",
+      "label": "created_key",
+      "event_id": "ct-1a2c",
+      "suspicious": true
+    },
+    {
+      "source": "user:svc-report",
+      "target": "policy:AdministratorAccess",
+      "label": "attached",
+      "event_id": "ct-1a7f",
+      "suspicious": true
+    },
+    {
+      "source": "session:okta:102svcR7",
+      "target": "role:AdminRole",
+      "label": "assumed",
+      "event_id": "ct-1b03",
+      "suspicious": true
+    },
+    {
+      "source": "role:AdminRole",
+      "target": "res:secret:prod/db",
+      "label": "accessed",
+      "event_id": "ct-1b19",
+      "suspicious": true
+    },
+    {
+      "source": "role:AdminRole",
+      "target": "res:s3://finance-backup",
+      "label": "can_access",
+      "event_id": null,
+      "suspicious": false
+    },
+    {
+      "source": "session:okta:102svcR7",
+      "target": "ip:185.220.101.4",
+      "label": "from_ip",
+      "event_id": "okta-8f1d",
+      "suspicious": true
+    },
+    {
+      "source": "user:meera.n",
+      "target": "session:okta:77meeQ2",
+      "label": "login",
+      "event_id": "okta-77a1",
+      "suspicious": false
+    },
+    {
+      "source": "user:meera.n",
+      "target": "key:AKIA...Q7",
+      "label": "uses_key",
+      "event_id": "ct-2c11",
+      "suspicious": true
+    },
+    {
+      "source": "key:AKIA...Q7",
+      "target": "ip:49.207.12.8",
+      "label": "from_ip",
+      "event_id": "ct-2c11",
+      "suspicious": false
+    },
+    {
+      "source": "key:AKIA...Q7",
+      "target": "ip:177.71.200.9",
+      "label": "from_ip",
+      "event_id": "ct-2c19",
+      "suspicious": true
+    },
+    {
+      "source": "user:anita.rao",
+      "target": "session:okta:55aniK9",
+      "label": "login",
+      "event_id": "okta-3e09",
+      "suspicious": true
+    },
+    {
+      "source": "session:okta:55aniK9",
+      "target": "ip:91.64.18.2",
+      "label": "from_ip",
+      "event_id": "okta-3e09",
+      "suspicious": true
+    },
+    {
+      "source": "session:okta:77meeQ2",
+      "target": "ip:49.207.12.8",
+      "label": "from_ip",
+      "event_id": "okta-77a1",
+      "suspicious": false
+    }
+  ],
+  "truncated": false
+}

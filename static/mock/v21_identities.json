@@ -1,0 +1,23 @@
+[
+  {
+    "identity_id": "svc-report",
+    "risk": 94.0,
+    "alerts": 2,
+    "privilege_level": 5,
+    "blast_radius": 4
+  },
+  {
+    "identity_id": "meera.n",
+    "risk": 88.0,
+    "alerts": 1,
+    "privilege_level": 2,
+    "blast_radius": 1
+  },
+  {
+    "identity_id": "anita.rao",
+    "risk": 78.0,
+    "alerts": 1,
+    "privilege_level": 1,
+    "blast_radius": 0
+  }
+]

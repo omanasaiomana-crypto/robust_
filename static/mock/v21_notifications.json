@@ -1,0 +1,26 @@
+[
+  {
+    "id": "a1b2c3d4e5f6",
+    "created_at": "2026-10-28T09:56:10+00:00",
+    "kind": "digest",
+    "subject": "[IdentityShield] CRITICAL: 3 identities need attention - svc-report (risk 94)",
+    "recipients": "admin@corp.example",
+    "alert_ids": ["AL-0001", "AL-0002", "AL-0003"],
+    "mode": "outbox",
+    "status": "outbox",
+    "detail": "Saved to outbox/",
+    "body_text": "IdentityShield detected suspicious identity activity.\n\nNew high-risk alerts: 3  (critical: 1)\nOpen alerts in console: 7\n\n- svc-report | risk 94 (revoke) | Privilege escalation, Dormant account\n  Why: Escalation chain: CreateAccessKey -> AttachUserPolicy -> AssumeRole within 11 min.\n  Recommended: Revoke session (needs analyst approval)\n  Open: http://127.0.0.1:8000/alert.html?id=AL-0001\n\n- meera.n | risk 88 (restrict) | Token abuse\n  Why: Access key used from India and Brazil within 3 minutes.\n  Recommended: Restrict access\n  Open: http://127.0.0.1:8000/alert.html?id=AL-0002\n\n- anita.rao | risk 78 (restrict) | Impossible travel, Behavior anomaly\n  Why: Login from Frankfurt, 7,406 km from Bengaluru, 30 min after previous login (14,812 km/h).\n  Recommended: Restrict access\n  Open: http://127.0.0.1:8000/alert.html?id=AL-0003\n\nNo session was revoked automatically. Revocation always requires analyst approval.\nThis is an automated message from IdentityShield."
+  },
+  {
+    "id": "f6e5d4c3b2a1",
+    "created_at": "2026-10-28T09:40:02+00:00",
+    "kind": "test",
+    "subject": "[IdentityShield] Test email",
+    "recipients": "admin@corp.example",
+    "alert_ids": [],
+    "mode": "smtp",
+    "status": "failed",
+    "detail": "TimeoutError: timed out; saved to outbox",
+    "body_text": "This is a test email from IdentityShield. Email alerts are configured correctly."
+  }
+]

@@ -1,0 +1,482 @@
+{
+  "labeled": true,
+  "level": "session",
+  "scenarios": [
+    "dormant_reactivation",
+    "impossible_travel",
+    "privilege_escalation",
+    "token_abuse",
+    "unusual_api"
+  ],
+  "rows": [
+    {
+      "id": "rules",
+      "label": "Rules (P1\u2013P5)",
+      "kind": "summary",
+      "flagged": 6,
+      "tp": 5,
+      "fp": 1,
+      "fn": 2,
+      "precision": 0.833,
+      "recall": 0.714,
+      "f1": 0.769
+    },
+    {
+      "id": "ml",
+      "label": "ML (Isolation Forest)",
+      "kind": "summary",
+      "flagged": 4,
+      "tp": 2,
+      "fp": 2,
+      "fn": 5,
+      "precision": 0.5,
+      "recall": 0.286,
+      "f1": 0.364
+    },
+    {
+      "id": "hybrid",
+      "label": "Hybrid (final alerts)",
+      "kind": "summary",
+      "flagged": 7,
+      "tp": 6,
+      "fp": 1,
+      "fn": 1,
+      "precision": 0.857,
+      "recall": 0.857,
+      "f1": 0.857
+    },
+    {
+      "id": "P1",
+      "label": "P1 Impossible travel",
+      "kind": "detector",
+      "flagged": 1,
+      "tp": 1,
+      "fp": 0,
+      "fn": 6,
+      "precision": 1.0,
+      "recall": 0.143,
+      "f1": 0.25
+    },
+    {
+      "id": "P2",
+      "label": "P2 Dormant account",
+      "kind": "detector",
+      "flagged": 2,
+      "tp": 2,
+      "fp": 0,
+      "fn": 5,
+      "precision": 1.0,
+      "recall": 0.286,
+      "f1": 0.444
+    },
+    {
+      "id": "P3",
+      "label": "P3 Privilege escalation",
+      "kind": "detector",
+      "flagged": 1,
+      "tp": 1,
+      "fp": 0,
+      "fn": 6,
+      "precision": 1.0,
+      "recall": 0.143,
+      "f1": 0.25
+    },
+    {
+      "id": "P4",
+      "label": "P4 Unusual API",
+      "kind": "detector",
+      "flagged": 2,
+      "tp": 1,
+      "fp": 1,
+      "fn": 6,
+      "precision": 0.5,
+      "recall": 0.143,
+      "f1": 0.222
+    },
+    {
+      "id": "P5",
+      "label": "P5 Token abuse",
+      "kind": "detector",
+      "flagged": 1,
+      "tp": 1,
+      "fp": 0,
+      "fn": 6,
+      "precision": 1.0,
+      "recall": 0.143,
+      "f1": 0.25
+    },
+    {
+      "id": "ML",
+      "label": "ML Behavior anomaly",
+      "kind": "detector",
+      "flagged": 4,
+      "tp": 2,
+      "fp": 2,
+      "fn": 5,
+      "precision": 0.5,
+      "recall": 0.286,
+      "f1": 0.364
+    }
+  ],
+  "matrix": [
+    {
+      "id": "rules",
+      "label": "Rules (P1\u2013P5)",
+      "kind": "summary",
+      "cells": [
+        {
+          "scenario": "dormant_reactivation",
+          "caught": 1,
+          "total": 1,
+          "recall": 1.0
+        },
+        {
+          "scenario": "impossible_travel",
+          "caught": 1,
+          "total": 1,
+          "recall": 1.0
+        },
+        {
+          "scenario": "privilege_escalation",
+          "caught": 1,
+          "total": 1,
+          "recall": 1.0
+        },
+        {
+          "scenario": "token_abuse",
+          "caught": 1,
+          "total": 2,
+          "recall": 0.5
+        },
+        {
+          "scenario": "unusual_api",
+          "caught": 1,
+          "total": 2,
+          "recall": 0.5
+        }
+      ],
+      "false_alarms": 1
+    },
+    {
+      "id": "ml",
+      "label": "ML (Isolation Forest)",
+      "kind": "summary",
+      "cells": [
+        {
+          "scenario": "dormant_reactivation",
+          "caught": 0,
+          "total": 1,
+          "recall": 0.0
+        },
+        {
+          "scenario": "impossible_travel",
+          "caught": 1,
+          "total": 1,
+          "recall": 1.0
+        },
+        {
+          "scenario": "privilege_escalation",
+          "caught": 0,
+          "total": 1,
+          "recall": 0.0
+        },
+        {
+          "scenario": "token_abuse",
+          "caught": 0,
+          "total": 2,
+          "recall": 0.0
+        },
+        {
+          "scenario": "unusual_api",
+          "caught": 1,
+          "total": 2,
+          "recall": 0.5
+        }
+      ],
+      "false_alarms": 2
+    },
+    {
+      "id": "hybrid",
+      "label": "Hybrid (final alerts)",
+      "kind": "summary",
+      "cells": [
+        {
+          "scenario": "dormant_reactivation",
+          "caught": 1,
+          "total": 1,
+          "recall": 1.0
+        },
+        {
+          "scenario": "impossible_travel",
+          "caught": 1,
+          "total": 1,
+          "recall": 1.0
+        },
+        {
+          "scenario": "privilege_escalation",
+          "caught": 1,
+          "total": 1,
+          "recall": 1.0
+        },
+        {
+          "scenario": "token_abuse",
+          "caught": 1,
+          "total": 2,
+          "recall": 0.5
+        },
+        {
+          "scenario": "unusual_api",
+          "caught": 2,
+          "total": 2,
+          "recall": 1.0
+        }
+      ],
+      "false_alarms": 1
+    },
+    {
+      "id": "P1",
+      "label": "P1 Impossible travel",
+      "kind": "detector",
+      "cells": [
+        {
+          "scenario": "dormant_reactivation",
+          "caught": 0,
+          "total": 1,
+          "recall": 0.0
+        },
+        {
+          "scenario": "impossible_travel",
+          "caught": 1,
+          "total": 1,
+          "recall": 1.0
+        },
+        {
+          "scenario": "privilege_escalation",
+          "caught": 0,
+          "total": 1,
+          "recall": 0.0
+        },
+        {
+          "scenario": "token_abuse",
+          "caught": 0,
+          "total": 2,
+          "recall": 0.0
+        },
+        {
+          "scenario": "unusual_api",
+          "caught": 0,
+          "total": 2,
+          "recall": 0.0
+        }
+      ],
+      "false_alarms": 0
+    },
+    {
+      "id": "P2",
+      "label": "P2 Dormant account",
+      "kind": "detector",
+      "cells": [
+        {
+          "scenario": "dormant_reactivation",
+          "caught": 1,
+          "total": 1,
+          "recall": 1.0
+        },
+        {
+          "scenario": "impossible_travel",
+          "caught": 0,
+          "total": 1,
+          "recall": 0.0
+        },
+        {
+          "scenario": "privilege_escalation",
+          "caught": 1,
+          "total": 1,
+          "recall": 1.0
+        },
+        {
+          "scenario": "token_abuse",
+          "caught": 0,
+          "total": 2,
+          "recall": 0.0
+        },
+        {
+          "scenario": "unusual_api",
+          "caught": 0,
+          "total": 2,
+          "recall": 0.0
+        }
+      ],
+      "false_alarms": 0
+    },
+    {
+      "id": "P3",
+      "label": "P3 Privilege escalation",
+      "kind": "detector",
+      "cells": [
+        {
+          "scenario": "dormant_reactivation",
+          "caught": 0,
+          "total": 1,
+          "recall": 0.0
+        },
+        {
+          "scenario": "impossible_travel",
+          "caught": 0,
+          "total": 1,
+          "recall": 0.0
+        },
+        {
+          "scenario": "privilege_escalation",
+          "caught": 1,
+          "total": 1,
+          "recall": 1.0
+        },
+        {
+          "scenario": "token_abuse",
+          "caught": 0,
+          "total": 2,
+          "recall": 0.0
+        },
+        {
+          "scenario": "unusual_api",
+          "caught": 0,
+          "total": 2,
+          "recall": 0.0
+        }
+      ],
+      "false_alarms": 0
+    },
+    {
+      "id": "P4",
+      "label": "P4 Unusual API",
+      "kind": "detector",
+      "cells": [
+        {
+          "scenario": "dormant_reactivation",
+          "caught": 0,
+          "total": 1,
+          "recall": 0.0
+        },
+        {
+          "scenario": "impossible_travel",
+          "caught": 0,
+          "total": 1,
+          "recall": 0.0
+        },
+        {
+          "scenario": "privilege_escalation",
+          "caught": 0,
+          "total": 1,
+          "recall": 0.0
+        },
+        {
+          "scenario": "token_abuse",
+          "caught": 0,
+          "total": 2,
+          "recall": 0.0
+        },
+        {
+          "scenario": "unusual_api",
+          "caught": 1,
+          "total": 2,
+          "recall": 0.5
+        }
+      ],
+      "false_alarms": 1
+    },
+    {
+      "id": "P5",
+      "label": "P5 Token abuse",
+      "kind": "detector",
+      "cells": [
+        {
+          "scenario": "dormant_reactivation",
+          "caught": 0,
+          "total": 1,
+          "recall": 0.0
+        },
+        {
+          "scenario": "impossible_travel",
+          "caught": 0,
+          "total": 1,
+          "recall": 0.0
+        },
+        {
+          "scenario": "privilege_escalation",
+          "caught": 0,
+          "total": 1,
+          "recall": 0.0
+        },
+        {
+          "scenario": "token_abuse",
+          "caught": 1,
+          "total": 2,
+          "recall": 0.5
+        },
+        {
+          "scenario": "unusual_api",
+          "caught": 0,
+          "total": 2,
+          "recall": 0.0
+        }
+      ],
+      "false_alarms": 0
+    },
+    {
+      "id": "ML",
+      "label": "ML Behavior anomaly",
+      "kind": "detector",
+      "cells": [
+        {
+          "scenario": "dormant_reactivation",
+          "caught": 0,
+          "total": 1,
+          "recall": 0.0
+        },
+        {
+          "scenario": "impossible_travel",
+          "caught": 1,
+          "total": 1,
+          "recall": 1.0
+        },
+        {
+          "scenario": "privilege_escalation",
+          "caught": 0,
+          "total": 1,
+          "recall": 0.0
+        },
+        {
+          "scenario": "token_abuse",
+          "caught": 0,
+          "total": 2,
+          "recall": 0.0
+        },
+        {
+          "scenario": "unusual_api",
+          "caught": 1,
+          "total": 2,
+          "recall": 0.5
+        }
+      ],
+      "false_alarms": 2
+    }
+  ],
+  "agreement": {
+    "both": 2,
+    "rules_only": 4,
+    "ml_only": 2,
+    "missed_by_both": 1,
+    "both_true": 1,
+    "rules_only_true": 4,
+    "ml_only_true": 1
+  },
+  "winner": {
+    "id": "hybrid",
+    "label": "Hybrid (final alerts)",
+    "f1": 0.857,
+    "text": "Hybrid (final alerts) performs best (F1 0.86 vs Rules (P1\u2013P5) 0.77, ML (Isolation Forest) 0.36)"
+  },
+  "malicious_sessions": 7,
+  "note": null
+}

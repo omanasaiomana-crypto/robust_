@@ -4,3 +4,8 @@ __pycache__/
 data/identityshield.db
 data/sample/
 scratch_*.py
+.env
+data/outbox/
+data/output/
+data/input/
+.v21_backup/

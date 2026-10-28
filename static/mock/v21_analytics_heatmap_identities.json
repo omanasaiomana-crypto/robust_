@@ -1,0 +1,75 @@
+{
+  "identities": [
+    "svc-report",
+    "meera.n",
+    "anita.rao",
+    "dev.kumar",
+    "rahul.s"
+  ],
+  "risk": [
+    94.0,
+    88.0,
+    78.0,
+    55.0,
+    44.0
+  ],
+  "patterns": [
+    "P1",
+    "P2",
+    "P3",
+    "P4",
+    "P5",
+    "ML"
+  ],
+  "pattern_names": [
+    "Impossible travel",
+    "Dormant account",
+    "Privilege escalation",
+    "Unusual API",
+    "Token abuse",
+    "Behavior anomaly"
+  ],
+  "cells": [
+    [
+      0,
+      2,
+      1,
+      0,
+      0,
+      0
+    ],
+    [
+      0,
+      0,
+      0,
+      0,
+      1,
+      0
+    ],
+    [
+      1,
+      0,
+      0,
+      0,
+      0,
+      1
+    ],
+    [
+      0,
+      0,
+      0,
+      1,
+      0,
+      1
+    ],
+    [
+      0,
+      0,
+      0,
+      1,
+      0,
+      1
+    ]
+  ],
+  "max": 2
+}
