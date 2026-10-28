@@ -448,7 +448,7 @@ While `state == "running"`: POST action, feedback and pipeline/run return 409 wi
 | 24 | Email notifier backend | ☑ | app/notify.py from REF_03, .env.example, app/api/notifications.py, outbox & digest wiring, 50 tests passing |
 | 25 | Notifications UI | ☑ | static/notifications.html, static/js/notifications.js (status card, expandable history), alert.js 'Email admin' button |
 | 26 | Background pipeline runs | ☑ | app/runner.py from REF_04, app/trace.py from REF_09, REF_08 in config.py, async 202 runner, 54 tests passing |
-| 27 | Offline assets | ☐ | |
+| 27 | Offline assets | ☑ | vendored assets in static/vendor, replaced CDN links in all HTML files, tests/test_vendor.py passing |
 | 28 | Analyst token (optional) | ☐ | |
 | 29 | Supplied simulator adapter | ☐ | |
 | 30 | Regression, docs, demo | ☐ | |
