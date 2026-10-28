@@ -445,7 +445,7 @@ While `state == "running"`: POST action, feedback and pipeline/run return 409 wi
 | 21 | Official data run, baseline, export, latency | ☑ | data recon, fallback mappings, export CLI, baseline logging, latency replay (p50=1640ms, 259.6 ev/s) |
 | 22 | Analytics backend | ☑ | app/analytics.py from REF_02, app/notify.py from REF_03, tests from REF_05, app/api/analytics.py, 46 tests passing |
 | 23 | Analytics UI | ☑ | static/analytics.html, analytics.js (winner, 3 cards, chart, detection matrix, agreement, heatmaps, definitions), overview card, mock fixtures |
-| 24 | Email notifier backend | ☐ | |
+| 24 | Email notifier backend | ☑ | app/notify.py from REF_03, .env.example, app/api/notifications.py, outbox & digest wiring, 50 tests passing |
 | 25 | Notifications UI | ☐ | |
 | 26 | Background pipeline runs | ☐ | |
 | 27 | Offline assets | ☐ | |

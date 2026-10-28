@@ -58,3 +58,43 @@ def test_pipeline_not_ready_503(monkeypatch):
             assert r.json().get("error") == "pipeline_not_ready"
         finally:
             app.state.result = orig
+
+
+def test_notifications_status_and_no_password():
+    with TestClient(app) as client:
+        r = client.get("/api/notifications/status")
+        assert r.status_code == 200
+        data = r.json()
+        for k in ("mode", "recipients", "min_risk"):
+            assert k in data
+        assert "password" not in r.text.lower()
+
+
+def test_notifications_test_send():
+    with TestClient(app) as client:
+        r = client.post("/api/notifications/test")
+        assert r.status_code == 200
+        data = r.json()
+        assert data.get("status") in {"outbox", "sent", "failed", "rate_limited", "off"}
+
+
+def test_alert_notify_not_found():
+    with TestClient(app) as client:
+        r = client.post("/api/alerts/DOES-NOT-EXIST/notify")
+        assert r.status_code == 404
+        assert r.json().get("error") == "not_found"
+
+
+def test_startup_digest_notification():
+    import time
+    with TestClient(app) as client:
+        found = False
+        for _ in range(30):
+            r = client.get("/api/notifications")
+            if r.status_code == 200:
+                recs = r.json()
+                if any(rec.get("kind") == "digest" for rec in recs):
+                    found = True
+                    break
+            time.sleep(0.1)
+        assert found, "Expected startup digest notification in list_notifications"

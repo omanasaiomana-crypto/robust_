@@ -4,6 +4,7 @@ from typing import Any
 from fastapi import APIRouter, Request
 from pydantic import BaseModel
 
+from app import notify
 from app.models import Health
 from app.pipeline import get_identity_rows, run_pipeline
 from app.utils import clean_json
@@ -54,6 +55,8 @@ def trigger_pipeline(request: Request, body: PipelineRunRequest | None = None) -
         res = run_pipeline(use_sample=use_sample)
         request.app.state.result = res
         request.app.state.startup_error = res.detail if res.status == "failed" else ""
+        if res and res.status != "failed":
+            notify.notify_new_alerts(res.alerts, total_open=len(res.alerts))
     except Exception as exc:
         log.exception("Re-running pipeline failed")
         request.app.state.startup_error = str(exc)
