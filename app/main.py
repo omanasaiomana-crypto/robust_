@@ -10,7 +10,7 @@ from fastapi.staticfiles import StaticFiles
 from starlette.exceptions import HTTPException as StarletteHTTPException
 
 from app import store
-from app.api import alerts, audit, health, identities, metrics
+from app.api import alerts, analytics, audit, health, identities, metrics
 from app.config import STATIC_DIR
 from app.pipeline import run_pipeline
 
@@ -61,7 +61,7 @@ async def unhandled_error(_: Request, exc: Exception):
     return _err(500, "internal_error", "Unexpected server error. See server log.")
 
 
-for module in (health, alerts, identities, metrics, audit):
+for module in (health, alerts, identities, metrics, audit, analytics):
     app.include_router(module.router, prefix="/api")
 
 
