@@ -118,6 +118,27 @@ export function renderLayout(active, title, subtitle) {
             .join('')}
         </nav>
 
+        <!-- Download Reports Box in Sidebar -->
+        <div class="px-3 py-3 border-t border-line">
+          <div class="p-3 rounded-lg bg-panel2/80 border border-line/60">
+            <div class="flex items-center gap-2 text-xs font-semibold text-ink">
+              <svg class="w-4 h-4 text-brand" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/>
+              </svg>
+              <span>Download Report</span>
+            </div>
+            <p class="text-[11px] text-muted mt-1 leading-snug">Attack summary with agent attribution & heatmaps.</p>
+            <div class="mt-2.5 flex flex-col gap-1.5">
+              <a href="/api/reports/download/docx" download class="inline-flex items-center justify-center gap-1.5 px-2.5 py-1.5 rounded bg-brand/15 hover:bg-brand/25 text-brand border border-brand/30 text-xs font-medium transition-colors">
+                <span>📄 Word Report (.docx)</span>
+              </a>
+              <a href="/api/reports/download/html" download class="inline-flex items-center justify-center gap-1.5 px-2.5 py-1.5 rounded bg-cyan-400/15 hover:bg-cyan-400/25 text-cyan-300 border border-cyan-400/30 text-xs font-medium transition-colors">
+                <span>🌐 Interactive Report (.html)</span>
+              </a>
+            </div>
+          </div>
+        </div>
+
         <!-- Sidebar Footer -->
         <div class="p-4 border-t border-line text-xs text-muted flex items-center justify-between">
           <span class="font-mono">Track 2: Zero Trust</span>
@@ -153,6 +174,14 @@ export function renderLayout(active, title, subtitle) {
             <div id="mode-pill" class="hidden sm:inline-flex items-center px-2.5 py-1 rounded-full text-xs font-medium border border-line bg-panel2 text-muted font-mono">
               Mode: ...
             </div>
+
+            <!-- Download Report Dropdown / Button in Top Bar -->
+            <a href="/api/reports/download/docx" download class="hidden sm:inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-medium bg-emerald-500/10 hover:bg-emerald-500/20 text-emerald-400 border border-emerald-500/30 transition-colors" title="Download Word Attack Report with Heatmaps">
+              <svg class="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/>
+              </svg>
+              <span>Download (.docx)</span>
+            </a>
 
             <!-- Re-run Pipeline Button -->
             <button id="btn-rerun" aria-label="Re-run detection pipeline" class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-medium bg-brand/10 hover:bg-brand/20 text-brand border border-brand/30 transition-colors">

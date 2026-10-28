@@ -84,17 +84,63 @@ if (content) {
         </div>
       </div>
     </div>
+
+    <!-- Which Agents Caught What Attribution Grid -->
+    <div class="mt-6 bg-panel border border-line rounded-xl p-5 shadow-sm">
+      <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 mb-4">
+        <div>
+          <div class="flex items-center gap-2">
+            <span class="w-2.5 h-2.5 rounded-full bg-brand animate-pulse"></span>
+            <h3 class="text-sm font-semibold text-ink">Which Agents Caught What (Detection Attribution)</h3>
+          </div>
+          <p class="text-xs text-muted mt-0.5">Real-time mapping of detection agents to intercepted adversary techniques and affected identities</p>
+        </div>
+        <div class="flex items-center gap-2">
+          <a href="/api/reports/download/docx" download class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-emerald-500/10 hover:bg-emerald-500/20 text-emerald-400 border border-emerald-500/30 text-xs font-medium transition-colors" title="Download Word report with heatmaps">
+            <svg class="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/></svg>
+            <span>Download Report (.docx)</span>
+          </a>
+          <a href="/api/reports/download/html" download class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-cyan-400/10 hover:bg-cyan-400/20 text-cyan-300 border border-cyan-400/30 text-xs font-medium transition-colors" title="Download interactive HTML report">
+            <span>Interactive (.html)</span>
+          </a>
+        </div>
+      </div>
+      <div id="agent-detection-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3">
+        ${skeleton(3)}
+      </div>
+    </div>
+
+    <!-- Live Threat Heatmap Matrix -->
+    <div class="mt-6 bg-panel border border-line rounded-xl p-5 shadow-sm">
+      <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2 mb-4">
+        <div>
+          <div class="flex items-center gap-2">
+            <span class="w-2.5 h-2.5 rounded-full bg-cyan-400"></span>
+            <h3 class="text-sm font-semibold text-ink">Identity × Attack Pattern Heatmap Matrix</h3>
+          </div>
+          <p class="text-xs text-muted mt-0.5">Signal intensity: numbers show detections per vector; red/orange highlight compounded attack profiles</p>
+        </div>
+        <a href="/analytics.html${querySuffix}" class="text-xs font-medium text-brand hover:text-blue-400 transition-colors">
+          Full Analytics & 24h Heatmap →
+        </a>
+      </div>
+      <div id="overview-heatmap-wrapper" class="overflow-x-auto">
+        ${skeleton(2)}
+      </div>
+    </div>
   `;
 
   loadOverviewData();
 }
 
 async function loadOverviewData() {
-  const [summaryRes, metricsRes, alertsRes, healthRes] = await Promise.allSettled([
+  const [summaryRes, metricsRes, alertsRes, healthRes, agentMapRes, idHeatmapRes] = await Promise.allSettled([
     api('/summary'),
     api('/metrics'),
     api('/alerts?min_risk=70&limit=5'),
     api('/health'),
+    api('/analytics/agent-map'),
+    api('/analytics/heatmap/identities'),
   ]);
 
   const demoContainer = document.getElementById('demo-scenario-container');
@@ -397,5 +443,116 @@ async function loadOverviewData() {
     }
   } else {
     alertsWrapper.innerHTML = errorState(alertsRes.reason?.message || 'Failed to load critical alerts');
+  }
+
+  // 6. Which Agents Caught What Attribution Grid
+  const agentGridWrapper = document.getElementById('agent-detection-grid');
+  if (agentGridWrapper) {
+    if (agentMapRes.status === 'fulfilled' && agentMapRes.value?.agents) {
+      const agents = agentMapRes.value.agents;
+      agentGridWrapper.innerHTML = agents
+        .map((ag) => {
+          const victimTags = ag.victims
+            .map(
+              (v) =>
+                `<a href="/identities.html?search=${esc(v)}" class="px-1.5 py-0.5 rounded bg-panel font-mono text-[11px] text-brand hover:underline">${esc(v)}</a>`
+            )
+            .join(' ');
+          const mitreTags = ag.mitre
+            .map(
+              (m) =>
+                `<span class="px-1.5 py-0.5 rounded bg-panel2 font-mono text-[10px] text-muted border border-line">${esc(m)}</span>`
+            )
+            .join(' ');
+          return `
+            <div class="p-3.5 rounded-lg bg-panel2/60 border border-line hover:border-brand/40 transition-colors flex flex-col justify-between">
+              <div>
+                <div class="flex items-center justify-between gap-2 mb-1.5">
+                  <div class="flex items-center gap-1.5 min-w-0">
+                    <span class="px-1.5 py-0.5 rounded bg-brand/15 text-brand font-mono text-[10px] font-bold">[${ag.agent_num.toString().padStart(2, '0')}]</span>
+                    <span class="text-xs font-bold text-ink truncate">${esc(ag.name)}</span>
+                  </div>
+                  <span class="px-1.5 py-0.5 rounded-full bg-crit/15 text-crit text-[10px] font-semibold tracking-wider uppercase flex-shrink-0">Caught Threat</span>
+                </div>
+                <p class="text-[11px] text-muted mt-1 leading-snug">${esc(ag.evidence)}</p>
+              </div>
+              <div class="mt-3 pt-2.5 border-t border-line/60 flex items-center justify-between gap-2">
+                <div class="flex items-center gap-1 flex-wrap">${victimTags}</div>
+                <div class="flex items-center gap-1 flex-wrap">${mitreTags}</div>
+              </div>
+            </div>
+          `;
+        })
+        .join('');
+    } else {
+      agentGridWrapper.innerHTML = `<p class="text-xs text-muted py-3">Agent map loading or unavailable.</p>`;
+    }
+  }
+
+  // 7. Identity x Attack Pattern Heatmap Matrix
+  const heatmapWrapper = document.getElementById('overview-heatmap-wrapper');
+  if (heatmapWrapper) {
+    if (idHeatmapRes.status === 'fulfilled' && idHeatmapRes.value?.identities) {
+      const hm = idHeatmapRes.value;
+      const idents = hm.identities || [];
+      const risks = hm.risk || [];
+      const patterns = hm.patterns || [];
+      const cells = hm.cells || [];
+
+      let tableHtml = `
+        <table class="w-full border-collapse text-xs">
+          <thead>
+            <tr class="border-b border-line text-left text-muted font-mono text-[11px]">
+              <th class="py-2.5 px-3 bg-panel2">Identity</th>
+              <th class="py-2.5 px-3 bg-panel2 text-center">Risk Score</th>
+              ${patterns.map((p) => `<th class="py-2.5 px-3 bg-panel2 text-center font-bold" title="${esc(p)}">${esc(p)}</th>`).join('')}
+            </tr>
+          </thead>
+          <tbody class="divide-y divide-line">
+      `;
+
+      idents.forEach((idName, rIdx) => {
+        const rVal = risks[rIdx] || 0;
+        let riskBadgeClass = 'bg-panel2 text-muted';
+        let bandLabel = 'MONITOR';
+        if (rVal >= 90) {
+          riskBadgeClass = 'bg-crit/20 text-crit border border-crit/40';
+          bandLabel = 'REVOKE';
+        } else if (rVal >= 70) {
+          riskBadgeClass = 'bg-warn/20 text-warn border border-warn/40';
+          bandLabel = 'RESTRICT';
+        } else if (rVal >= 40) {
+          riskBadgeClass = 'bg-cyan-400/20 text-cyan-300 border border-cyan-400/40';
+          bandLabel = 'STEP-UP';
+        }
+
+        tableHtml += `
+          <tr class="hover:bg-panel2/40 transition-colors">
+            <td class="py-2 px-3 font-semibold text-ink font-mono">
+              <a href="/explorer.html?identity=${esc(idName)}" class="hover:text-brand hover:underline">${esc(idName)}</a>
+            </td>
+            <td class="py-2 px-3 text-center">
+              <span class="px-2 py-0.5 rounded text-[11px] font-bold font-mono ${riskBadgeClass}">
+                ${rVal.toFixed(0)} · ${bandLabel}
+              </span>
+            </td>
+        `;
+
+        (cells[rIdx] || []).forEach((val) => {
+          let cellCls = 'bg-panel2/40 text-muted/60';
+          if (val >= 3) cellCls = 'bg-red-500/35 text-red-300 font-bold';
+          else if (val === 2) cellCls = 'bg-orange-500/30 text-orange-200 font-bold';
+          else if (val === 1) cellCls = 'bg-amber-400/20 text-amber-200 font-medium';
+          tableHtml += `<td class="py-2 px-3 text-center ${cellCls} font-mono">${val}</td>`;
+        });
+
+        tableHtml += `</tr>`;
+      });
+
+      tableHtml += `</tbody></table>`;
+      heatmapWrapper.innerHTML = tableHtml;
+    } else {
+      heatmapWrapper.innerHTML = `<p class="text-xs text-muted py-3">Heatmap loading or unavailable.</p>`;
+    }
   }
 }

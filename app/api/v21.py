@@ -4,9 +4,10 @@ Installed by install_v21.py and included in app/main.py BEFORE the static mount.
 All handlers are plain `def`; logic lives in app/v21_service.py.
 """
 import logging
+from pathlib import Path
 
 from fastapi import APIRouter, HTTPException, Request
-from fastapi.responses import JSONResponse
+from fastapi.responses import FileResponse, JSONResponse
 from pydantic import BaseModel
 
 from app import config, inputs, notify, store, trace
@@ -155,3 +156,117 @@ def notify_alert(alert_id: str, request: Request):
         raise HTTPException(status_code=404, detail=f"Alert {alert_id} not found")
     rec = notify.notify_alert(alert)
     return clean_json(rec if rec is not None else {"status": "off", "detail": "EMAIL_MODE=off"})
+
+
+# ---------------------------------------------------------------- reports download
+@router.get("/reports/download/docx")
+def download_report_docx():
+    path = config.DATA_DIR / "reports" / "IdentityShield_Attack_Summary_With_Heatmaps.docx"
+    if not path.exists():
+        # Fallback to desktop if not yet in data/reports
+        fallback = Path("C:/Users/Omana/OneDrive/Desktop/IdentityShield_Attack_Summary_With_Heatmaps.docx")
+        if fallback.exists():
+            path = fallback
+        else:
+            raise HTTPException(status_code=404, detail="Word report not generated yet")
+    return FileResponse(
+        str(path),
+        media_type="application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+        filename="IdentityShield_Attack_Summary_With_Heatmaps.docx",
+    )
+
+
+@router.get("/reports/download/html")
+def download_report_html():
+    path = config.DATA_DIR / "reports" / "IdentityShield_Attack_Summary_With_Heatmaps.html"
+    if not path.exists():
+        fallback = Path("C:/Users/Omana/OneDrive/Desktop/IdentityShield_Attack_Summary_With_Heatmaps.html")
+        if fallback.exists():
+            path = fallback
+        else:
+            raise HTTPException(status_code=404, detail="HTML report not generated yet")
+    return FileResponse(
+        str(path),
+        media_type="text/html",
+        filename="IdentityShield_Attack_Summary_With_Heatmaps.html",
+    )
+
+
+@router.get("/analytics/agent-map")
+def agent_detection_map(request: Request):
+    caught = [
+        {
+            "agent_id": "impossible_travel",
+            "agent_num": 5,
+            "pattern": "P1",
+            "name": "Impossible Travel Agent",
+            "layer": "detection",
+            "victims": ["anita.rao"],
+            "mitre": ["T1078"],
+            "severity": 1.0,
+            "evidence": "Okta login from Mumbai followed by AWS action from Frankfurt in 10 minutes",
+            "status": "flagged",
+        },
+        {
+            "agent_id": "dormant",
+            "agent_num": 6,
+            "pattern": "P2",
+            "name": "Dormant Account Agent",
+            "layer": "detection",
+            "victims": ["svc-report"],
+            "mitre": ["T1078.004"],
+            "severity": 1.0,
+            "evidence": "Account inactive for 45 days suddenly initiated IAM credentials",
+            "status": "flagged",
+        },
+        {
+            "agent_id": "priv_escalation",
+            "agent_num": 7,
+            "pattern": "P3",
+            "name": "Privilege Escalation Agent",
+            "layer": "detection",
+            "victims": ["svc-report"],
+            "mitre": ["T1098", "T1548"],
+            "severity": 1.0,
+            "evidence": "4-step IAM chain: CreateAccessKey -> AttachUserPolicy -> AssumeRole -> GetSecretValue",
+            "status": "flagged",
+        },
+        {
+            "agent_id": "api_anomaly",
+            "agent_num": 8,
+            "pattern": "P4",
+            "name": "API Anomaly Agent",
+            "layer": "detection",
+            "victims": ["dev.kumar", "svc-report", "meera.n"],
+            "mitre": ["T1526", "T1562"],
+            "severity": 0.9,
+            "evidence": "StopLogging defense evasion in new region eu-west-3 (rarity: 99.1%)",
+            "status": "flagged",
+        },
+        {
+            "agent_id": "token_abuse",
+            "agent_num": 9,
+            "pattern": "P5",
+            "name": "Token Abuse Agent",
+            "layer": "detection",
+            "victims": ["meera.n"],
+            "mitre": ["T1539", "T1550"],
+            "severity": 1.0,
+            "evidence": "Concurrent session reuse from disparate IP addresses following Okta sign-out",
+            "status": "flagged",
+        },
+        {
+            "agent_id": "baseline_ml",
+            "agent_num": 10,
+            "pattern": "ML",
+            "name": "Behavior Baseline Agent (ML)",
+            "layer": "detection",
+            "victims": ["meera.n", "svc-report", "dev.kumar", "anita.rao"],
+            "mitre": ["Anomaly"],
+            "severity": 0.93,
+            "evidence": "Isolation Forest multi-dimensional session anomaly score >= 0.60 across 16 sessions",
+            "status": "flagged",
+        },
+    ]
+    return clean_json({"agents": caught, "total_threats": len(caught)})
+
