@@ -326,7 +326,7 @@ tailwind.config = {
 | 6 | Rule detectors P1-P3 | ☑ | P1 (anita.rao), P2 (svc-report), P3 (svc-report 4-step chain) |
 | 7 | Rule detectors P4-P5 | ☑ | P4 (dev.kumar StopLogging), P5 (meera.n token abuse) |
 | 8 | ML module | ☑ | features (661,14), AnomalyModel IF, ChainModel Markov, PeerModel KM, Calibrator |
-| 9 | Decision + simulator | ☐ | |
+| 9 | Decision + simulator | ☑ | scoring, explain, respond, feedback, simulator, test_scoring 5/5 |
 | 10 | Pipeline + evaluation | ☐ | |
 | 11 | API + main | ☐ | |
 | 12 | UI foundation | ☐ | |
