@@ -328,7 +328,7 @@ tailwind.config = {
 | 8 | ML module | ☑ | features (661,14), AnomalyModel IF, ChainModel Markov, PeerModel KM, Calibrator |
 | 9 | Decision + simulator | ☑ | scoring, explain, respond, feedback, simulator, test_scoring 5/5 |
 | 10 | Pipeline + evaluation | ☑ | status ok, 16 alerts, top: svc-report (revoke), meera.n, dev.kumar, anita.rao; F1 0.537 > baseline 0.0 |
-| 11 | API + main | ☐ | |
+| 11 | API + main | ☑ | smoke_test passed, all 13 REST endpoints verified |
 | 12 | UI foundation | ☐ | |
 | 13 | Overview + Alerts pages | ☐ | |
 | 14 | Alert detail page | ☐ | |
