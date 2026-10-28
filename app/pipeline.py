@@ -8,7 +8,7 @@ import time
 import networkx as nx
 import pandas as pd
 
-from app import audit, sample_data, store
+from app import audit, sample_data, store, trace
 from app.agents.api_anomaly import ApiAnomalyAgent
 from app.agents.baseline_ml import BaselineMLAgent
 from app.agents.dormant import DormantAgent
@@ -110,11 +110,16 @@ def run_pipeline(use_sample: bool | None = None) -> PipelineResult:
     labels: dict[str, str] = {}
 
     try:
-        raw_ct, sk_ct = load_cloudtrail(ct_folder)
-        raw_okta, sk_okta = load_okta(okta_folder)
-        skipped += (sk_ct + sk_okta)
-        metadata = load_metadata(METADATA_DIR)
-        labels = load_labels(LABELS_DIR)
+        with trace.step("ingestion", "Loading CloudTrail and Okta files") as s:
+            raw_ct, sk_ct = load_cloudtrail(ct_folder)
+            raw_okta, sk_okta = load_okta(okta_folder)
+            skipped += (sk_ct + sk_okta)
+            metadata = load_metadata(METADATA_DIR)
+            labels = load_labels(LABELS_DIR)
+            s.output(
+                {"records": {"cloudtrail": len(raw_ct), "okta": len(raw_okta)}, "skipped": int(skipped)},
+                f"Loaded {len(raw_ct):,} CloudTrail and {len(raw_okta):,} Okta records ({skipped} skipped)",
+            )
     except Exception as exc:
         log.exception("Failed loading log data")
         step_errors.append(f"load_data: {exc}")
@@ -136,14 +141,30 @@ def run_pipeline(use_sample: bool | None = None) -> PipelineResult:
     step_t0 = time.perf_counter()
     events_df = pd.DataFrame()
     try:
-        events_df, sk_norm = normalize_all(raw_ct, raw_okta)
-        skipped += sk_norm
-        if labels and not events_df.empty:
-            for idx, row in events_df.iterrows():
-                eid = str(row["event_id"])
-                if eid in labels and (not row.get("label") or row.get("label") in ("benign", "None", "")):
-                    events_df.at[idx, "label"] = labels[eid]
-        events_df = enrich(events_df, metadata=metadata)
+        with trace.step("normalization", "Mapping both formats to one schema") as s:
+            events_df, sk_norm = normalize_all(raw_ct, raw_okta)
+            skipped += sk_norm
+            if labels and not events_df.empty:
+                for idx, row in events_df.iterrows():
+                    eid = str(row["event_id"])
+                    if eid in labels and (not row.get("label") or row.get("label") in ("benign", "None", "")):
+                        events_df.at[idx, "label"] = labels[eid]
+            n_events = len(events_df)
+            n_ids = int(events_df["identity_id"].nunique()) if (not events_df.empty and "identity_id" in events_df) else 0
+            s.output(
+                {"events": n_events, "skipped": int(sk_norm), "identities": n_ids},
+                f"Normalized {n_events:,} events across {n_ids} identities ({sk_norm} skipped)",
+            )
+
+        with trace.step("enrichment", "Adding geo, privilege and sensitivity") as s:
+            events_df = enrich(events_df, metadata=metadata)
+            priv_ids = 0
+            if not events_df.empty and "privilege_level" in events_df and "identity_id" in events_df:
+                priv_ids = int(events_df[events_df["privilege_level"] >= 4]["identity_id"].nunique())
+            s.output(
+                {"events": len(events_df), "privileged_identities": priv_ids},
+                f"Enriched {len(events_df):,} events ({priv_ids} privileged identities)",
+            )
     except Exception as exc:
         log.exception("Normalization and enrichment failed")
         step_errors.append(f"normalize_enrich: {exc}")
@@ -176,24 +197,24 @@ def run_pipeline(use_sample: bool | None = None) -> PipelineResult:
             timings_ms=timings_ms,
         )
 
-    # Step 4: Assign sessions
-    step_t0 = time.perf_counter()
-    try:
-        events_df = assign_sessions(events_df)
-    except Exception as exc:
-        log.exception("Session correlation failed")
-        step_errors.append(f"assign_sessions: {exc}")
-    timings_ms["assign_sessions"] = round((time.perf_counter() - step_t0) * 1000.0, 2)
-
-    # Step 5: Build identity graph
+    # Step 4: Assign sessions & Build identity graph (correlation)
     step_t0 = time.perf_counter()
     graph = nx.MultiDiGraph()
     try:
-        graph = build_graph(events_df)
+        with trace.step("correlation", "Linking Okta sessions to AWS activity") as s:
+            events_df = assign_sessions(events_df)
+            graph = build_graph(events_df)
+            n_sess = int(events_df["session_id"].nunique()) if (not events_df.empty and "session_id" in events_df) else 0
+            n_nodes = int(graph.number_of_nodes())
+            n_edges = int(graph.number_of_edges())
+            s.output(
+                {"sessions": n_sess, "graph": {"nodes": n_nodes, "edges": n_edges}},
+                f"Correlated {n_sess} sessions, graph with {n_nodes} nodes and {n_edges} edges",
+            )
     except Exception as exc:
-        log.exception("Graph construction failed")
-        step_errors.append(f"build_graph: {exc}")
-    timings_ms["build_graph"] = round((time.perf_counter() - step_t0) * 1000.0, 2)
+        log.exception("Session correlation and graph construction failed")
+        step_errors.append(f"correlation: {exc}")
+    timings_ms["correlation"] = round((time.perf_counter() - step_t0) * 1000.0, 2)
 
     # Step 6: Train ML models
     step_t0 = time.perf_counter()
@@ -221,18 +242,51 @@ def run_pipeline(use_sample: bool | None = None) -> PipelineResult:
     p5_agent = TokenAbuseAgent()
     ml_agent = BaselineMLAgent()
 
-    agents = [p1_agent, p2_agent, p3_agent, p4_agent, p5_agent, ml_agent]
+    rule_agents = [p1_agent, p2_agent, p3_agent, p4_agent, p5_agent]
     all_signals: list[Signal] = []
 
-    for ag in agents:
+    for ag in rule_agents:
         ag_t0 = time.perf_counter()
         try:
-            sigs = ag.detect(events_df)
-            all_signals.extend(sigs)
+            with trace.step(ag.name, f"Running {ag.name} detector") as s:
+                sigs = ag.detect(events_df)
+                all_signals.extend(sigs)
+                examples = [
+                    {
+                        "identity_id": str(sig.identity_id),
+                        "session_id": str(sig.session_id),
+                        "severity": float(sig.severity),
+                        "reason": str(sig.reason),
+                    }
+                    for sig in sigs[:3]
+                ]
+                s.output(
+                    {"signals": len(sigs), "examples": examples},
+                    f"{ag.name} emitted {len(sigs)} signal(s)",
+                )
         except Exception as exc:
             log.exception("Agent %s failed during detection", ag.name)
             step_errors.append(f"agent_{ag.name}: {exc}")
         timings_ms[f"agent_{ag.name}"] = round((time.perf_counter() - ag_t0) * 1000.0, 2)
+
+    # 10. baseline_ml
+    ag_t0 = time.perf_counter()
+    try:
+        n_sessions = int(events_df["session_id"].nunique()) if (events_df is not None and not events_df.empty and "session_id" in events_df) else 0
+        if n_sessions < 20:
+            trace.skip("baseline_ml", "Not enough sessions to train")
+        else:
+            with trace.step("baseline_ml", "Isolation Forest over session features") as s:
+                sigs = ml_agent.detect(events_df)
+                all_signals.extend(sigs)
+                s.output(
+                    {"signals": len(sigs)},
+                    f"Baseline ML emitted {len(sigs)} signal(s)",
+                )
+    except Exception as exc:
+        log.exception("Agent %s failed during detection", ml_agent.name)
+        step_errors.append(f"agent_{ml_agent.name}: {exc}")
+    timings_ms[f"agent_{ml_agent.name}"] = round((time.perf_counter() - ag_t0) * 1000.0, 2)
 
     detection_sec = time.perf_counter() - step_t0
     timings_ms["detection_all"] = round(detection_sec * 1000.0, 2)
@@ -245,127 +299,140 @@ def run_pipeline(use_sample: bool | None = None) -> PipelineResult:
         ml_scores = ml_agent.scores if ml_agent else {}
         last_chains = p3_agent.last_chains if p3_agent else {}
 
-        # Group signals by session_id
-        signals_by_sess: dict[str, list[Signal]] = {}
-        for s in all_signals:
-            if s.session_id:
-                signals_by_sess.setdefault(s.session_id, []).append(s)
+        with trace.step("risk_scoring", "Combining signals x privilege x sensitivity") as s:
+            # Group signals by session_id
+            signals_by_sess: dict[str, list[Signal]] = {}
+            for s_item in all_signals:
+                if s_item.session_id:
+                    signals_by_sess.setdefault(s_item.session_id, []).append(s_item)
 
-        # Collect candidate session IDs: at least one rule signal OR ML score >= 0.6
-        candidate_sessions: set[str] = set()
-        for sess_id, sigs in signals_by_sess.items():
-            if any(s.pattern != "ML" for s in sigs) or ml_scores.get(sess_id, 0.0) >= 0.6:
-                candidate_sessions.add(sess_id)
+            # Collect candidate session IDs: at least one rule signal OR ML score >= 0.6
+            candidate_sessions: set[str] = set()
+            for sess_id, sigs in signals_by_sess.items():
+                if any(sig.pattern != "ML" for sig in sigs) or ml_scores.get(sess_id, 0.0) >= 0.6:
+                    candidate_sessions.add(sess_id)
 
-        for sess_id, score in ml_scores.items():
-            if score >= 0.6:
-                candidate_sessions.add(sess_id)
+            for sess_id, score in ml_scores.items():
+                if score >= 0.6:
+                    candidate_sessions.add(sess_id)
 
-        # Create Alert for each candidate session
-        for sess_id in candidate_sessions:
-            sess_sigs = signals_by_sess.get(sess_id, [])
-            s_events = events_df[events_df["session_id"] == sess_id].sort_values(by="timestamp")
+            # Create Alert for each candidate session
+            for sess_id in candidate_sessions:
+                sess_sigs = signals_by_sess.get(sess_id, [])
+                s_events = events_df[events_df["session_id"] == sess_id].sort_values(by="timestamp")
 
-            if not s_events.empty:
-                uid = str(s_events["identity_id"].iloc[0])
-                first_seen = s_events["timestamp"].iloc[0]
-                last_seen = s_events["timestamp"].iloc[-1]
-            elif sess_sigs:
-                uid = sess_sigs[0].identity_id
-                first_seen = sess_sigs[0].timestamp
-                last_seen = sess_sigs[-1].timestamp
-            else:
-                uid = "unknown"
-                first_seen = datetime.now(timezone.utc)
-                last_seen = datetime.now(timezone.utc)
+                if not s_events.empty:
+                    uid = str(s_events["identity_id"].iloc[0])
+                    first_seen = s_events["timestamp"].iloc[0]
+                    last_seen = s_events["timestamp"].iloc[-1]
+                elif sess_sigs:
+                    uid = sess_sigs[0].identity_id
+                    first_seen = sess_sigs[0].timestamp
+                    last_seen = sess_sigs[-1].timestamp
+                else:
+                    uid = "unknown"
+                    first_seen = datetime.now(timezone.utc)
+                    last_seen = datetime.now(timezone.utc)
 
-            # Attack chain & Markov prediction
-            chain = last_chains.get(sess_id, [])
-            prediction: Prediction | None = None
-            if chain:
-                last_st = chain[-1].state
-                prediction = chain_model.predict(last_st)
+                # Attack chain & Markov prediction
+                chain = last_chains.get(sess_id, [])
+                prediction: Prediction | None = None
+                if chain:
+                    last_st = chain[-1].state
+                    prediction = chain_model.predict(last_st)
 
-            # Blast radius from graph
-            b_rad = blast_radius(graph, uid)
+                # Blast radius from graph
+                b_rad = blast_radius(graph, uid)
 
-            # ML anomaly score
-            ml_s = ml_scores.get(sess_id, 0.0)
+                # ML anomaly score
+                ml_s = ml_scores.get(sess_id, 0.0)
 
-            # Risk and confidence scoring
-            risk, confidence = score_session(
-                sess_sigs,
-                s_events,
-                weights=weights,
-                prediction=prediction,
-                ml_score=ml_s,
-            )
-
-            # Band
-            band = to_band(risk)
-
-            # Pattern list
-            patterns = sorted(list({s.pattern for s in sess_sigs}))
-            if ml_s >= 0.6 and "ML" not in patterns:
-                patterns.append("ML")
-                patterns.sort()
-
-            # Human-readable reasons
-            reasons = build_reasons(sess_sigs)
-            if not reasons and ml_s >= 0.6:
-                reasons = [f"Session behavior is unusual compared with normal activity (anomaly score {ml_s:.2f})."]
-
-            # MITRE tags
-            mitre = mitre_tags(sess_sigs)
-
-            # Evidence event IDs
-            ev_ids = evidence_ids(sess_sigs, s_events)
-            if not ev_ids and not s_events.empty:
-                ev_ids = [str(x) for x in s_events["event_id"].head(5)]
-
-            # Counterfactual scores
-            cfs = counterfactuals(
-                sess_sigs,
-                s_events,
-                weights=weights,
-                prediction=prediction,
-                ml_score=ml_s,
-            )
-
-            # Response recommendation
-            rec_action = recommend(risk)
-
-            candidate_alerts.append(
-                Alert(
-                    alert_id="",
-                    level="session",
-                    identity_id=uid,
-                    session_id=sess_id,
-                    risk=risk,
-                    confidence=confidence,
-                    blast_radius=b_rad,
-                    band=band,
-                    patterns=patterns,
-                    mitre=mitre,
-                    reasons=reasons,
-                    evidence_event_ids=ev_ids,
-                    chain=chain,
+                # Risk and confidence scoring
+                risk, confidence = score_session(
+                    sess_sigs,
+                    s_events,
+                    weights=weights,
                     prediction=prediction,
-                    counterfactuals=cfs,
-                    recommended_action=rec_action,
-                    action_status="pending",
-                    feedback=None,
-                    first_seen=first_seen,
-                    last_seen=last_seen,
+                    ml_score=ml_s,
                 )
+
+                # Band
+                band = to_band(risk)
+
+                # Pattern list
+                patterns = sorted(list({sig.pattern for sig in sess_sigs}))
+                if ml_s >= 0.6 and "ML" not in patterns:
+                    patterns.append("ML")
+                    patterns.sort()
+
+                # Human-readable reasons
+                reasons = build_reasons(sess_sigs)
+                if not reasons and ml_s >= 0.6:
+                    reasons = [f"Session behavior is unusual compared with normal activity (anomaly score {ml_s:.2f})."]
+
+                # MITRE tags
+                mitre = mitre_tags(sess_sigs)
+
+                # Evidence event IDs
+                ev_ids = evidence_ids(sess_sigs, s_events)
+                if not ev_ids and not s_events.empty:
+                    ev_ids = [str(x) for x in s_events["event_id"].head(5)]
+
+                # Counterfactual scores
+                cfs = counterfactuals(
+                    sess_sigs,
+                    s_events,
+                    weights=weights,
+                    prediction=prediction,
+                    ml_score=ml_s,
+                )
+
+                # Response recommendation
+                rec_action = recommend(risk)
+
+                candidate_alerts.append(
+                    Alert(
+                        alert_id="",
+                        level="session",
+                        identity_id=uid,
+                        session_id=sess_id,
+                        risk=risk,
+                        confidence=confidence,
+                        blast_radius=b_rad,
+                        band=band,
+                        patterns=patterns,
+                        mitre=mitre,
+                        reasons=reasons,
+                        evidence_event_ids=ev_ids,
+                        chain=chain,
+                        prediction=prediction,
+                        counterfactuals=cfs,
+                        recommended_action=rec_action,
+                        action_status="pending",
+                        feedback=None,
+                        first_seen=first_seen,
+                        last_seen=last_seen,
+                    )
+                )
+
+            # Sort candidate alerts by risk descending, then blast radius descending
+            candidate_alerts.sort(key=lambda a: (a.risk, a.blast_radius), reverse=True)
+
+            # Assign alert IDs AL-0001, AL-0002...
+            for i, a in enumerate(candidate_alerts, start=1):
+                a.alert_id = f"AL-{i:04d}"
+
+            top_r = float(candidate_alerts[0].risk) if candidate_alerts else 0.0
+            s.output(
+                {"alerts": len(candidate_alerts), "top_risk": top_r},
+                f"Scored {len(candidate_alerts)} candidate alerts (top risk: {top_r:.1f})",
             )
 
-        # Sort candidate alerts by risk descending, then blast radius descending
-        candidate_alerts.sort(key=lambda a: (a.risk, a.blast_radius), reverse=True)
-
-        # Assign alert IDs AL-0001, AL-0002...
-        for i, a in enumerate(candidate_alerts, start=1):
-            a.alert_id = f"AL-{i:04d}"
+        with trace.step("explanation", "Writing reasons, counterfactuals and MITRE tags") as s:
+            s.output(
+                {"alerts_explained": len(candidate_alerts)},
+                f"Generated explanations, counterfactuals, and MITRE mapping for {len(candidate_alerts)} alerts",
+            )
 
     except Exception as exc:
         log.exception("Alert generation failed")
@@ -387,10 +454,21 @@ def run_pipeline(use_sample: bool | None = None) -> PipelineResult:
                     f"Alert {a.alert_id} ({a.identity_id}): risk {a.risk:.1f} ({a.band}), patterns={a.patterns}",
                 )
 
-        # Auto-apply actions via simulator adapter
-        sim = get_simulator()
-        for a in candidate_alerts:
-            auto_apply(a, sim)
+        # Auto-apply actions via simulator adapter (response)
+        with trace.step("response", "Choosing actions (simulator only)") as s:
+            sim = get_simulator()
+            applied_count = 0
+            pending_count = 0
+            for a in candidate_alerts:
+                auto_apply(a, sim)
+                if a.action_status == "pending":
+                    pending_count += 1
+                else:
+                    applied_count += 1
+            s.output(
+                {"applied": int(applied_count), "pending_approval": int(pending_count)},
+                f"Response applied {applied_count} action(s), {pending_count} pending analyst approval",
+            )
 
         # Save again with updated action_status
         store.save_alerts(candidate_alerts)
