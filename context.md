@@ -320,7 +320,7 @@ tailwind.config = {
 | 0 | Scaffold | ☑ | pre-built, verified |
 | 1 | Contracts, config, utils | ☑ | pre-built, verified |
 | 2 | Store and audit | ☑ | pre-built, verified |
-| 3 | Sample data | ☐ | |
+| 3 | Sample data | ☑ | generated 2,306 CT / 661 Okta records with S1-S5 |
 | 4 | Loaders and normalize | ☐ | |
 | 5 | Enrich, sessions, graph | ☐ | |
 | 6 | Rule detectors P1-P3 | ☐ | |
