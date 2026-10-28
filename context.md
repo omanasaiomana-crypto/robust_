@@ -325,7 +325,7 @@ tailwind.config = {
 | 5 | Enrich, sessions, graph | ☑ | enriched, 661 sessions assigned, 1,173 graph nodes |
 | 6 | Rule detectors P1-P3 | ☑ | P1 (anita.rao), P2 (svc-report), P3 (svc-report 4-step chain) |
 | 7 | Rule detectors P4-P5 | ☑ | P4 (dev.kumar StopLogging), P5 (meera.n token abuse) |
-| 8 | ML module | ☐ | |
+| 8 | ML module | ☑ | features (661,14), AnomalyModel IF, ChainModel Markov, PeerModel KM, Calibrator |
 | 9 | Decision + simulator | ☐ | |
 | 10 | Pipeline + evaluation | ☐ | |
 | 11 | API + main | ☐ | |
