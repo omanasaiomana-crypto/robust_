@@ -321,7 +321,7 @@ tailwind.config = {
 | 1 | Contracts, config, utils | ☑ | pre-built, verified |
 | 2 | Store and audit | ☑ | pre-built, verified |
 | 3 | Sample data | ☑ | generated 2,306 CT / 661 Okta records with S1-S5 |
-| 4 | Loaders and normalize | ☐ | |
+| 4 | Loaders and normalize | ☑ | normalized 2,967 events, 0 skipped, 20 identities |
 | 5 | Enrich, sessions, graph | ☐ | |
 | 6 | Rule detectors P1-P3 | ☐ | |
 | 7 | Rule detectors P4-P5 | ☐ | |
