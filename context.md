@@ -331,7 +331,7 @@ tailwind.config = {
 | 11 | API + main | ☑ | smoke_test passed, all 13 REST endpoints verified |
 | 12 | UI foundation | ☑ | 8 HTML shells, Tailwind dark theme, api.js with mock mode, ui.js components, layout.js, 13 mock fixtures |
 | 13 | Overview + Alerts pages | ☑ | Overview dashboard with Chart.js charts, KPIs, top identities; Alerts queue with interactive filter bar and keyboard accessible table |
-| 14 | Alert detail page | ☐ | |
+| 14 | Alert detail page | ☑ | Header with risk ring (size 96), action buttons, confirm modal for revoke, why flagged, counterfactual table, attack chain stepper, predicted next step, evidence table, feedback loop |
 | 15 | Identities, Graph, Timeline | ☐ | |
 | 16 | Hygiene, Audit | ☐ | |
 | 17 | Live wiring + tests | ☐ | |
