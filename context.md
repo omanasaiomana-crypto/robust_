@@ -324,7 +324,7 @@ tailwind.config = {
 | 4 | Loaders and normalize | ☑ | normalized 2,967 events, 0 skipped, 20 identities |
 | 5 | Enrich, sessions, graph | ☑ | enriched, 661 sessions assigned, 1,173 graph nodes |
 | 6 | Rule detectors P1-P3 | ☑ | P1 (anita.rao), P2 (svc-report), P3 (svc-report 4-step chain) |
-| 7 | Rule detectors P4-P5 | ☐ | |
+| 7 | Rule detectors P4-P5 | ☑ | P4 (dev.kumar StopLogging), P5 (meera.n token abuse) |
 | 8 | ML module | ☐ | |
 | 9 | Decision + simulator | ☐ | |
 | 10 | Pipeline + evaluation | ☐ | |
