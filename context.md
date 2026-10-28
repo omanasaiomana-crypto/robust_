@@ -335,7 +335,7 @@ tailwind.config = {
 | 15 | Identities, Graph, Timeline | ☑ | Interactive identities table, vis-network graph with escalation paths, and step-by-step session attack activity replay timeline |
 | 16 | Hygiene, Audit | ☑ | Posture hygiene with dormant privileged accounts and paths to admin; tamper-evident audit ledger with chain verification |
 | 17 | Live wiring + tests | ☑ | 33 pytest tests passing across utils, normalize, detectors S1-S5, API actions/feedback; mock vs live API verified |
-| 18 | Polish + demo prep | ☐ | |
+| 18 | Polish + demo prep | ☑ | Inline SVG shield favicon, subtle demo scenario card on overview, accessibility labels, professional README.md |
 
 Status values: ☐ not started · ◐ in progress · ☑ done (check passed).
 

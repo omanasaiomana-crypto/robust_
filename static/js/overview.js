@@ -13,6 +13,9 @@ const content = renderLayout('overview', 'Threat Overview', 'Real-time multi-age
 
 if (content) {
   content.innerHTML = `
+    <!-- Demo Scenario Callout (Visible only for sample data) -->
+    <div id="demo-scenario-container"></div>
+
     <!-- Top Stat Cards Grid -->
     <div id="stats-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
       ${skeleton(2)}
@@ -68,17 +71,69 @@ if (content) {
 }
 
 async function loadOverviewData() {
-  const [summaryRes, metricsRes, alertsRes] = await Promise.allSettled([
+  const [summaryRes, metricsRes, alertsRes, healthRes] = await Promise.allSettled([
     api('/summary'),
     api('/metrics'),
     api('/alerts?min_risk=70&limit=5'),
+    api('/health'),
   ]);
 
+  const demoContainer = document.getElementById('demo-scenario-container');
   const statsContainer = document.getElementById('stats-grid');
   const patternWrapper = document.getElementById('pattern-chart-wrapper');
   const riskWrapper = document.getElementById('risk-chart-wrapper');
   const identitiesWrapper = document.getElementById('identities-wrapper');
   const alertsWrapper = document.getElementById('critical-alerts-wrapper');
+
+  // Demo Scenario Callout (rendered only when in sample data mode)
+  if (demoContainer) {
+    const isSampleData = healthRes.status === 'fulfilled' && (healthRes.value?.data_mode === 'sample' || isMock);
+    if (isSampleData) {
+      demoContainer.innerHTML = `
+        <div class="bg-panel border border-brand/40 rounded-xl p-4 shadow-sm flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
+          <div class="flex items-center gap-3">
+            <div class="w-9 h-9 rounded-lg bg-brand/10 border border-brand/30 flex items-center justify-center text-brand font-bold text-base flex-shrink-0">
+              ⚡
+            </div>
+            <div>
+              <div class="flex items-center gap-2 flex-wrap">
+                <span class="text-xs font-semibold text-ink uppercase tracking-wider">Demo Scenario</span>
+                <span class="px-2 py-0.5 rounded text-[11px] font-mono bg-brand/15 text-brand font-medium">Sample data with 5 injected attacks</span>
+              </div>
+              <p class="text-xs text-muted mt-0.5">
+                Explore the critical S3 privilege escalation chain on service account <code class="text-ink font-mono">svc-report</code>.
+              </p>
+            </div>
+          </div>
+          <div class="flex items-center gap-2 text-xs flex-wrap">
+            <a
+              href="/alert.html?id=AL-0001${querySuffix}"
+              class="px-3 py-1.5 rounded-lg bg-panel2 border border-line hover:border-brand/50 text-ink hover:text-brand transition-colors font-medium inline-flex items-center gap-1 shadow-sm"
+            >
+              <span>Alert (AL-0001)</span>
+              <span>→</span>
+            </a>
+            <a
+              href="/graph.html?identity=svc-report${querySuffix}"
+              class="px-3 py-1.5 rounded-lg bg-panel2 border border-line hover:border-brand/50 text-ink hover:text-brand transition-colors font-medium inline-flex items-center gap-1 shadow-sm"
+            >
+              <span>Identity Graph</span>
+              <span>→</span>
+            </a>
+            <a
+              href="/timeline.html?session=okta:sess-svc-esc-1657${querySuffix}"
+              class="px-3 py-1.5 rounded-lg bg-panel2 border border-line hover:border-brand/50 text-ink hover:text-brand transition-colors font-medium inline-flex items-center gap-1 shadow-sm"
+            >
+              <span>Session Timeline</span>
+              <span>→</span>
+            </a>
+          </div>
+        </div>
+      `;
+    } else {
+      demoContainer.innerHTML = '';
+    }
+  }
 
   // 1. Stat Cards
   if (summaryRes.status === 'fulfilled') {

@@ -99,6 +99,7 @@ if (content) {
         </div>
         <input
           id="timeline-slider"
+          aria-label="Timeline event scrubber"
           type="range"
           min="0"
           max="0"

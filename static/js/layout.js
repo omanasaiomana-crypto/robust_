@@ -131,7 +131,7 @@ export function renderLayout(active, title, subtitle) {
             </div>
 
             <!-- Re-run Pipeline Button -->
-            <button id="btn-rerun" class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-medium bg-brand/10 hover:bg-brand/20 text-brand border border-brand/30 transition-colors">
+            <button id="btn-rerun" aria-label="Re-run detection pipeline" class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-medium bg-brand/10 hover:bg-brand/20 text-brand border border-brand/30 transition-colors">
               <svg class="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
               </svg>
