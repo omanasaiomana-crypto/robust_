@@ -11,8 +11,36 @@ const querySuffix = isMock ? '?mock=1' : '';
 
 const content = renderLayout('overview', 'Threat Overview', 'Real-time multi-agent identity posture');
 
+const scanUrl = isMock ? '/scan.html?mock=1&autostart=replay' : '/scan.html?autostart=1';
+
+const rerunBtn = document.getElementById('btn-rerun');
+if (rerunBtn && rerunBtn.parentElement) {
+  const scanBtn = document.createElement('a');
+  scanBtn.href = scanUrl;
+  scanBtn.id = 'btn-run-live-scan';
+  scanBtn.className = 'inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold bg-brand hover:bg-blue-600 text-white shadow-sm transition-colors';
+  scanBtn.innerHTML = `<svg class="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><circle cx="12" cy="12" r="9" stroke-width="2"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3a9 9 0 019 9m-9-6a6 6 0 016 6m-6-3a3 3 0 013 3"/></svg><span>Run live scan</span>`;
+  rerunBtn.parentElement.insertBefore(scanBtn, rerunBtn);
+}
+
 if (content) {
   content.innerHTML = `
+    <!-- Header Area Callout with Run live scan button -->
+    <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 bg-panel border border-line rounded-xl p-4 shadow-sm">
+      <div class="flex items-center gap-3">
+        <div class="w-9 h-9 rounded-lg bg-brand/10 border border-brand/20 flex items-center justify-center text-brand flex-shrink-0">
+          <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><circle cx="12" cy="12" r="9" stroke-width="2"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3a9 9 0 019 9m-9-6a6 6 0 016 6m-6-3a3 3 0 013 3"/></svg>
+        </div>
+        <div>
+          <h2 class="text-sm font-semibold text-ink">Autonomous Agent Live Scan</h2>
+          <p class="text-xs text-muted">Watch all 15 agents inspect identity telemetry, flag anomalies, and commit threats to the audit log.</p>
+        </div>
+      </div>
+      <a href="${scanUrl}" class="inline-flex items-center justify-center gap-1.5 px-4 py-2 rounded-lg text-xs font-semibold bg-brand hover:bg-blue-600 text-white shadow-sm transition-colors flex-shrink-0">
+        Run live scan →
+      </a>
+    </div>
+
     <!-- Demo Scenario Callout (Visible only for sample data) -->
     <div id="demo-scenario-container"></div>
 

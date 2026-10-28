@@ -518,7 +518,7 @@ Sidebar order after v2.1: Overview · Live scan · Agents · Input data · Alert
 |---|---|---|---|
 | 31 | Agent trace, threat audit, terminal scan | ☑ | trace instrumentation (13 scan agents), threat audit entries, scan CLI, scan API, 66 tests passing |
 | 32 | Agents dashboard | ☑ | static/agents.html, static/js/agents.js (15 cards, 5 columns, banner, detail modal), mock fixtures, smoke test passed |
-| 33 | Live scan page | ☐ | |
+| 33 | Live scan page | ☑ | static/scan.html, static/js/scan.js (REF_16 matched), jsonview.js, layout nav & overview live scan button, smoke test passed |
 | 34 | Data input backend | ☐ | |
 | 35 | Input page UI | ☐ | |
 | 36 | Attack Path Explorer | ☐ | |
