@@ -1,0 +1,84 @@
+{
+  "alert_id": "AL-0001",
+  "level": "session",
+  "identity_id": "svc-report",
+  "session_id": "okta:sess-svc-esc-1657",
+  "risk": 100.0,
+  "confidence": 0.3,
+  "blast_radius": 2,
+  "band": "revoke",
+  "patterns": [
+    "ML",
+    "P3",
+    "P4"
+  ],
+  "mitre": [
+    "T1098",
+    "T1526",
+    "T1548",
+    "T1562"
+  ],
+  "reasons": [
+    "Privilege escalation chain detected for svc-report: CredCreate (CreateAccessKey) -> PermGrant (AttachUserPolicy) -> RoleAssume (AssumeRole) -> Impact (GetSecretValue) across 4 steps in 11 minutes.",
+    "Session behavior is unusual compared with normal activity (anomaly score 0.95).",
+    "Unusual API activity by svc-report: sensitive action CreateAccessKey.",
+    "Unusual API activity by svc-report: sensitive action AttachUserPolicy.",
+    "Unusual API activity by svc-report: sensitive action GetSecretValue."
+  ],
+  "evidence_event_ids": [
+    "okta-000658",
+    "ct-0002299",
+    "ct-0002300",
+    "ct-0002301",
+    "ct-0002302"
+  ],
+  "chain": [
+    {
+      "event_id": "ct-0002299",
+      "action": "CreateAccessKey",
+      "state": "CredCreate",
+      "timestamp": "2026-10-27T08:01:00Z"
+    },
+    {
+      "event_id": "ct-0002300",
+      "action": "AttachUserPolicy",
+      "state": "PermGrant",
+      "timestamp": "2026-10-27T08:04:00Z"
+    },
+    {
+      "event_id": "ct-0002301",
+      "action": "AssumeRole",
+      "state": "RoleAssume",
+      "timestamp": "2026-10-27T08:08:00Z"
+    },
+    {
+      "event_id": "ct-0002302",
+      "action": "GetSecretValue",
+      "state": "Impact",
+      "timestamp": "2026-10-27T08:12:00Z"
+    }
+  ],
+  "prediction": {
+    "next_state": "End",
+    "probability": 0.222
+  },
+  "counterfactuals": [
+    {
+      "without": "ML",
+      "risk": 100.0
+    },
+    {
+      "without": "P3",
+      "risk": 61.2
+    },
+    {
+      "without": "P4",
+      "risk": 100.0
+    }
+  ],
+  "recommended_action": "revoke",
+  "action_status": "pending",
+  "feedback": null,
+  "first_seen": "2026-10-27T08:00:00Z",
+  "last_seen": "2026-10-27T08:12:00Z"
+}

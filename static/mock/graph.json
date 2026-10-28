@@ -1,0 +1,2017 @@
+{
+  "identity_id": "svc-report",
+  "nodes": [
+    {
+      "id": "session:okta:sess-1197",
+      "label": "okta:sess-1197",
+      "kind": "session",
+      "risk": 0.0
+    },
+    {
+      "id": "session:okta:sess-1035",
+      "label": "okta:sess-1035",
+      "kind": "session",
+      "risk": 0.0
+    },
+    {
+      "id": "session:okta:sess-1076",
+      "label": "okta:sess-1076",
+      "kind": "session",
+      "risk": 0.0
+    },
+    {
+      "id": "session:okta:sess-1139",
+      "label": "okta:sess-1139",
+      "kind": "session",
+      "risk": 0.0
+    },
+    {
+      "id": "session:okta:sess-1059",
+      "label": "okta:sess-1059",
+      "kind": "session",
+      "risk": 0.0
+    },
+    {
+      "id": "session:okta:sess-1023",
+      "label": "okta:sess-1023",
+      "kind": "session",
+      "risk": 0.0
+    },
+    {
+      "id": "session:okta:sess-1124",
+      "label": "okta:sess-1124",
+      "kind": "session",
+      "risk": 0.0
+    },
+    {
+      "id": "session:okta:sess-1218",
+      "label": "okta:sess-1218",
+      "kind": "session",
+      "risk": 0.0
+    },
+    {
+      "id": "session:okta:svc-sess-1016",
+      "label": "okta:svc-sess-1016",
+      "kind": "session",
+      "risk": 0.0
+    },
+    {
+      "id": "session:okta:sess-1010",
+      "label": "okta:sess-1010",
+      "kind": "session",
+      "risk": 0.0
+    },
+    {
+      "id": "session:okta:sess-1142",
+      "label": "okta:sess-1142",
+      "kind": "session",
+      "risk": 0.0
+    },
+    {
+      "id": "session:okta:sess-1129",
+      "label": "okta:sess-1129",
+      "kind": "session",
+      "risk": 0.0
+    },
+    {
+      "id": "session:okta:sess-1093",
+      "label": "okta:sess-1093",
+      "kind": "session",
+      "risk": 0.0
+    },
+    {
+      "id": "session:okta:sess-1238",
+      "label": "okta:sess-1238",
+      "kind": "session",
+      "risk": 0.0
+    },
+    {
+      "id": "session:okta:sess-1159",
+      "label": "okta:sess-1159",
+      "kind": "session",
+      "risk": 0.0
+    },
+    {
+      "id": "session:okta:sess-1185",
+      "label": "okta:sess-1185",
+      "kind": "session",
+      "risk": 0.0
+    },
+    {
+      "id": "session:okta:sess-1006",
+      "label": "okta:sess-1006",
+      "kind": "session",
+      "risk": 0.0
+    },
+    {
+      "id": "session:okta:sess-1157",
+      "label": "okta:sess-1157",
+      "kind": "session",
+      "risk": 0.0
+    },
+    {
+      "id": "session:okta:sess-1136",
+      "label": "okta:sess-1136",
+      "kind": "session",
+      "risk": 0.0
+    },
+    {
+      "id": "session:okta:sess-1158",
+      "label": "okta:sess-1158",
+      "kind": "session",
+      "risk": 0.0
+    },
+    {
+      "id": "session:okta:svc-sess-1071",
+      "label": "okta:svc-sess-1071",
+      "kind": "session",
+      "risk": 0.0
+    },
+    {
+      "id": "session:okta:sess-1027",
+      "label": "okta:sess-1027",
+      "kind": "session",
+      "risk": 0.0
+    },
+    {
+      "id": "session:okta:sess-1191",
+      "label": "okta:sess-1191",
+      "kind": "session",
+      "risk": 0.0
+    },
+    {
+      "id": "session:okta:sess-1253",
+      "label": "okta:sess-1253",
+      "kind": "session",
+      "risk": 0.0
+    },
+    {
+      "id": "session:okta:sess-1210",
+      "label": "okta:sess-1210",
+      "kind": "session",
+      "risk": 0.0
+    },
+    {
+      "id": "session:okta:sess-1259",
+      "label": "okta:sess-1259",
+      "kind": "session",
+      "risk": 0.0
+    },
+    {
+      "id": "session:okta:sess-1183",
+      "label": "okta:sess-1183",
+      "kind": "session",
+      "risk": 0.0
+    },
+    {
+      "id": "session:okta:sess-1214",
+      "label": "okta:sess-1214",
+      "kind": "session",
+      "risk": 0.0
+    },
+    {
+      "id": "session:okta:sess-1017",
+      "label": "okta:sess-1017",
+      "kind": "session",
+      "risk": 0.0
+    },
+    {
+      "id": "session:okta:sess-1261",
+      "label": "okta:sess-1261",
+      "kind": "session",
+      "risk": 0.0
+    },
+    {
+      "id": "session:okta:sess-1068",
+      "label": "okta:sess-1068",
+      "kind": "session",
+      "risk": 0.0
+    },
+    {
+      "id": "session:okta:sess-1247",
+      "label": "okta:sess-1247",
+      "kind": "session",
+      "risk": 0.0
+    },
+    {
+      "id": "res:arn:aws:secretsmanager:ap-south-1:123456789012:secret:prod/db/credentials-XYZ",
+      "label": "credentials-XYZ",
+      "kind": "resource",
+      "risk": 0.0
+    },
+    {
+      "id": "session:okta:sess-1143",
+      "label": "okta:sess-1143",
+      "kind": "session",
+      "risk": 0.0
+    },
+    {
+      "id": "session:okta:sess-1200",
+      "label": "okta:sess-1200",
+      "kind": "session",
+      "risk": 0.0
+    },
+    {
+      "id": "session:okta:sess-1118",
+      "label": "okta:sess-1118",
+      "kind": "session",
+      "risk": 0.0
+    },
+    {
+      "id": "session:okta:sess-1052",
+      "label": "okta:sess-1052",
+      "kind": "session",
+      "risk": 0.0
+    },
+    {
+      "id": "session:okta:sess-1057",
+      "label": "okta:sess-1057",
+      "kind": "session",
+      "risk": 0.0
+    },
+    {
+      "id": "session:okta:sess-1175",
+      "label": "okta:sess-1175",
+      "kind": "session",
+      "risk": 0.0
+    },
+    {
+      "id": "session:okta:sess-1219",
+      "label": "okta:sess-1219",
+      "kind": "session",
+      "risk": 0.0
+    },
+    {
+      "id": "session:okta:sess-1215",
+      "label": "okta:sess-1215",
+      "kind": "session",
+      "risk": 0.0
+    },
+    {
+      "id": "session:okta:sess-1196",
+      "label": "okta:sess-1196",
+      "kind": "session",
+      "risk": 0.0
+    },
+    {
+      "id": "session:okta:sess-1190",
+      "label": "okta:sess-1190",
+      "kind": "session",
+      "risk": 0.0
+    },
+    {
+      "id": "session:okta:sess-1160",
+      "label": "okta:sess-1160",
+      "kind": "session",
+      "risk": 0.0
+    },
+    {
+      "id": "session:okta:sess-1237",
+      "label": "okta:sess-1237",
+      "kind": "session",
+      "risk": 0.0
+    },
+    {
+      "id": "session:okta:sess-1083",
+      "label": "okta:sess-1083",
+      "kind": "session",
+      "risk": 0.0
+    },
+    {
+      "id": "session:okta:sess-1065",
+      "label": "okta:sess-1065",
+      "kind": "session",
+      "risk": 0.0
+    },
+    {
+      "id": "session:okta:sess-1132",
+      "label": "okta:sess-1132",
+      "kind": "session",
+      "risk": 0.0
+    },
+    {
+      "id": "session:okta:sess-1260",
+      "label": "okta:sess-1260",
+      "kind": "session",
+      "risk": 0.0
+    },
+    {
+      "id": "session:okta:sess-1276",
+      "label": "okta:sess-1276",
+      "kind": "session",
+      "risk": 0.0
+    },
+    {
+      "id": "session:okta:sess-1078",
+      "label": "okta:sess-1078",
+      "kind": "session",
+      "risk": 0.0
+    },
+    {
+      "id": "session:okta:sess-1163",
+      "label": "okta:sess-1163",
+      "kind": "session",
+      "risk": 0.0
+    },
+    {
+      "id": "session:okta:sess-1153",
+      "label": "okta:sess-1153",
+      "kind": "session",
+      "risk": 0.0
+    },
+    {
+      "id": "session:okta:sess-1082",
+      "label": "okta:sess-1082",
+      "kind": "session",
+      "risk": 0.0
+    },
+    {
+      "id": "session:okta:sess-1217",
+      "label": "okta:sess-1217",
+      "kind": "session",
+      "risk": 0.0
+    },
+    {
+      "id": "session:okta:svc-sess-1053",
+      "label": "okta:svc-sess-1053",
+      "kind": "session",
+      "risk": 0.0
+    },
+    {
+      "id": "policy:svc-report",
+      "label": "svc-report",
+      "kind": "policy",
+      "risk": 0.0
+    },
+    {
+      "id": "session:okta:sess-1037",
+      "label": "okta:sess-1037",
+      "kind": "session",
+      "risk": 0.0
+    },
+    {
+      "id": "session:okta:sess-1232",
+      "label": "okta:sess-1232",
+      "kind": "session",
+      "risk": 0.0
+    },
+    {
+      "id": "session:okta:sess-1227",
+      "label": "okta:sess-1227",
+      "kind": "session",
+      "risk": 0.0
+    },
+    {
+      "id": "res:arn:aws:ec2:ap-south-1:123456789012:instance/*",
+      "label": "*",
+      "kind": "resource",
+      "risk": 0.0
+    },
+    {
+      "id": "ip:103.21.244.99",
+      "label": "103.21.244.99",
+      "kind": "ip",
+      "risk": 0.0
+    },
+    {
+      "id": "session:okta:sess-1211",
+      "label": "okta:sess-1211",
+      "kind": "session",
+      "risk": 0.0
+    },
+    {
+      "id": "session:okta:sess-1043",
+      "label": "okta:sess-1043",
+      "kind": "session",
+      "risk": 0.0
+    },
+    {
+      "id": "session:okta:sess-1032",
+      "label": "okta:sess-1032",
+      "kind": "session",
+      "risk": 0.0
+    },
+    {
+      "id": "session:okta:sess-1170",
+      "label": "okta:sess-1170",
+      "kind": "session",
+      "risk": 0.0
+    },
+    {
+      "id": "session:okta:sess-1095",
+      "label": "okta:sess-1095",
+      "kind": "session",
+      "risk": 0.0
+    },
+    {
+      "id": "session:okta:sess-1034",
+      "label": "okta:sess-1034",
+      "kind": "session",
+      "risk": 0.0
+    },
+    {
+      "id": "session:okta:sess-1111",
+      "label": "okta:sess-1111",
+      "kind": "session",
+      "risk": 0.0
+    },
+    {
+      "id": "session:okta:sess-1092",
+      "label": "okta:sess-1092",
+      "kind": "session",
+      "risk": 0.0
+    },
+    {
+      "id": "session:okta:sess-1104",
+      "label": "okta:sess-1104",
+      "kind": "session",
+      "risk": 0.0
+    },
+    {
+      "id": "ip:103.21.244.5",
+      "label": "103.21.244.5",
+      "kind": "ip",
+      "risk": 0.0
+    },
+    {
+      "id": "key:AKIASVC-4232KEY",
+      "label": "AKIASVC-4232KEY",
+      "kind": "key",
+      "risk": 0.0
+    },
+    {
+      "id": "session:okta:sess-1168",
+      "label": "okta:sess-1168",
+      "kind": "session",
+      "risk": 0.0
+    },
+    {
+      "id": "session:okta:sess-1106",
+      "label": "okta:sess-1106",
+      "kind": "session",
+      "risk": 0.0
+    },
+    {
+      "id": "session:okta:sess-1009",
+      "label": "okta:sess-1009",
+      "kind": "session",
+      "risk": 0.0
+    },
+    {
+      "id": "session:okta:sess-1208",
+      "label": "okta:sess-1208",
+      "kind": "session",
+      "risk": 0.0
+    },
+    {
+      "id": "session:okta:sess-1140",
+      "label": "okta:sess-1140",
+      "kind": "session",
+      "risk": 0.0
+    },
+    {
+      "id": "session:okta:sess-1284",
+      "label": "okta:sess-1284",
+      "kind": "session",
+      "risk": 0.0
+    },
+    {
+      "id": "session:okta:sess-1273",
+      "label": "okta:sess-1273",
+      "kind": "session",
+      "risk": 0.0
+    },
+    {
+      "id": "res:arn:aws:iam::123456789012:user/svc-report",
+      "label": "svc-report",
+      "kind": "resource",
+      "risk": 0.0
+    },
+    {
+      "id": "session:okta:sess-1036",
+      "label": "okta:sess-1036",
+      "kind": "session",
+      "risk": 0.0
+    },
+    {
+      "id": "session:okta:sess-1144",
+      "label": "okta:sess-1144",
+      "kind": "session",
+      "risk": 0.0
+    },
+    {
+      "id": "session:okta:sess-1234",
+      "label": "okta:sess-1234",
+      "kind": "session",
+      "risk": 0.0
+    },
+    {
+      "id": "session:okta:sess-1048",
+      "label": "okta:sess-1048",
+      "kind": "session",
+      "risk": 0.0
+    },
+    {
+      "id": "session:okta:sess-1213",
+      "label": "okta:sess-1213",
+      "kind": "session",
+      "risk": 0.0
+    },
+    {
+      "id": "session:okta:sess-1056",
+      "label": "okta:sess-1056",
+      "kind": "session",
+      "risk": 0.0
+    },
+    {
+      "id": "session:okta:sess-1245",
+      "label": "okta:sess-1245",
+      "kind": "session",
+      "risk": 0.0
+    },
+    {
+      "id": "session:okta:sess-1171",
+      "label": "okta:sess-1171",
+      "kind": "session",
+      "risk": 0.0
+    },
+    {
+      "id": "session:okta:sess-1195",
+      "label": "okta:sess-1195",
+      "kind": "session",
+      "risk": 0.0
+    },
+    {
+      "id": "session:okta:sess-1007",
+      "label": "okta:sess-1007",
+      "kind": "session",
+      "risk": 0.0
+    },
+    {
+      "id": "session:okta:sess-1042",
+      "label": "okta:sess-1042",
+      "kind": "session",
+      "risk": 0.0
+    },
+    {
+      "id": "session:okta:sess-1026",
+      "label": "okta:sess-1026",
+      "kind": "session",
+      "risk": 0.0
+    },
+    {
+      "id": "session:okta:sess-1174",
+      "label": "okta:sess-1174",
+      "kind": "session",
+      "risk": 0.0
+    },
+    {
+      "id": "session:okta:sess-1014",
+      "label": "okta:sess-1014",
+      "kind": "session",
+      "risk": 0.0
+    },
+    {
+      "id": "role:AdminRole",
+      "label": "AdminRole",
+      "kind": "role",
+      "risk": 0.0
+    },
+    {
+      "id": "session:okta:sess-1058",
+      "label": "okta:sess-1058",
+      "kind": "session",
+      "risk": 0.0
+    },
+    {
+      "id": "session:okta:sess-1085",
+      "label": "okta:sess-1085",
+      "kind": "session",
+      "risk": 0.0
+    },
+    {
+      "id": "session:okta:sess-1204",
+      "label": "okta:sess-1204",
+      "kind": "session",
+      "risk": 0.0
+    },
+    {
+      "id": "session:okta:sess-1249",
+      "label": "okta:sess-1249",
+      "kind": "session",
+      "risk": 0.0
+    },
+    {
+      "id": "session:okta:sess-1255",
+      "label": "okta:sess-1255",
+      "kind": "session",
+      "risk": 0.0
+    },
+    {
+      "id": "session:okta:sess-1123",
+      "label": "okta:sess-1123",
+      "kind": "session",
+      "risk": 0.0
+    },
+    {
+      "id": "session:okta:sess-1108",
+      "label": "okta:sess-1108",
+      "kind": "session",
+      "risk": 0.0
+    },
+    {
+      "id": "session:okta:sess-svc-1656",
+      "label": "okta:sess-svc-1656",
+      "kind": "session",
+      "risk": 0.0
+    },
+    {
+      "id": "session:okta:sess-1067",
+      "label": "okta:sess-1067",
+      "kind": "session",
+      "risk": 0.0
+    },
+    {
+      "id": "session:okta:sess-1090",
+      "label": "okta:sess-1090",
+      "kind": "session",
+      "risk": 0.0
+    },
+    {
+      "id": "session:okta:sess-1145",
+      "label": "okta:sess-1145",
+      "kind": "session",
+      "risk": 0.0
+    },
+    {
+      "id": "session:okta:sess-1002",
+      "label": "okta:sess-1002",
+      "kind": "session",
+      "risk": 0.0
+    },
+    {
+      "id": "session:okta:sess-1024",
+      "label": "okta:sess-1024",
+      "kind": "session",
+      "risk": 0.0
+    },
+    {
+      "id": "session:okta:sess-1131",
+      "label": "okta:sess-1131",
+      "kind": "session",
+      "risk": 0.0
+    },
+    {
+      "id": "res:arn:aws:s3:::corp-data-lake-reports/batch.json",
+      "label": "batch.json",
+      "kind": "resource",
+      "risk": 0.0
+    },
+    {
+      "id": "session:okta:sess-1229",
+      "label": "okta:sess-1229",
+      "kind": "session",
+      "risk": 0.0
+    },
+    {
+      "id": "session:okta:sess-1066",
+      "label": "okta:sess-1066",
+      "kind": "session",
+      "risk": 0.0
+    },
+    {
+      "id": "session:okta:sess-1205",
+      "label": "okta:sess-1205",
+      "kind": "session",
+      "risk": 0.0
+    },
+    {
+      "id": "session:okta:sess-1236",
+      "label": "okta:sess-1236",
+      "kind": "session",
+      "risk": 0.0
+    },
+    {
+      "id": "session:okta:sess-1226",
+      "label": "okta:sess-1226",
+      "kind": "session",
+      "risk": 0.0
+    },
+    {
+      "id": "session:okta:sess-1286",
+      "label": "okta:sess-1286",
+      "kind": "session",
+      "risk": 0.0
+    },
+    {
+      "id": "session:okta:sess-1186",
+      "label": "okta:sess-1186",
+      "kind": "session",
+      "risk": 0.0
+    },
+    {
+      "id": "session:okta:sess-1221",
+      "label": "okta:sess-1221",
+      "kind": "session",
+      "risk": 0.0
+    },
+    {
+      "id": "session:okta:sess-1003",
+      "label": "okta:sess-1003",
+      "kind": "session",
+      "risk": 0.0
+    },
+    {
+      "id": "user:svc-report",
+      "label": "svc-report",
+      "kind": "user",
+      "risk": 0.0
+    },
+    {
+      "id": "session:okta:sess-1161",
+      "label": "okta:sess-1161",
+      "kind": "session",
+      "risk": 0.0
+    },
+    {
+      "id": "session:okta:sess-1165",
+      "label": "okta:sess-1165",
+      "kind": "session",
+      "risk": 0.0
+    },
+    {
+      "id": "session:okta:sess-1178",
+      "label": "okta:sess-1178",
+      "kind": "session",
+      "risk": 0.0
+    },
+    {
+      "id": "session:okta:sess-1152",
+      "label": "okta:sess-1152",
+      "kind": "session",
+      "risk": 0.0
+    },
+    {
+      "id": "session:okta:sess-1096",
+      "label": "okta:sess-1096",
+      "kind": "session",
+      "risk": 0.0
+    },
+    {
+      "id": "session:okta:sess-1164",
+      "label": "okta:sess-1164",
+      "kind": "session",
+      "risk": 0.0
+    },
+    {
+      "id": "session:okta:sess-1004",
+      "label": "okta:sess-1004",
+      "kind": "session",
+      "risk": 0.0
+    },
+    {
+      "id": "session:okta:sess-1231",
+      "label": "okta:sess-1231",
+      "kind": "session",
+      "risk": 0.0
+    },
+    {
+      "id": "session:okta:sess-1162",
+      "label": "okta:sess-1162",
+      "kind": "session",
+      "risk": 0.0
+    },
+    {
+      "id": "session:okta:sess-1239",
+      "label": "okta:sess-1239",
+      "kind": "session",
+      "risk": 0.0
+    },
+    {
+      "id": "session:okta:svc-sess-1033",
+      "label": "okta:svc-sess-1033",
+      "kind": "session",
+      "risk": 0.0
+    },
+    {
+      "id": "session:okta:sess-1198",
+      "label": "okta:sess-1198",
+      "kind": "session",
+      "risk": 0.0
+    },
+    {
+      "id": "session:okta:sess-1060",
+      "label": "okta:sess-1060",
+      "kind": "session",
+      "risk": 0.0
+    },
+    {
+      "id": "session:okta:sess-1146",
+      "label": "okta:sess-1146",
+      "kind": "session",
+      "risk": 0.0
+    },
+    {
+      "id": "session:okta:sess-1028",
+      "label": "okta:sess-1028",
+      "kind": "session",
+      "risk": 0.0
+    },
+    {
+      "id": "session:okta:sess-1264",
+      "label": "okta:sess-1264",
+      "kind": "session",
+      "risk": 0.0
+    },
+    {
+      "id": "session:okta:sess-1081",
+      "label": "okta:sess-1081",
+      "kind": "session",
+      "risk": 0.0
+    },
+    {
+      "id": "session:okta:sess-1148",
+      "label": "okta:sess-1148",
+      "kind": "session",
+      "risk": 0.0
+    },
+    {
+      "id": "session:okta:sess-1086",
+      "label": "okta:sess-1086",
+      "kind": "session",
+      "risk": 0.0
+    },
+    {
+      "id": "session:okta:sess-svc-esc-1657",
+      "label": "okta:sess-svc-esc-1657",
+      "kind": "session",
+      "risk": 0.0
+    },
+    {
+      "id": "session:okta:sess-1113",
+      "label": "okta:sess-1113",
+      "kind": "session",
+      "risk": 0.0
+    },
+    {
+      "id": "session:okta:sess-1179",
+      "label": "okta:sess-1179",
+      "kind": "session",
+      "risk": 0.0
+    },
+    {
+      "id": "session:okta:sess-1088",
+      "label": "okta:sess-1088",
+      "kind": "session",
+      "risk": 0.0
+    },
+    {
+      "id": "session:okta:sess-1098",
+      "label": "okta:sess-1098",
+      "kind": "session",
+      "risk": 0.0
+    },
+    {
+      "id": "session:okta:sess-1125",
+      "label": "okta:sess-1125",
+      "kind": "session",
+      "risk": 0.0
+    },
+    {
+      "id": "session:okta:sess-1243",
+      "label": "okta:sess-1243",
+      "kind": "session",
+      "risk": 0.0
+    },
+    {
+      "id": "session:okta:sess-1177",
+      "label": "okta:sess-1177",
+      "kind": "session",
+      "risk": 0.0
+    },
+    {
+      "id": "session:okta:sess-1269",
+      "label": "okta:sess-1269",
+      "kind": "session",
+      "risk": 0.0
+    },
+    {
+      "id": "session:okta:sess-1073",
+      "label": "okta:sess-1073",
+      "kind": "session",
+      "risk": 0.0
+    }
+  ],
+  "edges": [
+    {
+      "source": "session:okta:sess-1197",
+      "target": "res:arn:aws:ec2:ap-south-1:123456789012:instance/*",
+      "label": "accessed",
+      "event_id": "ct-0000713",
+      "suspicious": false
+    },
+    {
+      "source": "session:okta:sess-1035",
+      "target": "res:arn:aws:ec2:ap-south-1:123456789012:instance/*",
+      "label": "accessed",
+      "event_id": "ct-0000127",
+      "suspicious": false
+    },
+    {
+      "source": "session:okta:sess-1076",
+      "target": "res:arn:aws:ec2:ap-south-1:123456789012:instance/*",
+      "label": "accessed",
+      "event_id": "ct-0000279",
+      "suspicious": false
+    },
+    {
+      "source": "session:okta:sess-1139",
+      "target": "res:arn:aws:ec2:ap-south-1:123456789012:instance/*",
+      "label": "accessed",
+      "event_id": "ct-0000506",
+      "suspicious": false
+    },
+    {
+      "source": "session:okta:sess-1059",
+      "target": "res:arn:aws:ec2:ap-south-1:123456789012:instance/*",
+      "label": "accessed",
+      "event_id": "ct-0000224",
+      "suspicious": false
+    },
+    {
+      "source": "session:okta:sess-1023",
+      "target": "res:arn:aws:ec2:ap-south-1:123456789012:instance/*",
+      "label": "accessed",
+      "event_id": "ct-0000090",
+      "suspicious": false
+    },
+    {
+      "source": "session:okta:sess-1124",
+      "target": "res:arn:aws:ec2:ap-south-1:123456789012:instance/*",
+      "label": "accessed",
+      "event_id": "ct-0000449",
+      "suspicious": false
+    },
+    {
+      "source": "session:okta:sess-1218",
+      "target": "res:arn:aws:ec2:ap-south-1:123456789012:instance/*",
+      "label": "accessed",
+      "event_id": "ct-0000787",
+      "suspicious": false
+    },
+    {
+      "source": "session:okta:svc-sess-1016",
+      "target": "ip:103.21.244.5",
+      "label": "from_ip",
+      "event_id": "okta-000017",
+      "suspicious": true
+    },
+    {
+      "source": "session:okta:svc-sess-1016",
+      "target": "res:arn:aws:s3:::corp-data-lake-reports/batch.json",
+      "label": "accessed",
+      "event_id": "ct-0000061",
+      "suspicious": true
+    },
+    {
+      "source": "session:okta:sess-1010",
+      "target": "res:arn:aws:ec2:ap-south-1:123456789012:instance/*",
+      "label": "accessed",
+      "event_id": "ct-0000039",
+      "suspicious": false
+    },
+    {
+      "source": "session:okta:sess-1142",
+      "target": "res:arn:aws:ec2:ap-south-1:123456789012:instance/*",
+      "label": "accessed",
+      "event_id": "ct-0000516",
+      "suspicious": false
+    },
+    {
+      "source": "session:okta:sess-1129",
+      "target": "res:arn:aws:ec2:ap-south-1:123456789012:instance/*",
+      "label": "accessed",
+      "event_id": "ct-0000465",
+      "suspicious": false
+    },
+    {
+      "source": "session:okta:sess-1093",
+      "target": "res:arn:aws:ec2:ap-south-1:123456789012:instance/*",
+      "label": "accessed",
+      "event_id": "ct-0000342",
+      "suspicious": false
+    },
+    {
+      "source": "session:okta:sess-1238",
+      "target": "res:arn:aws:ec2:ap-south-1:123456789012:instance/*",
+      "label": "accessed",
+      "event_id": "ct-0000855",
+      "suspicious": false
+    },
+    {
+      "source": "session:okta:sess-1159",
+      "target": "res:arn:aws:ec2:ap-south-1:123456789012:instance/*",
+      "label": "accessed",
+      "event_id": "ct-0000573",
+      "suspicious": false
+    },
+    {
+      "source": "session:okta:sess-1185",
+      "target": "res:arn:aws:ec2:ap-south-1:123456789012:instance/*",
+      "label": "accessed",
+      "event_id": "ct-0000671",
+      "suspicious": false
+    },
+    {
+      "source": "session:okta:sess-1006",
+      "target": "res:arn:aws:ec2:ap-south-1:123456789012:instance/*",
+      "label": "accessed",
+      "event_id": "ct-0000024",
+      "suspicious": false
+    },
+    {
+      "source": "session:okta:sess-1157",
+      "target": "res:arn:aws:ec2:ap-south-1:123456789012:instance/*",
+      "label": "accessed",
+      "event_id": "ct-0000567",
+      "suspicious": false
+    },
+    {
+      "source": "session:okta:sess-1136",
+      "target": "res:arn:aws:ec2:ap-south-1:123456789012:instance/*",
+      "label": "accessed",
+      "event_id": "ct-0000491",
+      "suspicious": false
+    },
+    {
+      "source": "session:okta:sess-1158",
+      "target": "res:arn:aws:ec2:ap-south-1:123456789012:instance/*",
+      "label": "accessed",
+      "event_id": "ct-0000572",
+      "suspicious": false
+    },
+    {
+      "source": "session:okta:svc-sess-1071",
+      "target": "ip:103.21.244.5",
+      "label": "from_ip",
+      "event_id": "okta-000072",
+      "suspicious": true
+    },
+    {
+      "source": "session:okta:svc-sess-1071",
+      "target": "res:arn:aws:s3:::corp-data-lake-reports/batch.json",
+      "label": "accessed",
+      "event_id": "ct-0000265",
+      "suspicious": true
+    },
+    {
+      "source": "session:okta:sess-1027",
+      "target": "res:arn:aws:ec2:ap-south-1:123456789012:instance/*",
+      "label": "accessed",
+      "event_id": "ct-0000103",
+      "suspicious": false
+    },
+    {
+      "source": "session:okta:sess-1191",
+      "target": "res:arn:aws:ec2:ap-south-1:123456789012:instance/*",
+      "label": "accessed",
+      "event_id": "ct-0000686",
+      "suspicious": false
+    },
+    {
+      "source": "session:okta:sess-1253",
+      "target": "res:arn:aws:ec2:ap-south-1:123456789012:instance/*",
+      "label": "accessed",
+      "event_id": "ct-0000913",
+      "suspicious": false
+    },
+    {
+      "source": "session:okta:sess-1210",
+      "target": "res:arn:aws:ec2:ap-south-1:123456789012:instance/*",
+      "label": "accessed",
+      "event_id": "ct-0000755",
+      "suspicious": false
+    },
+    {
+      "source": "session:okta:sess-1259",
+      "target": "res:arn:aws:ec2:ap-south-1:123456789012:instance/*",
+      "label": "accessed",
+      "event_id": "ct-0000931",
+      "suspicious": false
+    },
+    {
+      "source": "session:okta:sess-1183",
+      "target": "res:arn:aws:ec2:ap-south-1:123456789012:instance/*",
+      "label": "accessed",
+      "event_id": "ct-0000663",
+      "suspicious": false
+    },
+    {
+      "source": "session:okta:sess-1214",
+      "target": "res:arn:aws:ec2:ap-south-1:123456789012:instance/*",
+      "label": "accessed",
+      "event_id": "ct-0000771",
+      "suspicious": false
+    },
+    {
+      "source": "session:okta:sess-1017",
+      "target": "res:arn:aws:ec2:ap-south-1:123456789012:instance/*",
+      "label": "accessed",
+      "event_id": "ct-0000067",
+      "suspicious": false
+    },
+    {
+      "source": "session:okta:sess-1261",
+      "target": "res:arn:aws:ec2:ap-south-1:123456789012:instance/*",
+      "label": "accessed",
+      "event_id": "ct-0000939",
+      "suspicious": false
+    },
+    {
+      "source": "session:okta:sess-1068",
+      "target": "res:arn:aws:ec2:ap-south-1:123456789012:instance/*",
+      "label": "accessed",
+      "event_id": "ct-0000254",
+      "suspicious": false
+    },
+    {
+      "source": "session:okta:sess-1247",
+      "target": "res:arn:aws:ec2:ap-south-1:123456789012:instance/*",
+      "label": "accessed",
+      "event_id": "ct-0000890",
+      "suspicious": false
+    },
+    {
+      "source": "session:okta:sess-1143",
+      "target": "res:arn:aws:ec2:ap-south-1:123456789012:instance/*",
+      "label": "accessed",
+      "event_id": "ct-0000518",
+      "suspicious": false
+    },
+    {
+      "source": "session:okta:sess-1200",
+      "target": "res:arn:aws:ec2:ap-south-1:123456789012:instance/*",
+      "label": "accessed",
+      "event_id": "ct-0000725",
+      "suspicious": false
+    },
+    {
+      "source": "session:okta:sess-1118",
+      "target": "res:arn:aws:ec2:ap-south-1:123456789012:instance/*",
+      "label": "accessed",
+      "event_id": "ct-0000431",
+      "suspicious": false
+    },
+    {
+      "source": "session:okta:sess-1052",
+      "target": "res:arn:aws:ec2:ap-south-1:123456789012:instance/*",
+      "label": "accessed",
+      "event_id": "ct-0000194",
+      "suspicious": false
+    },
+    {
+      "source": "session:okta:sess-1057",
+      "target": "res:arn:aws:ec2:ap-south-1:123456789012:instance/*",
+      "label": "accessed",
+      "event_id": "ct-0000213",
+      "suspicious": false
+    },
+    {
+      "source": "session:okta:sess-1175",
+      "target": "res:arn:aws:ec2:ap-south-1:123456789012:instance/*",
+      "label": "accessed",
+      "event_id": "ct-0000636",
+      "suspicious": false
+    },
+    {
+      "source": "session:okta:sess-1219",
+      "target": "res:arn:aws:ec2:ap-south-1:123456789012:instance/*",
+      "label": "accessed",
+      "event_id": "ct-0000791",
+      "suspicious": false
+    },
+    {
+      "source": "session:okta:sess-1215",
+      "target": "res:arn:aws:ec2:ap-south-1:123456789012:instance/*",
+      "label": "accessed",
+      "event_id": "ct-0000773",
+      "suspicious": false
+    },
+    {
+      "source": "session:okta:sess-1196",
+      "target": "res:arn:aws:ec2:ap-south-1:123456789012:instance/*",
+      "label": "accessed",
+      "event_id": "ct-0000710",
+      "suspicious": false
+    },
+    {
+      "source": "session:okta:sess-1190",
+      "target": "res:arn:aws:ec2:ap-south-1:123456789012:instance/*",
+      "label": "accessed",
+      "event_id": "ct-0000683",
+      "suspicious": false
+    },
+    {
+      "source": "session:okta:sess-1160",
+      "target": "res:arn:aws:ec2:ap-south-1:123456789012:instance/*",
+      "label": "accessed",
+      "event_id": "ct-0000582",
+      "suspicious": false
+    },
+    {
+      "source": "session:okta:sess-1237",
+      "target": "res:arn:aws:ec2:ap-south-1:123456789012:instance/*",
+      "label": "accessed",
+      "event_id": "ct-0000853",
+      "suspicious": false
+    },
+    {
+      "source": "session:okta:sess-1083",
+      "target": "res:arn:aws:ec2:ap-south-1:123456789012:instance/*",
+      "label": "accessed",
+      "event_id": "ct-0000306",
+      "suspicious": false
+    },
+    {
+      "source": "session:okta:sess-1065",
+      "target": "res:arn:aws:ec2:ap-south-1:123456789012:instance/*",
+      "label": "accessed",
+      "event_id": "ct-0000243",
+      "suspicious": false
+    },
+    {
+      "source": "session:okta:sess-1132",
+      "target": "res:arn:aws:ec2:ap-south-1:123456789012:instance/*",
+      "label": "accessed",
+      "event_id": "ct-0000481",
+      "suspicious": false
+    },
+    {
+      "source": "session:okta:sess-1260",
+      "target": "res:arn:aws:ec2:ap-south-1:123456789012:instance/*",
+      "label": "accessed",
+      "event_id": "ct-0000935",
+      "suspicious": false
+    },
+    {
+      "source": "session:okta:sess-1276",
+      "target": "res:arn:aws:ec2:ap-south-1:123456789012:instance/*",
+      "label": "accessed",
+      "event_id": "ct-0000991",
+      "suspicious": false
+    },
+    {
+      "source": "session:okta:sess-1078",
+      "target": "res:arn:aws:ec2:ap-south-1:123456789012:instance/*",
+      "label": "accessed",
+      "event_id": "ct-0000287",
+      "suspicious": false
+    },
+    {
+      "source": "session:okta:sess-1163",
+      "target": "res:arn:aws:ec2:ap-south-1:123456789012:instance/*",
+      "label": "accessed",
+      "event_id": "ct-0000590",
+      "suspicious": false
+    },
+    {
+      "source": "session:okta:sess-1153",
+      "target": "res:arn:aws:ec2:ap-south-1:123456789012:instance/*",
+      "label": "accessed",
+      "event_id": "ct-0000549",
+      "suspicious": false
+    },
+    {
+      "source": "session:okta:sess-1082",
+      "target": "res:arn:aws:ec2:ap-south-1:123456789012:instance/*",
+      "label": "accessed",
+      "event_id": "ct-0000302",
+      "suspicious": false
+    },
+    {
+      "source": "session:okta:sess-1217",
+      "target": "res:arn:aws:ec2:ap-south-1:123456789012:instance/*",
+      "label": "accessed",
+      "event_id": "ct-0000782",
+      "suspicious": false
+    },
+    {
+      "source": "session:okta:svc-sess-1053",
+      "target": "ip:103.21.244.5",
+      "label": "from_ip",
+      "event_id": "okta-000054",
+      "suspicious": true
+    },
+    {
+      "source": "session:okta:svc-sess-1053",
+      "target": "res:arn:aws:s3:::corp-data-lake-reports/batch.json",
+      "label": "accessed",
+      "event_id": "ct-0000199",
+      "suspicious": true
+    },
+    {
+      "source": "session:okta:sess-1037",
+      "target": "res:arn:aws:ec2:ap-south-1:123456789012:instance/*",
+      "label": "accessed",
+      "event_id": "ct-0000140",
+      "suspicious": false
+    },
+    {
+      "source": "session:okta:sess-1232",
+      "target": "res:arn:aws:ec2:ap-south-1:123456789012:instance/*",
+      "label": "accessed",
+      "event_id": "ct-0000834",
+      "suspicious": false
+    },
+    {
+      "source": "session:okta:sess-1227",
+      "target": "res:arn:aws:ec2:ap-south-1:123456789012:instance/*",
+      "label": "accessed",
+      "event_id": "ct-0000808",
+      "suspicious": false
+    },
+    {
+      "source": "session:okta:sess-1211",
+      "target": "res:arn:aws:ec2:ap-south-1:123456789012:instance/*",
+      "label": "accessed",
+      "event_id": "ct-0000759",
+      "suspicious": false
+    },
+    {
+      "source": "session:okta:sess-1043",
+      "target": "res:arn:aws:ec2:ap-south-1:123456789012:instance/*",
+      "label": "accessed",
+      "event_id": "ct-0000158",
+      "suspicious": false
+    },
+    {
+      "source": "session:okta:sess-1032",
+      "target": "res:arn:aws:ec2:ap-south-1:123456789012:instance/*",
+      "label": "accessed",
+      "event_id": "ct-0000119",
+      "suspicious": false
+    },
+    {
+      "source": "session:okta:sess-1170",
+      "target": "res:arn:aws:ec2:ap-south-1:123456789012:instance/*",
+      "label": "accessed",
+      "event_id": "ct-0000616",
+      "suspicious": false
+    },
+    {
+      "source": "session:okta:sess-1095",
+      "target": "res:arn:aws:ec2:ap-south-1:123456789012:instance/*",
+      "label": "accessed",
+      "event_id": "ct-0000349",
+      "suspicious": false
+    },
+    {
+      "source": "session:okta:sess-1034",
+      "target": "res:arn:aws:ec2:ap-south-1:123456789012:instance/*",
+      "label": "accessed",
+      "event_id": "ct-0000126",
+      "suspicious": false
+    },
+    {
+      "source": "session:okta:sess-1111",
+      "target": "res:arn:aws:ec2:ap-south-1:123456789012:instance/*",
+      "label": "accessed",
+      "event_id": "ct-0000405",
+      "suspicious": false
+    },
+    {
+      "source": "session:okta:sess-1092",
+      "target": "res:arn:aws:ec2:ap-south-1:123456789012:instance/*",
+      "label": "accessed",
+      "event_id": "ct-0000337",
+      "suspicious": false
+    },
+    {
+      "source": "session:okta:sess-1104",
+      "target": "res:arn:aws:ec2:ap-south-1:123456789012:instance/*",
+      "label": "accessed",
+      "event_id": "ct-0000378",
+      "suspicious": false
+    },
+    {
+      "source": "session:okta:sess-1168",
+      "target": "res:arn:aws:ec2:ap-south-1:123456789012:instance/*",
+      "label": "accessed",
+      "event_id": "ct-0000610",
+      "suspicious": false
+    },
+    {
+      "source": "session:okta:sess-1106",
+      "target": "res:arn:aws:ec2:ap-south-1:123456789012:instance/*",
+      "label": "accessed",
+      "event_id": "ct-0000386",
+      "suspicious": false
+    },
+    {
+      "source": "session:okta:sess-1009",
+      "target": "res:arn:aws:ec2:ap-south-1:123456789012:instance/*",
+      "label": "accessed",
+      "event_id": "ct-0000038",
+      "suspicious": false
+    },
+    {
+      "source": "session:okta:sess-1208",
+      "target": "res:arn:aws:ec2:ap-south-1:123456789012:instance/*",
+      "label": "accessed",
+      "event_id": "ct-0000748",
+      "suspicious": false
+    },
+    {
+      "source": "session:okta:sess-1140",
+      "target": "res:arn:aws:ec2:ap-south-1:123456789012:instance/*",
+      "label": "accessed",
+      "event_id": "ct-0000511",
+      "suspicious": false
+    },
+    {
+      "source": "session:okta:sess-1284",
+      "target": "res:arn:aws:ec2:ap-south-1:123456789012:instance/*",
+      "label": "accessed",
+      "event_id": "ct-0001015",
+      "suspicious": false
+    },
+    {
+      "source": "session:okta:sess-1273",
+      "target": "res:arn:aws:ec2:ap-south-1:123456789012:instance/*",
+      "label": "accessed",
+      "event_id": "ct-0000978",
+      "suspicious": false
+    },
+    {
+      "source": "session:okta:sess-1036",
+      "target": "res:arn:aws:ec2:ap-south-1:123456789012:instance/*",
+      "label": "accessed",
+      "event_id": "ct-0000134",
+      "suspicious": false
+    },
+    {
+      "source": "session:okta:sess-1144",
+      "target": "res:arn:aws:ec2:ap-south-1:123456789012:instance/*",
+      "label": "accessed",
+      "event_id": "ct-0000524",
+      "suspicious": false
+    },
+    {
+      "source": "session:okta:sess-1234",
+      "target": "res:arn:aws:ec2:ap-south-1:123456789012:instance/*",
+      "label": "accessed",
+      "event_id": "ct-0000840",
+      "suspicious": false
+    },
+    {
+      "source": "session:okta:sess-1048",
+      "target": "res:arn:aws:ec2:ap-south-1:123456789012:instance/*",
+      "label": "accessed",
+      "event_id": "ct-0000179",
+      "suspicious": false
+    },
+    {
+      "source": "session:okta:sess-1213",
+      "target": "res:arn:aws:ec2:ap-south-1:123456789012:instance/*",
+      "label": "accessed",
+      "event_id": "ct-0000766",
+      "suspicious": false
+    },
+    {
+      "source": "session:okta:sess-1056",
+      "target": "res:arn:aws:ec2:ap-south-1:123456789012:instance/*",
+      "label": "accessed",
+      "event_id": "ct-0000212",
+      "suspicious": false
+    },
+    {
+      "source": "session:okta:sess-1245",
+      "target": "res:arn:aws:ec2:ap-south-1:123456789012:instance/*",
+      "label": "accessed",
+      "event_id": "ct-0000881",
+      "suspicious": false
+    },
+    {
+      "source": "session:okta:sess-1171",
+      "target": "res:arn:aws:ec2:ap-south-1:123456789012:instance/*",
+      "label": "accessed",
+      "event_id": "ct-0000621",
+      "suspicious": false
+    },
+    {
+      "source": "session:okta:sess-1195",
+      "target": "res:arn:aws:ec2:ap-south-1:123456789012:instance/*",
+      "label": "accessed",
+      "event_id": "ct-0000705",
+      "suspicious": false
+    },
+    {
+      "source": "session:okta:sess-1007",
+      "target": "res:arn:aws:ec2:ap-south-1:123456789012:instance/*",
+      "label": "accessed",
+      "event_id": "ct-0000027",
+      "suspicious": false
+    },
+    {
+      "source": "session:okta:sess-1042",
+      "target": "res:arn:aws:ec2:ap-south-1:123456789012:instance/*",
+      "label": "accessed",
+      "event_id": "ct-0000154",
+      "suspicious": false
+    },
+    {
+      "source": "session:okta:sess-1026",
+      "target": "res:arn:aws:ec2:ap-south-1:123456789012:instance/*",
+      "label": "accessed",
+      "event_id": "ct-0000101",
+      "suspicious": false
+    },
+    {
+      "source": "session:okta:sess-1174",
+      "target": "res:arn:aws:ec2:ap-south-1:123456789012:instance/*",
+      "label": "accessed",
+      "event_id": "ct-0000634",
+      "suspicious": false
+    },
+    {
+      "source": "session:okta:sess-1014",
+      "target": "res:arn:aws:ec2:ap-south-1:123456789012:instance/*",
+      "label": "accessed",
+      "event_id": "ct-0000052",
+      "suspicious": false
+    },
+    {
+      "source": "session:okta:sess-1058",
+      "target": "res:arn:aws:ec2:ap-south-1:123456789012:instance/*",
+      "label": "accessed",
+      "event_id": "ct-0000219",
+      "suspicious": false
+    },
+    {
+      "source": "session:okta:sess-1085",
+      "target": "res:arn:aws:ec2:ap-south-1:123456789012:instance/*",
+      "label": "accessed",
+      "event_id": "ct-0000312",
+      "suspicious": false
+    },
+    {
+      "source": "session:okta:sess-1204",
+      "target": "res:arn:aws:ec2:ap-south-1:123456789012:instance/*",
+      "label": "accessed",
+      "event_id": "ct-0000738",
+      "suspicious": false
+    },
+    {
+      "source": "session:okta:sess-1249",
+      "target": "res:arn:aws:ec2:ap-south-1:123456789012:instance/*",
+      "label": "accessed",
+      "event_id": "ct-0000899",
+      "suspicious": false
+    },
+    {
+      "source": "session:okta:sess-1255",
+      "target": "res:arn:aws:ec2:ap-south-1:123456789012:instance/*",
+      "label": "accessed",
+      "event_id": "ct-0000918",
+      "suspicious": false
+    },
+    {
+      "source": "session:okta:sess-1123",
+      "target": "res:arn:aws:ec2:ap-south-1:123456789012:instance/*",
+      "label": "accessed",
+      "event_id": "ct-0000445",
+      "suspicious": false
+    },
+    {
+      "source": "session:okta:sess-1108",
+      "target": "res:arn:aws:ec2:ap-south-1:123456789012:instance/*",
+      "label": "accessed",
+      "event_id": "ct-0000392",
+      "suspicious": false
+    },
+    {
+      "source": "session:okta:sess-svc-1656",
+      "target": "ip:103.21.244.5",
+      "label": "from_ip",
+      "event_id": "okta-000657",
+      "suspicious": true
+    },
+    {
+      "source": "session:okta:sess-svc-1656",
+      "target": "res:arn:aws:ec2:ap-south-1:123456789012:instance/*",
+      "label": "accessed",
+      "event_id": "ct-0002298",
+      "suspicious": true
+    },
+    {
+      "source": "session:okta:sess-1067",
+      "target": "res:arn:aws:ec2:ap-south-1:123456789012:instance/*",
+      "label": "accessed",
+      "event_id": "ct-0000253",
+      "suspicious": false
+    },
+    {
+      "source": "session:okta:sess-1090",
+      "target": "res:arn:aws:ec2:ap-south-1:123456789012:instance/*",
+      "label": "accessed",
+      "event_id": "ct-0000329",
+      "suspicious": false
+    },
+    {
+      "source": "session:okta:sess-1145",
+      "target": "res:arn:aws:ec2:ap-south-1:123456789012:instance/*",
+      "label": "accessed",
+      "event_id": "ct-0000529",
+      "suspicious": false
+    },
+    {
+      "source": "session:okta:sess-1002",
+      "target": "res:arn:aws:ec2:ap-south-1:123456789012:instance/*",
+      "label": "accessed",
+      "event_id": "ct-0000008",
+      "suspicious": false
+    },
+    {
+      "source": "session:okta:sess-1024",
+      "target": "res:arn:aws:ec2:ap-south-1:123456789012:instance/*",
+      "label": "accessed",
+      "event_id": "ct-0000095",
+      "suspicious": false
+    },
+    {
+      "source": "session:okta:sess-1131",
+      "target": "res:arn:aws:ec2:ap-south-1:123456789012:instance/*",
+      "label": "accessed",
+      "event_id": "ct-0000479",
+      "suspicious": false
+    },
+    {
+      "source": "session:okta:sess-1229",
+      "target": "res:arn:aws:ec2:ap-south-1:123456789012:instance/*",
+      "label": "accessed",
+      "event_id": "ct-0000818",
+      "suspicious": false
+    },
+    {
+      "source": "session:okta:sess-1066",
+      "target": "res:arn:aws:ec2:ap-south-1:123456789012:instance/*",
+      "label": "accessed",
+      "event_id": "ct-0000247",
+      "suspicious": false
+    },
+    {
+      "source": "session:okta:sess-1205",
+      "target": "res:arn:aws:ec2:ap-south-1:123456789012:instance/*",
+      "label": "accessed",
+      "event_id": "ct-0000739",
+      "suspicious": false
+    },
+    {
+      "source": "session:okta:sess-1236",
+      "target": "res:arn:aws:ec2:ap-south-1:123456789012:instance/*",
+      "label": "accessed",
+      "event_id": "ct-0000846",
+      "suspicious": false
+    },
+    {
+      "source": "session:okta:sess-1226",
+      "target": "res:arn:aws:ec2:ap-south-1:123456789012:instance/*",
+      "label": "accessed",
+      "event_id": "ct-0000807",
+      "suspicious": false
+    },
+    {
+      "source": "session:okta:sess-1286",
+      "target": "res:arn:aws:ec2:ap-south-1:123456789012:instance/*",
+      "label": "accessed",
+      "event_id": "ct-0001022",
+      "suspicious": false
+    },
+    {
+      "source": "session:okta:sess-1186",
+      "target": "res:arn:aws:ec2:ap-south-1:123456789012:instance/*",
+      "label": "accessed",
+      "event_id": "ct-0000672",
+      "suspicious": false
+    },
+    {
+      "source": "session:okta:sess-1221",
+      "target": "res:arn:aws:ec2:ap-south-1:123456789012:instance/*",
+      "label": "accessed",
+      "event_id": "ct-0000796",
+      "suspicious": false
+    },
+    {
+      "source": "session:okta:sess-1003",
+      "target": "res:arn:aws:ec2:ap-south-1:123456789012:instance/*",
+      "label": "accessed",
+      "event_id": "ct-0000012",
+      "suspicious": false
+    },
+    {
+      "source": "user:svc-report",
+      "target": "session:okta:svc-sess-1016",
+      "label": "login",
+      "event_id": "okta-000017",
+      "suspicious": true
+    },
+    {
+      "source": "user:svc-report",
+      "target": "session:okta:svc-sess-1033",
+      "label": "login",
+      "event_id": "okta-000034",
+      "suspicious": true
+    },
+    {
+      "source": "user:svc-report",
+      "target": "session:okta:svc-sess-1053",
+      "label": "login",
+      "event_id": "okta-000054",
+      "suspicious": true
+    },
+    {
+      "source": "user:svc-report",
+      "target": "session:okta:svc-sess-1071",
+      "label": "login",
+      "event_id": "okta-000072",
+      "suspicious": true
+    },
+    {
+      "source": "user:svc-report",
+      "target": "session:okta:sess-svc-1656",
+      "label": "login",
+      "event_id": "okta-000657",
+      "suspicious": true
+    },
+    {
+      "source": "user:svc-report",
+      "target": "session:okta:sess-svc-esc-1657",
+      "label": "login",
+      "event_id": "okta-000658",
+      "suspicious": true
+    },
+    {
+      "source": "user:svc-report",
+      "target": "key:AKIASVC-4232KEY",
+      "label": "created_key",
+      "event_id": "ct-0002299",
+      "suspicious": true
+    },
+    {
+      "source": "user:svc-report",
+      "target": "policy:svc-report",
+      "label": "attached",
+      "event_id": "ct-0002300",
+      "suspicious": true
+    },
+    {
+      "source": "user:svc-report",
+      "target": "role:AdminRole",
+      "label": "assumed",
+      "event_id": "ct-0002301",
+      "suspicious": true
+    },
+    {
+      "source": "session:okta:sess-1161",
+      "target": "res:arn:aws:ec2:ap-south-1:123456789012:instance/*",
+      "label": "accessed",
+      "event_id": "ct-0000583",
+      "suspicious": false
+    },
+    {
+      "source": "session:okta:sess-1165",
+      "target": "res:arn:aws:ec2:ap-south-1:123456789012:instance/*",
+      "label": "accessed",
+      "event_id": "ct-0000597",
+      "suspicious": false
+    },
+    {
+      "source": "session:okta:sess-1178",
+      "target": "res:arn:aws:ec2:ap-south-1:123456789012:instance/*",
+      "label": "accessed",
+      "event_id": "ct-0000647",
+      "suspicious": false
+    },
+    {
+      "source": "session:okta:sess-1152",
+      "target": "res:arn:aws:ec2:ap-south-1:123456789012:instance/*",
+      "label": "accessed",
+      "event_id": "ct-0000548",
+      "suspicious": false
+    },
+    {
+      "source": "session:okta:sess-1096",
+      "target": "res:arn:aws:ec2:ap-south-1:123456789012:instance/*",
+      "label": "accessed",
+      "event_id": "ct-0000351",
+      "suspicious": false
+    },
+    {
+      "source": "session:okta:sess-1164",
+      "target": "res:arn:aws:ec2:ap-south-1:123456789012:instance/*",
+      "label": "accessed",
+      "event_id": "ct-0000594",
+      "suspicious": false
+    },
+    {
+      "source": "session:okta:sess-1004",
+      "target": "res:arn:aws:ec2:ap-south-1:123456789012:instance/*",
+      "label": "accessed",
+      "event_id": "ct-0000019",
+      "suspicious": false
+    },
+    {
+      "source": "session:okta:sess-1231",
+      "target": "res:arn:aws:ec2:ap-south-1:123456789012:instance/*",
+      "label": "accessed",
+      "event_id": "ct-0000831",
+      "suspicious": false
+    },
+    {
+      "source": "session:okta:sess-1162",
+      "target": "res:arn:aws:ec2:ap-south-1:123456789012:instance/*",
+      "label": "accessed",
+      "event_id": "ct-0000587",
+      "suspicious": false
+    },
+    {
+      "source": "session:okta:sess-1239",
+      "target": "res:arn:aws:ec2:ap-south-1:123456789012:instance/*",
+      "label": "accessed",
+      "event_id": "ct-0000864",
+      "suspicious": false
+    },
+    {
+      "source": "session:okta:svc-sess-1033",
+      "target": "ip:103.21.244.5",
+      "label": "from_ip",
+      "event_id": "okta-000034",
+      "suspicious": true
+    },
+    {
+      "source": "session:okta:svc-sess-1033",
+      "target": "res:arn:aws:s3:::corp-data-lake-reports/batch.json",
+      "label": "accessed",
+      "event_id": "ct-0000121",
+      "suspicious": true
+    },
+    {
+      "source": "session:okta:sess-1198",
+      "target": "res:arn:aws:ec2:ap-south-1:123456789012:instance/*",
+      "label": "accessed",
+      "event_id": "ct-0000714",
+      "suspicious": false
+    },
+    {
+      "source": "session:okta:sess-1060",
+      "target": "res:arn:aws:ec2:ap-south-1:123456789012:instance/*",
+      "label": "accessed",
+      "event_id": "ct-0000228",
+      "suspicious": false
+    },
+    {
+      "source": "session:okta:sess-1146",
+      "target": "res:arn:aws:ec2:ap-south-1:123456789012:instance/*",
+      "label": "accessed",
+      "event_id": "ct-0000531",
+      "suspicious": false
+    },
+    {
+      "source": "session:okta:sess-1028",
+      "target": "res:arn:aws:ec2:ap-south-1:123456789012:instance/*",
+      "label": "accessed",
+      "event_id": "ct-0000107",
+      "suspicious": false
+    },
+    {
+      "source": "session:okta:sess-1264",
+      "target": "res:arn:aws:ec2:ap-south-1:123456789012:instance/*",
+      "label": "accessed",
+      "event_id": "ct-0000947",
+      "suspicious": false
+    },
+    {
+      "source": "session:okta:sess-1081",
+      "target": "res:arn:aws:ec2:ap-south-1:123456789012:instance/*",
+      "label": "accessed",
+      "event_id": "ct-0000298",
+      "suspicious": false
+    },
+    {
+      "source": "session:okta:sess-1148",
+      "target": "res:arn:aws:ec2:ap-south-1:123456789012:instance/*",
+      "label": "accessed",
+      "event_id": "ct-0000536",
+      "suspicious": false
+    },
+    {
+      "source": "session:okta:sess-1086",
+      "target": "res:arn:aws:ec2:ap-south-1:123456789012:instance/*",
+      "label": "accessed",
+      "event_id": "ct-0000315",
+      "suspicious": false
+    },
+    {
+      "source": "session:okta:sess-svc-esc-1657",
+      "target": "ip:103.21.244.99",
+      "label": "from_ip",
+      "event_id": "okta-000658",
+      "suspicious": true
+    },
+    {
+      "source": "session:okta:sess-svc-esc-1657",
+      "target": "res:arn:aws:iam::123456789012:user/svc-report",
+      "label": "accessed",
+      "event_id": "ct-0002299",
+      "suspicious": true
+    },
+    {
+      "source": "session:okta:sess-svc-esc-1657",
+      "target": "role:AdminRole",
+      "label": "assumed",
+      "event_id": "ct-0002301",
+      "suspicious": true
+    },
+    {
+      "source": "session:okta:sess-svc-esc-1657",
+      "target": "res:arn:aws:secretsmanager:ap-south-1:123456789012:secret:prod/db/credentials-XYZ",
+      "label": "accessed",
+      "event_id": "ct-0002302",
+      "suspicious": true
+    },
+    {
+      "source": "session:okta:sess-1113",
+      "target": "res:arn:aws:ec2:ap-south-1:123456789012:instance/*",
+      "label": "accessed",
+      "event_id": "ct-0000414",
+      "suspicious": false
+    },
+    {
+      "source": "session:okta:sess-1179",
+      "target": "res:arn:aws:ec2:ap-south-1:123456789012:instance/*",
+      "label": "accessed",
+      "event_id": "ct-0000649",
+      "suspicious": false
+    },
+    {
+      "source": "session:okta:sess-1088",
+      "target": "res:arn:aws:ec2:ap-south-1:123456789012:instance/*",
+      "label": "accessed",
+      "event_id": "ct-0000322",
+      "suspicious": false
+    },
+    {
+      "source": "session:okta:sess-1098",
+      "target": "res:arn:aws:ec2:ap-south-1:123456789012:instance/*",
+      "label": "accessed",
+      "event_id": "ct-0000359",
+      "suspicious": false
+    },
+    {
+      "source": "session:okta:sess-1125",
+      "target": "res:arn:aws:ec2:ap-south-1:123456789012:instance/*",
+      "label": "accessed",
+      "event_id": "ct-0000450",
+      "suspicious": false
+    },
+    {
+      "source": "session:okta:sess-1243",
+      "target": "res:arn:aws:ec2:ap-south-1:123456789012:instance/*",
+      "label": "accessed",
+      "event_id": "ct-0000871",
+      "suspicious": false
+    },
+    {
+      "source": "session:okta:sess-1177",
+      "target": "res:arn:aws:ec2:ap-south-1:123456789012:instance/*",
+      "label": "accessed",
+      "event_id": "ct-0000645",
+      "suspicious": false
+    },
+    {
+      "source": "session:okta:sess-1269",
+      "target": "res:arn:aws:ec2:ap-south-1:123456789012:instance/*",
+      "label": "accessed",
+      "event_id": "ct-0000964",
+      "suspicious": false
+    },
+    {
+      "source": "session:okta:sess-1073",
+      "target": "res:arn:aws:ec2:ap-south-1:123456789012:instance/*",
+      "label": "accessed",
+      "event_id": "ct-0000273",
+      "suspicious": false
+    }
+  ],
+  "escalation_paths": [
+    [
+      "user:svc-report",
+      "session:okta:sess-svc-esc-1657",
+      "role:AdminRole"
+    ],
+    [
+      "user:svc-report",
+      "role:AdminRole"
+    ]
+  ]
+}

@@ -1,0 +1,1541 @@
+[
+  {
+    "seq": 171,
+    "timestamp": "2026-10-28T12:50:45.073296Z",
+    "agent": "pipeline",
+    "action": "end",
+    "detail": "Pipeline finished: 16 alerts produced",
+    "prev_hash": "28d4925d8eb909f978f914a1ddfb8c1954f109c4acaf127d0604eb83bf318fb8",
+    "hash": "fdfae05228398bae5381322c450684f6d378b025884b598a05de0aedeaf5e6ac"
+  },
+  {
+    "seq": 170,
+    "timestamp": "2026-10-28T12:50:45.009155Z",
+    "agent": "response",
+    "action": "monitor",
+    "detail": "Alert AL-0016: Session flagged for monitoring; no active enforcement required.",
+    "prev_hash": "9d98ada8422673d640c7ea6e3679f5e12d42553f21fe33f1048f6e93cacf62fe",
+    "hash": "28d4925d8eb909f978f914a1ddfb8c1954f109c4acaf127d0604eb83bf318fb8"
+  },
+  {
+    "seq": 169,
+    "timestamp": "2026-10-28T12:50:45.002155Z",
+    "agent": "response",
+    "action": "monitor",
+    "detail": "Alert AL-0015: Session flagged for monitoring; no active enforcement required.",
+    "prev_hash": "730bdb979ea0b5600d5a62192cf59233f1434fa4e7682eb52bf72a58c0f6d526",
+    "hash": "9d98ada8422673d640c7ea6e3679f5e12d42553f21fe33f1048f6e93cacf62fe"
+  },
+  {
+    "seq": 168,
+    "timestamp": "2026-10-28T12:50:44.992427Z",
+    "agent": "response",
+    "action": "monitor",
+    "detail": "Alert AL-0014: Session flagged for monitoring; no active enforcement required.",
+    "prev_hash": "1e5e4fb6dc7a54f982b0b853091b1c7a220ae1cb089d068d8629467d70bae101",
+    "hash": "730bdb979ea0b5600d5a62192cf59233f1434fa4e7682eb52bf72a58c0f6d526"
+  },
+  {
+    "seq": 167,
+    "timestamp": "2026-10-28T12:50:44.985093Z",
+    "agent": "response",
+    "action": "monitor",
+    "detail": "Alert AL-0013: Session flagged for monitoring; no active enforcement required.",
+    "prev_hash": "b23a9d1bc505b1cacfe9da1bbbc2f5ab82f690c1e8bc95f7c8655053cde79a4c",
+    "hash": "1e5e4fb6dc7a54f982b0b853091b1c7a220ae1cb089d068d8629467d70bae101"
+  },
+  {
+    "seq": 166,
+    "timestamp": "2026-10-28T12:50:44.978405Z",
+    "agent": "response",
+    "action": "monitor",
+    "detail": "Alert AL-0012: Session flagged for monitoring; no active enforcement required.",
+    "prev_hash": "3e3ae7ff6b7d17d3d502663467d7753da124b19de9b0d6f84b34cc8b35748038",
+    "hash": "b23a9d1bc505b1cacfe9da1bbbc2f5ab82f690c1e8bc95f7c8655053cde79a4c"
+  },
+  {
+    "seq": 165,
+    "timestamp": "2026-10-28T12:50:44.970407Z",
+    "agent": "response",
+    "action": "monitor",
+    "detail": "Alert AL-0011: Session flagged for monitoring; no active enforcement required.",
+    "prev_hash": "2ff2e0ae25f2882dc11ffbc9a0de1259bd24af55bc61c6fe67320d504c99ae76",
+    "hash": "3e3ae7ff6b7d17d3d502663467d7753da124b19de9b0d6f84b34cc8b35748038"
+  },
+  {
+    "seq": 164,
+    "timestamp": "2026-10-28T12:50:44.963426Z",
+    "agent": "response",
+    "action": "monitor",
+    "detail": "Alert AL-0010: Session flagged for monitoring; no active enforcement required.",
+    "prev_hash": "ea9d293ad4c310ff5b60299ce042ce2e4d0856db5cf72a1b4cc513a9ca0e0a87",
+    "hash": "2ff2e0ae25f2882dc11ffbc9a0de1259bd24af55bc61c6fe67320d504c99ae76"
+  },
+  {
+    "seq": 163,
+    "timestamp": "2026-10-28T12:50:44.956369Z",
+    "agent": "response",
+    "action": "monitor",
+    "detail": "Alert AL-0009: Session flagged for monitoring; no active enforcement required.",
+    "prev_hash": "ea2a3d4c1703a6dcc2e3c4ce8099411002e63cc1302c36efef205f577d480917",
+    "hash": "ea9d293ad4c310ff5b60299ce042ce2e4d0856db5cf72a1b4cc513a9ca0e0a87"
+  },
+  {
+    "seq": 162,
+    "timestamp": "2026-10-28T12:50:44.949373Z",
+    "agent": "response",
+    "action": "monitor",
+    "detail": "Alert AL-0008: Session flagged for monitoring; no active enforcement required.",
+    "prev_hash": "73092363d99018ae123741eb0c5b9f6903c2b91481e38e40da179603b6c40734",
+    "hash": "ea2a3d4c1703a6dcc2e3c4ce8099411002e63cc1302c36efef205f577d480917"
+  },
+  {
+    "seq": 161,
+    "timestamp": "2026-10-28T12:50:44.942369Z",
+    "agent": "response",
+    "action": "monitor",
+    "detail": "Alert AL-0007: Session flagged for monitoring; no active enforcement required.",
+    "prev_hash": "f378a47b265ef326cb61194078dccd7ab59ccaaca385d846cb3d7dd309cf4c3f",
+    "hash": "73092363d99018ae123741eb0c5b9f6903c2b91481e38e40da179603b6c40734"
+  },
+  {
+    "seq": 160,
+    "timestamp": "2026-10-28T12:50:44.935370Z",
+    "agent": "response",
+    "action": "monitor",
+    "detail": "Alert AL-0006: Session flagged for monitoring; no active enforcement required.",
+    "prev_hash": "4d70b529c581dc3c24a96bc89c6611982b7dc1220f03c14167bcd62cfcb83829",
+    "hash": "f378a47b265ef326cb61194078dccd7ab59ccaaca385d846cb3d7dd309cf4c3f"
+  },
+  {
+    "seq": 159,
+    "timestamp": "2026-10-28T12:50:44.928371Z",
+    "agent": "response",
+    "action": "monitor",
+    "detail": "Alert AL-0005: Session flagged for monitoring; no active enforcement required.",
+    "prev_hash": "c770b890e1f97ec181ec5375f6c2be086b799029cf2e81a65f70d7bbd94ddd73",
+    "hash": "4d70b529c581dc3c24a96bc89c6611982b7dc1220f03c14167bcd62cfcb83829"
+  },
+  {
+    "seq": 158,
+    "timestamp": "2026-10-28T12:50:44.921369Z",
+    "agent": "response",
+    "action": "notify",
+    "detail": "Alert AL-0004: Friction budget of 2/day exceeded for anita.rao; converted to notification.",
+    "prev_hash": "b13e7e029e0ddf99b06e8dbb68dfa759550f911cd0646793029257f1418b6b86",
+    "hash": "c770b890e1f97ec181ec5375f6c2be086b799029cf2e81a65f70d7bbd94ddd73"
+  },
+  {
+    "seq": 157,
+    "timestamp": "2026-10-28T12:50:44.913304Z",
+    "agent": "response",
+    "action": "notify",
+    "detail": "Alert AL-0003: Friction budget of 2/day exceeded for dev.kumar; converted to notification.",
+    "prev_hash": "a15ce0c57c068b1b70e4f0963a43b736ee214be4777eefde53075a7f3f321650",
+    "hash": "b13e7e029e0ddf99b06e8dbb68dfa759550f911cd0646793029257f1418b6b86"
+  },
+  {
+    "seq": 156,
+    "timestamp": "2026-10-28T12:50:44.906255Z",
+    "agent": "response",
+    "action": "restrict",
+    "detail": "Alert AL-0002 (meera.n): simulated:restrict:ok",
+    "prev_hash": "5385d7850eb6f0a0462ed13efb40b27bc8724c614e5e34b9c7c398bc08533e3a",
+    "hash": "a15ce0c57c068b1b70e4f0963a43b736ee214be4777eefde53075a7f3f321650"
+  },
+  {
+    "seq": 155,
+    "timestamp": "2026-10-28T12:50:44.902257Z",
+    "agent": "decision",
+    "action": "alert_created",
+    "detail": "Alert AL-0002 (meera.n): risk 86.2 (restrict), patterns=['ML', 'P4', 'P5']",
+    "prev_hash": "9fdbefd673e51965957af6a4f8fd4ac9e17ed50cb6cacb297f62b8124c6e8db4",
+    "hash": "5385d7850eb6f0a0462ed13efb40b27bc8724c614e5e34b9c7c398bc08533e3a"
+  },
+  {
+    "seq": 154,
+    "timestamp": "2026-10-28T12:50:44.898022Z",
+    "agent": "decision",
+    "action": "alert_created",
+    "detail": "Alert AL-0001 (svc-report): risk 100.0 (revoke), patterns=['ML', 'P3', 'P4']",
+    "prev_hash": "de19a0f983c6381cc13b6005edd2f75030fece75dbc22e5c23c99a97bab7e981",
+    "hash": "9fdbefd673e51965957af6a4f8fd4ac9e17ed50cb6cacb297f62b8124c6e8db4"
+  },
+  {
+    "seq": 153,
+    "timestamp": "2026-10-28T12:50:40.659639Z",
+    "agent": "pipeline",
+    "action": "start",
+    "detail": "Pipeline started (mode=sample)",
+    "prev_hash": "b43e7050566c054f208837e635793e5772bbd9f537646ca3e92dd835e23a050c",
+    "hash": "de19a0f983c6381cc13b6005edd2f75030fece75dbc22e5c23c99a97bab7e981"
+  },
+  {
+    "seq": 152,
+    "timestamp": "2026-10-28T12:44:36.794383Z",
+    "agent": "analyst",
+    "action": "feedback",
+    "detail": "Alert AL-FB-TEST labeled 'tp': updated weights [P4:16.5->17.0]",
+    "prev_hash": "f6c944b6f82de83d7b88c8f5de42c707aaa0a26ca1e508c747750fbfb3e67e77",
+    "hash": "b43e7050566c054f208837e635793e5772bbd9f537646ca3e92dd835e23a050c"
+  },
+  {
+    "seq": 151,
+    "timestamp": "2026-10-28T12:44:36.774220Z",
+    "agent": "response",
+    "action": "revoke",
+    "detail": "Alert AL-REV-TEST (test-user): simulated:revoke:ok",
+    "prev_hash": "70bb1b0f46d876a22fdc420c6ed82b8791662f5bbd8b6e3734021e932a0917d6",
+    "hash": "f6c944b6f82de83d7b88c8f5de42c707aaa0a26ca1e508c747750fbfb3e67e77"
+  },
+  {
+    "seq": 150,
+    "timestamp": "2026-10-28T12:44:36.769905Z",
+    "agent": "response",
+    "action": "refused",
+    "detail": "Alert AL-REV-TEST: Revoke containment requires explicit analyst approval.",
+    "prev_hash": "30a10f3a1dd517dddf7934e314d37de5c3d6e569e10a9e31759b618f07191a3d",
+    "hash": "70bb1b0f46d876a22fdc420c6ed82b8791662f5bbd8b6e3734021e932a0917d6"
+  },
+  {
+    "seq": 149,
+    "timestamp": "2026-10-28T12:44:36.744610Z",
+    "agent": "test",
+    "action": "check",
+    "detail": "ok",
+    "prev_hash": "6bae5eb511fc2179bc404facde6700444eee56e5b3bdbe53b085a8e28853cc8a",
+    "hash": "30a10f3a1dd517dddf7934e314d37de5c3d6e569e10a9e31759b618f07191a3d"
+  },
+  {
+    "seq": 148,
+    "timestamp": "2026-10-28T12:44:25.875351Z",
+    "agent": "pipeline",
+    "action": "end",
+    "detail": "Pipeline finished: 16 alerts produced",
+    "prev_hash": "499f9dbdb7eed14cdea14f3c0a577a3619bc929984783b6b045eeb8cba016428",
+    "hash": "6bae5eb511fc2179bc404facde6700444eee56e5b3bdbe53b085a8e28853cc8a"
+  },
+  {
+    "seq": 147,
+    "timestamp": "2026-10-28T12:44:25.782813Z",
+    "agent": "response",
+    "action": "monitor",
+    "detail": "Alert AL-0016: Session flagged for monitoring; no active enforcement required.",
+    "prev_hash": "e76a4c2b7a023515eb745744e18c60ef0d0ca63e80f93188479e4f2009a29dc3",
+    "hash": "499f9dbdb7eed14cdea14f3c0a577a3619bc929984783b6b045eeb8cba016428"
+  },
+  {
+    "seq": 146,
+    "timestamp": "2026-10-28T12:44:25.775815Z",
+    "agent": "response",
+    "action": "monitor",
+    "detail": "Alert AL-0015: Session flagged for monitoring; no active enforcement required.",
+    "prev_hash": "5f7844766fa1a20aaa9ffbe2c8e3cc034682cfb38f0d907ca212409b024f52b6",
+    "hash": "e76a4c2b7a023515eb745744e18c60ef0d0ca63e80f93188479e4f2009a29dc3"
+  },
+  {
+    "seq": 145,
+    "timestamp": "2026-10-28T12:44:25.766430Z",
+    "agent": "response",
+    "action": "monitor",
+    "detail": "Alert AL-0014: Session flagged for monitoring; no active enforcement required.",
+    "prev_hash": "02b3b01c85050de761bb7bbd7caffd0550e6bdec6f1fdafcae0459bd9cf048c5",
+    "hash": "5f7844766fa1a20aaa9ffbe2c8e3cc034682cfb38f0d907ca212409b024f52b6"
+  },
+  {
+    "seq": 144,
+    "timestamp": "2026-10-28T12:44:25.758903Z",
+    "agent": "response",
+    "action": "monitor",
+    "detail": "Alert AL-0013: Session flagged for monitoring; no active enforcement required.",
+    "prev_hash": "e6de2c40c1de4a92019f46bb4a4c57f918f1a1d62beffc0362ecc6ef8bac3a6f",
+    "hash": "02b3b01c85050de761bb7bbd7caffd0550e6bdec6f1fdafcae0459bd9cf048c5"
+  },
+  {
+    "seq": 143,
+    "timestamp": "2026-10-28T12:44:25.749665Z",
+    "agent": "response",
+    "action": "monitor",
+    "detail": "Alert AL-0012: Session flagged for monitoring; no active enforcement required.",
+    "prev_hash": "86a687c95fcf55f0177aad4730d4ad4e699d6654109e36ff3a675910a63f968d",
+    "hash": "e6de2c40c1de4a92019f46bb4a4c57f918f1a1d62beffc0362ecc6ef8bac3a6f"
+  },
+  {
+    "seq": 142,
+    "timestamp": "2026-10-28T12:44:25.740651Z",
+    "agent": "response",
+    "action": "monitor",
+    "detail": "Alert AL-0011: Session flagged for monitoring; no active enforcement required.",
+    "prev_hash": "a3a4c7400a9817d337dbbbdea7a376e0377e1e96a8d96f67728f2e9edd577995",
+    "hash": "86a687c95fcf55f0177aad4730d4ad4e699d6654109e36ff3a675910a63f968d"
+  },
+  {
+    "seq": 141,
+    "timestamp": "2026-10-28T12:44:25.732897Z",
+    "agent": "response",
+    "action": "monitor",
+    "detail": "Alert AL-0010: Session flagged for monitoring; no active enforcement required.",
+    "prev_hash": "5a9b5ef26b446a97a63adb59c6e95fcb7e990f67b3ae8dc354da48fe28dd9474",
+    "hash": "a3a4c7400a9817d337dbbbdea7a376e0377e1e96a8d96f67728f2e9edd577995"
+  },
+  {
+    "seq": 140,
+    "timestamp": "2026-10-28T12:44:25.721682Z",
+    "agent": "response",
+    "action": "monitor",
+    "detail": "Alert AL-0009: Session flagged for monitoring; no active enforcement required.",
+    "prev_hash": "7a8cf3a10fbe0d2abac59a03f39f6e34b861bf3ac94326f3dafeb0fbebfcd909",
+    "hash": "5a9b5ef26b446a97a63adb59c6e95fcb7e990f67b3ae8dc354da48fe28dd9474"
+  },
+  {
+    "seq": 139,
+    "timestamp": "2026-10-28T12:44:25.710107Z",
+    "agent": "response",
+    "action": "monitor",
+    "detail": "Alert AL-0008: Session flagged for monitoring; no active enforcement required.",
+    "prev_hash": "0fa4444b9f12513a834f06e32b9d190eac90130e127813aab275fa6dc0e068bf",
+    "hash": "7a8cf3a10fbe0d2abac59a03f39f6e34b861bf3ac94326f3dafeb0fbebfcd909"
+  },
+  {
+    "seq": 138,
+    "timestamp": "2026-10-28T12:44:25.702105Z",
+    "agent": "response",
+    "action": "monitor",
+    "detail": "Alert AL-0007: Session flagged for monitoring; no active enforcement required.",
+    "prev_hash": "06b80e5eb30a8df7713a9b9c5497b8344b41dce8d7c2ffc4980da74a9baa9cf2",
+    "hash": "0fa4444b9f12513a834f06e32b9d190eac90130e127813aab275fa6dc0e068bf"
+  },
+  {
+    "seq": 137,
+    "timestamp": "2026-10-28T12:44:25.694093Z",
+    "agent": "response",
+    "action": "monitor",
+    "detail": "Alert AL-0006: Session flagged for monitoring; no active enforcement required.",
+    "prev_hash": "1bf347a4c7a002cdc99edaf7cfe81af527bff89393b4758a82be171058cd5708",
+    "hash": "06b80e5eb30a8df7713a9b9c5497b8344b41dce8d7c2ffc4980da74a9baa9cf2"
+  },
+  {
+    "seq": 136,
+    "timestamp": "2026-10-28T12:44:25.683097Z",
+    "agent": "response",
+    "action": "monitor",
+    "detail": "Alert AL-0005: Session flagged for monitoring; no active enforcement required.",
+    "prev_hash": "d5d313ee04877ecbf8f2d9324d84cd9cc24e78e672d5aafe3002dd9c4cb3a3e7",
+    "hash": "1bf347a4c7a002cdc99edaf7cfe81af527bff89393b4758a82be171058cd5708"
+  },
+  {
+    "seq": 135,
+    "timestamp": "2026-10-28T12:44:25.673764Z",
+    "agent": "response",
+    "action": "notify",
+    "detail": "Alert AL-0004: Friction budget of 2/day exceeded for anita.rao; converted to notification.",
+    "prev_hash": "227e8163c40af541a47c4fff7d40b930ab6285a0f9f556e474cf30fa696e564a",
+    "hash": "d5d313ee04877ecbf8f2d9324d84cd9cc24e78e672d5aafe3002dd9c4cb3a3e7"
+  },
+  {
+    "seq": 134,
+    "timestamp": "2026-10-28T12:44:25.664248Z",
+    "agent": "response",
+    "action": "notify",
+    "detail": "Alert AL-0003: Friction budget of 2/day exceeded for dev.kumar; converted to notification.",
+    "prev_hash": "df2db1274079cbf7dd410f81382ddc348cb228d45928331f4fd950430303aded",
+    "hash": "227e8163c40af541a47c4fff7d40b930ab6285a0f9f556e474cf30fa696e564a"
+  },
+  {
+    "seq": 133,
+    "timestamp": "2026-10-28T12:44:25.651714Z",
+    "agent": "response",
+    "action": "restrict",
+    "detail": "Alert AL-0002 (meera.n): simulated:restrict:ok",
+    "prev_hash": "1eb4acba44ec2bd51908aa2a6ad53b519a00d263113f479b2598f396b611f258",
+    "hash": "df2db1274079cbf7dd410f81382ddc348cb228d45928331f4fd950430303aded"
+  },
+  {
+    "seq": 132,
+    "timestamp": "2026-10-28T12:44:25.648040Z",
+    "agent": "decision",
+    "action": "alert_created",
+    "detail": "Alert AL-0002 (meera.n): risk 85.7 (restrict), patterns=['ML', 'P4', 'P5']",
+    "prev_hash": "1a6a563a89acccb2a52eb41a7b74f743f8fff9e65cf7d51926742b06a8376cb1",
+    "hash": "1eb4acba44ec2bd51908aa2a6ad53b519a00d263113f479b2598f396b611f258"
+  },
+  {
+    "seq": 131,
+    "timestamp": "2026-10-28T12:44:25.643983Z",
+    "agent": "decision",
+    "action": "alert_created",
+    "detail": "Alert AL-0001 (svc-report): risk 100.0 (revoke), patterns=['ML', 'P3', 'P4']",
+    "prev_hash": "7e78c21bb042f4b7a5ca74cabc9b67422d5142f96f848e6d9b86c173eba6784b",
+    "hash": "1a6a563a89acccb2a52eb41a7b74f743f8fff9e65cf7d51926742b06a8376cb1"
+  },
+  {
+    "seq": 130,
+    "timestamp": "2026-10-28T12:44:20.867208Z",
+    "agent": "pipeline",
+    "action": "start",
+    "detail": "Pipeline started (mode=sample)",
+    "prev_hash": "79a4dc8c6507e8eb76030a702e701961050a0d4a50b4060607f9c7c00790a840",
+    "hash": "7e78c21bb042f4b7a5ca74cabc9b67422d5142f96f848e6d9b86c173eba6784b"
+  },
+  {
+    "seq": 129,
+    "timestamp": "2026-10-28T12:44:05.249690Z",
+    "agent": "analyst",
+    "action": "feedback",
+    "detail": "Alert AL-0001 labeled 'tp': updated weights [ML:20.0->20.0, P3:35.0->35.0, P4:16.5->16.5]",
+    "prev_hash": "2fdc486fb3da199925e34e0c37a1bc90ce37323d0761ce2c42807ec3b84d8146",
+    "hash": "79a4dc8c6507e8eb76030a702e701961050a0d4a50b4060607f9c7c00790a840"
+  },
+  {
+    "seq": 128,
+    "timestamp": "2026-10-28T12:44:05.219846Z",
+    "agent": "response",
+    "action": "dismiss",
+    "detail": "Alert AL-0001: Alert dismissed by analyst.",
+    "prev_hash": "8c8fee557e79b2baee33c19d0e3d339227c71a6cd475d57718112a52b0c1e2e2",
+    "hash": "2fdc486fb3da199925e34e0c37a1bc90ce37323d0761ce2c42807ec3b84d8146"
+  },
+  {
+    "seq": 127,
+    "timestamp": "2026-10-28T12:44:05.175017Z",
+    "agent": "pipeline",
+    "action": "end",
+    "detail": "Pipeline finished: 16 alerts produced",
+    "prev_hash": "a7d0a0a9c4495f8b7ae58e0e9571e4b8d6dc4e0c8150875ae72d9fc2684dd268",
+    "hash": "8c8fee557e79b2baee33c19d0e3d339227c71a6cd475d57718112a52b0c1e2e2"
+  },
+  {
+    "seq": 126,
+    "timestamp": "2026-10-28T12:44:05.095703Z",
+    "agent": "response",
+    "action": "monitor",
+    "detail": "Alert AL-0016: Session flagged for monitoring; no active enforcement required.",
+    "prev_hash": "27d7d3f9b4717e70947e826fbe9666d54302dadda7f4dadfe75948a84a8327ff",
+    "hash": "a7d0a0a9c4495f8b7ae58e0e9571e4b8d6dc4e0c8150875ae72d9fc2684dd268"
+  },
+  {
+    "seq": 125,
+    "timestamp": "2026-10-28T12:44:05.086406Z",
+    "agent": "response",
+    "action": "monitor",
+    "detail": "Alert AL-0015: Session flagged for monitoring; no active enforcement required.",
+    "prev_hash": "d57e169e09c4a7ce97b248d6468ce0a458016a7668d515b70299fa0a717c881e",
+    "hash": "27d7d3f9b4717e70947e826fbe9666d54302dadda7f4dadfe75948a84a8327ff"
+  },
+  {
+    "seq": 124,
+    "timestamp": "2026-10-28T12:44:05.078400Z",
+    "agent": "response",
+    "action": "monitor",
+    "detail": "Alert AL-0014: Session flagged for monitoring; no active enforcement required.",
+    "prev_hash": "7c78d67a5e5be27bf38f1e1aa6e881a5730df3127088d756b7436e2a3bbf08d4",
+    "hash": "d57e169e09c4a7ce97b248d6468ce0a458016a7668d515b70299fa0a717c881e"
+  },
+  {
+    "seq": 123,
+    "timestamp": "2026-10-28T12:44:05.070400Z",
+    "agent": "response",
+    "action": "monitor",
+    "detail": "Alert AL-0013: Session flagged for monitoring; no active enforcement required.",
+    "prev_hash": "0745f06e64908b1edd4d8d7333775b0fc5cdd8a660fa3ffa5ed656c86e773f1a",
+    "hash": "7c78d67a5e5be27bf38f1e1aa6e881a5730df3127088d756b7436e2a3bbf08d4"
+  },
+  {
+    "seq": 122,
+    "timestamp": "2026-10-28T12:44:05.061402Z",
+    "agent": "response",
+    "action": "monitor",
+    "detail": "Alert AL-0012: Session flagged for monitoring; no active enforcement required.",
+    "prev_hash": "686793fc378c297f1e55813f196c6f9e0e4d5185e969c4fdee54d924446fc81b",
+    "hash": "0745f06e64908b1edd4d8d7333775b0fc5cdd8a660fa3ffa5ed656c86e773f1a"
+  },
+  {
+    "seq": 121,
+    "timestamp": "2026-10-28T12:44:05.053404Z",
+    "agent": "response",
+    "action": "monitor",
+    "detail": "Alert AL-0011: Session flagged for monitoring; no active enforcement required.",
+    "prev_hash": "042e0edc6407398a7b4bc528849dc46a66f4fbdb41281afa3d81dbf7014a0d7d",
+    "hash": "686793fc378c297f1e55813f196c6f9e0e4d5185e969c4fdee54d924446fc81b"
+  },
+  {
+    "seq": 120,
+    "timestamp": "2026-10-28T12:44:05.045402Z",
+    "agent": "response",
+    "action": "monitor",
+    "detail": "Alert AL-0010: Session flagged for monitoring; no active enforcement required.",
+    "prev_hash": "5f82db62a416d680bdbe3bf77582844bb5a780f464e8a062c672955cf8da29a1",
+    "hash": "042e0edc6407398a7b4bc528849dc46a66f4fbdb41281afa3d81dbf7014a0d7d"
+  },
+  {
+    "seq": 119,
+    "timestamp": "2026-10-28T12:44:05.035724Z",
+    "agent": "response",
+    "action": "monitor",
+    "detail": "Alert AL-0009: Session flagged for monitoring; no active enforcement required.",
+    "prev_hash": "53cd165e2ffaa44d64e5aae678543a8591f901751deb4f6ef901710d4a41fe44",
+    "hash": "5f82db62a416d680bdbe3bf77582844bb5a780f464e8a062c672955cf8da29a1"
+  },
+  {
+    "seq": 118,
+    "timestamp": "2026-10-28T12:44:05.025155Z",
+    "agent": "response",
+    "action": "monitor",
+    "detail": "Alert AL-0008: Session flagged for monitoring; no active enforcement required.",
+    "prev_hash": "2d3c1000ce55eb84ecaa2c53682ccf379cc68c6e78eb51dfffb5ef565041c7cd",
+    "hash": "53cd165e2ffaa44d64e5aae678543a8591f901751deb4f6ef901710d4a41fe44"
+  },
+  {
+    "seq": 117,
+    "timestamp": "2026-10-28T12:44:05.014402Z",
+    "agent": "response",
+    "action": "monitor",
+    "detail": "Alert AL-0007: Session flagged for monitoring; no active enforcement required.",
+    "prev_hash": "17622cf66ee6a22d5f8a724bd9f092096ebacf618a2fba282a7b753dff6e2cea",
+    "hash": "2d3c1000ce55eb84ecaa2c53682ccf379cc68c6e78eb51dfffb5ef565041c7cd"
+  },
+  {
+    "seq": 116,
+    "timestamp": "2026-10-28T12:44:05.000095Z",
+    "agent": "response",
+    "action": "monitor",
+    "detail": "Alert AL-0006: Session flagged for monitoring; no active enforcement required.",
+    "prev_hash": "c9fcfeafea1ec8f7b97628752b701e068be71ca086ac8a58a1aa047bc9d93f9c",
+    "hash": "17622cf66ee6a22d5f8a724bd9f092096ebacf618a2fba282a7b753dff6e2cea"
+  },
+  {
+    "seq": 115,
+    "timestamp": "2026-10-28T12:44:04.977528Z",
+    "agent": "response",
+    "action": "monitor",
+    "detail": "Alert AL-0005: Session flagged for monitoring; no active enforcement required.",
+    "prev_hash": "81336d6218b9a8f5510524792c586ab01a61e04b10f8398b0c9e7aa9e846367e",
+    "hash": "c9fcfeafea1ec8f7b97628752b701e068be71ca086ac8a58a1aa047bc9d93f9c"
+  },
+  {
+    "seq": 114,
+    "timestamp": "2026-10-28T12:44:04.957477Z",
+    "agent": "response",
+    "action": "notify",
+    "detail": "Alert AL-0004: Friction budget of 2/day exceeded for anita.rao; converted to notification.",
+    "prev_hash": "75034207d9814816ec1dd3ee1f12e97a81b11e45f2474ff7076f4d4b7d69d032",
+    "hash": "81336d6218b9a8f5510524792c586ab01a61e04b10f8398b0c9e7aa9e846367e"
+  },
+  {
+    "seq": 113,
+    "timestamp": "2026-10-28T12:44:04.924233Z",
+    "agent": "response",
+    "action": "notify",
+    "detail": "Alert AL-0003: Friction budget of 2/day exceeded for dev.kumar; converted to notification.",
+    "prev_hash": "2383b816c6320b45730ef030627ba04866c19a9c7b300f297a74be34f43a4c78",
+    "hash": "75034207d9814816ec1dd3ee1f12e97a81b11e45f2474ff7076f4d4b7d69d032"
+  },
+  {
+    "seq": 112,
+    "timestamp": "2026-10-28T12:44:04.902496Z",
+    "agent": "response",
+    "action": "restrict",
+    "detail": "Alert AL-0002 (meera.n): simulated:restrict:ok",
+    "prev_hash": "9b567dd4e6192cdbc906360f7b42fb8e7926b61ebbd6ceb6baa66f52d460314e",
+    "hash": "2383b816c6320b45730ef030627ba04866c19a9c7b300f297a74be34f43a4c78"
+  },
+  {
+    "seq": 111,
+    "timestamp": "2026-10-28T12:44:04.860358Z",
+    "agent": "decision",
+    "action": "alert_created",
+    "detail": "Alert AL-0002 (meera.n): risk 85.7 (restrict), patterns=['ML', 'P4', 'P5']",
+    "prev_hash": "ab8c82580b864d9b8c033cd8b312d1083e7ad8072eb4884f3e8a4b95bfd4225e",
+    "hash": "9b567dd4e6192cdbc906360f7b42fb8e7926b61ebbd6ceb6baa66f52d460314e"
+  },
+  {
+    "seq": 110,
+    "timestamp": "2026-10-28T12:44:04.856350Z",
+    "agent": "decision",
+    "action": "alert_created",
+    "detail": "Alert AL-0001 (svc-report): risk 100.0 (revoke), patterns=['ML', 'P3', 'P4']",
+    "prev_hash": "216743e6477763e333edfc673e4685acaa0d07f46e0903f7ed41085032aa63c9",
+    "hash": "ab8c82580b864d9b8c033cd8b312d1083e7ad8072eb4884f3e8a4b95bfd4225e"
+  },
+  {
+    "seq": 109,
+    "timestamp": "2026-10-28T12:44:00.175361Z",
+    "agent": "pipeline",
+    "action": "start",
+    "detail": "Pipeline started (mode=sample)",
+    "prev_hash": "cd4e54d319becdb3e2a80d2673c9fdc7af974dcb25cf6a3da2aa7fa77d31986d",
+    "hash": "216743e6477763e333edfc673e4685acaa0d07f46e0903f7ed41085032aa63c9"
+  },
+  {
+    "seq": 108,
+    "timestamp": "2026-10-28T12:42:51.186533Z",
+    "agent": "pipeline",
+    "action": "end",
+    "detail": "Pipeline finished: 16 alerts produced",
+    "prev_hash": "0dc51828728068e8463a75037f594302ff8292bf353b1a23169d2b6db29dc405",
+    "hash": "cd4e54d319becdb3e2a80d2673c9fdc7af974dcb25cf6a3da2aa7fa77d31986d"
+  },
+  {
+    "seq": 107,
+    "timestamp": "2026-10-28T12:42:51.085624Z",
+    "agent": "response",
+    "action": "monitor",
+    "detail": "Alert AL-0016: Session flagged for monitoring; no active enforcement required.",
+    "prev_hash": "c36dd5bac6b7ae8ed119d357614306e21a156fe4dab70358ad161634856aabe7",
+    "hash": "0dc51828728068e8463a75037f594302ff8292bf353b1a23169d2b6db29dc405"
+  },
+  {
+    "seq": 106,
+    "timestamp": "2026-10-28T12:42:51.078281Z",
+    "agent": "response",
+    "action": "monitor",
+    "detail": "Alert AL-0015: Session flagged for monitoring; no active enforcement required.",
+    "prev_hash": "e4c35b4e64d6e1dcfd7ea048996f1bf8d944054260572f879a6b3559505f20db",
+    "hash": "c36dd5bac6b7ae8ed119d357614306e21a156fe4dab70358ad161634856aabe7"
+  },
+  {
+    "seq": 105,
+    "timestamp": "2026-10-28T12:42:51.071280Z",
+    "agent": "response",
+    "action": "monitor",
+    "detail": "Alert AL-0014: Session flagged for monitoring; no active enforcement required.",
+    "prev_hash": "36ad3c67e513a2f8181361cacfa916112e6c5263cfd22f0326000d655be1a4c8",
+    "hash": "e4c35b4e64d6e1dcfd7ea048996f1bf8d944054260572f879a6b3559505f20db"
+  },
+  {
+    "seq": 104,
+    "timestamp": "2026-10-28T12:42:51.064274Z",
+    "agent": "response",
+    "action": "monitor",
+    "detail": "Alert AL-0013: Session flagged for monitoring; no active enforcement required.",
+    "prev_hash": "81e272cfb5415321a70bd6954516aeccf37d2e0f192ef246dbc6db8db8c020d9",
+    "hash": "36ad3c67e513a2f8181361cacfa916112e6c5263cfd22f0326000d655be1a4c8"
+  },
+  {
+    "seq": 103,
+    "timestamp": "2026-10-28T12:42:51.056272Z",
+    "agent": "response",
+    "action": "monitor",
+    "detail": "Alert AL-0012: Session flagged for monitoring; no active enforcement required.",
+    "prev_hash": "558936004105b9f01e0950d4bc9e422bb47162e530a90b022217baab7be87452",
+    "hash": "81e272cfb5415321a70bd6954516aeccf37d2e0f192ef246dbc6db8db8c020d9"
+  },
+  {
+    "seq": 102,
+    "timestamp": "2026-10-28T12:42:51.049273Z",
+    "agent": "response",
+    "action": "monitor",
+    "detail": "Alert AL-0011: Session flagged for monitoring; no active enforcement required.",
+    "prev_hash": "e500b96dcb9d00e58709636f34a073d06515eb5f46ea51007959160528dff53b",
+    "hash": "558936004105b9f01e0950d4bc9e422bb47162e530a90b022217baab7be87452"
+  },
+  {
+    "seq": 101,
+    "timestamp": "2026-10-28T12:42:51.040921Z",
+    "agent": "response",
+    "action": "monitor",
+    "detail": "Alert AL-0010: Session flagged for monitoring; no active enforcement required.",
+    "prev_hash": "d27ad3fefaaa3b8eb253c558784a38335248567c707e2b556cf24e7337c869c4",
+    "hash": "e500b96dcb9d00e58709636f34a073d06515eb5f46ea51007959160528dff53b"
+  },
+  {
+    "seq": 100,
+    "timestamp": "2026-10-28T12:42:51.033722Z",
+    "agent": "response",
+    "action": "monitor",
+    "detail": "Alert AL-0009: Session flagged for monitoring; no active enforcement required.",
+    "prev_hash": "a75524617b43bcfc7537e9ab0add371e7cb012618343ea4f16beca008c81db5e",
+    "hash": "d27ad3fefaaa3b8eb253c558784a38335248567c707e2b556cf24e7337c869c4"
+  },
+  {
+    "seq": 99,
+    "timestamp": "2026-10-28T12:42:51.026719Z",
+    "agent": "response",
+    "action": "monitor",
+    "detail": "Alert AL-0008: Session flagged for monitoring; no active enforcement required.",
+    "prev_hash": "91623ad6fef78334098741dcf57557dc3ca528078c2df82c836c00043f4d6b52",
+    "hash": "a75524617b43bcfc7537e9ab0add371e7cb012618343ea4f16beca008c81db5e"
+  },
+  {
+    "seq": 98,
+    "timestamp": "2026-10-28T12:42:51.018713Z",
+    "agent": "response",
+    "action": "monitor",
+    "detail": "Alert AL-0007: Session flagged for monitoring; no active enforcement required.",
+    "prev_hash": "823fa395b4230ed2f646588d3e5ad524bce4453fdf18c7946774569fa23e41e5",
+    "hash": "91623ad6fef78334098741dcf57557dc3ca528078c2df82c836c00043f4d6b52"
+  },
+  {
+    "seq": 97,
+    "timestamp": "2026-10-28T12:42:51.009173Z",
+    "agent": "response",
+    "action": "monitor",
+    "detail": "Alert AL-0006: Session flagged for monitoring; no active enforcement required.",
+    "prev_hash": "02663a3d88ef8f2a64cab5bbb71dd28b967b2b4fb4b1c1bafb6d42138608ce25",
+    "hash": "823fa395b4230ed2f646588d3e5ad524bce4453fdf18c7946774569fa23e41e5"
+  },
+  {
+    "seq": 96,
+    "timestamp": "2026-10-28T12:42:51.001657Z",
+    "agent": "response",
+    "action": "monitor",
+    "detail": "Alert AL-0005: Session flagged for monitoring; no active enforcement required.",
+    "prev_hash": "4aac3e60881e23e8b35bb22dc91096c70fb3d5f8cee05c16a432755ca4692e83",
+    "hash": "02663a3d88ef8f2a64cab5bbb71dd28b967b2b4fb4b1c1bafb6d42138608ce25"
+  },
+  {
+    "seq": 95,
+    "timestamp": "2026-10-28T12:42:50.990122Z",
+    "agent": "response",
+    "action": "notify",
+    "detail": "Alert AL-0004: Friction budget of 2/day exceeded for anita.rao; converted to notification.",
+    "prev_hash": "6a721ad0ed1fc4dcc1874f1a0b53312567a1a7e5e680d2d4120f557b9f4cb142",
+    "hash": "4aac3e60881e23e8b35bb22dc91096c70fb3d5f8cee05c16a432755ca4692e83"
+  },
+  {
+    "seq": 94,
+    "timestamp": "2026-10-28T12:42:50.980231Z",
+    "agent": "response",
+    "action": "notify",
+    "detail": "Alert AL-0003: Friction budget of 2/day exceeded for dev.kumar; converted to notification.",
+    "prev_hash": "71129c5c929650c207fac560b494d940fdb31dfaae95f6057edb86a909d97153",
+    "hash": "6a721ad0ed1fc4dcc1874f1a0b53312567a1a7e5e680d2d4120f557b9f4cb142"
+  },
+  {
+    "seq": 93,
+    "timestamp": "2026-10-28T12:42:50.971906Z",
+    "agent": "response",
+    "action": "restrict",
+    "detail": "Alert AL-0002 (meera.n): simulated:restrict:ok",
+    "prev_hash": "a4af28d7af61fdc9d999feebaa88a45d0a781937c62179401de4576c8c2f87b9",
+    "hash": "71129c5c929650c207fac560b494d940fdb31dfaae95f6057edb86a909d97153"
+  },
+  {
+    "seq": 92,
+    "timestamp": "2026-10-28T12:42:50.967905Z",
+    "agent": "decision",
+    "action": "alert_created",
+    "detail": "Alert AL-0002 (meera.n): risk 85.7 (restrict), patterns=['ML', 'P4', 'P5']",
+    "prev_hash": "3c85a3a0c72dec9b28bdb2ecc92cd711deb194eb37e15d6dab01b1e89eb69323",
+    "hash": "a4af28d7af61fdc9d999feebaa88a45d0a781937c62179401de4576c8c2f87b9"
+  },
+  {
+    "seq": 91,
+    "timestamp": "2026-10-28T12:42:50.961896Z",
+    "agent": "decision",
+    "action": "alert_created",
+    "detail": "Alert AL-0001 (svc-report): risk 100.0 (revoke), patterns=['ML', 'P3', 'P4']",
+    "prev_hash": "c2fe88f53a2e545e1a401045db1b8b857c949f227823f6d5b90573502923701a",
+    "hash": "3c85a3a0c72dec9b28bdb2ecc92cd711deb194eb37e15d6dab01b1e89eb69323"
+  },
+  {
+    "seq": 90,
+    "timestamp": "2026-10-28T12:42:46.923119Z",
+    "agent": "pipeline",
+    "action": "start",
+    "detail": "Pipeline started (mode=sample)",
+    "prev_hash": "39e643cbfeb50592591bbfc4a0516d1c2512ee32e384fb9a4b9d0bf29bd0db0d",
+    "hash": "c2fe88f53a2e545e1a401045db1b8b857c949f227823f6d5b90573502923701a"
+  },
+  {
+    "seq": 89,
+    "timestamp": "2026-10-28T12:42:19.882075Z",
+    "agent": "pipeline",
+    "action": "end",
+    "detail": "Pipeline finished: 16 alerts produced",
+    "prev_hash": "440969c3ef16026cf4a9be0730a922393ba6b5dcd570e43866e182a1fcc8c72a",
+    "hash": "39e643cbfeb50592591bbfc4a0516d1c2512ee32e384fb9a4b9d0bf29bd0db0d"
+  },
+  {
+    "seq": 88,
+    "timestamp": "2026-10-28T12:42:19.806442Z",
+    "agent": "response",
+    "action": "monitor",
+    "detail": "Alert AL-0016: Session flagged for monitoring; no active enforcement required.",
+    "prev_hash": "d63ed7edec9d63ec39df1387de6063ebcae94e9352b1483ed2c3542a7af43f47",
+    "hash": "440969c3ef16026cf4a9be0730a922393ba6b5dcd570e43866e182a1fcc8c72a"
+  },
+  {
+    "seq": 87,
+    "timestamp": "2026-10-28T12:42:19.795903Z",
+    "agent": "response",
+    "action": "monitor",
+    "detail": "Alert AL-0015: Session flagged for monitoring; no active enforcement required.",
+    "prev_hash": "90c9e5e160dd4375f787928fcad8c16e2658c7d2a243c6befe9e0cfd55fcb42c",
+    "hash": "d63ed7edec9d63ec39df1387de6063ebcae94e9352b1483ed2c3542a7af43f47"
+  },
+  {
+    "seq": 86,
+    "timestamp": "2026-10-28T12:42:19.786903Z",
+    "agent": "response",
+    "action": "monitor",
+    "detail": "Alert AL-0014: Session flagged for monitoring; no active enforcement required.",
+    "prev_hash": "c0cb1882dc82ffb075542992a51bfd5ca8e94d1bfe6d7a5066a202ffc79a8320",
+    "hash": "90c9e5e160dd4375f787928fcad8c16e2658c7d2a243c6befe9e0cfd55fcb42c"
+  },
+  {
+    "seq": 85,
+    "timestamp": "2026-10-28T12:42:19.777897Z",
+    "agent": "response",
+    "action": "monitor",
+    "detail": "Alert AL-0013: Session flagged for monitoring; no active enforcement required.",
+    "prev_hash": "37b4110fa66486acbb08c5f2f1854190aaa31c1830613e588aabaf8313547c0c",
+    "hash": "c0cb1882dc82ffb075542992a51bfd5ca8e94d1bfe6d7a5066a202ffc79a8320"
+  },
+  {
+    "seq": 84,
+    "timestamp": "2026-10-28T12:42:19.768896Z",
+    "agent": "response",
+    "action": "monitor",
+    "detail": "Alert AL-0012: Session flagged for monitoring; no active enforcement required.",
+    "prev_hash": "8a6d22faa79636d81345543342b311bb9063d9eccbe042825b1ac431d8d0488e",
+    "hash": "37b4110fa66486acbb08c5f2f1854190aaa31c1830613e588aabaf8313547c0c"
+  },
+  {
+    "seq": 83,
+    "timestamp": "2026-10-28T12:42:19.758895Z",
+    "agent": "response",
+    "action": "monitor",
+    "detail": "Alert AL-0011: Session flagged for monitoring; no active enforcement required.",
+    "prev_hash": "84f02fabdae361b9c68f0556ce5f97e3ce61dbccb8705acb4c4608eaa510e476",
+    "hash": "8a6d22faa79636d81345543342b311bb9063d9eccbe042825b1ac431d8d0488e"
+  },
+  {
+    "seq": 82,
+    "timestamp": "2026-10-28T12:42:19.750894Z",
+    "agent": "response",
+    "action": "monitor",
+    "detail": "Alert AL-0010: Session flagged for monitoring; no active enforcement required.",
+    "prev_hash": "6f3d804b0aa5bdb6804749aa05f922a614673f1a58d8a625ac53b519a9471bcb",
+    "hash": "84f02fabdae361b9c68f0556ce5f97e3ce61dbccb8705acb4c4608eaa510e476"
+  },
+  {
+    "seq": 81,
+    "timestamp": "2026-10-28T12:42:19.741897Z",
+    "agent": "response",
+    "action": "monitor",
+    "detail": "Alert AL-0009: Session flagged for monitoring; no active enforcement required.",
+    "prev_hash": "e0fbd883c1184717a71dc1b76ee4e243fcc169a3e7643f27d2f30f089d8efa61",
+    "hash": "6f3d804b0aa5bdb6804749aa05f922a614673f1a58d8a625ac53b519a9471bcb"
+  },
+  {
+    "seq": 80,
+    "timestamp": "2026-10-28T12:42:19.733898Z",
+    "agent": "response",
+    "action": "monitor",
+    "detail": "Alert AL-0008: Session flagged for monitoring; no active enforcement required.",
+    "prev_hash": "8ebb60d94484604f3abe35e930d7ab05d0bea57c8d1c9032c4d04898783e52e9",
+    "hash": "e0fbd883c1184717a71dc1b76ee4e243fcc169a3e7643f27d2f30f089d8efa61"
+  },
+  {
+    "seq": 79,
+    "timestamp": "2026-10-28T12:42:19.725320Z",
+    "agent": "response",
+    "action": "monitor",
+    "detail": "Alert AL-0007: Session flagged for monitoring; no active enforcement required.",
+    "prev_hash": "ae8cada8d546d5a7da32cdff4cc2124ac00efb0ad038384cd692ebf7e177af62",
+    "hash": "8ebb60d94484604f3abe35e930d7ab05d0bea57c8d1c9032c4d04898783e52e9"
+  },
+  {
+    "seq": 78,
+    "timestamp": "2026-10-28T12:42:19.715813Z",
+    "agent": "response",
+    "action": "monitor",
+    "detail": "Alert AL-0006: Session flagged for monitoring; no active enforcement required.",
+    "prev_hash": "fb02a2af94b29e74c5e405ea1e5f0874b3eb5b5f5fd27d3f243cc1b05d246f74",
+    "hash": "ae8cada8d546d5a7da32cdff4cc2124ac00efb0ad038384cd692ebf7e177af62"
+  },
+  {
+    "seq": 77,
+    "timestamp": "2026-10-28T12:42:19.707802Z",
+    "agent": "response",
+    "action": "monitor",
+    "detail": "Alert AL-0005: Session flagged for monitoring; no active enforcement required.",
+    "prev_hash": "1d3225288a01b580a209b7cfa7f7114b1d7a2a64edf3efe6312c368c9c83fb47",
+    "hash": "fb02a2af94b29e74c5e405ea1e5f0874b3eb5b5f5fd27d3f243cc1b05d246f74"
+  },
+  {
+    "seq": 76,
+    "timestamp": "2026-10-28T12:42:19.700287Z",
+    "agent": "response",
+    "action": "notify",
+    "detail": "Alert AL-0004: Friction budget of 2/day exceeded for anita.rao; converted to notification.",
+    "prev_hash": "a3161ad2f5d422030e9c16291f25c25a6cd9346f6027839041442c11d9958b70",
+    "hash": "1d3225288a01b580a209b7cfa7f7114b1d7a2a64edf3efe6312c368c9c83fb47"
+  },
+  {
+    "seq": 75,
+    "timestamp": "2026-10-28T12:42:19.686274Z",
+    "agent": "response",
+    "action": "notify",
+    "detail": "Alert AL-0003: Friction budget of 2/day exceeded for dev.kumar; converted to notification.",
+    "prev_hash": "36c021ed6e3dd7eca5d9af0a74bc2ebe59a110edf0d8e3f73f49aa706e5f6b37",
+    "hash": "a3161ad2f5d422030e9c16291f25c25a6cd9346f6027839041442c11d9958b70"
+  },
+  {
+    "seq": 74,
+    "timestamp": "2026-10-28T12:42:19.673903Z",
+    "agent": "response",
+    "action": "restrict",
+    "detail": "Alert AL-0002 (meera.n): simulated:restrict:ok",
+    "prev_hash": "117061ec32cd981bd304591292d0802747910dbe05665be1ba4b520f7aea5c5b",
+    "hash": "36c021ed6e3dd7eca5d9af0a74bc2ebe59a110edf0d8e3f73f49aa706e5f6b37"
+  },
+  {
+    "seq": 73,
+    "timestamp": "2026-10-28T12:42:19.669903Z",
+    "agent": "decision",
+    "action": "alert_created",
+    "detail": "Alert AL-0002 (meera.n): risk 85.7 (restrict), patterns=['ML', 'P4', 'P5']",
+    "prev_hash": "a575347b0f73fc216c30671cbb8a5503b4cf929086c6b9cdefc8d0de4c71518d",
+    "hash": "117061ec32cd981bd304591292d0802747910dbe05665be1ba4b520f7aea5c5b"
+  },
+  {
+    "seq": 72,
+    "timestamp": "2026-10-28T12:42:19.665817Z",
+    "agent": "decision",
+    "action": "alert_created",
+    "detail": "Alert AL-0001 (svc-report): risk 100.0 (revoke), patterns=['ML', 'P3', 'P4']",
+    "prev_hash": "f617540209629ba3c111f0b7ce0fdd3f04e7e6231aa8be9caf8c0d7c9d4b3142",
+    "hash": "a575347b0f73fc216c30671cbb8a5503b4cf929086c6b9cdefc8d0de4c71518d"
+  },
+  {
+    "seq": 71,
+    "timestamp": "2026-10-28T12:42:15.159892Z",
+    "agent": "pipeline",
+    "action": "start",
+    "detail": "Pipeline started (mode=sample)",
+    "prev_hash": "b9f337ef2f5cdbb6fa76da14140f182a0033111a81c88958309c501f3bceb0a7",
+    "hash": "f617540209629ba3c111f0b7ce0fdd3f04e7e6231aa8be9caf8c0d7c9d4b3142"
+  },
+  {
+    "seq": 70,
+    "timestamp": "2026-10-28T12:42:00.261098Z",
+    "agent": "pipeline",
+    "action": "end",
+    "detail": "Pipeline finished: 16 alerts produced",
+    "prev_hash": "7ef2518b0755692d61e76c560a5d9b237c3e9375d151f3a77085b7f5af76d1fd",
+    "hash": "b9f337ef2f5cdbb6fa76da14140f182a0033111a81c88958309c501f3bceb0a7"
+  },
+  {
+    "seq": 69,
+    "timestamp": "2026-10-28T12:42:00.173278Z",
+    "agent": "response",
+    "action": "monitor",
+    "detail": "Alert AL-0016: Session flagged for monitoring; no active enforcement required.",
+    "prev_hash": "f92db09045d0e0c1fced8feace4a595436ba9fc548cda6dd03e553aa27fb6d78",
+    "hash": "7ef2518b0755692d61e76c560a5d9b237c3e9375d151f3a77085b7f5af76d1fd"
+  },
+  {
+    "seq": 68,
+    "timestamp": "2026-10-28T12:42:00.164010Z",
+    "agent": "response",
+    "action": "monitor",
+    "detail": "Alert AL-0015: Session flagged for monitoring; no active enforcement required.",
+    "prev_hash": "fd73131e21864dc732e29603065be5d05fc39f2125e35e132906d9a93973e1d0",
+    "hash": "f92db09045d0e0c1fced8feace4a595436ba9fc548cda6dd03e553aa27fb6d78"
+  },
+  {
+    "seq": 67,
+    "timestamp": "2026-10-28T12:42:00.155055Z",
+    "agent": "response",
+    "action": "monitor",
+    "detail": "Alert AL-0014: Session flagged for monitoring; no active enforcement required.",
+    "prev_hash": "17e71e6ebe45e8f3c6d73039e5dbb2dcec7759815089e27c224f463ea52870c6",
+    "hash": "fd73131e21864dc732e29603065be5d05fc39f2125e35e132906d9a93973e1d0"
+  },
+  {
+    "seq": 66,
+    "timestamp": "2026-10-28T12:42:00.136710Z",
+    "agent": "response",
+    "action": "monitor",
+    "detail": "Alert AL-0013: Session flagged for monitoring; no active enforcement required.",
+    "prev_hash": "6e41449ca9970e0c606699ffd5c85ee80a98b1865ef0f3718cf3d10d9847f33d",
+    "hash": "17e71e6ebe45e8f3c6d73039e5dbb2dcec7759815089e27c224f463ea52870c6"
+  },
+  {
+    "seq": 65,
+    "timestamp": "2026-10-28T12:42:00.123512Z",
+    "agent": "response",
+    "action": "monitor",
+    "detail": "Alert AL-0012: Session flagged for monitoring; no active enforcement required.",
+    "prev_hash": "b49e2767b7967f15fcc3ca3e5ef02ecf918f24a96ab2bb3ee487330988962f99",
+    "hash": "6e41449ca9970e0c606699ffd5c85ee80a98b1865ef0f3718cf3d10d9847f33d"
+  },
+  {
+    "seq": 64,
+    "timestamp": "2026-10-28T12:42:00.112994Z",
+    "agent": "response",
+    "action": "monitor",
+    "detail": "Alert AL-0011: Session flagged for monitoring; no active enforcement required.",
+    "prev_hash": "157bac57f3d41683b8aacc80b4ba8a2773a724a96bdfd0191dad34d12c76c63b",
+    "hash": "b49e2767b7967f15fcc3ca3e5ef02ecf918f24a96ab2bb3ee487330988962f99"
+  },
+  {
+    "seq": 63,
+    "timestamp": "2026-10-28T12:42:00.095308Z",
+    "agent": "response",
+    "action": "monitor",
+    "detail": "Alert AL-0010: Session flagged for monitoring; no active enforcement required.",
+    "prev_hash": "1e4fc9099dc5e1a004be81f81104648fad156e76b9619d295e8733762cb1a208",
+    "hash": "157bac57f3d41683b8aacc80b4ba8a2773a724a96bdfd0191dad34d12c76c63b"
+  },
+  {
+    "seq": 62,
+    "timestamp": "2026-10-28T12:42:00.068341Z",
+    "agent": "response",
+    "action": "monitor",
+    "detail": "Alert AL-0009: Session flagged for monitoring; no active enforcement required.",
+    "prev_hash": "fb8e1d930bf31d356348fdd6e1111d3f65010a5e963cd1377d5325c6a83bb0af",
+    "hash": "1e4fc9099dc5e1a004be81f81104648fad156e76b9619d295e8733762cb1a208"
+  },
+  {
+    "seq": 61,
+    "timestamp": "2026-10-28T12:42:00.044328Z",
+    "agent": "response",
+    "action": "monitor",
+    "detail": "Alert AL-0008: Session flagged for monitoring; no active enforcement required.",
+    "prev_hash": "00ec968dbf0e8697b2be76896f2777a5cc23c947513bf9634dc94970a6a5deb9",
+    "hash": "fb8e1d930bf31d356348fdd6e1111d3f65010a5e963cd1377d5325c6a83bb0af"
+  },
+  {
+    "seq": 60,
+    "timestamp": "2026-10-28T12:42:00.035808Z",
+    "agent": "response",
+    "action": "monitor",
+    "detail": "Alert AL-0007: Session flagged for monitoring; no active enforcement required.",
+    "prev_hash": "0206a226dc5db7937798063f881e8bf07836af4af38417b1d7eb5baee5dd9a84",
+    "hash": "00ec968dbf0e8697b2be76896f2777a5cc23c947513bf9634dc94970a6a5deb9"
+  },
+  {
+    "seq": 59,
+    "timestamp": "2026-10-28T12:42:00.016994Z",
+    "agent": "response",
+    "action": "monitor",
+    "detail": "Alert AL-0006: Session flagged for monitoring; no active enforcement required.",
+    "prev_hash": "a8416bcbab61aba7b7484c2308766db56fb5f07ed04d99aa114b2d42da575ac1",
+    "hash": "0206a226dc5db7937798063f881e8bf07836af4af38417b1d7eb5baee5dd9a84"
+  },
+  {
+    "seq": 58,
+    "timestamp": "2026-10-28T12:42:00.006363Z",
+    "agent": "response",
+    "action": "monitor",
+    "detail": "Alert AL-0005: Session flagged for monitoring; no active enforcement required.",
+    "prev_hash": "357eb5ed46695f19abebaf5724312cf29cc3e228d04e62a9a236c5802df19029",
+    "hash": "a8416bcbab61aba7b7484c2308766db56fb5f07ed04d99aa114b2d42da575ac1"
+  },
+  {
+    "seq": 57,
+    "timestamp": "2026-10-28T12:41:59.997276Z",
+    "agent": "response",
+    "action": "notify",
+    "detail": "Alert AL-0004: Friction budget of 2/day exceeded for anita.rao; converted to notification.",
+    "prev_hash": "1e64bfab6ddcab9945ab906e669253a32e5c60d40b71b3ba0716d539e627382c",
+    "hash": "357eb5ed46695f19abebaf5724312cf29cc3e228d04e62a9a236c5802df19029"
+  },
+  {
+    "seq": 56,
+    "timestamp": "2026-10-28T12:41:59.987281Z",
+    "agent": "response",
+    "action": "notify",
+    "detail": "Alert AL-0003: Friction budget of 2/day exceeded for dev.kumar; converted to notification.",
+    "prev_hash": "5b344f36834acbac698f8810e1b41400609792314cc33044b15a15b3792613a1",
+    "hash": "1e64bfab6ddcab9945ab906e669253a32e5c60d40b71b3ba0716d539e627382c"
+  },
+  {
+    "seq": 55,
+    "timestamp": "2026-10-28T12:41:59.979413Z",
+    "agent": "response",
+    "action": "restrict",
+    "detail": "Alert AL-0002 (meera.n): simulated:restrict:ok",
+    "prev_hash": "00fce032453ace82c0ae957b666851fc0c4175dfe90c211aa2877b446719955f",
+    "hash": "5b344f36834acbac698f8810e1b41400609792314cc33044b15a15b3792613a1"
+  },
+  {
+    "seq": 54,
+    "timestamp": "2026-10-28T12:41:59.975412Z",
+    "agent": "decision",
+    "action": "alert_created",
+    "detail": "Alert AL-0002 (meera.n): risk 85.7 (restrict), patterns=['ML', 'P4', 'P5']",
+    "prev_hash": "6a6c5a9bf9bc8692bd69b2f545b3d84cdc0785cc99fce191789339ec9d82e4b9",
+    "hash": "00fce032453ace82c0ae957b666851fc0c4175dfe90c211aa2877b446719955f"
+  },
+  {
+    "seq": 53,
+    "timestamp": "2026-10-28T12:41:59.970996Z",
+    "agent": "decision",
+    "action": "alert_created",
+    "detail": "Alert AL-0001 (svc-report): risk 100.0 (revoke), patterns=['ML', 'P3', 'P4']",
+    "prev_hash": "d0ed8acca8d5cf7bd19359f3dde00984b74cc4d72550a5c182ad1c8079fc4181",
+    "hash": "6a6c5a9bf9bc8692bd69b2f545b3d84cdc0785cc99fce191789339ec9d82e4b9"
+  },
+  {
+    "seq": 52,
+    "timestamp": "2026-10-28T12:41:55.358180Z",
+    "agent": "pipeline",
+    "action": "start",
+    "detail": "Pipeline started (mode=sample)",
+    "prev_hash": "299930734d213711c0e4540b82e259ecbf5a403290250b89a5020bdd4c2569ef",
+    "hash": "d0ed8acca8d5cf7bd19359f3dde00984b74cc4d72550a5c182ad1c8079fc4181"
+  },
+  {
+    "seq": 51,
+    "timestamp": "2026-10-28T12:37:35.464911Z",
+    "agent": "analyst",
+    "action": "feedback",
+    "detail": "Alert AL-FB-TEST labeled 'tp': updated weights [P4:16.0->16.5]",
+    "prev_hash": "e385697da53b64a50186b5ed281308ef16695546a16e224dc893766f65087d9e",
+    "hash": "299930734d213711c0e4540b82e259ecbf5a403290250b89a5020bdd4c2569ef"
+  },
+  {
+    "seq": 50,
+    "timestamp": "2026-10-28T12:37:35.442933Z",
+    "agent": "response",
+    "action": "revoke",
+    "detail": "Alert AL-REV-TEST (test-user): simulated:revoke:ok",
+    "prev_hash": "e40f32e6da50eabaa052b7e96e0ea8ebb4ff4e2282437eb09317e79990fc101e",
+    "hash": "e385697da53b64a50186b5ed281308ef16695546a16e224dc893766f65087d9e"
+  },
+  {
+    "seq": 49,
+    "timestamp": "2026-10-28T12:37:35.437418Z",
+    "agent": "response",
+    "action": "refused",
+    "detail": "Alert AL-REV-TEST: Revoke containment requires explicit analyst approval.",
+    "prev_hash": "9519e8d42ab3928700005ae73936efb9ccbff10dd3f423e2381cc488b0591629",
+    "hash": "e40f32e6da50eabaa052b7e96e0ea8ebb4ff4e2282437eb09317e79990fc101e"
+  },
+  {
+    "seq": 48,
+    "timestamp": "2026-10-28T12:37:35.417923Z",
+    "agent": "test",
+    "action": "check",
+    "detail": "ok",
+    "prev_hash": "9cbff266781f087ba3312cf00131a5815c879980ab38a9c19804fa01f17391fc",
+    "hash": "9519e8d42ab3928700005ae73936efb9ccbff10dd3f423e2381cc488b0591629"
+  },
+  {
+    "seq": 47,
+    "timestamp": "2026-10-28T12:37:26.282371Z",
+    "agent": "pipeline",
+    "action": "end",
+    "detail": "Pipeline finished: 16 alerts produced",
+    "prev_hash": "969b8d2a3643f16bbbc0cc73034953c0f87dd228ceba49cee2262811541d6277",
+    "hash": "9cbff266781f087ba3312cf00131a5815c879980ab38a9c19804fa01f17391fc"
+  },
+  {
+    "seq": 46,
+    "timestamp": "2026-10-28T12:37:26.204948Z",
+    "agent": "response",
+    "action": "monitor",
+    "detail": "Alert AL-0016: Session flagged for monitoring; no active enforcement required.",
+    "prev_hash": "e6ffc3b2f2902f652c5bd40192f126913faff878f7e49f29531af1f0142512d0",
+    "hash": "969b8d2a3643f16bbbc0cc73034953c0f87dd228ceba49cee2262811541d6277"
+  },
+  {
+    "seq": 45,
+    "timestamp": "2026-10-28T12:37:26.196575Z",
+    "agent": "response",
+    "action": "monitor",
+    "detail": "Alert AL-0015: Session flagged for monitoring; no active enforcement required.",
+    "prev_hash": "f20ccd2d6959640dc7c5709d0fba79ae20201345cb54db43db841327c04c2429",
+    "hash": "e6ffc3b2f2902f652c5bd40192f126913faff878f7e49f29531af1f0142512d0"
+  },
+  {
+    "seq": 44,
+    "timestamp": "2026-10-28T12:37:26.190574Z",
+    "agent": "response",
+    "action": "monitor",
+    "detail": "Alert AL-0014: Session flagged for monitoring; no active enforcement required.",
+    "prev_hash": "0318d0198104cdf3c56bea42d86769d6a622759c271a0d8cd78e178ff59a8ecc",
+    "hash": "f20ccd2d6959640dc7c5709d0fba79ae20201345cb54db43db841327c04c2429"
+  },
+  {
+    "seq": 43,
+    "timestamp": "2026-10-28T12:37:26.183422Z",
+    "agent": "response",
+    "action": "monitor",
+    "detail": "Alert AL-0013: Session flagged for monitoring; no active enforcement required.",
+    "prev_hash": "0446b2b9f302bc36e592a9b931dc5c99ff69371e9b088d3c4e4d54030980ca2c",
+    "hash": "0318d0198104cdf3c56bea42d86769d6a622759c271a0d8cd78e178ff59a8ecc"
+  },
+  {
+    "seq": 42,
+    "timestamp": "2026-10-28T12:37:26.176302Z",
+    "agent": "response",
+    "action": "monitor",
+    "detail": "Alert AL-0012: Session flagged for monitoring; no active enforcement required.",
+    "prev_hash": "86490502041dd3a1b4c904a288040263da5002cdc2625e9429378f1a25f41cac",
+    "hash": "0446b2b9f302bc36e592a9b931dc5c99ff69371e9b088d3c4e4d54030980ca2c"
+  },
+  {
+    "seq": 41,
+    "timestamp": "2026-10-28T12:37:26.169712Z",
+    "agent": "response",
+    "action": "monitor",
+    "detail": "Alert AL-0011: Session flagged for monitoring; no active enforcement required.",
+    "prev_hash": "a4592a5d90abd0743c872cf4a04df006505a2e8c607ab42a937989f421b1fc52",
+    "hash": "86490502041dd3a1b4c904a288040263da5002cdc2625e9429378f1a25f41cac"
+  },
+  {
+    "seq": 40,
+    "timestamp": "2026-10-28T12:37:26.162205Z",
+    "agent": "response",
+    "action": "monitor",
+    "detail": "Alert AL-0010: Session flagged for monitoring; no active enforcement required.",
+    "prev_hash": "65782f3ec2ab78c5448c3864beedec8b7d87ac633b76aacce4f1a7fcf290da20",
+    "hash": "a4592a5d90abd0743c872cf4a04df006505a2e8c607ab42a937989f421b1fc52"
+  },
+  {
+    "seq": 39,
+    "timestamp": "2026-10-28T12:37:26.155011Z",
+    "agent": "response",
+    "action": "monitor",
+    "detail": "Alert AL-0009: Session flagged for monitoring; no active enforcement required.",
+    "prev_hash": "be11c9112bf76987eb5f949f8a6132b59f3aef897132ec9e1d623013ed0c017d",
+    "hash": "65782f3ec2ab78c5448c3864beedec8b7d87ac633b76aacce4f1a7fcf290da20"
+  },
+  {
+    "seq": 38,
+    "timestamp": "2026-10-28T12:37:26.147960Z",
+    "agent": "response",
+    "action": "monitor",
+    "detail": "Alert AL-0008: Session flagged for monitoring; no active enforcement required.",
+    "prev_hash": "0efbe250ac392094bdc813b513b8f6261468d31151bd5aaf9b45a21fa49e3c69",
+    "hash": "be11c9112bf76987eb5f949f8a6132b59f3aef897132ec9e1d623013ed0c017d"
+  },
+  {
+    "seq": 37,
+    "timestamp": "2026-10-28T12:37:26.141795Z",
+    "agent": "response",
+    "action": "monitor",
+    "detail": "Alert AL-0007: Session flagged for monitoring; no active enforcement required.",
+    "prev_hash": "8403f3b535d4a57236edf49380f2298279243eab5ff7966adaefcba62399d46a",
+    "hash": "0efbe250ac392094bdc813b513b8f6261468d31151bd5aaf9b45a21fa49e3c69"
+  },
+  {
+    "seq": 36,
+    "timestamp": "2026-10-28T12:37:26.134233Z",
+    "agent": "response",
+    "action": "monitor",
+    "detail": "Alert AL-0006: Session flagged for monitoring; no active enforcement required.",
+    "prev_hash": "4f441b82e9a71f417783a88787b3274e7a596db56f4541a47750c101f09273c2",
+    "hash": "8403f3b535d4a57236edf49380f2298279243eab5ff7966adaefcba62399d46a"
+  },
+  {
+    "seq": 35,
+    "timestamp": "2026-10-28T12:37:26.126821Z",
+    "agent": "response",
+    "action": "monitor",
+    "detail": "Alert AL-0005: Session flagged for monitoring; no active enforcement required.",
+    "prev_hash": "66911d7431d5f020f226dd05b3dd99d32720b470adf0ce0746ad856b189218ee",
+    "hash": "4f441b82e9a71f417783a88787b3274e7a596db56f4541a47750c101f09273c2"
+  },
+  {
+    "seq": 34,
+    "timestamp": "2026-10-28T12:37:26.117511Z",
+    "agent": "response",
+    "action": "step_up",
+    "detail": "Alert AL-0004 (anita.rao): simulated:step_up:ok",
+    "prev_hash": "f21b4c6258e4c7f7fbf0b1e717fd22afd5df4643697af634709cd8913f119852",
+    "hash": "66911d7431d5f020f226dd05b3dd99d32720b470adf0ce0746ad856b189218ee"
+  },
+  {
+    "seq": 33,
+    "timestamp": "2026-10-28T12:37:26.107865Z",
+    "agent": "response",
+    "action": "step_up",
+    "detail": "Alert AL-0003 (dev.kumar): simulated:step_up:ok",
+    "prev_hash": "802bafb9fc8f101a8a76f43a28b38ea99e3e02a55bc6850dc6cc444403554675",
+    "hash": "f21b4c6258e4c7f7fbf0b1e717fd22afd5df4643697af634709cd8913f119852"
+  },
+  {
+    "seq": 32,
+    "timestamp": "2026-10-28T12:37:26.096355Z",
+    "agent": "response",
+    "action": "restrict",
+    "detail": "Alert AL-0002 (meera.n): simulated:restrict:ok",
+    "prev_hash": "d9efaf414d500adf00507c9f3758a5b8222a0c48e1f9a1102d58e41a77a9a044",
+    "hash": "802bafb9fc8f101a8a76f43a28b38ea99e3e02a55bc6850dc6cc444403554675"
+  },
+  {
+    "seq": 31,
+    "timestamp": "2026-10-28T12:37:26.091147Z",
+    "agent": "decision",
+    "action": "alert_created",
+    "detail": "Alert AL-0002 (meera.n): risk 85.2 (restrict), patterns=['ML', 'P4', 'P5']",
+    "prev_hash": "769e8dfa9fa4f2497658f4930b53399ce2f5dcfb153fcd69acd1963eaefcdcfe",
+    "hash": "d9efaf414d500adf00507c9f3758a5b8222a0c48e1f9a1102d58e41a77a9a044"
+  },
+  {
+    "seq": 30,
+    "timestamp": "2026-10-28T12:37:26.086483Z",
+    "agent": "decision",
+    "action": "alert_created",
+    "detail": "Alert AL-0001 (svc-report): risk 100.0 (revoke), patterns=['ML', 'P3', 'P4']",
+    "prev_hash": "c814968aed8f3796e2372123f4f900c0e65cf6d76cb588f830eb31cc375d59f4",
+    "hash": "769e8dfa9fa4f2497658f4930b53399ce2f5dcfb153fcd69acd1963eaefcdcfe"
+  },
+  {
+    "seq": 29,
+    "timestamp": "2026-10-28T12:37:21.392574Z",
+    "agent": "pipeline",
+    "action": "start",
+    "detail": "Pipeline started (mode=sample)",
+    "prev_hash": "cc75ca0fa479e3e70a2eeb596270dfa439771b94cfbc86117694594a673cd962",
+    "hash": "c814968aed8f3796e2372123f4f900c0e65cf6d76cb588f830eb31cc375d59f4"
+  },
+  {
+    "seq": 28,
+    "timestamp": "2026-10-28T12:37:09.287278Z",
+    "agent": "pipeline",
+    "action": "end",
+    "detail": "Pipeline finished: 16 alerts produced",
+    "prev_hash": "23cfe4d27a44e178fea25ea582d49765f62c9a5abb703f597e35aefa2895e149",
+    "hash": "cc75ca0fa479e3e70a2eeb596270dfa439771b94cfbc86117694594a673cd962"
+  },
+  {
+    "seq": 27,
+    "timestamp": "2026-10-28T12:37:09.149222Z",
+    "agent": "response",
+    "action": "monitor",
+    "detail": "Alert AL-0016: Session flagged for monitoring; no active enforcement required.",
+    "prev_hash": "18e0472c78a4512675f05578dc63e20c4561ea66e10a8c9cd461b029aa5098ff",
+    "hash": "23cfe4d27a44e178fea25ea582d49765f62c9a5abb703f597e35aefa2895e149"
+  },
+  {
+    "seq": 26,
+    "timestamp": "2026-10-28T12:37:09.139941Z",
+    "agent": "response",
+    "action": "monitor",
+    "detail": "Alert AL-0015: Session flagged for monitoring; no active enforcement required.",
+    "prev_hash": "e794e5f4c857197e7f79663b0217ef40172bbfb2fa9267fa9145bb7bc0ac1729",
+    "hash": "18e0472c78a4512675f05578dc63e20c4561ea66e10a8c9cd461b029aa5098ff"
+  },
+  {
+    "seq": 25,
+    "timestamp": "2026-10-28T12:37:09.132937Z",
+    "agent": "response",
+    "action": "monitor",
+    "detail": "Alert AL-0014: Session flagged for monitoring; no active enforcement required.",
+    "prev_hash": "ec00ade8eece284161cdb53a0ff588ac66a7088e12402e62ecf3730b9142ecf1",
+    "hash": "e794e5f4c857197e7f79663b0217ef40172bbfb2fa9267fa9145bb7bc0ac1729"
+  },
+  {
+    "seq": 24,
+    "timestamp": "2026-10-28T12:37:09.125930Z",
+    "agent": "response",
+    "action": "monitor",
+    "detail": "Alert AL-0013: Session flagged for monitoring; no active enforcement required.",
+    "prev_hash": "5980c9cb1b194b54b5d33b21786a402ca456421054e7d035d27ba9e1d7eff5a2",
+    "hash": "ec00ade8eece284161cdb53a0ff588ac66a7088e12402e62ecf3730b9142ecf1"
+  },
+  {
+    "seq": 23,
+    "timestamp": "2026-10-28T12:37:09.118930Z",
+    "agent": "response",
+    "action": "monitor",
+    "detail": "Alert AL-0012: Session flagged for monitoring; no active enforcement required.",
+    "prev_hash": "10a946e4d76cf5f145308f1efb141a2328848218ab355f4870ef4ac0361b9074",
+    "hash": "5980c9cb1b194b54b5d33b21786a402ca456421054e7d035d27ba9e1d7eff5a2"
+  },
+  {
+    "seq": 22,
+    "timestamp": "2026-10-28T12:37:09.110932Z",
+    "agent": "response",
+    "action": "monitor",
+    "detail": "Alert AL-0011: Session flagged for monitoring; no active enforcement required.",
+    "prev_hash": "c2ba353d29e34c2566d6f2bc9b50b9681d4eb0d32cfe0d98cb9f4099f58f58b4",
+    "hash": "10a946e4d76cf5f145308f1efb141a2328848218ab355f4870ef4ac0361b9074"
+  },
+  {
+    "seq": 21,
+    "timestamp": "2026-10-28T12:37:09.102929Z",
+    "agent": "response",
+    "action": "monitor",
+    "detail": "Alert AL-0010: Session flagged for monitoring; no active enforcement required.",
+    "prev_hash": "c8981770a243983d8718198b8b4ee46a9d47db296f2ed097d4e9e74e8da02a76",
+    "hash": "c2ba353d29e34c2566d6f2bc9b50b9681d4eb0d32cfe0d98cb9f4099f58f58b4"
+  },
+  {
+    "seq": 20,
+    "timestamp": "2026-10-28T12:37:09.094931Z",
+    "agent": "response",
+    "action": "monitor",
+    "detail": "Alert AL-0009: Session flagged for monitoring; no active enforcement required.",
+    "prev_hash": "16404bf4eb7d7a0e0cdc409ccce6b7f7c1660d15f275b99c51550d00f3dadcd9",
+    "hash": "c8981770a243983d8718198b8b4ee46a9d47db296f2ed097d4e9e74e8da02a76"
+  },
+  {
+    "seq": 19,
+    "timestamp": "2026-10-28T12:37:09.088414Z",
+    "agent": "response",
+    "action": "monitor",
+    "detail": "Alert AL-0008: Session flagged for monitoring; no active enforcement required.",
+    "prev_hash": "fcc6cfd8a93b622e6071d5d1ed441101b835dcb6320c3da93e9d737ea9a851d3",
+    "hash": "16404bf4eb7d7a0e0cdc409ccce6b7f7c1660d15f275b99c51550d00f3dadcd9"
+  },
+  {
+    "seq": 18,
+    "timestamp": "2026-10-28T12:37:09.080414Z",
+    "agent": "response",
+    "action": "monitor",
+    "detail": "Alert AL-0007: Session flagged for monitoring; no active enforcement required.",
+    "prev_hash": "beb8435f310fb8664a2b4df80bd1fd07bf889687de96587197600e51a8ee6460",
+    "hash": "fcc6cfd8a93b622e6071d5d1ed441101b835dcb6320c3da93e9d737ea9a851d3"
+  },
+  {
+    "seq": 17,
+    "timestamp": "2026-10-28T12:37:09.073406Z",
+    "agent": "response",
+    "action": "monitor",
+    "detail": "Alert AL-0006: Session flagged for monitoring; no active enforcement required.",
+    "prev_hash": "16e2fd46f4d2c5b278f4bc2dd9c81709ed9e3047608aae85946fc467e0ae66d3",
+    "hash": "beb8435f310fb8664a2b4df80bd1fd07bf889687de96587197600e51a8ee6460"
+  },
+  {
+    "seq": 16,
+    "timestamp": "2026-10-28T12:37:09.067406Z",
+    "agent": "response",
+    "action": "monitor",
+    "detail": "Alert AL-0005: Session flagged for monitoring; no active enforcement required.",
+    "prev_hash": "3f6ce398e3a3c48c024c2558b24642bf2a9e6f235193b9917ee9bbbd9de95969",
+    "hash": "16e2fd46f4d2c5b278f4bc2dd9c81709ed9e3047608aae85946fc467e0ae66d3"
+  },
+  {
+    "seq": 15,
+    "timestamp": "2026-10-28T12:37:09.058406Z",
+    "agent": "response",
+    "action": "step_up",
+    "detail": "Alert AL-0004 (anita.rao): simulated:step_up:ok",
+    "prev_hash": "d65c3988518528bb05916100e132e90c8f7f33517c2f6912860f34adcbb23479",
+    "hash": "3f6ce398e3a3c48c024c2558b24642bf2a9e6f235193b9917ee9bbbd9de95969"
+  },
+  {
+    "seq": 14,
+    "timestamp": "2026-10-28T12:37:09.048409Z",
+    "agent": "response",
+    "action": "step_up",
+    "detail": "Alert AL-0003 (dev.kumar): simulated:step_up:ok",
+    "prev_hash": "dfc32b73bd12378c138a06575f7144729dfc1e4672a57196f7f0671439d0f0ed",
+    "hash": "d65c3988518528bb05916100e132e90c8f7f33517c2f6912860f34adcbb23479"
+  },
+  {
+    "seq": 13,
+    "timestamp": "2026-10-28T12:37:09.034064Z",
+    "agent": "response",
+    "action": "restrict",
+    "detail": "Alert AL-0002 (meera.n): simulated:restrict:ok",
+    "prev_hash": "dd7df09aac292a79484abdd676d420d0c4974042cfcb3e2ad14ec89575fdfb7d",
+    "hash": "dfc32b73bd12378c138a06575f7144729dfc1e4672a57196f7f0671439d0f0ed"
+  },
+  {
+    "seq": 12,
+    "timestamp": "2026-10-28T12:37:09.030064Z",
+    "agent": "decision",
+    "action": "alert_created",
+    "detail": "Alert AL-0002 (meera.n): risk 85.2 (restrict), patterns=['ML', 'P4', 'P5']",
+    "prev_hash": "9b85234023fe2d743e61e57cb554fe5bce388f52acfe5b51ef0430de947e9a9d",
+    "hash": "dd7df09aac292a79484abdd676d420d0c4974042cfcb3e2ad14ec89575fdfb7d"
+  },
+  {
+    "seq": 11,
+    "timestamp": "2026-10-28T12:37:09.025064Z",
+    "agent": "decision",
+    "action": "alert_created",
+    "detail": "Alert AL-0001 (svc-report): risk 100.0 (revoke), patterns=['ML', 'P3', 'P4']",
+    "prev_hash": "700c8b7028f49cf57e60abddfabd36e1f8f5a2b6588998da7b5050b8e9bd6e79",
+    "hash": "9b85234023fe2d743e61e57cb554fe5bce388f52acfe5b51ef0430de947e9a9d"
+  },
+  {
+    "seq": 10,
+    "timestamp": "2026-10-28T12:37:04.676478Z",
+    "agent": "pipeline",
+    "action": "start",
+    "detail": "Pipeline started (mode=sample)",
+    "prev_hash": "352d71f97143748e539f9271d2a72fc1480fc2f11f30a65679ffa148231d4f34",
+    "hash": "700c8b7028f49cf57e60abddfabd36e1f8f5a2b6588998da7b5050b8e9bd6e79"
+  },
+  {
+    "seq": 9,
+    "timestamp": "2026-10-28T12:26:16.318334Z",
+    "agent": "analyst",
+    "action": "feedback",
+    "detail": "Alert AL-FB-TEST labeled 'tp': updated weights [P4:15.5->16.0]",
+    "prev_hash": "65f15e50c48b5cebb3740c2f27621e79942e63bd33cdd5fce3fa967e7a5dbf01",
+    "hash": "352d71f97143748e539f9271d2a72fc1480fc2f11f30a65679ffa148231d4f34"
+  },
+  {
+    "seq": 8,
+    "timestamp": "2026-10-28T12:26:16.300141Z",
+    "agent": "response",
+    "action": "revoke",
+    "detail": "Alert AL-REV-TEST (test-user): simulated:revoke:ok",
+    "prev_hash": "b4d9028536a0d39208420d9995d4d1017553bfd2717ca9dcdca8771afddf5036",
+    "hash": "65f15e50c48b5cebb3740c2f27621e79942e63bd33cdd5fce3fa967e7a5dbf01"
+  },
+  {
+    "seq": 7,
+    "timestamp": "2026-10-28T12:26:16.294039Z",
+    "agent": "response",
+    "action": "refused",
+    "detail": "Alert AL-REV-TEST: Revoke containment requires explicit analyst approval.",
+    "prev_hash": "be5a73ddc07c8d6329a73d575cf4fae9594cb6beced147acc8d569a2e39c57ac",
+    "hash": "b4d9028536a0d39208420d9995d4d1017553bfd2717ca9dcdca8771afddf5036"
+  },
+  {
+    "seq": 6,
+    "timestamp": "2026-10-28T12:26:16.271765Z",
+    "agent": "test",
+    "action": "check",
+    "detail": "ok",
+    "prev_hash": "fbb389ac5285c3dd5027094237a8545c92f49a57160e18dcbd79d9c1b9290ab4",
+    "hash": "be5a73ddc07c8d6329a73d575cf4fae9594cb6beced147acc8d569a2e39c57ac"
+  },
+  {
+    "seq": 5,
+    "timestamp": "2026-10-28T12:26:07.238392Z",
+    "agent": "analyst",
+    "action": "feedback",
+    "detail": "Alert AL-FB-TEST labeled 'tp': updated weights [P4:15.0->15.5]",
+    "prev_hash": "b52527cf0ca6499b3bc1485d2876d2929ebce8e5f0cce6637497defe9e4789be",
+    "hash": "fbb389ac5285c3dd5027094237a8545c92f49a57160e18dcbd79d9c1b9290ab4"
+  },
+  {
+    "seq": 4,
+    "timestamp": "2026-10-28T12:26:07.212992Z",
+    "agent": "response",
+    "action": "revoke",
+    "detail": "Alert AL-REV-TEST (test-user): simulated:revoke:ok",
+    "prev_hash": "43b4ce11b57ee9480ca2753c81f767036d4cf25fb465b92ca6437cf355a965ea",
+    "hash": "b52527cf0ca6499b3bc1485d2876d2929ebce8e5f0cce6637497defe9e4789be"
+  },
+  {
+    "seq": 3,
+    "timestamp": "2026-10-28T12:26:07.206383Z",
+    "agent": "response",
+    "action": "refused",
+    "detail": "Alert AL-REV-TEST: Revoke containment requires explicit analyst approval.",
+    "prev_hash": "90532224ff9584eceb0607ed86bdc9899e307edc3a988801ee9350500e321499",
+    "hash": "43b4ce11b57ee9480ca2753c81f767036d4cf25fb465b92ca6437cf355a965ea"
+  },
+  {
+    "seq": 2,
+    "timestamp": "2026-10-28T11:41:46.452213Z",
+    "agent": "test",
+    "action": "init",
+    "detail": "ok",
+    "prev_hash": "6e7d8fb4fcd9e932401b5663c2534150abb2f05dbb3586964c513f6c4091ecff",
+    "hash": "90532224ff9584eceb0607ed86bdc9899e307edc3a988801ee9350500e321499"
+  },
+  {
+    "seq": 1,
+    "timestamp": "2026-10-28T11:41:17.211002Z",
+    "agent": "test",
+    "action": "check",
+    "detail": "ok",
+    "prev_hash": "0000000000000000000000000000000000000000000000000000000000000000",
+    "hash": "6e7d8fb4fcd9e932401b5663c2534150abb2f05dbb3586964c513f6c4091ecff"
+  }
+]

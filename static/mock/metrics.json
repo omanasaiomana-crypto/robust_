@@ -1,0 +1,11 @@
+{
+  "event_precision": 0.367,
+  "event_recall": 1.0,
+  "event_f1": 0.537,
+  "session_precision": 0.438,
+  "baseline_event_f1": 0.0,
+  "median_latency_ms": 0.9907,
+  "total_events": 2967,
+  "total_alerts": 16,
+  "skipped_records": 0
+}

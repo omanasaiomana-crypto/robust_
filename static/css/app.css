@@ -1,0 +1,49 @@
+/* Custom scrollbar */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+::-webkit-scrollbar-track {
+  background: #0B0F17;
+}
+::-webkit-scrollbar-thumb {
+  background: #1F2A3C;
+  border-radius: 4px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #2D3D56;
+}
+
+/* Typography & Layout */
+.tabular-nums {
+  font-variant-numeric: tabular-nums;
+}
+
+/* Focus rings */
+:focus-visible {
+  outline: 2px solid #3B82F6;
+  outline-offset: 2px;
+}
+
+/* Sticky table header helper */
+.sticky-th {
+  position: sticky;
+  top: 0;
+  z-index: 10;
+  backdrop-filter: blur(8px);
+}
+
+/* Skeleton pulse animation */
+@keyframes skeleton-pulse {
+  0%, 100% {
+    opacity: 0.4;
+  }
+  50% {
+    opacity: 0.8;
+  }
+}
+.skeleton-box {
+  animation: skeleton-pulse 1.8s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+  background-color: #161E2E;
+  border-radius: 0.5rem;
+}

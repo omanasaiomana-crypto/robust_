@@ -329,7 +329,7 @@ tailwind.config = {
 | 9 | Decision + simulator | ☑ | scoring, explain, respond, feedback, simulator, test_scoring 5/5 |
 | 10 | Pipeline + evaluation | ☑ | status ok, 16 alerts, top: svc-report (revoke), meera.n, dev.kumar, anita.rao; F1 0.537 > baseline 0.0 |
 | 11 | API + main | ☑ | smoke_test passed, all 13 REST endpoints verified |
-| 12 | UI foundation | ☐ | |
+| 12 | UI foundation | ☑ | 8 HTML shells, Tailwind dark theme, api.js with mock mode, ui.js components, layout.js, 13 mock fixtures |
 | 13 | Overview + Alerts pages | ☐ | |
 | 14 | Alert detail page | ☐ | |
 | 15 | Identities, Graph, Timeline | ☐ | |

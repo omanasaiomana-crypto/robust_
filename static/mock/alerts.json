@@ -1,0 +1,655 @@
+[
+  {
+    "alert_id": "AL-0001",
+    "level": "session",
+    "identity_id": "svc-report",
+    "session_id": "okta:sess-svc-esc-1657",
+    "risk": 100.0,
+    "confidence": 0.3,
+    "blast_radius": 2,
+    "band": "revoke",
+    "patterns": [
+      "ML",
+      "P3",
+      "P4"
+    ],
+    "mitre": [
+      "T1098",
+      "T1526",
+      "T1548",
+      "T1562"
+    ],
+    "reasons": [
+      "Privilege escalation chain detected for svc-report: CredCreate (CreateAccessKey) -> PermGrant (AttachUserPolicy) -> RoleAssume (AssumeRole) -> Impact (GetSecretValue) across 4 steps in 11 minutes.",
+      "Session behavior is unusual compared with normal activity (anomaly score 0.95).",
+      "Unusual API activity by svc-report: sensitive action CreateAccessKey.",
+      "Unusual API activity by svc-report: sensitive action AttachUserPolicy.",
+      "Unusual API activity by svc-report: sensitive action GetSecretValue."
+    ],
+    "evidence_event_ids": [
+      "okta-000658",
+      "ct-0002299",
+      "ct-0002300",
+      "ct-0002301",
+      "ct-0002302"
+    ],
+    "chain": [
+      {
+        "event_id": "ct-0002299",
+        "action": "CreateAccessKey",
+        "state": "CredCreate",
+        "timestamp": "2026-10-27T08:01:00Z"
+      },
+      {
+        "event_id": "ct-0002300",
+        "action": "AttachUserPolicy",
+        "state": "PermGrant",
+        "timestamp": "2026-10-27T08:04:00Z"
+      },
+      {
+        "event_id": "ct-0002301",
+        "action": "AssumeRole",
+        "state": "RoleAssume",
+        "timestamp": "2026-10-27T08:08:00Z"
+      },
+      {
+        "event_id": "ct-0002302",
+        "action": "GetSecretValue",
+        "state": "Impact",
+        "timestamp": "2026-10-27T08:12:00Z"
+      }
+    ],
+    "prediction": {
+      "next_state": "End",
+      "probability": 0.222
+    },
+    "counterfactuals": [
+      {
+        "without": "ML",
+        "risk": 100.0
+      },
+      {
+        "without": "P3",
+        "risk": 61.2
+      },
+      {
+        "without": "P4",
+        "risk": 100.0
+      }
+    ],
+    "recommended_action": "revoke",
+    "action_status": "pending",
+    "feedback": null,
+    "first_seen": "2026-10-27T08:00:00Z",
+    "last_seen": "2026-10-27T08:12:00Z"
+  },
+  {
+    "alert_id": "AL-0002",
+    "level": "session",
+    "identity_id": "meera.n",
+    "session_id": "aws:meera.n:1",
+    "risk": 86.2,
+    "confidence": 0.15,
+    "blast_radius": 1,
+    "band": "restrict",
+    "patterns": [
+      "ML",
+      "P4",
+      "P5"
+    ],
+    "mitre": [
+      "T1526",
+      "T1539",
+      "T1550",
+      "T1562"
+    ],
+    "reasons": [
+      "Session behavior is unusual compared with normal activity (anomaly score 0.93).",
+      "Concurrent token use: token ASIA_MEERA_STOLEN_99 used from 103.21.244.20 and 177.18.90.12 within 105 seconds.",
+      "Unusual API activity by meera.n: unseen region sa-east-1.",
+      "User-Agent changed within session aws:meera.n:1: switched from 'aws-cli/2.15.15 Python/3.11.6 Linux/5.15...' to 'aws-sdk-python/1.34.0 Boto3/1.34.0 Pytho...'."
+    ],
+    "evidence_event_ids": [
+      "ct-0002305",
+      "ct-0002306",
+      "ct-0002304"
+    ],
+    "chain": [],
+    "prediction": null,
+    "counterfactuals": [
+      {
+        "without": "ML",
+        "risk": 48.6
+      },
+      {
+        "without": "P4",
+        "risk": 57.0
+      },
+      {
+        "without": "P5",
+        "risk": 38.1
+      }
+    ],
+    "recommended_action": "restrict",
+    "action_status": "applied",
+    "feedback": null,
+    "first_seen": "2026-10-27T11:02:15Z",
+    "last_seen": "2026-10-27T11:14:00Z"
+  },
+  {
+    "alert_id": "AL-0003",
+    "level": "session",
+    "identity_id": "dev.kumar",
+    "session_id": "okta:sess-dev-1658",
+    "risk": 67.2,
+    "confidence": 0.2,
+    "blast_radius": 1,
+    "band": "step_up",
+    "patterns": [
+      "ML",
+      "P4"
+    ],
+    "mitre": [
+      "T1526",
+      "T1562"
+    ],
+    "reasons": [
+      "Unusual API activity by dev.kumar: sensitive action StopLogging, unseen region eu-west-3, rare action (identity rarity: 99.1%).",
+      "Session behavior is unusual compared with normal activity (anomaly score 0.94)."
+    ],
+    "evidence_event_ids": [
+      "okta-000659",
+      "ct-0002303"
+    ],
+    "chain": [],
+    "prediction": null,
+    "counterfactuals": [
+      {
+        "without": "ML",
+        "risk": 25.5
+      },
+      {
+        "without": "P4",
+        "risk": 28.2
+      }
+    ],
+    "recommended_action": "step_up",
+    "action_status": "notified",
+    "feedback": null,
+    "first_seen": "2026-10-27T10:30:00Z",
+    "last_seen": "2026-10-27T10:35:00Z"
+  },
+  {
+    "alert_id": "AL-0004",
+    "level": "session",
+    "identity_id": "anita.rao",
+    "session_id": "okta:sess-anita-1655",
+    "risk": 51.3,
+    "confidence": 0.2,
+    "blast_radius": 0,
+    "band": "step_up",
+    "patterns": [
+      "ML",
+      "P1"
+    ],
+    "mitre": [
+      "T1078"
+    ],
+    "reasons": [
+      "Login from Frankfurt, 7,406 km from Bengaluru, 30 min after previous login (14,812 km/h).",
+      "Session behavior is unusual compared with normal activity (anomaly score 0.80)."
+    ],
+    "evidence_event_ids": [
+      "okta-000656",
+      "ct-0002297",
+      "okta-000655"
+    ],
+    "chain": [],
+    "prediction": null,
+    "counterfactuals": [
+      {
+        "without": "ML",
+        "risk": 25.0
+      },
+      {
+        "without": "P1",
+        "risk": 16.0
+      }
+    ],
+    "recommended_action": "step_up",
+    "action_status": "notified",
+    "feedback": null,
+    "first_seen": "2026-10-26T04:30:00Z",
+    "last_seen": "2026-10-26T04:32:00Z"
+  },
+  {
+    "alert_id": "AL-0005",
+    "level": "session",
+    "identity_id": "svc-report",
+    "session_id": "okta:sess-svc-1656",
+    "risk": 37.9,
+    "confidence": 0.2,
+    "blast_radius": 2,
+    "band": "monitor",
+    "patterns": [
+      "ML",
+      "P2"
+    ],
+    "mitre": [
+      "T1078.004"
+    ],
+    "reasons": [
+      "Session behavior is unusual compared with normal activity (anomaly score 0.92).",
+      "Account svc-report reactivated after 53.1 days of inactivity with action user.session.start (privilege level 1)."
+    ],
+    "evidence_event_ids": [
+      "okta-000657",
+      "ct-0002298"
+    ],
+    "chain": [],
+    "prediction": null,
+    "counterfactuals": [
+      {
+        "without": "ML",
+        "risk": 12.0
+      },
+      {
+        "without": "P2",
+        "risk": 18.3
+      }
+    ],
+    "recommended_action": "monitor",
+    "action_status": "applied",
+    "feedback": null,
+    "first_seen": "2026-10-26T07:15:00Z",
+    "last_seen": "2026-10-26T07:16:00Z"
+  },
+  {
+    "alert_id": "AL-0006",
+    "level": "session",
+    "identity_id": "meera.n",
+    "session_id": "okta:sess-meera-1659",
+    "risk": 24.8,
+    "confidence": 0.3,
+    "blast_radius": 1,
+    "band": "monitor",
+    "patterns": [
+      "ML"
+    ],
+    "mitre": [],
+    "reasons": [
+      "Session behavior is unusual compared with normal activity (anomaly score 0.92)."
+    ],
+    "evidence_event_ids": [
+      "okta-000660",
+      "ct-0002304",
+      "okta-000661"
+    ],
+    "chain": [],
+    "prediction": null,
+    "counterfactuals": [
+      {
+        "without": "ML",
+        "risk": 0.0
+      }
+    ],
+    "recommended_action": "monitor",
+    "action_status": "applied",
+    "feedback": null,
+    "first_seen": "2026-10-27T11:00:00Z",
+    "last_seen": "2026-10-27T11:10:00Z"
+  },
+  {
+    "alert_id": "AL-0007",
+    "level": "session",
+    "identity_id": "svc-report",
+    "session_id": "okta:svc-sess-1033",
+    "risk": 20.0,
+    "confidence": 0.4,
+    "blast_radius": 2,
+    "band": "monitor",
+    "patterns": [
+      "ML"
+    ],
+    "mitre": [],
+    "reasons": [
+      "Session behavior is unusual compared with normal activity (anomaly score 1.00)."
+    ],
+    "evidence_event_ids": [
+      "okta-000034",
+      "ct-0000121",
+      "ct-0000123",
+      "ct-0000122"
+    ],
+    "chain": [],
+    "prediction": null,
+    "counterfactuals": [
+      {
+        "without": "ML",
+        "risk": 0.0
+      }
+    ],
+    "recommended_action": "monitor",
+    "action_status": "applied",
+    "feedback": null,
+    "first_seen": "2026-09-01T04:00:00Z",
+    "last_seen": "2026-09-01T04:46:00Z"
+  },
+  {
+    "alert_id": "AL-0008",
+    "level": "session",
+    "identity_id": "svc-report",
+    "session_id": "okta:svc-sess-1071",
+    "risk": 19.5,
+    "confidence": 0.4,
+    "blast_radius": 2,
+    "band": "monitor",
+    "patterns": [
+      "ML"
+    ],
+    "mitre": [],
+    "reasons": [
+      "Session behavior is unusual compared with normal activity (anomaly score 0.97)."
+    ],
+    "evidence_event_ids": [
+      "okta-000072",
+      "ct-0000265",
+      "ct-0000264",
+      "ct-0000263"
+    ],
+    "chain": [],
+    "prediction": null,
+    "counterfactuals": [
+      {
+        "without": "ML",
+        "risk": 0.0
+      }
+    ],
+    "recommended_action": "monitor",
+    "action_status": "applied",
+    "feedback": null,
+    "first_seen": "2026-09-03T04:00:00Z",
+    "last_seen": "2026-09-03T04:57:00Z"
+  },
+  {
+    "alert_id": "AL-0009",
+    "level": "session",
+    "identity_id": "svc-report",
+    "session_id": "okta:svc-sess-1053",
+    "risk": 19.2,
+    "confidence": 0.4,
+    "blast_radius": 2,
+    "band": "monitor",
+    "patterns": [
+      "ML"
+    ],
+    "mitre": [],
+    "reasons": [
+      "Session behavior is unusual compared with normal activity (anomaly score 0.96)."
+    ],
+    "evidence_event_ids": [
+      "okta-000054",
+      "ct-0000199",
+      "ct-0000197",
+      "ct-0000198"
+    ],
+    "chain": [],
+    "prediction": null,
+    "counterfactuals": [
+      {
+        "without": "ML",
+        "risk": 0.0
+      }
+    ],
+    "recommended_action": "monitor",
+    "action_status": "applied",
+    "feedback": null,
+    "first_seen": "2026-09-02T04:00:00Z",
+    "last_seen": "2026-09-02T04:55:00Z"
+  },
+  {
+    "alert_id": "AL-0010",
+    "level": "session",
+    "identity_id": "svc-report",
+    "session_id": "okta:svc-sess-1016",
+    "risk": 19.2,
+    "confidence": 0.4,
+    "blast_radius": 2,
+    "band": "monitor",
+    "patterns": [
+      "ML"
+    ],
+    "mitre": [],
+    "reasons": [
+      "Session behavior is unusual compared with normal activity (anomaly score 0.96)."
+    ],
+    "evidence_event_ids": [
+      "okta-000017",
+      "ct-0000061",
+      "ct-0000060",
+      "ct-0000062"
+    ],
+    "chain": [],
+    "prediction": null,
+    "counterfactuals": [
+      {
+        "without": "ML",
+        "risk": 0.0
+      }
+    ],
+    "recommended_action": "monitor",
+    "action_status": "applied",
+    "feedback": null,
+    "first_seen": "2026-08-31T04:00:00Z",
+    "last_seen": "2026-08-31T04:55:00Z"
+  },
+  {
+    "alert_id": "AL-0011",
+    "level": "session",
+    "identity_id": "manoj.pillai",
+    "session_id": "okta:sess-1298",
+    "risk": 17.1,
+    "confidence": 0.3,
+    "blast_radius": 0,
+    "band": "monitor",
+    "patterns": [
+      "ML"
+    ],
+    "mitre": [],
+    "reasons": [
+      "Session behavior is unusual compared with normal activity (anomaly score 0.85)."
+    ],
+    "evidence_event_ids": [
+      "okta-000299",
+      "ct-0001062",
+      "ct-0001063"
+    ],
+    "chain": [],
+    "prediction": null,
+    "counterfactuals": [
+      {
+        "without": "ML",
+        "risk": 0.0
+      }
+    ],
+    "recommended_action": "monitor",
+    "action_status": "applied",
+    "feedback": null,
+    "first_seen": "2026-09-23T03:56:12Z",
+    "last_seen": "2026-09-23T04:36:12Z"
+  },
+  {
+    "alert_id": "AL-0012",
+    "level": "session",
+    "identity_id": "anita.rao",
+    "session_id": "okta:sess-anita-1654",
+    "risk": 15.9,
+    "confidence": 0.2,
+    "blast_radius": 0,
+    "band": "monitor",
+    "patterns": [
+      "ML"
+    ],
+    "mitre": [],
+    "reasons": [
+      "Session behavior is unusual compared with normal activity (anomaly score 0.79)."
+    ],
+    "evidence_event_ids": [
+      "okta-000655",
+      "ct-0002296"
+    ],
+    "chain": [],
+    "prediction": null,
+    "counterfactuals": [
+      {
+        "without": "ML",
+        "risk": 0.0
+      }
+    ],
+    "recommended_action": "monitor",
+    "action_status": "applied",
+    "feedback": null,
+    "first_seen": "2026-10-26T04:00:00Z",
+    "last_seen": "2026-10-26T04:05:00Z"
+  },
+  {
+    "alert_id": "AL-0013",
+    "level": "session",
+    "identity_id": "manoj.pillai",
+    "session_id": "okta:sess-1413",
+    "risk": 15.7,
+    "confidence": 0.3,
+    "blast_radius": 0,
+    "band": "monitor",
+    "patterns": [
+      "ML"
+    ],
+    "mitre": [],
+    "reasons": [
+      "Session behavior is unusual compared with normal activity (anomaly score 0.78)."
+    ],
+    "evidence_event_ids": [
+      "okta-000414",
+      "ct-0001466",
+      "ct-0001467"
+    ],
+    "chain": [],
+    "prediction": null,
+    "counterfactuals": [
+      {
+        "without": "ML",
+        "risk": 0.0
+      }
+    ],
+    "recommended_action": "monitor",
+    "action_status": "applied",
+    "feedback": null,
+    "first_seen": "2026-10-02T03:40:01Z",
+    "last_seen": "2026-10-02T04:47:01Z"
+  },
+  {
+    "alert_id": "AL-0014",
+    "level": "session",
+    "identity_id": "anita.rao",
+    "session_id": "okta:sess-1300",
+    "risk": 15.7,
+    "confidence": 0.3,
+    "blast_radius": 0,
+    "band": "monitor",
+    "patterns": [
+      "ML"
+    ],
+    "mitre": [],
+    "reasons": [
+      "Session behavior is unusual compared with normal activity (anomaly score 0.79)."
+    ],
+    "evidence_event_ids": [
+      "okta-000301",
+      "ct-0001069",
+      "ct-0001070"
+    ],
+    "chain": [],
+    "prediction": null,
+    "counterfactuals": [
+      {
+        "without": "ML",
+        "risk": 0.0
+      }
+    ],
+    "recommended_action": "monitor",
+    "action_status": "applied",
+    "feedback": null,
+    "first_seen": "2026-09-24T03:35:53Z",
+    "last_seen": "2026-09-24T04:15:53Z"
+  },
+  {
+    "alert_id": "AL-0015",
+    "level": "session",
+    "identity_id": "alok.mishra",
+    "session_id": "okta:sess-1266",
+    "risk": 13.0,
+    "confidence": 0.3,
+    "blast_radius": 0,
+    "band": "monitor",
+    "patterns": [
+      "ML"
+    ],
+    "mitre": [],
+    "reasons": [
+      "Session behavior is unusual compared with normal activity (anomaly score 0.65)."
+    ],
+    "evidence_event_ids": [
+      "okta-000267",
+      "ct-0000953",
+      "ct-0000954"
+    ],
+    "chain": [],
+    "prediction": null,
+    "counterfactuals": [
+      {
+        "without": "ML",
+        "risk": 0.0
+      }
+    ],
+    "recommended_action": "monitor",
+    "action_status": "applied",
+    "feedback": null,
+    "first_seen": "2026-09-21T03:55:50Z",
+    "last_seen": "2026-09-21T05:16:50Z"
+  },
+  {
+    "alert_id": "AL-0016",
+    "level": "session",
+    "identity_id": "alok.mishra",
+    "session_id": "okta:sess-1199",
+    "risk": 12.6,
+    "confidence": 0.3,
+    "blast_radius": 0,
+    "band": "monitor",
+    "patterns": [
+      "ML"
+    ],
+    "mitre": [],
+    "reasons": [
+      "Session behavior is unusual compared with normal activity (anomaly score 0.63)."
+    ],
+    "evidence_event_ids": [
+      "okta-000200",
+      "ct-0000720",
+      "ct-0000719"
+    ],
+    "chain": [],
+    "prediction": null,
+    "counterfactuals": [
+      {
+        "without": "ML",
+        "risk": 0.0
+      }
+    ],
+    "recommended_action": "monitor",
+    "action_status": "applied",
+    "feedback": null,
+    "first_seen": "2026-09-15T03:51:03Z",
+    "last_seen": "2026-09-15T05:16:03Z"
+  }
+]

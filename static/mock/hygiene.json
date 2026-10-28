@@ -1,0 +1,20 @@
+{
+  "dormant_admins": [],
+  "escalation_paths": [
+    {
+      "identity_id": "svc-report",
+      "risk": 100.0,
+      "paths": [
+        [
+          "user:svc-report",
+          "session:okta:sess-svc-esc-1657",
+          "role:AdminRole"
+        ],
+        [
+          "user:svc-report",
+          "role:AdminRole"
+        ]
+      ]
+    }
+  ]
+}
