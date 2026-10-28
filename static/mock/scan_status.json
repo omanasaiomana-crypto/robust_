@@ -1,0 +1,35 @@
+{
+  "run_id": "scan-20261028-161121-43d1",
+  "mode": "dataset",
+  "state": "done",
+  "started_at": "2026-10-28T16:11:21.249206+00:00",
+  "finished_at": "2026-10-28T16:11:21.257774+00:00",
+  "duration_ms": 8.6,
+  "current": null,
+  "completed": [
+    "ingestion",
+    "normalization",
+    "enrichment",
+    "correlation",
+    "impossible_travel",
+    "dormant",
+    "priv_escalation",
+    "api_anomaly",
+    "token_abuse",
+    "baseline_ml",
+    "risk_scoring",
+    "explanation",
+    "response"
+  ],
+  "failed": [],
+  "threats": 4,
+  "summary": {
+    "status": "ok",
+    "alerts": 4,
+    "threats_logged": 4,
+    "detail": ""
+  },
+  "total_steps": 13,
+  "progress": 1.0,
+  "last_seq": 32
+}

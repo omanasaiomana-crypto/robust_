@@ -61,6 +61,9 @@ function mockPathFor(path) {
   if (clean === '/notifications/status') return '/mock/notifications_status.json';
   if (clean === '/notifications') return '/mock/notifications.json';
   if (clean === '/pipeline/status') return '/mock/pipeline_status.json';
+  if (clean === '/agents') return '/mock/agents.json';
+  if (clean === '/scan/status') return '/mock/scan_status.json';
+  if (clean === '/scan/trace') return '/mock/scan_trace.json';
   return `/mock${clean}.json`;
 }
 

@@ -1,0 +1,34 @@
+{
+  "files": [
+    {
+      "source": "cloudtrail",
+      "file": "cloudtrail_20261028T162032389684_trail-export.jsonl",
+      "records": 120,
+      "bytes": 14290,
+      "modified": "2026-10-28T10:05:00+00:00"
+    },
+    {
+      "source": "cloudtrail",
+      "file": "cloudtrail_manual.jsonl",
+      "records": 1,
+      "bytes": 586,
+      "modified": "2026-10-28T10:05:00+00:00"
+    },
+    {
+      "source": "okta",
+      "file": "okta_manual.jsonl",
+      "records": 1,
+      "bytes": 580,
+      "modified": "2026-10-28T10:05:00+00:00"
+    }
+  ],
+  "totals": {
+    "cloudtrail": 121,
+    "okta": 1
+  },
+  "total_records": 122,
+  "limits": {
+    "max_bytes": 5000000,
+    "max_records": 50000
+  }
+}

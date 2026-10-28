@@ -16,6 +16,7 @@ def main() -> int:
             "index_page": c.get("/index.html"),
             "analytics_page": c.get("/analytics.html"),
             "notifications_page": c.get("/notifications.html"),
+            "agents_page": c.get("/agents.html"),
         }
         failed = [k for k, r in checks.items() if r.status_code >= 500]
         for k, r in checks.items():

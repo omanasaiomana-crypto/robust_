@@ -1,0 +1,758 @@
+{
+  "run_id": "scan-20261028-161121-43d1",
+  "state": "done",
+  "last_seq": 32,
+  "events": [
+    {
+      "seq": 1,
+      "run_id": "scan-20261028-161121-43d1",
+      "ts": "2026-10-28T16:11:21.249224+00:00",
+      "agent_id": "orchestrator",
+      "agent_num": 15,
+      "agent_name": "Orchestrator & Supervisor Agent",
+      "layer": "oversight",
+      "state": "started",
+      "level": "info",
+      "message": "Scan started · mode dataset · 15 agents on duty",
+      "duration_ms": null,
+      "data": {
+        "run_id": "scan-20261028-161121-43d1",
+        "mode": "dataset",
+        "agents": [
+          "Log Ingestion Agent",
+          "Normalization Agent",
+          "Enrichment Agent",
+          "Session Correlation Agent",
+          "Impossible Travel Agent",
+          "Dormant Account Agent",
+          "Privilege Escalation Agent",
+          "API Anomaly Agent",
+          "Token Abuse Agent",
+          "Behavior Baseline Agent (ML)",
+          "Risk Scoring Agent",
+          "Explanation Agent",
+          "Response Agent",
+          "Feedback Learning Agent",
+          "Orchestrator & Supervisor Agent"
+        ]
+      }
+    },
+    {
+      "seq": 2,
+      "run_id": "scan-20261028-161121-43d1",
+      "ts": "2026-10-28T16:11:21.249359+00:00",
+      "agent_id": "ingestion",
+      "agent_num": 1,
+      "agent_name": "Log Ingestion Agent",
+      "layer": "data",
+      "state": "started",
+      "level": "info",
+      "message": "Loading CloudTrail and Okta files",
+      "duration_ms": null,
+      "data": null
+    },
+    {
+      "seq": 3,
+      "run_id": "scan-20261028-161121-43d1",
+      "ts": "2026-10-28T16:11:21.249395+00:00",
+      "agent_id": "ingestion",
+      "agent_num": 1,
+      "agent_name": "Log Ingestion Agent",
+      "layer": "data",
+      "state": "done",
+      "level": "ok",
+      "message": "Loaded 2,967 records from 2 files",
+      "duration_ms": 0.0,
+      "data": {
+        "files": {
+          "cloudtrail": [
+            "cloudtrail.json"
+          ],
+          "okta": [
+            "okta.json"
+          ]
+        },
+        "records": {
+          "cloudtrail": 2214,
+          "okta": 753
+        },
+        "skipped": 0
+      }
+    },
+    {
+      "seq": 4,
+      "run_id": "scan-20261028-161121-43d1",
+      "ts": "2026-10-28T16:11:21.249537+00:00",
+      "agent_id": "normalization",
+      "agent_num": 2,
+      "agent_name": "Normalization Agent",
+      "layer": "data",
+      "state": "started",
+      "level": "info",
+      "message": "Mapping both formats to the unified event schema",
+      "duration_ms": null,
+      "data": null
+    },
+    {
+      "seq": 5,
+      "run_id": "scan-20261028-161121-43d1",
+      "ts": "2026-10-28T16:11:21.249577+00:00",
+      "agent_id": "normalization",
+      "agent_num": 2,
+      "agent_name": "Normalization Agent",
+      "layer": "data",
+      "state": "done",
+      "level": "ok",
+      "message": "2,967 events normalized for 21 identities",
+      "duration_ms": 0.0,
+      "data": {
+        "events": 2967,
+        "skipped": 0,
+        "sources": {
+          "cloudtrail": 2214,
+          "okta": 753
+        },
+        "identities": 21,
+        "sample_event": {
+          "event_id": "ct-1a7f",
+          "source": "cloudtrail",
+          "timestamp": "2026-10-28T04:21:12+00:00",
+          "identity_id": "svc-report",
+          "action": "AttachUserPolicy",
+          "category": "api",
+          "src_ip": "185.220.101.4",
+          "resource": "arn:aws:iam::aws:policy/AdministratorAccess"
+        }
+      }
+    },
+    {
+      "seq": 6,
+      "run_id": "scan-20261028-161121-43d1",
+      "ts": "2026-10-28T16:11:21.249635+00:00",
+      "agent_id": "enrichment",
+      "agent_num": 3,
+      "agent_name": "Enrichment Agent",
+      "layer": "data",
+      "state": "started",
+      "level": "info",
+      "message": "Adding geo, privilege level and resource sensitivity",
+      "duration_ms": null,
+      "data": null
+    },
+    {
+      "seq": 7,
+      "run_id": "scan-20261028-161121-43d1",
+      "ts": "2026-10-28T16:11:21.249652+00:00",
+      "agent_id": "enrichment",
+      "agent_num": 3,
+      "agent_name": "Enrichment Agent",
+      "layer": "data",
+      "state": "done",
+      "level": "ok",
+      "message": "Enriched 2,967 events · 61 touch sensitive resources",
+      "duration_ms": 0.0,
+      "data": {
+        "geo_filled": 2140,
+        "privileged_identities": 3,
+        "sensitive_events": 61
+      }
+    },
+    {
+      "seq": 8,
+      "run_id": "scan-20261028-161121-43d1",
+      "ts": "2026-10-28T16:11:21.249680+00:00",
+      "agent_id": "correlation",
+      "agent_num": 4,
+      "agent_name": "Session Correlation Agent",
+      "layer": "data",
+      "state": "started",
+      "level": "info",
+      "message": "Linking Okta sessions to AWS activity",
+      "duration_ms": null,
+      "data": null
+    },
+    {
+      "seq": 9,
+      "run_id": "scan-20261028-161121-43d1",
+      "ts": "2026-10-28T16:11:21.249696+00:00",
+      "agent_id": "correlation",
+      "agent_num": 4,
+      "agent_name": "Session Correlation Agent",
+      "layer": "data",
+      "state": "done",
+      "level": "ok",
+      "message": "412 sessions · identity graph 964 nodes / 3,311 edges",
+      "duration_ms": 0.0,
+      "data": {
+        "sessions": 412,
+        "okta_linked": 388,
+        "aws_only": 24,
+        "graph": {
+          "nodes": 964,
+          "edges": 3311
+        }
+      }
+    },
+    {
+      "seq": 10,
+      "run_id": "scan-20261028-161121-43d1",
+      "ts": "2026-10-28T16:11:21.249725+00:00",
+      "agent_id": "impossible_travel",
+      "agent_num": 5,
+      "agent_name": "Impossible Travel Agent",
+      "layer": "detection",
+      "state": "started",
+      "level": "info",
+      "message": "Checking login pairs for impossible travel",
+      "duration_ms": null,
+      "data": null
+    },
+    {
+      "seq": 11,
+      "run_id": "scan-20261028-161121-43d1",
+      "ts": "2026-10-28T16:11:21.249738+00:00",
+      "agent_id": "impossible_travel",
+      "agent_num": 5,
+      "agent_name": "Impossible Travel Agent",
+      "layer": "detection",
+      "state": "done",
+      "level": "ok",
+      "message": "1 signal · anita.rao 14,812 km/h",
+      "duration_ms": 0.0,
+      "data": {
+        "signals": 1,
+        "pairs_checked": 731,
+        "examples": [
+          {
+            "identity_id": "anita.rao",
+            "from": "Bengaluru",
+            "to": "Frankfurt",
+            "km": 7406,
+            "minutes": 30,
+            "kmh": 14812
+          }
+        ]
+      }
+    },
+    {
+      "seq": 12,
+      "run_id": "scan-20261028-161121-43d1",
+      "ts": "2026-10-28T16:11:21.249769+00:00",
+      "agent_id": "dormant",
+      "agent_num": 6,
+      "agent_name": "Dormant Account Agent",
+      "layer": "detection",
+      "state": "started",
+      "level": "info",
+      "message": "Looking for dormant accounts that woke up",
+      "duration_ms": null,
+      "data": null
+    },
+    {
+      "seq": 13,
+      "run_id": "scan-20261028-161121-43d1",
+      "ts": "2026-10-28T16:11:21.249786+00:00",
+      "agent_id": "dormant",
+      "agent_num": 6,
+      "agent_name": "Dormant Account Agent",
+      "layer": "detection",
+      "state": "done",
+      "level": "ok",
+      "message": "1 signal · svc-report idle 47 days",
+      "duration_ms": 0.0,
+      "data": {
+        "signals": 1,
+        "examples": [
+          {
+            "identity_id": "svc-report",
+            "idle_days": 47,
+            "privilege_level": 5
+          }
+        ]
+      }
+    },
+    {
+      "seq": 14,
+      "run_id": "scan-20261028-161121-43d1",
+      "ts": "2026-10-28T16:11:21.249811+00:00",
+      "agent_id": "priv_escalation",
+      "agent_num": 7,
+      "agent_name": "Privilege Escalation Agent",
+      "layer": "detection",
+      "state": "started",
+      "level": "info",
+      "message": "Reconstructing privilege-escalation chains",
+      "duration_ms": null,
+      "data": null
+    },
+    {
+      "seq": 15,
+      "run_id": "scan-20261028-161121-43d1",
+      "ts": "2026-10-28T16:11:21.249824+00:00",
+      "agent_id": "priv_escalation",
+      "agent_num": 7,
+      "agent_name": "Privilege Escalation Agent",
+      "layer": "detection",
+      "state": "done",
+      "level": "ok",
+      "message": "1 chain · 4 steps in 11 min",
+      "duration_ms": 0.0,
+      "data": {
+        "signals": 1,
+        "chains": [
+          {
+            "session_id": "okta:102svcR7",
+            "steps": [
+              "CredCreate",
+              "PermGrant",
+              "RoleAssume",
+              "Impact"
+            ],
+            "minutes": 11
+          }
+        ]
+      }
+    },
+    {
+      "seq": 16,
+      "run_id": "scan-20261028-161121-43d1",
+      "ts": "2026-10-28T16:11:21.249852+00:00",
+      "agent_id": "api_anomaly",
+      "agent_num": 8,
+      "agent_name": "API Anomaly Agent",
+      "layer": "detection",
+      "state": "started",
+      "level": "info",
+      "message": "Scoring API calls for rarity and sensitivity",
+      "duration_ms": null,
+      "data": null
+    },
+    {
+      "seq": 17,
+      "run_id": "scan-20261028-161121-43d1",
+      "ts": "2026-10-28T16:11:21.249865+00:00",
+      "agent_id": "api_anomaly",
+      "agent_num": 8,
+      "agent_name": "API Anomaly Agent",
+      "layer": "detection",
+      "state": "done",
+      "level": "ok",
+      "message": "2 signals · StopLogging in a new region",
+      "duration_ms": 0.0,
+      "data": {
+        "signals": 2,
+        "examples": [
+          {
+            "identity_id": "dev.kumar",
+            "action": "StopLogging",
+            "region": "sa-east-1",
+            "new_region": true
+          }
+        ]
+      }
+    },
+    {
+      "seq": 18,
+      "run_id": "scan-20261028-161121-43d1",
+      "ts": "2026-10-28T16:11:21.249889+00:00",
+      "agent_id": "token_abuse",
+      "agent_num": 9,
+      "agent_name": "Token Abuse Agent",
+      "layer": "detection",
+      "state": "started",
+      "level": "info",
+      "message": "Checking token and session reuse",
+      "duration_ms": null,
+      "data": null
+    },
+    {
+      "seq": 19,
+      "run_id": "scan-20261028-161121-43d1",
+      "ts": "2026-10-28T16:11:21.249902+00:00",
+      "agent_id": "token_abuse",
+      "agent_num": 9,
+      "agent_name": "Token Abuse Agent",
+      "layer": "detection",
+      "state": "done",
+      "level": "ok",
+      "message": "1 signal · same key in IN and BR within 3 min",
+      "duration_ms": 0.0,
+      "data": {
+        "signals": 1,
+        "examples": [
+          {
+            "identity_id": "meera.n",
+            "token": "AKIA...Q7",
+            "countries": [
+              "IN",
+              "BR"
+            ],
+            "minutes": 3
+          }
+        ]
+      }
+    },
+    {
+      "seq": 20,
+      "run_id": "scan-20261028-161121-43d1",
+      "ts": "2026-10-28T16:11:21.249928+00:00",
+      "agent_id": "baseline_ml",
+      "agent_num": 10,
+      "agent_name": "Behavior Baseline Agent (ML)",
+      "layer": "detection",
+      "state": "started",
+      "level": "info",
+      "message": "Isolation Forest over 412 session feature vectors",
+      "duration_ms": null,
+      "data": null
+    },
+    {
+      "seq": 21,
+      "run_id": "scan-20261028-161121-43d1",
+      "ts": "2026-10-28T16:11:21.249942+00:00",
+      "agent_id": "baseline_ml",
+      "agent_num": 10,
+      "agent_name": "Behavior Baseline Agent (ML)",
+      "layer": "detection",
+      "state": "done",
+      "level": "ok",
+      "message": "2 sessions above anomaly threshold 0.60",
+      "duration_ms": 0.0,
+      "data": {
+        "signals": 2,
+        "trained_on": 398,
+        "features": 13,
+        "top_scores": [
+          {
+            "session_id": "okta:55aniK9",
+            "score": 0.91
+          },
+          {
+            "session_id": "okta:102svcR7",
+            "score": 0.84
+          }
+        ]
+      }
+    },
+    {
+      "seq": 22,
+      "run_id": "scan-20261028-161121-43d1",
+      "ts": "2026-10-28T16:11:21.249976+00:00",
+      "agent_id": "risk_scoring",
+      "agent_num": 11,
+      "agent_name": "Risk Scoring Agent",
+      "layer": "decision",
+      "state": "started",
+      "level": "info",
+      "message": "Combining signals x privilege x sensitivity",
+      "duration_ms": null,
+      "data": null
+    },
+    {
+      "seq": 23,
+      "run_id": "scan-20261028-161121-43d1",
+      "ts": "2026-10-28T16:11:21.249992+00:00",
+      "agent_id": "risk_scoring",
+      "agent_num": 11,
+      "agent_name": "Risk Scoring Agent",
+      "layer": "decision",
+      "state": "done",
+      "level": "ok",
+      "message": "4 alerts · top risk 94 (svc-report)",
+      "duration_ms": 0.0,
+      "data": {
+        "sessions_scored": 7,
+        "alerts": 4,
+        "bands": {
+          "revoke": 1,
+          "restrict": 2,
+          "step_up": 1,
+          "monitor": 0
+        },
+        "top": {
+          "alert_id": "AL-0001",
+          "risk": 94.0
+        }
+      }
+    },
+    {
+      "seq": 24,
+      "run_id": "scan-20261028-161121-43d1",
+      "ts": "2026-10-28T16:11:21.250021+00:00",
+      "agent_id": "explanation",
+      "agent_num": 12,
+      "agent_name": "Explanation Agent",
+      "layer": "decision",
+      "state": "started",
+      "level": "info",
+      "message": "Writing reasons, counterfactuals and MITRE tags",
+      "duration_ms": null,
+      "data": null
+    },
+    {
+      "seq": 25,
+      "run_id": "scan-20261028-161121-43d1",
+      "ts": "2026-10-28T16:11:21.250035+00:00",
+      "agent_id": "explanation",
+      "agent_num": 12,
+      "agent_name": "Explanation Agent",
+      "layer": "decision",
+      "state": "done",
+      "level": "ok",
+      "message": "4 alerts explained with evidence",
+      "duration_ms": 0.0,
+      "data": {
+        "alerts_explained": 4,
+        "counterfactuals": {
+          "AL-0001": {
+            "without P3": 44.0,
+            "without P2": 61.0
+          }
+        },
+        "mitre": [
+          "T1078",
+          "T1078.004",
+          "T1098",
+          "T1526",
+          "T1539",
+          "T1548",
+          "T1550",
+          "T1562"
+        ]
+      }
+    },
+    {
+      "seq": 26,
+      "run_id": "scan-20261028-161121-43d1",
+      "ts": "2026-10-28T16:11:21.250064+00:00",
+      "agent_id": "response",
+      "agent_num": 13,
+      "agent_name": "Response Agent",
+      "layer": "decision",
+      "state": "started",
+      "level": "info",
+      "message": "Choosing actions (simulator only)",
+      "duration_ms": null,
+      "data": null
+    },
+    {
+      "seq": 27,
+      "run_id": "scan-20261028-161121-43d1",
+      "ts": "2026-10-28T16:11:21.250075+00:00",
+      "agent_id": "response",
+      "agent_num": 13,
+      "agent_name": "Response Agent",
+      "layer": "decision",
+      "state": "done",
+      "level": "ok",
+      "message": "3 actions applied · 1 revoke awaiting analyst approval",
+      "duration_ms": 0.0,
+      "data": {
+        "applied": [
+          {
+            "alert_id": "AL-0002",
+            "action": "restrict",
+            "result": "simulated:restrict:ok"
+          },
+          {
+            "alert_id": "AL-0003",
+            "action": "restrict",
+            "result": "simulated:restrict:ok"
+          },
+          {
+            "alert_id": "AL-0004",
+            "action": "step_up",
+            "result": "simulated:step_up:ok"
+          }
+        ],
+        "pending_approval": [
+          {
+            "alert_id": "AL-0001",
+            "action": "revoke"
+          }
+        ]
+      }
+    },
+    {
+      "seq": 28,
+      "run_id": "scan-20261028-161121-43d1",
+      "ts": "2026-10-28T16:11:21.251964+00:00",
+      "agent_id": "priv_escalation",
+      "agent_num": 7,
+      "agent_name": "Privilege Escalation Agent",
+      "layer": "detection",
+      "state": "threat",
+      "level": "crit",
+      "message": "THREAT DETECTED · svc-report · risk 94 (revoke) · Privilege escalation, Dormant account",
+      "duration_ms": null,
+      "data": {
+        "fingerprint": "svc-report|okta:102svcR7|revoke",
+        "alert_id": "AL-0001",
+        "identity_id": "svc-report",
+        "session_id": "okta:102svcR7",
+        "risk": 94.0,
+        "band": "revoke",
+        "patterns": [
+          "P3",
+          "P2"
+        ],
+        "mitre": [
+          "T1098",
+          "T1548",
+          "T1078.004"
+        ],
+        "detectors": [
+          "dormant",
+          "priv_escalation"
+        ],
+        "evidence_count": 5,
+        "evidence_sample": [
+          "okta-8f1d",
+          "ct-1a2c",
+          "ct-1a7f",
+          "ct-1b03",
+          "ct-1b19"
+        ],
+        "recommended_action": "revoke",
+        "reason": "Escalation chain: CreateAccessKey -> AttachUserPolicy -> AssumeRole -> GetSecretValue within 11 min.",
+        "run_id": "scan-20261028-161121-43d1"
+      }
+    },
+    {
+      "seq": 29,
+      "run_id": "scan-20261028-161121-43d1",
+      "ts": "2026-10-28T16:11:21.254228+00:00",
+      "agent_id": "token_abuse",
+      "agent_num": 9,
+      "agent_name": "Token Abuse Agent",
+      "layer": "detection",
+      "state": "threat",
+      "level": "crit",
+      "message": "THREAT DETECTED · meera.n · risk 88 (restrict) · Token abuse",
+      "duration_ms": null,
+      "data": {
+        "fingerprint": "meera.n|okta:77meeQ2|restrict",
+        "alert_id": "AL-0002",
+        "identity_id": "meera.n",
+        "session_id": "okta:77meeQ2",
+        "risk": 88.0,
+        "band": "restrict",
+        "patterns": [
+          "P5"
+        ],
+        "mitre": [
+          "T1550",
+          "T1539"
+        ],
+        "detectors": [
+          "token_abuse"
+        ],
+        "evidence_count": 2,
+        "evidence_sample": [
+          "ct-2c11",
+          "ct-2c19"
+        ],
+        "recommended_action": "restrict",
+        "reason": "Access key AKIA...Q7 used from India and Brazil within 3 minutes.",
+        "run_id": "scan-20261028-161121-43d1"
+      }
+    },
+    {
+      "seq": 30,
+      "run_id": "scan-20261028-161121-43d1",
+      "ts": "2026-10-28T16:11:21.256105+00:00",
+      "agent_id": "impossible_travel",
+      "agent_num": 5,
+      "agent_name": "Impossible Travel Agent",
+      "layer": "detection",
+      "state": "threat",
+      "level": "crit",
+      "message": "THREAT DETECTED · anita.rao · risk 78 (restrict) · Impossible travel, Behavior anomaly",
+      "duration_ms": null,
+      "data": {
+        "fingerprint": "anita.rao|okta:55aniK9|restrict",
+        "alert_id": "AL-0003",
+        "identity_id": "anita.rao",
+        "session_id": "okta:55aniK9",
+        "risk": 78.0,
+        "band": "restrict",
+        "patterns": [
+          "P1",
+          "ML"
+        ],
+        "mitre": [
+          "T1078"
+        ],
+        "detectors": [
+          "baseline_ml",
+          "impossible_travel"
+        ],
+        "evidence_count": 2,
+        "evidence_sample": [
+          "okta-3e02",
+          "okta-3e09"
+        ],
+        "recommended_action": "restrict",
+        "reason": "Login from Frankfurt, 7,406 km from Bengaluru, 30 min after previous login (14,812 km/h).",
+        "run_id": "scan-20261028-161121-43d1"
+      }
+    },
+    {
+      "seq": 31,
+      "run_id": "scan-20261028-161121-43d1",
+      "ts": "2026-10-28T16:11:21.257675+00:00",
+      "agent_id": "api_anomaly",
+      "agent_num": 8,
+      "agent_name": "API Anomaly Agent",
+      "layer": "detection",
+      "state": "threat",
+      "level": "crit",
+      "message": "THREAT DETECTED · dev.kumar · risk 62 (step_up) · Unusual API",
+      "duration_ms": null,
+      "data": {
+        "fingerprint": "dev.kumar|aws:dev.kumar:7|step_up",
+        "alert_id": "AL-0004",
+        "identity_id": "dev.kumar",
+        "session_id": "aws:dev.kumar:7",
+        "risk": 62.0,
+        "band": "step_up",
+        "patterns": [
+          "P4"
+        ],
+        "mitre": [
+          "T1526",
+          "T1562"
+        ],
+        "detectors": [
+          "api_anomaly"
+        ],
+        "evidence_count": 1,
+        "evidence_sample": [
+          "ct-4d70"
+        ],
+        "recommended_action": "step_up",
+        "reason": "StopLogging called in sa-east-1, a region this identity never used.",
+        "run_id": "scan-20261028-161121-43d1"
+      }
+    },
+    {
+      "seq": 32,
+      "run_id": "scan-20261028-161121-43d1",
+      "ts": "2026-10-28T16:11:21.257797+00:00",
+      "agent_id": "orchestrator",
+      "agent_num": 15,
+      "agent_name": "Orchestrator & Supervisor Agent",
+      "layer": "oversight",
+      "state": "done",
+      "level": "ok",
+      "message": "Scan complete · 4 threat(s) logged",
+      "duration_ms": 8.6,
+      "data": {
+        "status": "ok",
+        "alerts": 4,
+        "threats_logged": 4,
+        "detail": ""
+      }
+    }
+  ]
+}
