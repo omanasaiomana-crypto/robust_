@@ -4,6 +4,8 @@ import logging
 from typing import Any
 import pandas as pd
 
+from app.config import CLOUDTRAIL_SESSION_GAP_HOURS, SESSION_LINK_WINDOW_HOURS
+
 log = logging.getLogger(__name__)
 
 
@@ -40,7 +42,7 @@ def assign_sessions(df: pd.DataFrame) -> pd.DataFrame:
         okta_sessions[uid].sort(key=lambda x: x[0])
 
     # 2. Correlate CloudTrail events
-    twelve_hours = timedelta(hours=12)
+    link_window = timedelta(hours=SESSION_LINK_WINDOW_HOURS)
     unassigned_indices: list[int] = []
 
     for idx, row in out[out["source"] == "cloudtrail"].iterrows():
@@ -50,10 +52,10 @@ def assign_sessions(df: pd.DataFrame) -> pd.DataFrame:
         assigned = False
 
         if uid in okta_sessions:
-            # Find latest Okta session with matching IP that started within previous 12h
+            # Find latest Okta session with matching IP that started within previous window
             matching_sessions = [
                 s for s in okta_sessions[uid]
-                if s[2] == ct_ip and timedelta(0) <= (ct_ts - s[0]) <= twelve_hours
+                if s[2] == ct_ip and timedelta(0) <= (ct_ts - s[0]) <= link_window
             ]
             if matching_sessions:
                 # Latest started session
@@ -64,10 +66,10 @@ def assign_sessions(df: pd.DataFrame) -> pd.DataFrame:
         if not assigned:
             unassigned_indices.append(idx)
 
-    # 3. Group remaining CloudTrail events by (identity_id, token_id) with 1-hour inactivity gap
+    # 3. Group remaining CloudTrail events by (identity_id, token_id) with inactivity gap
     if unassigned_indices:
         ct_rem = out.loc[unassigned_indices].sort_values(by="timestamp")
-        one_hour = timedelta(hours=1)
+        one_hour = timedelta(hours=CLOUDTRAIL_SESSION_GAP_HOURS)
         # Track last_seen_time and session_counter per (identity_id, token_id)
         cluster_tracker: dict[tuple[str, str], tuple[Any, int]] = {}
 

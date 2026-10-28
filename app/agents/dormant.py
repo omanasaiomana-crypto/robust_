@@ -2,7 +2,12 @@
 import pandas as pd
 
 from app.agents.base import Agent
-from app.config import DORMANT_DAYS
+from app.config import (
+    DORMANT_DAYS,
+    DORMANT_HIGH_SEVERITY,
+    DORMANT_LOW_SEVERITY,
+    DORMANT_PRIVILEGE_THRESHOLD,
+)
 from app.models import Signal
 
 
@@ -31,7 +36,7 @@ class DormantAccountAgent(Agent):
 
                     if gap_days >= DORMANT_DAYS and str(curr_row.get("outcome", "")).lower() == "success":
                         priv = int(curr_row.get("privilege_level", 1) or 1)
-                        severity = 0.9 if priv >= 4 else 0.6
+                        severity = DORMANT_HIGH_SEVERITY if priv >= DORMANT_PRIVILEGE_THRESHOLD else DORMANT_LOW_SEVERITY
                         action = str(curr_row.get("action", "unknown"))
 
                         reason = (

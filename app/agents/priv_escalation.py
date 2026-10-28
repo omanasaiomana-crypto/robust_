@@ -3,7 +3,11 @@ from datetime import timedelta
 import pandas as pd
 
 from app.agents.base import Agent
-from app.config import ESCALATION_WINDOW_HOURS
+from app.config import (
+    ESCALATION_BASE_SEVERITY,
+    ESCALATION_STEP_SEVERITY,
+    ESCALATION_WINDOW_HOURS,
+)
 from app.models import ChainStep, Signal
 
 STATE_OF_ACTION: dict[str, str] = {
@@ -97,8 +101,8 @@ class PrivEscalationAgent(Agent):
                     sess_id = chain[-1][1] or chain[0][1]
                     self.last_chains[sess_id] = chain_steps
 
-                    # Calculate severity: 0.4 + 0.15 per distinct state
-                    severity = min(1.0, 0.4 + 0.15 * len(distinct_states))
+                    # Calculate severity: base + step per distinct state
+                    severity = min(1.0, ESCALATION_BASE_SEVERITY + ESCALATION_STEP_SEVERITY * len(distinct_states))
 
                     # Duration in minutes
                     dur_min = max(1.0, (chain_steps[-1].timestamp - chain_steps[0].timestamp).total_seconds() / 60.0)

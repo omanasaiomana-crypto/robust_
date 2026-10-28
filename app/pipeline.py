@@ -16,8 +16,11 @@ from app.agents.impossible_travel import ImpossibleTravelAgent
 from app.agents.priv_escalation import PrivEscalationAgent, STATE_OF_ACTION
 from app.agents.token_abuse import TokenAbuseAgent
 from app.config import (
+    BAND_RESTRICT,
     LABELS_DIR,
+    MAX_EVIDENCE_EVENTS,
     METADATA_DIR,
+    ML_ANOMALY_THRESHOLD,
     RAW_CLOUDTRAIL,
     RAW_OKTA,
     SAMPLE_DIR,
@@ -251,14 +254,14 @@ def run_pipeline(use_sample: bool | None = None) -> PipelineResult:
             if s.session_id:
                 signals_by_sess.setdefault(s.session_id, []).append(s)
 
-        # Collect candidate session IDs: at least one rule signal OR ML score >= 0.6
+        # Collect candidate session IDs: at least one rule signal OR ML score >= ML_ANOMALY_THRESHOLD
         candidate_sessions: set[str] = set()
         for sess_id, sigs in signals_by_sess.items():
-            if any(s.pattern != "ML" for s in sigs) or ml_scores.get(sess_id, 0.0) >= 0.6:
+            if any(s.pattern != "ML" for s in sigs) or ml_scores.get(sess_id, 0.0) >= ML_ANOMALY_THRESHOLD:
                 candidate_sessions.add(sess_id)
 
         for sess_id, score in ml_scores.items():
-            if score >= 0.6:
+            if score >= ML_ANOMALY_THRESHOLD:
                 candidate_sessions.add(sess_id)
 
         # Create Alert for each candidate session
@@ -306,13 +309,13 @@ def run_pipeline(use_sample: bool | None = None) -> PipelineResult:
 
             # Pattern list
             patterns = sorted(list({s.pattern for s in sess_sigs}))
-            if ml_s >= 0.6 and "ML" not in patterns:
+            if ml_s >= ML_ANOMALY_THRESHOLD and "ML" not in patterns:
                 patterns.append("ML")
                 patterns.sort()
 
             # Human-readable reasons
             reasons = build_reasons(sess_sigs)
-            if not reasons and ml_s >= 0.6:
+            if not reasons and ml_s >= ML_ANOMALY_THRESHOLD:
                 reasons = [f"Session behavior is unusual compared with normal activity (anomaly score {ml_s:.2f})."]
 
             # MITRE tags
@@ -321,7 +324,7 @@ def run_pipeline(use_sample: bool | None = None) -> PipelineResult:
             # Evidence event IDs
             ev_ids = evidence_ids(sess_sigs, s_events)
             if not ev_ids and not s_events.empty:
-                ev_ids = [str(x) for x in s_events["event_id"].head(5)]
+                ev_ids = [str(x) for x in s_events["event_id"].head(MAX_EVIDENCE_EVENTS)]
 
             # Counterfactual scores
             cfs = counterfactuals(
@@ -378,9 +381,9 @@ def run_pipeline(use_sample: bool | None = None) -> PipelineResult:
         store.reset_run_tables()
         store.save_alerts(candidate_alerts)
 
-        # Audit alerts with risk >= 70
+        # Audit alerts with risk >= BAND_RESTRICT (70)
         for a in candidate_alerts:
-            if a.risk >= 70.0:
+            if a.risk >= float(BAND_RESTRICT):
                 audit.append(
                     "decision",
                     "alert_created",

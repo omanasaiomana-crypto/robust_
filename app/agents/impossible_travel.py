@@ -2,7 +2,7 @@
 import pandas as pd
 
 from app.agents.base import Agent
-from app.config import IMPOSSIBLE_TRAVEL_KMH
+from app.config import IMPOSSIBLE_TRAVEL_KMH, IMPOSSIBLE_TRAVEL_MAX_SPEED_KMH
 from app.models import Signal
 from app.utils import haversine_km
 
@@ -54,7 +54,7 @@ class ImpossibleTravelAgent(Agent):
                         )
 
                         if speed > IMPOSSIBLE_TRAVEL_KMH and asn_differs:
-                            severity = min(1.0, speed / 3000.0)
+                            severity = min(1.0, speed / IMPOSSIBLE_TRAVEL_MAX_SPEED_KMH)
                             prev_city = prev_row.get("city") or prev_row.get("country") or "Unknown location"
                             curr_city = curr_row.get("city") or curr_row.get("country") or "Unknown location"
                             mins = hours * 60.0
