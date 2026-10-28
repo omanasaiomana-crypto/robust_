@@ -14,6 +14,7 @@ const MOCK_MAP = [
   [/^\/graph\/global$/, "v21_graph_global"], [/^\/alerts\/[^/]+\/events$/, "v21_events"],
   [/^\/analytics\/detectors$/, "v21_analytics_detectors"], [/^\/analytics\/heatmap\/time$/, "v21_analytics_heatmap_time"],
   [/^\/analytics\/heatmap\/identities$/, "v21_analytics_heatmap_identities"],
+  [/^\/analytics\/agent-map$/, "v21_agent_map"],
   [/^\/notifications$/, "v21_notifications"], [/^\/notifications\/status$/, "v21_notifications_status"],
 ];
 
