@@ -1,17 +1,22 @@
-// static/js/scan.js — Live scan: watch all 15 agents check for malicious activity, step by step.
+// static/js/scan.js — Live scan: the server runs all 15 agents at a watchable pace and streams every step,
+// progress message and finding as it happens. Old scans can be replayed.
 // Full-color console + full JSON of the current step + agent strip + threat list.
 // Uses only: api.js (api, esc), ui.js (toast), layout.js (renderLayout), jsonview.js.
 import { api, toast, renderLayout, MOCK, keepMock } from "./v21kit.js";
 import { highlightJson, consoleLine, LAYER_STYLE, escHtml as esc } from "./jsonview.js";
 
-const DELAY = { "0.5": 280, "1": 140, "2": 70, "4": 35, instant: 0 };
+// Simulation pace. Live scans: the SERVER really runs each agent step at this pace and streams events as they
+// happen (the page shows them immediately). Replays / mock mode: the page re-plays a finished trace at this pace.
+const PACE = { slow: { step: 1.8, delay: 420, label: "Slow" }, normal: { step: 1.0, delay: 240, label: "Normal" },
+  fast: { step: 0.4, delay: 90, label: "Fast" }, instant: { step: 0, delay: 0, label: "Instant" } };
 const SCAN_STEPS = 13;
 const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
 
 const S = {
   agents: [], queue: [], shown: [], lastSeq: 0, runId: null, runState: "idle",
-  polling: false, playing: false, done: false, speed: "1", inlineJson: false, filter: "all",
+  polling: false, playing: false, done: false, speed: "normal", inlineJson: false, filter: "all",
   selectedSeq: null, agentState: {}, threats: [], completed: new Set(), current: null, firstTs: null,
+  live: false, findings: 0, clockStart: null, clock: null,
 };
 
 const root = await renderLayout("scan", "Live scan", "Watch all 15 agents check for malicious activity, step by step");
@@ -24,15 +29,17 @@ root.innerHTML = `
         <span id="sc-pill" class="text-xs font-medium px-2 py-0.5 rounded-full bg-panel2 text-muted">Idle</span>
         <span id="sc-run" class="font-mono text-xs text-muted truncate"></span>
       </div>
-      <div id="sc-step" class="mt-3 text-lg font-semibold">Ready to scan</div>
+      <div class="mt-3 flex items-center gap-3"><span id="sc-spin" class="hidden h-5 w-5 shrink-0 animate-spin rounded-full border-2 border-cyan-400 border-t-transparent"></span>
+        <div id="sc-step" class="text-lg font-semibold">Ready to scan</div></div>
       <div id="sc-msg" class="mt-1 text-sm text-muted truncate">Choose a data source and press Start scan.</div>
       <div class="mt-4 h-2 w-full rounded-full bg-panel2 overflow-hidden">
         <div id="sc-bar" class="h-2 rounded-full bg-brand2 transition-all duration-300" style="width:0%"></div>
       </div>
     </div>
-    <div class="grid grid-cols-3 gap-3 lg:w-[360px]">
+    <div class="grid grid-cols-4 gap-3 lg:w-[460px]">
       <div class="rounded-lg border border-line bg-panel2 p-3"><div class="text-[11px] uppercase tracking-wide text-muted">Elapsed</div><div id="sc-elapsed" class="text-xl font-semibold tabular-nums">0.0s</div></div>
       <div class="rounded-lg border border-line bg-panel2 p-3"><div class="text-[11px] uppercase tracking-wide text-muted">Events</div><div id="sc-events" class="text-xl font-semibold tabular-nums">0</div></div>
+      <div class="rounded-lg border border-line bg-panel2 p-3"><div class="text-[11px] uppercase tracking-wide text-muted">Findings</div><div id="sc-findings" class="text-xl font-semibold tabular-nums text-amber-300">0</div></div>
       <div class="rounded-lg border border-line bg-panel2 p-3"><div class="text-[11px] uppercase tracking-wide text-muted">Threats</div><div id="sc-threats" class="text-xl font-semibold tabular-nums text-crit">0</div></div>
     </div>
   </div>
@@ -42,9 +49,10 @@ root.innerHTML = `
     </select>
     <button id="sc-start" class="bg-brand hover:bg-blue-500 text-white rounded-lg px-3.5 py-2 text-sm font-medium">Start scan</button>
     <button id="sc-replay" class="border border-line hover:bg-panel2 rounded-lg px-3.5 py-2 text-sm">Replay last scan</button>
-    <label class="ml-auto flex items-center gap-2 text-sm text-muted">Speed
+    <label class="ml-auto flex items-center gap-2 text-sm text-muted">Simulation pace
       <select id="sc-speed" class="bg-panel2 border border-line rounded-lg px-2 py-1.5 text-sm text-ink">
-        <option value="0.5">0.5×</option><option value="1" selected>1×</option><option value="2">2×</option><option value="4">4×</option><option value="instant">Instant</option>
+        <option value="slow">Slow (≈1.8 s per agent)</option><option value="normal" selected>Normal (≈1 s per agent)</option>
+        <option value="fast">Fast (≈0.4 s per agent)</option><option value="instant">Instant (full speed)</option>
       </select></label>
     <label class="flex items-center gap-2 text-sm text-muted"><input id="sc-json" type="checkbox" class="accent-cyan-400"> Inline JSON</label>
     <select id="sc-filter" aria-label="Filter" class="bg-panel2 border border-line rounded-lg px-2 py-1.5 text-sm">
@@ -131,7 +139,7 @@ function renderStrip() {
 
 function setPill(state) {
   const map = {
-    idle: ["Idle", "bg-panel2 text-muted"], running: ["Scanning…", "bg-brand2/15 text-brand2"],
+    idle: ["Idle", "bg-panel2 text-muted"], running: ["● LIVE · simulating…", "bg-red-500/15 text-red-300 animate-pulse"],
     replay: ["Replaying", "bg-brand/15 text-blue-300"], done: ["Complete", "bg-emerald-500/15 text-emerald-300"],
     failed: ["Failed", "bg-red-500/15 text-red-300"],
   };
@@ -146,11 +154,13 @@ function updateHeader() {
   $("sc-bar").style.width = `${Math.round((done / SCAN_STEPS) * 100)}%`;
   $("sc-events").textContent = String(S.shown.length);
   $("sc-threats").textContent = String(S.threats.length);
+  $("sc-findings").textContent = String(S.findings);
+  $("sc-spin").classList.toggle("hidden", S.done || !(S.live || S.playing) || !S.shown.length);
   if (cur) {
     $("sc-step").textContent = `Step ${Math.min(done + (S.agentState[cur.agent_id] === "running" ? 1 : 0), SCAN_STEPS)} / ${SCAN_STEPS} · ${cur.agent_name}`;
     $("sc-msg").textContent = cur.message;
   }
-  if (S.firstTs && S.shown.length) {
+  if (!S.live && S.firstTs && S.shown.length) {
     const last = Date.parse(S.shown[S.shown.length - 1].ts);
     $("sc-elapsed").textContent = `${Math.max(0, (last - S.firstTs) / 1000).toFixed(1)}s`;
   }
@@ -201,12 +211,13 @@ function reveal(ev) {
   if (!S.firstTs) S.firstTs = Date.parse(ev.ts);
   S.shown.push(ev);
   if (ev.agent_num >= 1 && ev.agent_num <= SCAN_STEPS) {
-    if (ev.state === "started" || ev.state === "progress") { S.agentState[ev.agent_id] = "running"; S.current = ev; }
+    if (ev.state === "started" || ev.state === "progress" || ev.state === "finding") { S.agentState[ev.agent_id] = "running"; S.current = ev; }
     if (ev.state === "done" || ev.state === "skipped") { S.agentState[ev.agent_id] = ev.state; S.completed.add(ev.agent_id); }
     if (ev.state === "failed") S.agentState[ev.agent_id] = "failed";
   }
   if (ev.agent_id === "orchestrator" && ev.state !== "threat") S.agentState.orchestrator = ev.state === "started" ? "running" : ev.state;
   if (ev.state === "threat") addThreat(ev);
+  if (ev.state === "finding") S.findings += 1;
   if (visible(ev)) {
     consoleEl.insertAdjacentHTML("beforeend", consoleLine(ev, { showJson: S.inlineJson }));
     if (follow) consoleEl.scrollTop = consoleEl.scrollHeight;
@@ -223,7 +234,7 @@ async function play() {
     let n = 0;
     while (S.queue.length) {
       reveal(S.queue.shift());
-      const d = DELAY[S.speed] ?? 140;
+      const d = S.live ? 0 : (PACE[S.speed] || PACE.normal).delay;
       if (d > 0) await sleep(d);
       else if (++n % 50 === 0) await sleep(0);
     }
@@ -235,16 +246,19 @@ async function play() {
 
 function finish() {
   S.done = true;
+  $("sc-spin").classList.add("hidden");
   const end = [...S.shown].reverse().find((e) => e.agent_id === "orchestrator" && (e.state === "done" || e.state === "failed"));
   const ok = !end || end.state === "done";
   setPill(ok ? "done" : "failed");
   S.agentState.orchestrator = ok ? "done" : "failed";
   renderStrip();
+  stopClock();
   const actual = end && end.duration_ms != null ? `${(end.duration_ms / 1000).toFixed(2)} s` : "n/a";
-  const speed = S.speed === "instant" ? "instant" : `${S.speed}×`;
+  const pace = (PACE[S.speed] || PACE.normal).label;
+  const speed = S.live ? `live simulation, pace ${pace}` : `replay, pace ${pace}`;
   $("sc-banner").className = `mt-6 rounded-xl border px-5 py-4 ${ok ? "border-emerald-500/40 bg-emerald-500/10" : "border-red-500/40 bg-red-500/10"}`;
-  $("sc-banner").innerHTML = `<div class="font-semibold ${ok ? "text-emerald-300" : "text-red-300"}">${ok ? "Scan complete" : "Scan failed"} · ${S.threats.length} threat(s), each written to the audit log</div>
-    <div class="mt-1 text-sm text-muted">Actual scan time ${esc(actual)} · ${esc(S.shown.length)} events · visual replay speed ${esc(speed)}
+  $("sc-banner").innerHTML = `<div class="font-semibold ${ok ? "text-emerald-300" : "text-red-300"}">${ok ? "Scan complete" : "Scan failed"} · ${S.findings} finding(s) · ${S.threats.length} threat(s), each written to the audit log</div>
+    <div class="mt-1 text-sm text-muted">Scan time ${esc(actual)} · ${esc(S.shown.length)} events · ${esc(speed)}
     · <a class="text-brand2 hover:underline" href="${esc(keepMock("audit.html"))}">Open audit log</a>
     · <a class="text-brand2 hover:underline" href="${esc(keepMock("alerts.html"))}">Open alerts</a></div>`;
   $("sc-step").textContent = ok ? `All ${SCAN_STEPS} steps finished` : "Scan stopped with an error";
@@ -270,7 +284,7 @@ async function poll() {
       S.runState = res.state || "done";
       play();
       if (MOCK || S.runState !== "running") break;
-      await sleep(400);
+      await sleep(S.live ? 300 : 400);
     }
   } catch (err) {
     toast(err.message || "Could not load the scan trace", "error");
@@ -281,9 +295,24 @@ async function poll() {
   if (!S.playing && !S.queue.length && S.shown.length && !S.done) finish();
 }
 
+function startClock() {
+  stopClock();
+  S.clockStart = performance.now();
+  S.clock = setInterval(() => {
+    $("sc-elapsed").textContent = `${((performance.now() - S.clockStart) / 1000).toFixed(1)}s`;
+  }, 100);
+}
+
+function stopClock() {
+  if (S.clock) clearInterval(S.clock);
+  S.clock = null;
+}
+
 function resetView(state) {
   Object.assign(S, { queue: [], shown: [], lastSeq: 0, runId: null, done: false, selectedSeq: null, autoSelect: true,
-    threats: [], completed: new Set(), current: null, firstTs: null, runState: "running" });
+    threats: [], completed: new Set(), current: null, firstTs: null, runState: "running", findings: 0 });
+  stopClock();
+  $("sc-elapsed").textContent = "0.0s";
   S.agentState = Object.fromEntries(S.agents.map((a) => [a.id, a.num <= SCAN_STEPS ? "waiting" : "idle"]));
   consoleEl.innerHTML = "";
   $("sc-threat-list").innerHTML = `<div class="text-sm text-muted">No threats yet.</div>`;
@@ -304,8 +333,11 @@ async function startScan() {
     let prev = null;
     try { prev = (await api("/scan/status")).run_id; } catch { /* first run */ }
     resetView("running");
+    S.live = !MOCK;
+    startClock();
+    const pace = (PACE[S.speed] || PACE.normal).step;
     try {
-      await api("/scan/start", { method: "POST", body: mode === "dataset" ? {} : { input_mode: mode } });
+      await api("/scan/start", { method: "POST", body: mode === "dataset" ? { pace } : { input_mode: mode, pace } });
     } catch (err) {
       if (!/already|409|conflict/i.test(err.message || "")) { toast(err.message, "error"); setPill("failed"); return; }
       toast("A scan is already running, attaching to it", "error");
@@ -325,6 +357,7 @@ async function startScan() {
 
 async function replay() {
   resetView("replay");
+  S.live = false;
   try { S.runId = (await api("/scan/status")).run_id || null; } catch { S.runId = null; }
   if (!S.runId && !MOCK) { toast("No scan has run yet", "error"); setPill("idle"); return; }
   await poll();

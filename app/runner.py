@@ -29,12 +29,13 @@ def is_running() -> bool:
     return _state["state"] == "running"
 
 
-def run_now(app, use_sample: bool | None = None, input_mode: str | None = None) -> None:
+def run_now(app, use_sample: bool | None = None, input_mode: str | None = None, pace: float | None = None) -> None:
     """Synchronous run used at startup and by the terminal scan. Never raises."""
-    _execute(app, use_sample, input_mode)
+    _execute(app, use_sample, input_mode, pace=pace)
 
 
-def start(app, use_sample: bool | None = None, input_mode: str | None = None) -> tuple[bool, dict]:
+def start(app, use_sample: bool | None = None, input_mode: str | None = None,
+          pace: float | None = None) -> tuple[bool, dict]:
     """Start a background run. Returns (started, status). started=False if one is already running."""
     if not _run_lock.acquire(blocking=False):
         return False, status()
@@ -43,7 +44,7 @@ def start(app, use_sample: bool | None = None, input_mode: str | None = None) ->
 
     def _job() -> None:
         try:
-            _execute(app, use_sample, input_mode, locked=True)
+            _execute(app, use_sample, input_mode, locked=True, pace=pace)
         finally:
             _run_lock.release()
 
@@ -59,13 +60,14 @@ def _mode(use_sample: bool | None, input_mode: str | None) -> str:
     return "sample" if use_sample else "dataset"
 
 
-def _execute(app, use_sample: bool | None, input_mode: str | None = None, locked: bool = False) -> None:
+def _execute(app, use_sample: bool | None, input_mode: str | None = None, locked: bool = False,
+             pace: float | None = None) -> None:
     t0 = time.perf_counter()
     mode = _mode(use_sample, input_mode)
     if not locked:
         _state.update(state="running", run_id=_state["run_id"] + 1, started_at=_now(), finished_at=None,
                       mode=mode)
-    trace.begin_run(mode)
+    trace.begin_run(mode, pace=pace)
     try:
         from app.pipeline import run_pipeline  # imported lazily so a broken pipeline cannot break startup
         kwargs: dict = {"use_sample": use_sample}

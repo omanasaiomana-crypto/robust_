@@ -3,6 +3,8 @@
 - Pipeline steps call `with trace.step("<agent_id>", "message") as s: ... s.output({...})`.
 - The runner calls begin_run() / log_threats() / end_run().
 - The UI polls events(after=seq); the terminal scan (app/scan.py) uses add_listener() + render_ansi().
+- Live simulation: begin_run(mode, pace=seconds) makes the REAL pipeline pause between steps; progress() and
+  finding() stream real intermediate results while each step runs.
 Thread-safe. emit() never raises; listener errors are swallowed; payloads are JSON-safe and size-capped.
 """
 import json
@@ -61,7 +63,9 @@ PATTERN_AGENT = {a["pattern"]: a["id"] for a in AGENTS if a["pattern"]}
 SCAN_AGENT_IDS = [a["id"] for a in AGENTS if 1 <= a["num"] <= 13]       # the steps of one scan
 
 STATE_LEVEL = {"started": "info", "progress": "info", "done": "ok", "failed": "crit", "threat": "crit",
-               "info": "info", "skipped": "warn"}
+               "info": "info", "skipped": "warn", "finding": "warn"}
+
+MAX_PACE_SECONDS = 3.0
 
 _lock = threading.RLock()
 _events: deque = deque(maxlen=config.TRACE_MAX_EVENTS)
@@ -71,7 +75,8 @@ _seq = 0
 
 def _new_run() -> dict:
     return {"run_id": None, "mode": None, "state": "idle", "started_at": None, "finished_at": None,
-            "duration_ms": None, "current": None, "completed": [], "failed": [], "threats": 0, "summary": None}
+            "duration_ms": None, "current": None, "completed": [], "failed": [], "threats": 0, "findings": 0,
+            "pace": 0.0, "summary": None}
 
 
 def _new_stats() -> dict:
@@ -83,6 +88,26 @@ def _new_stats() -> dict:
 _run: dict = _new_run()
 _stats: dict = _new_stats()
 _t0: float = 0.0
+_pace: float = 0.0          # seconds per agent step for live (paced) scans; 0 = full speed
+
+
+def set_pace(seconds: float | None) -> float:
+    """Live-simulation pace: the real pipeline pauses between steps so people can watch it work."""
+    global _pace
+    try:
+        _pace = max(0.0, min(float(seconds or 0.0), MAX_PACE_SECONDS))
+    except (TypeError, ValueError):
+        _pace = 0.0
+    return _pace
+
+
+def get_pace() -> float:
+    return _pace
+
+
+def _breathe(fraction: float) -> None:
+    if _pace > 0:
+        time.sleep(_pace * fraction)
 
 
 def _now_iso() -> str:
@@ -132,7 +157,7 @@ def emit(agent_id: str, state: str, message: str, data: Any = None, level: str |
             if st is not None and state != "threat":
                 if state == "started":
                     st.update(state="running", last_started=ev["ts"], last_message=ev["message"], last_error="")
-                elif state == "progress":
+                elif state in ("progress", "finding"):
                     st["last_message"] = ev["message"]
                 elif state in ("done", "skipped"):
                     st.update(state="done" if state == "done" else "skipped", last_finished=ev["ts"],
@@ -144,7 +169,7 @@ def emit(agent_id: str, state: str, message: str, data: Any = None, level: str |
                     st.update(state="failed", last_finished=ev["ts"], last_duration_ms=ev["duration_ms"],
                               last_error=ev["message"], runs=st["runs"] + 1)
             if agent["id"] in SCAN_AGENT_IDS:
-                if state in ("started", "progress"):
+                if state in ("started", "progress", "finding"):
                     _run["current"] = {"agent_id": agent["id"], "agent_num": agent["num"],
                                        "agent_name": agent["name"], "message": ev["message"], "seq": ev["seq"]}
                 elif state in ("done", "skipped") and agent["id"] not in _run["completed"]:
@@ -153,6 +178,8 @@ def emit(agent_id: str, state: str, message: str, data: Any = None, level: str |
                     _run["failed"].append(agent["id"])
             if state == "threat":
                 _run["threats"] += 1
+            if state == "finding":
+                _run["findings"] += 1
             listeners = list(_listeners)
     except Exception:  # noqa: BLE001 - tracing must never break the pipeline
         log.exception("trace.emit failed")
@@ -178,13 +205,17 @@ class StepHandle:
             self._message = message
 
     def progress(self, message: str, data: Any = None) -> None:
-        emit(self.agent_id, "progress", message, data)
+        progress(self.agent_id, message, data)
+
+    def finding(self, message: str, data: Any = None) -> None:
+        finding(self.agent_id, message, data)
 
 
 @contextmanager
 def step(agent_id: str, message: str, data: Any = None) -> Iterator[StepHandle]:
     """Trace one agent step: emits started, then done (with duration) or failed (and re-raises)."""
     emit(agent_id, "started", message, data)
+    _breathe(0.35)
     handle = StepHandle(agent_id)
     t0 = time.perf_counter()
     try:
@@ -196,24 +227,55 @@ def step(agent_id: str, message: str, data: Any = None) -> Iterator[StepHandle]:
     name = AGENT_BY_ID.get(agent_id, {}).get("name", agent_id)
     emit(agent_id, "done", handle._message or f"{name} finished", handle._output,
          duration_ms=(time.perf_counter() - t0) * 1000)
+    _breathe(0.45)
+
+
+def progress(agent_id: str, message: str, data: Any = None) -> None:
+    """A real intermediate progress message from inside a step (e.g. 'Read CloudTrail · 2,214 records')."""
+    emit(agent_id, "progress", message, data)
+    _breathe(0.18)
+
+
+def finding(agent_id: str, message: str, data: Any = None) -> None:
+    """A real intermediate result (a signal, a score, an action) shown live while the step runs."""
+    emit(agent_id, "finding", message, data)
+    _breathe(0.22)
+
+
+def signal_findings(agent_id: str, signals: list, limit: int = 8) -> None:
+    """Emit one finding per detector signal (up to `limit`, highest severity first)."""
+    try:
+        ranked = sorted(signals or [], key=lambda s: getattr(s, "severity", 0), reverse=True)
+        for s in ranked[:limit]:
+            finding(agent_id, f"{s.identity_id} · {s.reason}",
+                    {"identity_id": s.identity_id, "session_id": s.session_id, "pattern": s.pattern,
+                     "severity": round(float(s.severity), 2), "evidence": list(s.evidence_event_ids)[:5],
+                     "mitre": list(s.mitre)})
+        if len(ranked) > limit:
+            progress(agent_id, f"+{len(ranked) - limit} more signal(s)")
+    except Exception:  # noqa: BLE001 - tracing must never break the pipeline
+        log.exception("signal_findings failed")
 
 
 def skip(agent_id: str, reason: str) -> None:
     emit(agent_id, "skipped", reason)
 
 
-def begin_run(mode: str = "dataset") -> str:
+def begin_run(mode: str = "dataset", pace: float | None = None) -> str:
     global _t0
     run_id = f"scan-{datetime.now(timezone.utc):%Y%m%d-%H%M%S}-{uuid.uuid4().hex[:4]}"
+    used = set_pace(pace)
     with _lock:
         _run.clear()
         _run.update(_new_run())
-        _run.update(run_id=run_id, mode=mode, state="running", started_at=_now_iso())
+        _run.update(run_id=run_id, mode=mode, state="running", started_at=_now_iso(), pace=used)
         for aid in SCAN_AGENT_IDS:
             _stats[aid]["state"] = "waiting"
         _t0 = time.perf_counter()
-    emit("orchestrator", "started", f"Scan started · mode {mode} · {len(AGENTS)} agents on duty",
-         {"run_id": run_id, "mode": mode, "agents": [a["name"] for a in AGENTS]})
+    emit("orchestrator", "started", f"Scan started · mode {mode} · {len(AGENTS)} agents on duty"
+         + (f" · live pace {used:.1f}s/step" if used else ""),
+         {"run_id": run_id, "mode": mode, "pace_seconds_per_step": used, "agents": [a["name"] for a in AGENTS]})
+    _breathe(0.5)
     return run_id
 
 
@@ -223,8 +285,9 @@ def end_run(state: str, summary: Any = None) -> None:
         _run.update(state=state, finished_at=_now_iso(), duration_ms=duration, current=None,
                     summary=_safe_data(summary))
     emit("orchestrator", "done" if state == "done" else "failed",
-         f"Scan {'complete' if state == 'done' else 'failed'} · {_run['threats']} threat(s) logged",
-         summary, duration_ms=duration)
+         f"Scan {'complete' if state == 'done' else 'failed'} · {_run['findings']} finding(s) · "
+         f"{_run['threats']} threat(s) logged", summary, duration_ms=duration)
+    set_pace(0)
 
 
 def run_status() -> dict:
@@ -311,6 +374,7 @@ def log_threats(alerts: list[Alert], min_risk: float | None = None) -> list[dict
         primary = PATTERN_AGENT.get(a.patterns[0]) if a.patterns else None    # detector of the main pattern
         emit(primary or "orchestrator", "threat",
              f"THREAT DETECTED · {a.identity_id} · risk {a.risk:.0f} ({a.band}) · {names}", detail)
+        _breathe(0.4)
         logged.append(detail)
     return logged
 
@@ -321,7 +385,7 @@ def log_threats(alerts: list[Alert], min_risk: float | None = None) -> list[dict
 _LAYER_COLOR = {"data": "36", "detection": "35", "decision": "33", "learning": "32", "oversight": "34"}
 _LEVEL_COLOR = {"info": "37", "ok": "32", "warn": "33", "crit": "1;31", "debug": "90"}
 _STATE_SYMBOL = {"started": ">>", "progress": "..", "done": "OK", "failed": "XX", "threat": "!!",
-                 "info": "--", "skipped": "~~"}
+                 "info": "--", "skipped": "~~", "finding": "**"}
 _JSON_TOKEN = re.compile(r'("(?:\\.|[^"\\])*")(\s*:)?|\b(true|false)\b|\b(null)\b|(-?\d+(?:\.\d+)?(?:[eE][+-]?\d+)?)')
 
 
@@ -362,7 +426,7 @@ def render_ansi(ev: dict, show_json: bool = False, color: bool = True) -> str:
     line = (f"{_c('90', _local_time(ev.get('ts', '')), color)}  "
             f"{_c(_LAYER_COLOR.get(ev.get('layer'), '37'), tag.ljust(24), color)} "
             f"{_c(_LEVEL_COLOR.get(level, '37'), _STATE_SYMBOL.get(state, '--'), color)}  "
-            f"{_c('1;31', ev.get('message', ''), color) if state == 'threat' else ev.get('message', '')}"
+            f"{_c('1;31', ev.get('message', ''), color) if state == 'threat' else _c('33', ev.get('message', ''), color) if state == 'finding' else ev.get('message', '')}"
             f"{_c('90', dur, color)}")
     if state == "threat":
         line = _c("1;37;41", " THREAT ", color) + " " + line

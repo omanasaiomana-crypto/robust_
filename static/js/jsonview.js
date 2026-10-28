@@ -44,6 +44,7 @@ export const STATE_STYLE = {
   failed: { sym: "✖", cls: "text-red-400" },
   threat: { sym: "⚠", cls: "text-red-400" },
   skipped: { sym: "↷", cls: "text-amber-400" },
+  finding: { sym: "◆", cls: "text-amber-300" },
   info: { sym: "•", cls: "text-slate-400" },
 };
 
@@ -56,7 +57,8 @@ export function consoleLine(ev, { showJson = false } = {}) {
   const tag = `[${String(ev.agent_num ?? 0).padStart(2, "0")} ${String(ev.agent_id || "").toUpperCase()}]`;
   const dur = ev.duration_ms != null ? ` <span class="text-slate-500">(${escHtml(Math.round(ev.duration_ms))} ms)</span>` : "";
   const threat = ev.state === "threat";
-  const msgCls = threat ? "text-red-300 font-semibold" : ev.state === "failed" ? "text-red-300" : "text-slate-200";
+  const msgCls = threat ? "text-red-300 font-semibold" : ev.state === "failed" ? "text-red-300"
+    : ev.state === "finding" ? "text-amber-200" : ev.state === "progress" ? "text-slate-400" : "text-slate-200";
   const badge = threat ? `<span class="mr-2 rounded bg-red-600 px-1.5 py-0.5 text-[10px] font-bold tracking-wider text-white">THREAT</span>` : "";
   let html = `<div class="cl-line ${threat ? "bg-red-500/10 border-l-2 border-red-500" : "border-l-2 border-transparent"} px-3 py-0.5" data-seq="${escHtml(ev.seq)}">`
     + `<span class="text-slate-500">${escHtml(time)}</span>  `

@@ -43,7 +43,8 @@ def pipeline_supports_input_mode() -> bool:
         return False
 
 
-def start_scan(app, use_sample: bool | None = None, input_mode: str | None = None) -> tuple[str, Any]:
+def start_scan(app, use_sample: bool | None = None, input_mode: str | None = None,
+               pace: float | None = None) -> tuple[str, Any]:
     """Returns (outcome, payload). outcome: started | busy | invalid."""
     if input_mode in ("", "dataset"):
         input_mode = None
@@ -53,7 +54,7 @@ def start_scan(app, use_sample: bool | None = None, input_mode: str | None = Non
         return "invalid", "Scanning input data needs the pipeline update from the v2.1 integration prompt (input_mode)."
     if input_mode == "only" and not inputs.has_input():
         return "invalid", "No input data. Add data on the Input page first."
-    started, st = runner.start(app, use_sample=use_sample, input_mode=input_mode)
+    started, st = runner.start(app, use_sample=use_sample, input_mode=input_mode, pace=pace)
     return ("started" if started else "busy"), st
 
 

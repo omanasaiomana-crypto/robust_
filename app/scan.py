@@ -5,7 +5,8 @@
     python -m app.scan --input-only    analyze only data added on the Input page
     python -m app.scan --merge-input   dataset + input data together
     python -m app.scan --json          print the full JSON payload under every step
-    python -m app.scan --delay 0.15    slow the output down for a live demo
+    python -m app.scan --pace 1        LIVE simulation: the real pipeline runs ~1 s per agent step
+    python -m app.scan --delay 0.15    slow down only the printing (replay-style)
     python -m app.scan --jsonl         machine-readable: one JSON event per line, no colors
     python -m app.scan --no-color      plain text (for log files)
 
@@ -30,7 +31,8 @@ def main(argv: list[str] | None = None) -> int:
     p.add_argument("--json", action="store_true", help="show the full JSON payload of every step")
     p.add_argument("--jsonl", action="store_true", help="one raw JSON event per line")
     p.add_argument("--no-color", action="store_true")
-    p.add_argument("--delay", type=float, default=0.0, help="seconds to pause after each line (demo pacing)")
+    p.add_argument("--pace", type=float, default=0.0, help="live simulation: seconds per agent step (max 3)")
+    p.add_argument("--delay", type=float, default=0.0, help="seconds to pause after each printed line")
     args = p.parse_args(argv)
 
     if os.name == "nt":
@@ -56,7 +58,7 @@ def main(argv: list[str] | None = None) -> int:
     app = SimpleNamespace(state=SimpleNamespace(result=None, startup_error=""))
     trace.add_listener(show)
     try:
-        runner.run_now(app, use_sample=True if args.sample else None, input_mode=input_mode)
+        runner.run_now(app, use_sample=True if args.sample else None, input_mode=input_mode, pace=args.pace)
     finally:
         trace.remove_listener(show)
 

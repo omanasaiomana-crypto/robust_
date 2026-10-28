@@ -1,10 +1,10 @@
 {
-  "run_id": "scan-20261028-161121-43d1",
+  "run_id": "scan-20261028-224315-cde9",
   "mode": "dataset",
   "state": "done",
-  "started_at": "2026-10-28T16:11:21.249206+00:00",
-  "finished_at": "2026-10-28T16:11:21.257774+00:00",
-  "duration_ms": 8.6,
+  "started_at": "2026-10-28T22:43:15.617549+00:00",
+  "finished_at": "2026-10-28T22:43:16.002969+00:00",
+  "duration_ms": 385.4,
   "current": null,
   "completed": [
     "ingestion",
@@ -23,6 +23,8 @@
   ],
   "failed": [],
   "threats": 4,
+  "findings": 15,
+  "pace": 0.02,
   "summary": {
     "status": "ok",
     "alerts": 4,
@@ -31,5 +33,5 @@
   },
   "total_steps": 13,
   "progress": 1.0,
-  "last_seq": 32
+  "last_seq": 53
 }

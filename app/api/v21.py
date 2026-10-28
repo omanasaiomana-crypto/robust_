@@ -33,6 +33,7 @@ def _res(request: Request):
 class ScanStart(BaseModel):
     use_sample: bool | None = None
     input_mode: str | None = None
+    pace: float | None = None          # live simulation: seconds per agent step (0 = full speed, max 3)
 
 
 class UploadBody(BaseModel):
@@ -65,7 +66,7 @@ def scan_trace(after: int = 0, limit: int = 500, run_id: str | None = None):
 @router.post("/scan/start")
 def scan_start(request: Request, body: ScanStart | None = None):
     body = body or ScanStart()
-    outcome, payload = svc.start_scan(request.app, body.use_sample, body.input_mode)
+    outcome, payload = svc.start_scan(request.app, body.use_sample, body.input_mode, body.pace)
     if outcome == "invalid":
         raise HTTPException(status_code=422, detail=str(payload))
     if outcome == "busy":
