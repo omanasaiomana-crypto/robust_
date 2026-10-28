@@ -147,9 +147,18 @@ def identity_subgraph(g: nx.MultiDiGraph, identity_id: str, suspicious_ids: set[
     try:
         undirected = g.to_undirected()
         lengths = nx.single_source_shortest_path_length(undirected, start_node, cutoff=3)
-        # Sort by distance, keeping start_node first
+        # Prioritize start_node and endpoints of suspicious evidence edges
+        sus_endpoints: set[str] = set()
+        if sus_ids:
+            for u, v, d in g.edges(data=True):
+                if d.get("event_id") in sus_ids:
+                    sus_endpoints.add(u)
+                    sus_endpoints.add(v)
+
+        priority_nodes = [start_node] + [n for n in sorted(sus_endpoints) if n != start_node and g.has_node(n)]
         sorted_nodes = sorted(lengths.keys(), key=lambda n: lengths[n])
-        selected_nodes = sorted_nodes[:150]
+        remaining = [n for n in sorted_nodes if n not in sus_endpoints and n != start_node]
+        selected_nodes = (priority_nodes + remaining)[:150]
         sub = g.subgraph(selected_nodes)
     except Exception as exc:
         log.warning("Subgraph extraction fallback for %s: %s", identity_id, exc)
