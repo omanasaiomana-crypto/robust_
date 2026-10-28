@@ -121,12 +121,16 @@ def run_pipeline(use_sample: bool | None = None, input_mode: str | None = None) 
     try:
         with trace.step("ingestion", "Loading CloudTrail and Okta files") as s:
             raw_ct, sk_ct = load_cloudtrail(ct_folder)
+            trace.progress("ingestion", f"Read CloudTrail – {len(raw_ct):,} records", {"records": len(raw_ct)})
             raw_okta, sk_okta = load_okta(okta_folder)
+            trace.progress("ingestion", f"Read Okta – {len(raw_okta):,} records", {"records": len(raw_okta)})
             skipped += (sk_ct + sk_okta)
 
             if input_mode == "merge":
                 in_ct, in_sk_ct = load_cloudtrail(INPUT_DIR / "cloudtrail")
+                trace.progress("ingestion", f"Read CloudTrail (input) – {len(in_ct):,} records", {"records": len(in_ct)})
                 in_okta, in_sk_okta = load_okta(INPUT_DIR / "okta")
+                trace.progress("ingestion", f"Read Okta (input) – {len(in_okta):,} records", {"records": len(in_okta)})
                 raw_ct.extend(in_ct)
                 raw_okta.extend(in_okta)
                 skipped += (in_sk_ct + in_sk_okta)
@@ -182,6 +186,8 @@ def run_pipeline(use_sample: bool | None = None, input_mode: str | None = None) 
                         events_df.at[idx, "label"] = labels[eid]
             n_events = len(events_df)
             n_ids = int(events_df["identity_id"].nunique()) if (not events_df.empty and "identity_id" in events_df) else 0
+            trace.progress("normalization", f"{n_events:,} events normalized – {sk_norm} skipped",
+                           {"events": n_events, "skipped": int(sk_norm)})
             s.output(
                 {"events": n_events, "skipped": int(sk_norm), "identities": n_ids},
                 f"Normalized {n_events:,} events across {n_ids} identities ({sk_norm} skipped)",
@@ -190,8 +196,14 @@ def run_pipeline(use_sample: bool | None = None, input_mode: str | None = None) 
         with trace.step("enrichment", "Adding geo, privilege and sensitivity") as s:
             events_df = enrich(events_df, metadata=metadata)
             priv_ids = 0
-            if not events_df.empty and "privilege_level" in events_df and "identity_id" in events_df:
-                priv_ids = int(events_df[events_df["privilege_level"] >= 4]["identity_id"].nunique())
+            sens_events = 0
+            if not events_df.empty:
+                if "privilege_level" in events_df and "identity_id" in events_df:
+                    priv_ids = int(events_df[events_df["privilege_level"] >= 4]["identity_id"].nunique())
+                if "resource_sensitivity" in events_df:
+                    sens_events = int((events_df["resource_sensitivity"] >= 4).sum())
+            trace.progress("enrichment", f"{priv_ids} privileged identities – {sens_events} events touch sensitive resources",
+                           {"privileged": priv_ids, "sensitive": sens_events})
             s.output(
                 {"events": len(events_df), "privileged_identities": priv_ids},
                 f"Enriched {len(events_df):,} events ({priv_ids} privileged identities)",
@@ -234,10 +246,13 @@ def run_pipeline(use_sample: bool | None = None, input_mode: str | None = None) 
     try:
         with trace.step("correlation", "Linking Okta sessions to AWS activity") as s:
             events_df = assign_sessions(events_df)
-            graph = build_graph(events_df)
             n_sess = int(events_df["session_id"].nunique()) if (not events_df.empty and "session_id" in events_df) else 0
+            trace.progress("correlation", f"Linked {n_sess:,} sessions", {"sessions": n_sess})
+            graph = build_graph(events_df)
             n_nodes = int(graph.number_of_nodes())
             n_edges = int(graph.number_of_edges())
+            trace.progress("correlation", f"Identity graph – {n_nodes:,} nodes / {n_edges:,} edges",
+                           {"nodes": n_nodes, "edges": n_edges})
             s.output(
                 {"sessions": n_sess, "graph": {"nodes": n_nodes, "edges": n_edges}},
                 f"Correlated {n_sess} sessions, graph with {n_nodes} nodes and {n_edges} edges",
@@ -281,6 +296,7 @@ def run_pipeline(use_sample: bool | None = None, input_mode: str | None = None) 
         try:
             with trace.step(ag.name, f"Running {ag.name} detector") as s:
                 sigs = ag.detect(events_df)
+                trace.signal_findings(ag.name, sigs)
                 all_signals.extend(sigs)
                 examples = [
                     {
@@ -308,7 +324,9 @@ def run_pipeline(use_sample: bool | None = None, input_mode: str | None = None) 
             trace.skip("baseline_ml", "Not enough sessions to train")
         else:
             with trace.step("baseline_ml", "Isolation Forest over session features") as s:
+                trace.progress("baseline_ml", f"Training Isolation Forest on {n_sessions} sessions")
                 sigs = ml_agent.detect(events_df)
+                trace.signal_findings("baseline_ml", sigs)
                 all_signals.extend(sigs)
                 s.output(
                     {"signals": len(sigs)},
@@ -453,6 +471,13 @@ def run_pipeline(use_sample: bool | None = None, input_mode: str | None = None) 
             for i, a in enumerate(candidate_alerts, start=1):
                 a.alert_id = f"AL-{i:04d}"
 
+            for a in candidate_alerts[:8]:
+                trace.finding(
+                    "risk_scoring",
+                    f"{a.identity_id} → risk {a.risk:.0f} ({a.band})",
+                    {"alert_id": a.alert_id, "risk": float(a.risk), "band": a.band, "patterns": list(a.patterns)},
+                )
+
             top_r = float(candidate_alerts[0].risk) if candidate_alerts else 0.0
             s.output(
                 {"alerts": len(candidate_alerts), "top_risk": top_r},
@@ -460,6 +485,12 @@ def run_pipeline(use_sample: bool | None = None, input_mode: str | None = None) 
             )
 
         with trace.step("explanation", "Writing reasons, counterfactuals and MITRE tags") as s:
+            for a in [alert for alert in candidate_alerts if alert.reasons][:3]:
+                trace.finding(
+                    "explanation",
+                    f"{a.alert_id}: {a.reasons[0]}",
+                    {"alert_id": a.alert_id, "mitre": list(a.mitre)},
+                )
             s.output(
                 {"alerts_explained": len(candidate_alerts)},
                 f"Generated explanations, counterfactuals, and MITRE mapping for {len(candidate_alerts)} alerts",
@@ -492,10 +523,21 @@ def run_pipeline(use_sample: bool | None = None, input_mode: str | None = None) 
             pending_count = 0
             for a in candidate_alerts:
                 auto_apply(a, sim)
+                action = a.recommended_action or "monitor"
                 if a.action_status == "pending":
                     pending_count += 1
+                    trace.progress(
+                        "response",
+                        f"{a.alert_id} {a.identity_id} → revoke awaiting analyst approval",
+                        {"alert_id": a.alert_id},
+                    )
                 else:
                     applied_count += 1
+                    trace.finding(
+                        "response",
+                        f"{a.alert_id} {a.identity_id} → {action} – {a.action_status}",
+                        {"alert_id": a.alert_id, "action": action},
+                    )
             s.output(
                 {"applied": int(applied_count), "pending_approval": int(pending_count)},
                 f"Response applied {applied_count} action(s), {pending_count} pending analyst approval",
