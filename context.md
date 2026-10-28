@@ -334,7 +334,7 @@ tailwind.config = {
 | 14 | Alert detail page | ☑ | Header with risk ring (size 96), action buttons, confirm modal for revoke, why flagged, counterfactual table, attack chain stepper, predicted next step, evidence table, feedback loop |
 | 15 | Identities, Graph, Timeline | ☑ | Interactive identities table, vis-network graph with escalation paths, and step-by-step session attack activity replay timeline |
 | 16 | Hygiene, Audit | ☑ | Posture hygiene with dormant privileged accounts and paths to admin; tamper-evident audit ledger with chain verification |
-| 17 | Live wiring + tests | ☐ | |
+| 17 | Live wiring + tests | ☑ | 33 pytest tests passing across utils, normalize, detectors S1-S5, API actions/feedback; mock vs live API verified |
 | 18 | Polish + demo prep | ☐ | |
 
 Status values: ☐ not started · ◐ in progress · ☑ done (check passed).
@@ -359,4 +359,4 @@ Status values: ☐ not started · ◐ in progress · ☑ done (check passed).
 
 | # | Issue | Status |
 |---|---|---|
-| | | |
+| 1 | ActionRequest schema defaulted approved_by='analyst', which bypassed 409 guard on unapproved revoke requests | Fixed: checked req.model_fields_set in alerts.py |

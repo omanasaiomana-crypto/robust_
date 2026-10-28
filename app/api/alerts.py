@@ -91,8 +91,9 @@ def apply_alert_action(request: Request, alert_id: str, req: ActionRequest) -> A
         raise HTTPException(status_code=404, detail=f"Alert {alert_id} not found")
 
     sim = get_simulator()
+    approved_by = req.approved_by if "approved_by" in req.model_fields_set else None
     try:
-        act_res = respond.apply_action(alert, req.action, approved_by=req.approved_by, sim=sim)
+        act_res = respond.apply_action(alert, req.action, approved_by=approved_by, sim=sim)
     except (ValueError, PermissionError) as exc:
         raise HTTPException(status_code=409, detail=str(exc))
 
