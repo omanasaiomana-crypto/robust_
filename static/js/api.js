@@ -60,6 +60,7 @@ function mockPathFor(path) {
   if (clean === '/analytics/heatmap/identities') return '/mock/analytics_heatmap_identities.json';
   if (clean === '/notifications/status') return '/mock/notifications_status.json';
   if (clean === '/notifications') return '/mock/notifications.json';
+  if (clean === '/pipeline/status') return '/mock/pipeline_status.json';
   return `/mock${clean}.json`;
 }
 

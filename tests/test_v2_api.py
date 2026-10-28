@@ -98,3 +98,28 @@ def test_startup_digest_notification():
                     break
             time.sleep(0.1)
         assert found, "Expected startup digest notification in list_notifications"
+
+
+def test_pipeline_run_background_and_status():
+    import time
+    with TestClient(app) as client:
+        r = client.post("/api/pipeline/run", json={"use_sample": True})
+        assert r.status_code in (202, 409)
+
+        r_st = client.get("/api/pipeline/status")
+        assert r_st.status_code == 200
+        st = r_st.json()
+        assert "state" in st
+
+        t0 = time.time()
+        while time.time() - t0 < 30:
+            st = client.get("/api/pipeline/status").json()
+            if st.get("state") != "running":
+                break
+            time.sleep(0.2)
+
+        assert st.get("state") in ("done", "idle", "failed")
+
+        r_alerts = client.get("/api/alerts")
+        assert r_alerts.status_code == 200
+

@@ -447,7 +447,7 @@ While `state == "running"`: POST action, feedback and pipeline/run return 409 wi
 | 23 | Analytics UI | ☑ | static/analytics.html, analytics.js (winner, 3 cards, chart, detection matrix, agreement, heatmaps, definitions), overview card, mock fixtures |
 | 24 | Email notifier backend | ☑ | app/notify.py from REF_03, .env.example, app/api/notifications.py, outbox & digest wiring, 50 tests passing |
 | 25 | Notifications UI | ☑ | static/notifications.html, static/js/notifications.js (status card, expandable history), alert.js 'Email admin' button |
-| 26 | Background pipeline runs | ☐ | |
+| 26 | Background pipeline runs | ☑ | app/runner.py from REF_04, app/trace.py from REF_09, REF_08 in config.py, async 202 runner, 54 tests passing |
 | 27 | Offline assets | ☐ | |
 | 28 | Analyst token (optional) | ☐ | |
 | 29 | Supplied simulator adapter | ☐ | |

@@ -1,12 +1,13 @@
 """Health, pipeline runner, and summary endpoints."""
 import logging
 from typing import Any
-from fastapi import APIRouter, Request
+from fastapi import APIRouter, HTTPException, Request
+from fastapi.responses import JSONResponse
 from pydantic import BaseModel
 
-from app import notify
+from app import runner
 from app.models import Health
-from app.pipeline import get_identity_rows, run_pipeline
+from app.pipeline import get_identity_rows
 from app.utils import clean_json
 
 log = logging.getLogger(__name__)
@@ -45,24 +46,24 @@ def _make_health(res: Any, startup_err: str = "") -> Health:
 def get_health(request: Request) -> Health:
     res = getattr(request.app.state, "result", None)
     startup_err = getattr(request.app.state, "startup_error", "")
-    return _make_health(res, startup_err)
+    h = _make_health(res, startup_err)
+    if runner.is_running():
+        h.pipeline = "running"
+    return h
 
 
-@router.post("/pipeline/run", response_model=Health)
-def trigger_pipeline(request: Request, body: PipelineRunRequest | None = None) -> Health:
+@router.post("/pipeline/run")
+def trigger_pipeline(request: Request, body: PipelineRunRequest | None = None) -> JSONResponse:
     use_sample = body.use_sample if body is not None else None
-    try:
-        res = run_pipeline(use_sample=use_sample)
-        request.app.state.result = res
-        request.app.state.startup_error = res.detail if res.status == "failed" else ""
-        if res and res.status != "failed":
-            notify.notify_new_alerts(res.alerts, total_open=len(res.alerts))
-    except Exception as exc:
-        log.exception("Re-running pipeline failed")
-        request.app.state.startup_error = str(exc)
-        return _make_health(None, str(exc))
+    started, st = runner.start(request.app, use_sample)
+    if not started:
+        raise HTTPException(status_code=409, detail="A pipeline run is already in progress")
+    return JSONResponse(status_code=202, content=clean_json(st))
 
-    return _make_health(res)
+
+@router.get("/pipeline/status")
+def get_pipeline_status() -> dict[str, Any]:
+    return clean_json(runner.status())
 
 
 @router.get("/summary")

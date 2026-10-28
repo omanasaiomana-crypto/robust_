@@ -177,21 +177,73 @@ export function renderLayout(active, title, subtitle) {
   if (menuBtn) menuBtn.onclick = toggleSidebar;
   if (backdrop) backdrop.onclick = toggleSidebar;
 
-  // Setup Re-run button
+  // Setup Re-run button and background status polling
   const rerunBtn = document.getElementById('btn-rerun');
+  const statusPill = document.getElementById('status-pill');
+  let pollInterval = null;
+
+  function setRunningState() {
+    if (rerunBtn) {
+      rerunBtn.disabled = true;
+      rerunBtn.classList.add('opacity-50', 'cursor-not-allowed');
+    }
+    if (statusPill) {
+      statusPill.innerHTML = `<span class="inline-block animate-spin mr-1">⏳</span><span class="text-brand2 font-medium">Running…</span>`;
+      statusPill.className = 'inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs border border-brand2/30 bg-brand2/10';
+    }
+  }
+
+  function startPolling() {
+    if (pollInterval) return;
+    setRunningState();
+    const pollStart = Date.now();
+    pollInterval = setInterval(async () => {
+      if (Date.now() - pollStart > 120000) {
+        clearInterval(pollInterval);
+        pollInterval = null;
+        toast('Pipeline run timed out after 120 seconds', 'error');
+        if (rerunBtn) {
+          rerunBtn.disabled = false;
+          rerunBtn.classList.remove('opacity-50', 'cursor-not-allowed');
+        }
+        return;
+      }
+      try {
+        const st = await api('/pipeline/status');
+        if (st.state === 'done') {
+          clearInterval(pollInterval);
+          pollInterval = null;
+          const durSec = st.duration_ms ? (st.duration_ms / 1000).toFixed(1) : '0.0';
+          toast(`Pipeline finished · ${st.alerts ?? 0} alerts · ${durSec}s`, 'success');
+          setTimeout(() => window.location.reload(), 1000);
+        } else if (st.state === 'failed') {
+          clearInterval(pollInterval);
+          pollInterval = null;
+          toast(`Pipeline run failed: ${st.detail || 'unknown error'}`, 'error');
+          setTimeout(() => window.location.reload(), 1500);
+        }
+      } catch {
+        // transient error during poll
+      }
+    }, 1000);
+  }
+
   if (rerunBtn) {
     rerunBtn.onclick = async () => {
-      rerunBtn.disabled = true;
-      rerunBtn.classList.add('opacity-50');
+      if (isMock) {
+        toast('Pipeline execution completed (mock mode)', 'success');
+        return;
+      }
       try {
-        toast('Re-running pipeline...', 'success');
         await api('/pipeline/run', { method: 'POST', body: {} });
-        toast('Pipeline execution completed! Refreshing...', 'success');
-        setTimeout(() => window.location.reload(), 800);
+        startPolling();
       } catch (err) {
-        toast(`Pipeline run failed: ${err.message}`, 'error');
-        rerunBtn.disabled = false;
-        rerunBtn.classList.remove('opacity-50');
+        if (err.status === 409 || (err.message && err.message.includes('already in progress'))) {
+          toast('A run is already in progress', 'info');
+          startPolling();
+        } else {
+          toast(`Pipeline run failed: ${err.message}`, 'error');
+        }
       }
     };
   }
@@ -199,11 +251,12 @@ export function renderLayout(active, title, subtitle) {
   // Fetch health to populate status pills
   api('/health')
     .then((health) => {
-      const statusPill = document.getElementById('status-pill');
       const modePill = document.getElementById('mode-pill');
 
       if (statusPill) {
-        if (health.pipeline === 'ok' && health.status === 'ok') {
+        if (health.pipeline === 'running') {
+          startPolling();
+        } else if (health.pipeline === 'ok' && health.status === 'ok') {
           statusPill.innerHTML = `<span class="w-2 h-2 rounded-full bg-ok"></span><span class="text-ok font-medium">Pipeline OK</span>`;
           statusPill.className = 'inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs border border-ok/30 bg-ok/10';
         } else if (health.status === 'degraded') {
@@ -222,7 +275,6 @@ export function renderLayout(active, title, subtitle) {
       }
     })
     .catch(() => {
-      const statusPill = document.getElementById('status-pill');
       if (statusPill) {
         statusPill.innerHTML = `<span class="w-2 h-2 rounded-full bg-crit"></span><span class="text-crit font-medium">Offline</span>`;
       }

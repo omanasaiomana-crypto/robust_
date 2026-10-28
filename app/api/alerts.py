@@ -4,7 +4,7 @@ from typing import Any
 from fastapi import APIRouter, HTTPException, Request
 import pandas as pd
 
-from app import store
+from app import runner, store
 from app.decision import feedback, respond
 from app.decision.respond import recommend
 from app.decision.scoring import counterfactuals, score_session
@@ -85,6 +85,8 @@ def get_alert_events(request: Request, alert_id: str) -> list[Event]:
 
 @router.post("/alerts/{alert_id}/action", response_model=ActionResult)
 def apply_alert_action(request: Request, alert_id: str, req: ActionRequest) -> ActionResult:
+    if runner.is_running():
+        raise HTTPException(status_code=409, detail="Pipeline is re-running; try again in a few seconds")
     res = _result(request)
     alert = _find_alert(res, alert_id)
     if alert is None:
@@ -108,6 +110,8 @@ def apply_alert_action(request: Request, alert_id: str, req: ActionRequest) -> A
 
 @router.post("/alerts/{alert_id}/feedback", response_model=Alert)
 def submit_feedback(request: Request, alert_id: str, req: FeedbackRequest) -> Alert:
+    if runner.is_running():
+        raise HTTPException(status_code=409, detail="Pipeline is re-running; try again in a few seconds")
     res = _result(request)
     alert = _find_alert(res, alert_id)
     if alert is None:
