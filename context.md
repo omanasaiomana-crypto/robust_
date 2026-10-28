@@ -327,7 +327,7 @@ tailwind.config = {
 | 7 | Rule detectors P4-P5 | ☑ | P4 (dev.kumar StopLogging), P5 (meera.n token abuse) |
 | 8 | ML module | ☑ | features (661,14), AnomalyModel IF, ChainModel Markov, PeerModel KM, Calibrator |
 | 9 | Decision + simulator | ☑ | scoring, explain, respond, feedback, simulator, test_scoring 5/5 |
-| 10 | Pipeline + evaluation | ☐ | |
+| 10 | Pipeline + evaluation | ☑ | status ok, 16 alerts, top: svc-report (revoke), meera.n, dev.kumar, anita.rao; F1 0.537 > baseline 0.0 |
 | 11 | API + main | ☐ | |
 | 12 | UI foundation | ☐ | |
 | 13 | Overview + Alerts pages | ☐ | |

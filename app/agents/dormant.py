@@ -56,3 +56,6 @@ class DormantAccountAgent(Agent):
                 prev_row = curr_row
 
         return signals
+
+
+DormantAgent = DormantAccountAgent
