@@ -442,7 +442,7 @@ While `state == "running"`: POST action, feedback and pipeline/run return 409 wi
 | Phase | Name | Status | Notes |
 |---|---|---|---|
 | 20 | Audit verification and consistency fixes | ☑ | checked thresholds, added constants, added check_ref tool, updated AUDIT_REPORT |
-| 21 | Official data run, baseline, export, latency | ☐ | |
+| 21 | Official data run, baseline, export, latency | ☑ | data recon, fallback mappings, export CLI, baseline logging, latency replay (p50=1640ms, 259.6 ev/s) |
 | 22 | Analytics backend | ☐ | |
 | 23 | Analytics UI | ☐ | |
 | 24 | Email notifier backend | ☐ | |

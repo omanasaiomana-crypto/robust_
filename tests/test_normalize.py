@@ -132,3 +132,51 @@ def test_bad_records_skipped():
     assert skipped == 2
     assert len(df) == 1
     assert df.iloc[0]["action"] == "ValidEvent"
+
+
+def test_normalize_official_format_fallback():
+    """Verify official schema variations normalize to valid Event models via fallback paths."""
+    # Official CloudTrail shape with alternative key names
+    ct_official = {
+        "eventId": "ct-off-987",
+        "time": "2026-10-28T14:30:00Z",
+        "name": "AssumeRole",
+        "userName": "security-analyst@corp.example",
+        "ip": "198.51.100.99",
+        "region": "us-west-2",
+        "user_agent": "aws-sdk-go/v1.44.0",
+        "accessKeyId": "ASIA99EXAMPLEKEY",
+        "resource": "arn:aws:iam::123456789012:role/SecOpsRole",
+        "label": "benign",
+    }
+    evt_ct = normalize_cloudtrail(ct_official, 10)
+    assert evt_ct is not None
+    assert evt_ct.event_id == "ct-off-987"
+    assert evt_ct.identity_id == "security-analyst"
+    assert evt_ct.action == "AssumeRole"
+    assert evt_ct.src_ip == "198.51.100.99"
+    assert evt_ct.region == "us-west-2"
+    assert evt_ct.token_id == "ASIA99EXAMPLEKEY"
+
+    # Official Okta shape with alternative key names
+    okta_official = {
+        "id": "okta-off-123",
+        "timestamp": "2026-10-28T14:28:00Z",
+        "action": "user.session.start",
+        "username": "security-analyst@corp.example",
+        "sessionId": "sess-official-456",
+        "ipAddress": "198.51.100.99",
+        "country": "United States",
+        "city": "Seattle",
+        "deviceId": "dev-corp-laptop-01",
+        "outcome": "SUCCESS",
+    }
+    evt_okta = normalize_okta(okta_official, 20)
+    assert evt_okta is not None
+    assert evt_okta.event_id == "okta-off-123"
+    assert evt_okta.identity_id == "security-analyst"
+    assert evt_okta.session_id == "sess-official-456"
+    assert evt_okta.category == Category.auth
+    assert evt_okta.src_ip == "198.51.100.99"
+    assert evt_okta.country == "United States"
+    assert evt_okta.device_id == "dev-corp-laptop-01"

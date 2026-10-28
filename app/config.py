@@ -145,3 +145,7 @@ EMAIL_MAX_PER_HOUR = _env_int("EMAIL_MAX_PER_HOUR", 10)
 CONSOLE_BASE_URL = os.environ.get("CONSOLE_BASE_URL", "http://127.0.0.1:8000").rstrip("/")
 OUTBOX_DIR = DATA_DIR / "outbox"
 
+# Export settings (Phase 21)
+EXPORT_MIN_RISK = BAND_STEP_UP
+OUTPUT_DIR = DATA_DIR / "output"
+

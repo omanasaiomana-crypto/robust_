@@ -43,7 +43,7 @@ def _extract_ct_resource(rec: dict) -> str | None:
 
 def normalize_cloudtrail(rec: dict, idx: int) -> Event | None:
     """Map one CloudTrail record into Event contract. Returns None if timestamp missing/bad."""
-    ts = parse_ts(dig(rec, "eventTime"))
+    ts = parse_ts(dig(rec, "eventTime") or dig(rec, "time") or dig(rec, "timestamp"))
     if ts is None:
         return None
 
@@ -51,21 +51,26 @@ def normalize_cloudtrail(rec: dict, idx: int) -> Event | None:
         dig(rec, "userIdentity.userName")
         or dig(rec, "userIdentity.sessionContext.sessionIssuer.userName")
         or dig(rec, "userIdentity.arn")
+        or dig(rec, "userIdentity.principalId")
+        or dig(rec, "userName")
+        or dig(rec, "username")
+        or dig(rec, "user")
+        or dig(rec, "identity")
     )
     ident = canonical_identity(raw_id)
-    action = str(dig(rec, "eventName", "Unknown"))
+    action = str(dig(rec, "eventName") or dig(rec, "action") or dig(rec, "name") or "Unknown")
     category = Category.auth if action in AUTH_CLOUDTRAIL_ACTIONS else Category.api
 
-    has_error = bool(dig(rec, "errorCode"))
+    has_error = bool(dig(rec, "errorCode") or (str(dig(rec, "outcome", "")).lower() == "failure"))
     outcome = "failure" if has_error else "success"
 
-    event_id = str(dig(rec, "eventID") or f"ct-{idx}")
-    src_ip = dig(rec, "sourceIPAddress")
-    user_agent = dig(rec, "userAgent")
-    token_id = dig(rec, "userIdentity.accessKeyId")
-    region = dig(rec, "awsRegion")
-    resource = _extract_ct_resource(rec)
-    label = rec.get("label")
+    event_id = str(dig(rec, "eventID") or dig(rec, "id") or dig(rec, "eventId") or f"ct-{idx}")
+    src_ip = dig(rec, "sourceIPAddress") or dig(rec, "src_ip") or dig(rec, "ip") or dig(rec, "ipAddress")
+    user_agent = dig(rec, "userAgent") or dig(rec, "user_agent")
+    token_id = dig(rec, "userIdentity.accessKeyId") or dig(rec, "accessKeyId") or dig(rec, "token_id")
+    region = dig(rec, "awsRegion") or dig(rec, "region")
+    resource = _extract_ct_resource(rec) or dig(rec, "resource")
+    label = rec.get("label") or rec.get("target") or rec.get("anomaly")
 
     return Event(
         event_id=event_id,
@@ -95,14 +100,26 @@ def normalize_cloudtrail(rec: dict, idx: int) -> Event | None:
 
 def normalize_okta(rec: dict, idx: int) -> Event | None:
     """Map one Okta log record into Event contract. Returns None if timestamp missing/bad."""
-    ts = parse_ts(dig(rec, "published"))
+    ts = parse_ts(dig(rec, "published") or dig(rec, "timestamp") or dig(rec, "time"))
     if ts is None:
         return None
 
-    raw_id = dig(rec, "actor.alternateId") or dig(rec, "actor.id")
+    raw_id = (
+        dig(rec, "actor.alternateId")
+        or dig(rec, "actor.id")
+        or dig(rec, "actor.displayName")
+        or dig(rec, "userName")
+        or dig(rec, "username")
+        or dig(rec, "user")
+        or dig(rec, "identity")
+    )
     ident = canonical_identity(raw_id)
-    session_id = dig(rec, "authenticationContext.externalSessionId")
-    action = str(dig(rec, "eventType", "unknown"))
+    session_id = (
+        dig(rec, "authenticationContext.externalSessionId")
+        or dig(rec, "sessionId")
+        or dig(rec, "session_id")
+    )
+    action = str(dig(rec, "eventType") or dig(rec, "action") or "unknown")
 
     # Category determination
     if action in {"user.session.start", "user.authentication.verify"} or action.startswith("user.authentication."):
@@ -112,25 +129,30 @@ def normalize_okta(rec: dict, idx: int) -> Event | None:
     else:
         category = Category.api
 
-    raw_outcome = str(dig(rec, "outcome.result", "SUCCESS")).strip().lower()
-    outcome = "success" if raw_outcome == "success" else "failure"
+    raw_outcome = str(dig(rec, "outcome.result") or dig(rec, "outcome") or "SUCCESS").strip().lower()
+    outcome = "success" if raw_outcome in ("success", "allow") else "failure"
 
-    event_id = str(dig(rec, "uuid") or f"okta-{idx}")
-    src_ip = dig(rec, "client.ipAddress")
-    country = dig(rec, "client.geographicalContext.country")
-    city = dig(rec, "client.geographicalContext.city")
+    event_id = str(dig(rec, "uuid") or dig(rec, "id") or dig(rec, "eventId") or f"okta-{idx}")
+    src_ip = dig(rec, "client.ipAddress") or dig(rec, "ipAddress") or dig(rec, "src_ip")
+    country = dig(rec, "client.geographicalContext.country") or dig(rec, "country")
+    city = dig(rec, "client.geographicalContext.city") or dig(rec, "city")
 
-    raw_lat = dig(rec, "client.geographicalContext.geolocation.lat")
-    raw_lon = dig(rec, "client.geographicalContext.geolocation.lon")
+    raw_lat = dig(rec, "client.geographicalContext.geolocation.lat") or dig(rec, "lat")
+    raw_lon = dig(rec, "client.geographicalContext.geolocation.lon") or dig(rec, "lon")
     lat = float(raw_lat) if raw_lat is not None else None
     lon = float(raw_lon) if raw_lon is not None else None
 
-    raw_asn = dig(rec, "securityContext.asNumber")
+    raw_asn = dig(rec, "securityContext.asNumber") or dig(rec, "asn")
     asn = str(raw_asn) if raw_asn is not None else None
 
-    user_agent = dig(rec, "client.userAgent.rawUserAgent")
-    device_id = dig(rec, "client.device") or dig(rec, "debugContext.debugData.deviceFingerprint")
-    label = rec.get("label")
+    user_agent = dig(rec, "client.userAgent.rawUserAgent") or dig(rec, "userAgent") or dig(rec, "user_agent")
+    device_id = (
+        dig(rec, "client.device")
+        or dig(rec, "debugContext.debugData.deviceFingerprint")
+        or dig(rec, "deviceId")
+        or dig(rec, "device_id")
+    )
+    label = rec.get("label") or rec.get("target") or rec.get("anomaly")
 
     return Event(
         event_id=event_id,
