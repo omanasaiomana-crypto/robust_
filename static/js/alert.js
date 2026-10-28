@@ -196,6 +196,14 @@ function renderHeader(container, alert) {
             : ''
         }
 
+        <!-- Email Admin Button -->
+        <button
+          id="btn-email-admin"
+          class="border border-line hover:bg-panel2 text-ink rounded-lg px-4 py-2 text-sm font-medium transition-colors"
+        >
+          Email admin
+        </button>
+
         <!-- Dismiss Button -->
         <button
           id="btn-dismiss-alert"
@@ -271,6 +279,31 @@ function renderHeader(container, alert) {
       } catch (err) {
         toast(`Dismiss failed: ${err.message}`, 'error');
         dismissBtn.disabled = false;
+      }
+    };
+  }
+
+  const emailBtn = document.getElementById('btn-email-admin');
+  if (emailBtn) {
+    emailBtn.onclick = async () => {
+      emailBtn.disabled = true;
+      try {
+        const res = await api(`/alerts/${encodeURIComponent(alert.alert_id)}/notify`, {
+          method: 'POST',
+        });
+        if (res && res.status === 'outbox') {
+          toast('Email saved to outbox (demo mode)', 'success');
+        } else if (res && res.status === 'sent') {
+          toast('Email sent', 'success');
+        } else if (res && res.status === 'mocked') {
+          toast('Mock mode: nothing sent', 'success');
+        } else {
+          toast((res && res.detail) || 'Failed to send notification', 'error');
+        }
+      } catch (err) {
+        toast(err.message || 'Failed to send notification', 'error');
+      } finally {
+        emailBtn.disabled = false;
       }
     };
   }
@@ -483,7 +516,7 @@ function renderRightColumn(container, alert, events) {
     : `<span class="text-xs text-muted">Pending analyst review</span>`;
 
   // 3. Quick Links
-  const graphUrl = `/graph.html?identity=${encodeURIComponent(alert.identity_id)}${querySuffix}`;
+  const graphUrl = `/explorer.html?identity=${encodeURIComponent(alert.identity_id)}&play=1${isMock ? '&mock=1' : ''}`;
   const timelineUrl = `/timeline.html?session=${encodeURIComponent(alert.session_id || '')}${querySuffix}`;
 
   container.innerHTML = `

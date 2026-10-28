@@ -160,7 +160,7 @@ async function loadIdentities() {
       // Attach row click and keyboard navigation
       container.querySelectorAll('.identity-row').forEach((row) => {
         const uid = row.dataset.identityId;
-        const targetUrl = `/graph.html?identity=${encodeURIComponent(uid)}${querySuffix}`;
+        const targetUrl = `/explorer.html?identity=${encodeURIComponent(uid)}${querySuffix}`;
 
         row.onclick = () => {
           window.location.href = targetUrl;
