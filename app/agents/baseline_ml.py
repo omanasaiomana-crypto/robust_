@@ -3,11 +3,6 @@ import logging
 import pandas as pd
 
 from app.agents.base import Agent
-from app.config import (
-    MAX_EVIDENCE_EVENTS,
-    ML_ANOMALY_THRESHOLD,
-    ML_MIN_TRAIN_SESSIONS,
-)
 from app.ml.anomaly import AnomalyModel
 from app.ml.features import numeric_columns, session_features
 from app.models import Signal
@@ -52,7 +47,7 @@ class BaselineMLAgent(Agent):
 
             train_sessions = feat_df[feat_df.index.isin(benign_sess)]
 
-        if train_sessions is None or len(train_sessions) < ML_MIN_TRAIN_SESSIONS:
+        if train_sessions is None or len(train_sessions) < 20:
             train_sessions = feat_df
 
         # Fit model on training feature matrix
@@ -70,13 +65,13 @@ class BaselineMLAgent(Agent):
             score = round(float(score_val), 3)
             self.scores[str(sess_id)] = score
 
-            if score >= ML_ANOMALY_THRESHOLD:
+            if score >= 0.6:
                 s_events = session_events_map.get(sess_id)
                 if s_events is not None and not s_events.empty:
                     s_sorted = s_events.sort_values(by="timestamp")
                     uid = str(s_sorted["identity_id"].iloc[0])
                     ts = s_sorted["timestamp"].iloc[-1]
-                    ev_ids = [str(x) for x in s_sorted["event_id"].head(MAX_EVIDENCE_EVENTS)]
+                    ev_ids = [str(x) for x in s_sorted["event_id"].head(5)]
 
                     reason = f"Session behavior is unusual compared with normal activity (anomaly score {score:.2f})."
 

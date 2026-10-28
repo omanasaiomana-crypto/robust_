@@ -3,15 +3,7 @@ import logging
 import pandas as pd
 
 from app.agents.base import Agent
-from app.config import (
-    API_ANOMALY_BASE_SEV,
-    API_ANOMALY_REGION_BOOST,
-    API_ANOMALY_SENSITIVE_BOOST,
-    API_MIN_EVENTS_BASELINE,
-    API_RARITY_THRESHOLD,
-    PEER_RARITY_THRESHOLD,
-    SENSITIVE_ACTIONS,
-)
+from app.config import API_RARITY_THRESHOLD, PEER_RARITY_THRESHOLD, SENSITIVE_ACTIONS
 from app.models import Signal
 
 log = logging.getLogger(__name__)
@@ -72,7 +64,7 @@ class ApiAnomalyAgent(Agent):
             total_events_user = counts_per_identity.get(uid, 0)
 
             identity_rarity = 0.0
-            if total_events_user >= API_MIN_EVENTS_BASELINE:
+            if total_events_user >= 5:
                 act_cnt = action_counts.get((uid, act), 0)
                 identity_rarity = 1.0 - (act_cnt / total_events_user)
 
@@ -84,21 +76,21 @@ class ApiAnomalyAgent(Agent):
                     peer_rarity = 1.0
 
             is_rare_action = bool(
-                total_events_user >= API_MIN_EVENTS_BASELINE
+                total_events_user >= 5
                 and identity_rarity >= API_RARITY_THRESHOLD
                 and peer_rarity >= PEER_RARITY_THRESHOLD
             )
 
             # Fire signal if sensitive action, new region, or statistically rare action
             if is_sensitive or is_new_region or is_rare_action:
-                severity = API_ANOMALY_BASE_SEV
+                severity = 0.5
                 reasons: list[str] = []
 
                 if is_sensitive:
-                    severity += API_ANOMALY_SENSITIVE_BOOST
+                    severity += 0.3
                     reasons.append(f"sensitive action {act}")
                 if is_new_region:
-                    severity += API_ANOMALY_REGION_BOOST
+                    severity += 0.2
                     reasons.append(f"unseen region {reg}")
                 if is_rare_action:
                     reasons.append(f"rare action (identity rarity: {identity_rarity:.1%})")

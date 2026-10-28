@@ -1,0 +1,22 @@
+IdentityShield detected suspicious identity activity.
+
+New high-risk alerts: 3  (critical: 2)
+Open alerts in console: 16
+
+- svc-report | risk 100 (revoke) | Behavior anomaly, Privilege escalation, Unusual API
+  Why: Privilege escalation chain detected for svc-report: CredCreate (CreateAccessKey) -> PermGrant (AttachUserPolicy) -> RoleAssume (AssumeRole) -> Impact (GetSecretValue) across 4 steps in 11 minutes.
+  Recommended: Revoke session (needs analyst approval)
+  Open: http://127.0.0.1:8000/alert.html?id=AL-0001
+
+- meera.n | risk 95 (revoke) | Behavior anomaly, Unusual API, Token abuse
+  Why: Session behavior is unusual compared with normal activity (anomaly score 0.93).
+  Recommended: Revoke session (needs analyst approval)
+  Open: http://127.0.0.1:8000/alert.html?id=AL-0002
+
+- dev.kumar | risk 83 (restrict) | Behavior anomaly, Unusual API
+  Why: Unusual API activity by dev.kumar: sensitive action StopLogging, unseen region eu-west-3, rare action (identity rarity: 99.1%).
+  Recommended: Restrict access
+  Open: http://127.0.0.1:8000/alert.html?id=AL-0003
+
+No session was revoked automatically. Revocation always requires analyst approval.
+This is an automated message from IdentityShield.

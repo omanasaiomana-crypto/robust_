@@ -9,8 +9,8 @@ from fastapi.responses import JSONResponse, RedirectResponse
 from fastapi.staticfiles import StaticFiles
 from starlette.exceptions import HTTPException as StarletteHTTPException
 
-from app import notify, runner, store
-from app.api import alerts, analytics, audit, health, identities, metrics, notifications, scan
+from app import store
+from app.api import alerts, audit, health, identities, metrics
 from app.config import STATIC_DIR
 from app.pipeline import run_pipeline
 
@@ -23,8 +23,12 @@ async def lifespan(app: FastAPI):
     app.state.result = None
     app.state.startup_error = ""
     store.init_db()
-    notify.init_tables()
-    runner.run_now(app)
+    try:
+        app.state.result = run_pipeline()
+    except Exception as exc:  # noqa: BLE001 - server must still start
+        log.exception("Pipeline failed at startup")
+        app.state.result = None
+        app.state.startup_error = str(exc)
     yield
 
 
@@ -57,7 +61,7 @@ async def unhandled_error(_: Request, exc: Exception):
     return _err(500, "internal_error", "Unexpected server error. See server log.")
 
 
-for module in (health, alerts, identities, metrics, audit, analytics, notifications, scan):
+for module in (health, alerts, identities, metrics, audit):
     app.include_router(module.router, prefix="/api")
 
 

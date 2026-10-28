@@ -1,13 +1,11 @@
 """Health, pipeline runner, and summary endpoints."""
 import logging
-from typing import Any, Literal
-from fastapi import APIRouter, HTTPException, Request
-from fastapi.responses import JSONResponse
+from typing import Any
+from fastapi import APIRouter, Request
 from pydantic import BaseModel
 
-from app import runner
 from app.models import Health
-from app.pipeline import get_identity_rows
+from app.pipeline import get_identity_rows, run_pipeline
 from app.utils import clean_json
 
 log = logging.getLogger(__name__)
@@ -17,7 +15,6 @@ router = APIRouter(tags=["health"])
 
 class PipelineRunRequest(BaseModel):
     use_sample: bool | None = None
-    input_mode: Literal["only", "merge"] | None = None
 
 
 def _make_health(res: Any, startup_err: str = "") -> Health:
@@ -47,25 +44,22 @@ def _make_health(res: Any, startup_err: str = "") -> Health:
 def get_health(request: Request) -> Health:
     res = getattr(request.app.state, "result", None)
     startup_err = getattr(request.app.state, "startup_error", "")
-    h = _make_health(res, startup_err)
-    if runner.is_running():
-        h.pipeline = "running"
-    return h
+    return _make_health(res, startup_err)
 
 
-@router.post("/pipeline/run")
-def trigger_pipeline(request: Request, body: PipelineRunRequest | None = None) -> JSONResponse:
+@router.post("/pipeline/run", response_model=Health)
+def trigger_pipeline(request: Request, body: PipelineRunRequest | None = None) -> Health:
     use_sample = body.use_sample if body is not None else None
-    input_mode = body.input_mode if body is not None else None
-    started, st = runner.start(request.app, use_sample, input_mode)
-    if not started:
-        raise HTTPException(status_code=409, detail="A pipeline run is already in progress")
-    return JSONResponse(status_code=202, content=clean_json(st))
+    try:
+        res = run_pipeline(use_sample=use_sample)
+        request.app.state.result = res
+        request.app.state.startup_error = res.detail if res.status == "failed" else ""
+    except Exception as exc:
+        log.exception("Re-running pipeline failed")
+        request.app.state.startup_error = str(exc)
+        return _make_health(None, str(exc))
 
-
-@router.get("/pipeline/status")
-def get_pipeline_status() -> dict[str, Any]:
-    return clean_json(runner.status())
+    return _make_health(res)
 
 
 @router.get("/summary")

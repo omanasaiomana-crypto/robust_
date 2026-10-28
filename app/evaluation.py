@@ -6,8 +6,6 @@ from app.models import Alert, Metrics, Signal
 
 log = logging.getLogger(__name__)
 
-BASELINE_SOURCE: str = "fallback"
-
 
 def compute_metrics(
     events_df: pd.DataFrame,
@@ -20,24 +18,10 @@ def compute_metrics(
     total_events = len(events_df) if events_df is not None else 0
     total_alerts = len(alerts) if alerts is not None else 0
 
-    # Latency: load from OUTPUT_DIR/latency.json if present, else fallback to batch average
+    # Latency: ms per event
     median_latency_ms = None
-    try:
-        from app.config import OUTPUT_DIR
-        lat_file = OUTPUT_DIR / "latency.json"
-        if lat_file.exists():
-            import json
-            with open(lat_file, "rt", encoding="utf-8") as f:
-                lat_data = json.load(f)
-                if isinstance(lat_data, dict) and "p50" in lat_data:
-                    median_latency_ms = round(float(lat_data["p50"]), 4)
-                    log.info("median_latency_ms set to %s ms from %s", median_latency_ms, lat_file)
-    except Exception as exc:
-        log.debug("Could not read latency.json: %s", exc)
-
-    if median_latency_ms is None and total_events > 0 and elapsed_detection_sec > 0:
+    if total_events > 0 and elapsed_detection_sec > 0:
         median_latency_ms = round((elapsed_detection_sec / total_events) * 1000.0, 4)
-        log.info("median_latency_ms set to %s ms (estimate from batch mean)", median_latency_ms)
 
     # Check if ground truth labels exist
     has_labels = (
@@ -113,13 +97,6 @@ def compute_metrics(
                             found_official = True
                 except Exception as exc:
                     log.warning("Failed to load baseline file %s: %s", p, exc)
-
-    global BASELINE_SOURCE
-    if found_official:
-        BASELINE_SOURCE = "official"
-    else:
-        BASELINE_SOURCE = "fallback"
-    log.info("Evaluation using baseline source: %s", BASELINE_SOURCE)
 
     if not found_official:
         # Simple detector flags failed logins and any event from an IP seen with >= 3 failures

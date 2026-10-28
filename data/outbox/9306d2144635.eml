@@ -1,0 +1,84 @@
+Subject: [IdentityShield] CRITICAL: 3 identities need attention - svc-report
+ (risk 100)
+From: identityshield@localhost
+To: admin@localhost
+Date: Wed, 28 Oct 2026 19:01:21 -0000
+Message-ID: <179321408151.20684.16782661925112131018@identityshield.local>
+MIME-Version: 1.0
+Content-Type: multipart/alternative;
+ boundary="===============6647643029836264357=="
+
+--===============6647643029836264357==
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: quoted-printable
+
+IdentityShield detected suspicious identity activity.
+
+New high-risk alerts: 3  (critical: 2)
+Open alerts in console: 16
+
+- svc-report | risk 100 (revoke) | Behavior anomaly, Privilege escalation, Un=
+usual API
+  Why: Privilege escalation chain detected for svc-report: CredCreate (Create=
+AccessKey) -> PermGrant (AttachUserPolicy) -> RoleAssume (AssumeRole) -> Impa=
+ct (GetSecretValue) across 4 steps in 11 minutes.
+  Recommended: Revoke session (needs analyst approval)
+  Open: http://127.0.0.1:8000/alert.html?id=3DAL-0001
+
+- meera.n | risk 95 (revoke) | Behavior anomaly, Unusual API, Token abuse
+  Why: Session behavior is unusual compared with normal activity (anomaly sco=
+re 0.93).
+  Recommended: Revoke session (needs analyst approval)
+  Open: http://127.0.0.1:8000/alert.html?id=3DAL-0002
+
+- dev.kumar | risk 82 (restrict) | Behavior anomaly, Unusual API
+  Why: Unusual API activity by dev.kumar: sensitive action StopLogging, unsee=
+n region eu-west-3, rare action (identity rarity: 99.1%).
+  Recommended: Restrict access
+  Open: http://127.0.0.1:8000/alert.html?id=3DAL-0003
+
+No session was revoked automatically. Revocation always requires analyst appr=
+oval.
+This is an automated message from IdentityShield.
+
+--===============6647643029836264357==
+Content-Type: text/html; charset="utf-8"
+Content-Transfer-Encoding: quoted-printable
+MIME-Version: 1.0
+
+<div style=3D'font-family:Arial,sans-serif;color:#111827'><h2 style=3D'margin=
+:0 0 8px'>CRITICAL: suspicious identity activity</h2><p>3 new high-risk alert=
+(s), 2 critical.</p><table style=3D'border-collapse:collapse;font-size:14px'>=
+<tr><th align=3D'left'>Identity</th><th>Risk</th><th align=3D'left'>Band</th>=
+<th align=3D'left'>Patterns</th><th align=3D'left'>Recommended</th><th></th><=
+/tr><tr><td style=3D'padding:6px 10px;border-bottom:1px solid #e5e7eb'>svc-re=
+port</td><td style=3D'padding:6px 10px;border-bottom:1px solid #e5e7eb;text-a=
+lign:right'><b>100</b></td><td style=3D'padding:6px 10px;border-bottom:1px so=
+lid #e5e7eb'>revoke</td><td style=3D'padding:6px 10px;border-bottom:1px solid=
+ #e5e7eb'>Behavior anomaly, Privilege escalation, Unusual API</td><td style=
+=3D'padding:6px 10px;border-bottom:1px solid #e5e7eb'>Revoke session (needs a=
+nalyst approval)</td><td style=3D'padding:6px 10px;border-bottom:1px solid #e=
+5e7eb'><a href=3D'http://127.0.0.1:8000/alert.html?id=3DAL-0001'>Open</a></td=
+></tr><tr><td style=3D'padding:6px 10px;border-bottom:1px solid #e5e7eb'>meer=
+a.n</td><td style=3D'padding:6px 10px;border-bottom:1px solid #e5e7eb;text-al=
+ign:right'><b>95</b></td><td style=3D'padding:6px 10px;border-bottom:1px soli=
+d #e5e7eb'>revoke</td><td style=3D'padding:6px 10px;border-bottom:1px solid #=
+e5e7eb'>Behavior anomaly, Unusual API, Token abuse</td><td style=3D'padding:6=
+px 10px;border-bottom:1px solid #e5e7eb'>Revoke session (needs analyst approv=
+al)</td><td style=3D'padding:6px 10px;border-bottom:1px solid #e5e7eb'><a hre=
+f=3D'http://127.0.0.1:8000/alert.html?id=3DAL-0002'>Open</a></td></tr><tr><td=
+ style=3D'padding:6px 10px;border-bottom:1px solid #e5e7eb'>dev.kumar</td><td=
+ style=3D'padding:6px 10px;border-bottom:1px solid #e5e7eb;text-align:right'>=
+<b>82</b></td><td style=3D'padding:6px 10px;border-bottom:1px solid #e5e7eb'>=
+restrict</td><td style=3D'padding:6px 10px;border-bottom:1px solid #e5e7eb'>B=
+ehavior anomaly, Unusual API</td><td style=3D'padding:6px 10px;border-bottom:=
+1px solid #e5e7eb'>Restrict access</td><td style=3D'padding:6px 10px;border-b=
+ottom:1px solid #e5e7eb'><a href=3D'http://127.0.0.1:8000/alert.html?id=3DAL-=
+0003'>Open</a></td></tr></table><p><b>Top reason:</b> Privilege escalation ch=
+ain detected for svc-report: CredCreate (CreateAccessKey) -&gt; PermGrant (At=
+tachUserPolicy) -&gt; RoleAssume (AssumeRole) -&gt; Impact (GetSecretValue) a=
+cross 4 steps in 11 minutes.</p><p style=3D'color:#6b7280;font-size:12px'>No =
+session was revoked automatically. Revocation always requires analyst approva=
+l.</p></div>
+
+--===============6647643029836264357==--

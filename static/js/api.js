@@ -55,15 +55,6 @@ function mockPathFor(path) {
   if (clean === '/audit/verify') return '/mock/audit_verify.json';
   if (clean === '/audit') return '/mock/audit.json';
   if (clean === '/weights') return '/mock/weights.json';
-  if (clean === '/analytics/detectors') return '/mock/analytics_detectors.json';
-  if (clean === '/analytics/heatmap/time') return '/mock/analytics_heatmap_time.json';
-  if (clean === '/analytics/heatmap/identities') return '/mock/analytics_heatmap_identities.json';
-  if (clean === '/notifications/status') return '/mock/notifications_status.json';
-  if (clean === '/notifications') return '/mock/notifications.json';
-  if (clean === '/pipeline/status') return '/mock/pipeline_status.json';
-  if (clean === '/agents') return '/mock/agents.json';
-  if (clean === '/scan/status') return '/mock/scan_status.json';
-  if (clean === '/scan/trace') return '/mock/scan_trace.json';
   return `/mock${clean}.json`;
 }
 

@@ -19,18 +19,6 @@ export function renderLayout(active, title, subtitle) {
       icon: `<svg class="w-5 h-5 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"/></svg>`,
     },
     {
-      id: 'scan',
-      label: 'Live scan',
-      href: `/scan.html${querySuffix}`,
-      icon: `<svg class="w-5 h-5 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor"><circle cx="12" cy="12" r="9" stroke-width="2"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3a9 9 0 019 9m-9-6a6 6 0 016 6m-6-3a3 3 0 013 3"/></svg>`,
-    },
-    {
-      id: 'agents',
-      label: 'Agents',
-      href: `/agents.html${querySuffix}`,
-      icon: `<svg class="w-5 h-5 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 3v2m6-2v2M9 19v2m6-2v2M3 9h2m-2 6h2m14-6h2m-2 6h2M7 19h10a2 2 0 002-2V7a2 2 0 00-2-2H7a2 2 0 00-2 2v10a2 2 0 002 2zM9 9h6v6H9V9z"/></svg>`,
-    },
-    {
       id: 'alerts',
       label: 'Alerts',
       href: `/alerts.html${querySuffix}`,
@@ -55,12 +43,6 @@ export function renderLayout(active, title, subtitle) {
       icon: `<svg class="w-5 h-5 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>`,
     },
     {
-      id: 'analytics',
-      label: 'Analytics',
-      href: `/analytics.html${querySuffix}`,
-      icon: `<svg class="w-5 h-5 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"/></svg>`,
-    },
-    {
       id: 'hygiene',
       label: 'Hygiene',
       href: `/hygiene.html${querySuffix}`,
@@ -71,12 +53,6 @@ export function renderLayout(active, title, subtitle) {
       label: 'Audit Log',
       href: `/audit.html${querySuffix}`,
       icon: `<svg class="w-5 h-5 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-3 7h3m-3 4h3m-6-4h.01M9 16h.01"/></svg>`,
-    },
-    {
-      id: 'notifications',
-      label: 'Notifications',
-      href: `/notifications.html${querySuffix}`,
-      icon: `<svg class="w-5 h-5 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/></svg>`,
     },
   ];
 
@@ -189,73 +165,21 @@ export function renderLayout(active, title, subtitle) {
   if (menuBtn) menuBtn.onclick = toggleSidebar;
   if (backdrop) backdrop.onclick = toggleSidebar;
 
-  // Setup Re-run button and background status polling
+  // Setup Re-run button
   const rerunBtn = document.getElementById('btn-rerun');
-  const statusPill = document.getElementById('status-pill');
-  let pollInterval = null;
-
-  function setRunningState() {
-    if (rerunBtn) {
-      rerunBtn.disabled = true;
-      rerunBtn.classList.add('opacity-50', 'cursor-not-allowed');
-    }
-    if (statusPill) {
-      statusPill.innerHTML = `<span class="inline-block animate-spin mr-1">⏳</span><span class="text-brand2 font-medium">Running…</span>`;
-      statusPill.className = 'inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs border border-brand2/30 bg-brand2/10';
-    }
-  }
-
-  function startPolling() {
-    if (pollInterval) return;
-    setRunningState();
-    const pollStart = Date.now();
-    pollInterval = setInterval(async () => {
-      if (Date.now() - pollStart > 120000) {
-        clearInterval(pollInterval);
-        pollInterval = null;
-        toast('Pipeline run timed out after 120 seconds', 'error');
-        if (rerunBtn) {
-          rerunBtn.disabled = false;
-          rerunBtn.classList.remove('opacity-50', 'cursor-not-allowed');
-        }
-        return;
-      }
-      try {
-        const st = await api('/pipeline/status');
-        if (st.state === 'done') {
-          clearInterval(pollInterval);
-          pollInterval = null;
-          const durSec = st.duration_ms ? (st.duration_ms / 1000).toFixed(1) : '0.0';
-          toast(`Pipeline finished · ${st.alerts ?? 0} alerts · ${durSec}s`, 'success');
-          setTimeout(() => window.location.reload(), 1000);
-        } else if (st.state === 'failed') {
-          clearInterval(pollInterval);
-          pollInterval = null;
-          toast(`Pipeline run failed: ${st.detail || 'unknown error'}`, 'error');
-          setTimeout(() => window.location.reload(), 1500);
-        }
-      } catch {
-        // transient error during poll
-      }
-    }, 1000);
-  }
-
   if (rerunBtn) {
     rerunBtn.onclick = async () => {
-      if (isMock) {
-        toast('Pipeline execution completed (mock mode)', 'success');
-        return;
-      }
+      rerunBtn.disabled = true;
+      rerunBtn.classList.add('opacity-50');
       try {
+        toast('Re-running pipeline...', 'success');
         await api('/pipeline/run', { method: 'POST', body: {} });
-        startPolling();
+        toast('Pipeline execution completed! Refreshing...', 'success');
+        setTimeout(() => window.location.reload(), 800);
       } catch (err) {
-        if (err.status === 409 || (err.message && err.message.includes('already in progress'))) {
-          toast('A run is already in progress', 'info');
-          startPolling();
-        } else {
-          toast(`Pipeline run failed: ${err.message}`, 'error');
-        }
+        toast(`Pipeline run failed: ${err.message}`, 'error');
+        rerunBtn.disabled = false;
+        rerunBtn.classList.remove('opacity-50');
       }
     };
   }
@@ -263,12 +187,11 @@ export function renderLayout(active, title, subtitle) {
   // Fetch health to populate status pills
   api('/health')
     .then((health) => {
+      const statusPill = document.getElementById('status-pill');
       const modePill = document.getElementById('mode-pill');
 
       if (statusPill) {
-        if (health.pipeline === 'running') {
-          startPolling();
-        } else if (health.pipeline === 'ok' && health.status === 'ok') {
+        if (health.pipeline === 'ok' && health.status === 'ok') {
           statusPill.innerHTML = `<span class="w-2 h-2 rounded-full bg-ok"></span><span class="text-ok font-medium">Pipeline OK</span>`;
           statusPill.className = 'inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs border border-ok/30 bg-ok/10';
         } else if (health.status === 'degraded') {
@@ -287,6 +210,7 @@ export function renderLayout(active, title, subtitle) {
       }
     })
     .catch(() => {
+      const statusPill = document.getElementById('status-pill');
       if (statusPill) {
         statusPill.innerHTML = `<span class="w-2 h-2 rounded-full bg-crit"></span><span class="text-crit font-medium">Offline</span>`;
       }

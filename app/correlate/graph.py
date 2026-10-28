@@ -3,13 +3,6 @@ import logging
 import networkx as nx
 import pandas as pd
 
-from app.config import (
-    BLAST_RADIUS_MIN_SENSITIVITY,
-    GRAPH_ESCALATION_CUTOFF,
-    GRAPH_MAX_ESCALATION_PATHS,
-    GRAPH_MAX_SUBGRAPH_NODES,
-    GRAPH_NEIGHBORHOOD_CUTOFF,
-)
 from app.models import GraphEdge, GraphNode, IdentityGraph
 
 log = logging.getLogger(__name__)
@@ -114,9 +107,9 @@ def escalation_paths(g: nx.MultiDiGraph, identity_id: str) -> list[list[str]]:
     for t in targets:
         if nx.has_path(g, start_node, t):
             try:
-                for p in nx.all_simple_paths(g, start_node, t, cutoff=GRAPH_ESCALATION_CUTOFF):
+                for p in nx.all_simple_paths(g, start_node, t, cutoff=6):
                     paths.append(p)
-                    if len(paths) >= GRAPH_MAX_ESCALATION_PATHS:  # Cap for responsiveness
+                    if len(paths) >= 20:  # Cap at 20 paths for responsiveness
                         return paths
             except Exception as exc:
                 log.debug("Path search error for %s -> %s: %s", start_node, t, exc)
@@ -125,7 +118,7 @@ def escalation_paths(g: nx.MultiDiGraph, identity_id: str) -> list[list[str]]:
 
 
 def blast_radius(g: nx.MultiDiGraph, identity_id: str) -> int:
-    """Count reachable resource nodes with sensitivity >= BLAST_RADIUS_MIN_SENSITIVITY."""
+    """Count reachable resource nodes with sensitivity >= 4."""
     start_node = f"user:{identity_id}"
     if not g.has_node(start_node):
         return 0
@@ -134,7 +127,7 @@ def blast_radius(g: nx.MultiDiGraph, identity_id: str) -> int:
         reachable = nx.descendants(g, start_node)
         count = 0
         for n in reachable:
-            if g.nodes[n].get("kind") == "resource" and g.nodes[n].get("sensitivity", 1) >= BLAST_RADIUS_MIN_SENSITIVITY:
+            if g.nodes[n].get("kind") == "resource" and g.nodes[n].get("sensitivity", 1) >= 4:
                 count += 1
         return count
     except Exception as exc:
@@ -143,20 +136,20 @@ def blast_radius(g: nx.MultiDiGraph, identity_id: str) -> int:
 
 
 def identity_subgraph(g: nx.MultiDiGraph, identity_id: str, suspicious_ids: set[str] | None = None) -> IdentityGraph:
-    """Return subgraph centered on identity with at most GRAPH_MAX_SUBGRAPH_NODES nodes."""
+    """Return subgraph centered on identity with at most 150 nodes."""
     sus_ids = suspicious_ids or set()
     start_node = f"user:{identity_id}"
 
     if not g.has_node(start_node):
         return IdentityGraph(identity_id=identity_id, nodes=[], edges=[], escalation_paths=[])
 
-    # Neighborhood discovery up to radius cutoff
+    # Neighborhood discovery up to radius 3
     try:
         undirected = g.to_undirected()
-        lengths = nx.single_source_shortest_path_length(undirected, start_node, cutoff=GRAPH_NEIGHBORHOOD_CUTOFF)
+        lengths = nx.single_source_shortest_path_length(undirected, start_node, cutoff=3)
         # Sort by distance, keeping start_node first
         sorted_nodes = sorted(lengths.keys(), key=lambda n: lengths[n])
-        selected_nodes = sorted_nodes[:GRAPH_MAX_SUBGRAPH_NODES]
+        selected_nodes = sorted_nodes[:150]
         sub = g.subgraph(selected_nodes)
     except Exception as exc:
         log.warning("Subgraph extraction fallback for %s: %s", identity_id, exc)

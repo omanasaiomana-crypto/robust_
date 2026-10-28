@@ -165,33 +165,3 @@ While the platform is completely functional for demonstration, evaluation, and h
 ## Conclusion
 
 IdentityShield successfully demonstrates an end-to-end, explainable, and safe approach to Intelligent Identity Protection. The core data models, multi-agent correlation, behavioral ML, and interactive investigation interfaces function cohesively with rigorous automated testing. Implementing background task queuing, local script vendoring, and live cloud SDK wrappers in `supplied.py` will complete its transition from an award-ready hackathon platform to an enterprise-grade production SOC service.
-
----
-
-## 5. Corrections (v2 review)
-
-Following the formal kit_v2 audit verification (Phase 20), the following factual corrections are documented against the initial v1 audit report:
-
-1. **Impossible Travel Speed Threshold:**
-   - *Previous statement:* Stated threshold was 800 km/h.
-   * *Correction:* The detector strictly uses `config.IMPOSSIBLE_TRAVEL_KMH = 900.0` (900 km/h), with a maximum speed scale factor of `IMPOSSIBLE_TRAVEL_MAX_SPEED_KMH = 3000.0`.
-
-2. **Okta↔AWS Session Correlation Window:**
-   - *Previous statement:* Stated correlation used a 15-minute sliding window.
-   - *Correction:* The actual correlation links Okta sessions to AWS CloudTrail actions matching the same `identity_id` and `src_ip` within **12 hours** (`SESSION_LINK_WINDOW_HOURS = 12`). Unlinked CloudTrail events cluster with an inactivity gap of **1 hour** (`CLOUDTRAIL_SESSION_GAP_HOURS = 1`).
-
-3. **API Endpoint Count:**
-   - *Previous statement:* Listed 13 endpoints.
-   - *Correction:* There are **16** active endpoints under `/api` in `app/main.py` (`/api/health`, `/api/pipeline/run`, `/api/summary`, `/api/alerts`, `/api/alerts/{id}`, `/api/alerts/{id}/events`, `/api/alerts/{id}/action`, `/api/alerts/{id}/feedback`, `/api/identities`, `/api/identities/{id}/graph`, `/api/sessions/{id}/timeline`, `/api/hygiene`, `/api/metrics`, `/api/weights`, `/api/audit`, `/api/audit/verify`).
-
-4. **Anomaly Score Interpretation:**
-   - *Previous statement:* Referred to "calibrated" 0–1 anomaly scores.
-   - *Correction:* Isolation Forest decision scores are **min-max normalized** into a $[0, 1]$ relative anomaly score, not calibrated Bayesian probabilities.
-
-5. **Calibrator Usage:**
-   - *Previous statement:* Mentioned logistic calibrator calibrating raw detector outputs.
-   - *Correction:* `app/ml/calibrate.py` is an independent prototype and is **not wired** into `app/decision/scoring.py` or `app/pipeline.py`. Risk scores are computed deterministically via the multi-factor scoring formula (`base * context * combo * chain`), preventing overfitting to synthetic training labels.
-
-6. **Latency Measurement Method:**
-   - *Previous statement:* Reported as `median_latency_ms`.
-   - *Correction:* Currently computed as `(elapsed_detection_sec / total_events) * 1000.0`, representing the **batch average latency per event**, rather than a true streaming median latency. Phase 21 introduces explicit event replay under load to measure empirical p50/p95/max streaming latencies.

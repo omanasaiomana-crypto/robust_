@@ -4,11 +4,6 @@ from typing import Any
 import pandas as pd
 
 from app.agents.base import Agent
-from app.config import (
-    TOKEN_CONCURRENT_WINDOW_MINUTES,
-    TOKEN_CRITICAL_SEVERITY,
-    TOKEN_MODERATE_SEVERITY,
-)
 from app.models import Signal
 
 
@@ -39,7 +34,7 @@ class TokenAbuseAgent(Agent):
             & (sorted_events["token_id"] != "")
             & (sorted_events["token_id"] != "None")
         ]
-        five_mins = timedelta(minutes=TOKEN_CONCURRENT_WINDOW_MINUTES)
+        five_mins = timedelta(minutes=5)
 
         for tid, group in token_events.groupby("token_id", sort=False):
             prev_row = None
@@ -63,7 +58,7 @@ class TokenAbuseAgent(Agent):
                             signals.append(
                                 Signal(
                                     pattern=self.pattern,
-                                    severity=TOKEN_CRITICAL_SEVERITY,
+                                    severity=0.9,
                                     identity_id=uid,
                                     session_id=sess,
                                     agent=self.name,
@@ -93,7 +88,7 @@ class TokenAbuseAgent(Agent):
                     signals.append(
                         Signal(
                             pattern=self.pattern,
-                            severity=TOKEN_CRITICAL_SEVERITY,
+                            severity=0.9,
                             identity_id=uid,
                             session_id=sess,
                             agent=self.name,
@@ -129,7 +124,7 @@ class TokenAbuseAgent(Agent):
                         signals.append(
                             Signal(
                                 pattern=self.pattern,
-                                severity=TOKEN_MODERATE_SEVERITY,
+                                severity=0.6,
                                 identity_id=uid,
                                 session_id=sess,
                                 agent=self.name,
@@ -167,7 +162,7 @@ class TokenAbuseAgent(Agent):
                     signals.append(
                         Signal(
                             pattern=self.pattern,
-                            severity=TOKEN_MODERATE_SEVERITY,
+                            severity=0.6,
                             identity_id=uid,
                             session_id=sess,
                             agent=self.name,

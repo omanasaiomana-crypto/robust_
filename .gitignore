@@ -4,6 +4,3 @@ __pycache__/
 data/identityshield.db
 data/sample/
 scratch_*.py
-.env
-data/outbox/
-data/output/

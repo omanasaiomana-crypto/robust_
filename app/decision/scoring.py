@@ -3,7 +3,6 @@ import pandas as pd
 
 from app.config import (
     COMBO_BONUS_PER_PATTERN,
-    CONFIDENCE_EVENTS_SATURATION,
     PRIVILEGE_MULTIPLIER,
     RISK_HALF_LIFE_HOURS,
     SENSITIVITY_MULTIPLIER,
@@ -64,7 +63,7 @@ def score_session(
     # Confidence calculation
     n_events = len(session_events) if session_events is not None else 0
     n_signals = max(1, len(signals) + (1 if ml_score > 0 and "ML" not in {s.pattern for s in signals} else 0))
-    conf = min(1.0, n_events / CONFIDENCE_EVENTS_SATURATION) * (len(distinct_patterns) / n_signals)
+    conf = min(1.0, n_events / 10.0) * (len(distinct_patterns) / n_signals)
     confidence = round(min(1.0, max(0.0, conf)), 3)
 
     return risk, confidence

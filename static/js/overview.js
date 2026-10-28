@@ -11,36 +11,8 @@ const querySuffix = isMock ? '?mock=1' : '';
 
 const content = renderLayout('overview', 'Threat Overview', 'Real-time multi-agent identity posture');
 
-const scanUrl = isMock ? '/scan.html?mock=1&autostart=replay' : '/scan.html?autostart=1';
-
-const rerunBtn = document.getElementById('btn-rerun');
-if (rerunBtn && rerunBtn.parentElement) {
-  const scanBtn = document.createElement('a');
-  scanBtn.href = scanUrl;
-  scanBtn.id = 'btn-run-live-scan';
-  scanBtn.className = 'inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold bg-brand hover:bg-blue-600 text-white shadow-sm transition-colors';
-  scanBtn.innerHTML = `<svg class="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><circle cx="12" cy="12" r="9" stroke-width="2"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3a9 9 0 019 9m-9-6a6 6 0 016 6m-6-3a3 3 0 013 3"/></svg><span>Run live scan</span>`;
-  rerunBtn.parentElement.insertBefore(scanBtn, rerunBtn);
-}
-
 if (content) {
   content.innerHTML = `
-    <!-- Header Area Callout with Run live scan button -->
-    <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 bg-panel border border-line rounded-xl p-4 shadow-sm">
-      <div class="flex items-center gap-3">
-        <div class="w-9 h-9 rounded-lg bg-brand/10 border border-brand/20 flex items-center justify-center text-brand flex-shrink-0">
-          <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><circle cx="12" cy="12" r="9" stroke-width="2"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3a9 9 0 019 9m-9-6a6 6 0 016 6m-6-3a3 3 0 013 3"/></svg>
-        </div>
-        <div>
-          <h2 class="text-sm font-semibold text-ink">Autonomous Agent Live Scan</h2>
-          <p class="text-xs text-muted">Watch all 15 agents inspect identity telemetry, flag anomalies, and commit threats to the audit log.</p>
-        </div>
-      </div>
-      <a href="${scanUrl}" class="inline-flex items-center justify-center gap-1.5 px-4 py-2 rounded-lg text-xs font-semibold bg-brand hover:bg-blue-600 text-white shadow-sm transition-colors flex-shrink-0">
-        Run live scan →
-      </a>
-    </div>
-
     <!-- Demo Scenario Callout (Visible only for sample data) -->
     <div id="demo-scenario-container"></div>
 
@@ -51,9 +23,6 @@ if (content) {
       ${skeleton(2)}
       ${skeleton(2)}
     </div>
-
-    <!-- Rules vs ML Compact Card -->
-    <div id="analytics-callout-container"></div>
 
     <!-- Charts Row -->
     <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
@@ -102,12 +71,11 @@ if (content) {
 }
 
 async function loadOverviewData() {
-  const [summaryRes, metricsRes, alertsRes, healthRes, analyticsRes] = await Promise.allSettled([
+  const [summaryRes, metricsRes, alertsRes, healthRes] = await Promise.allSettled([
     api('/summary'),
     api('/metrics'),
     api('/alerts?min_risk=70&limit=5'),
     api('/health'),
-    api('/analytics/detectors'),
   ]);
 
   const demoContainer = document.getElementById('demo-scenario-container');
@@ -198,49 +166,6 @@ async function loadOverviewData() {
       ${statCard('Identities at Risk', fmtNum(atRiskCount), `out of ${fmtNum(totals.identities || topIds.length)} identities`)}
       ${statCard('Detection F1 Score', f1Value, f1Note)}
     `;
-
-    // Rules vs ML compact card
-    const analyticsContainer = document.getElementById('analytics-callout-container');
-    if (analyticsContainer) {
-      if (analyticsRes.status === 'fulfilled' && analyticsRes.value && analyticsRes.value.labeled) {
-        const aData = analyticsRes.value;
-        const winnerText = aData.winner?.text || 'Detection comparison available';
-        const summaryRows = (aData.rows || []).filter((r) => r.kind === 'summary');
-        const f1Items = summaryRows
-          .map((r) => {
-            const val = r.f1 !== null && r.f1 !== undefined ? Number(r.f1).toFixed(2) : '—';
-            return `<div class="flex items-center gap-1.5"><span class="text-muted font-medium">${esc(
-              r.label.split(' ')[0]
-            )}:</span><span class="font-semibold tabular-nums text-ink">${esc(val)}</span></div>`;
-          })
-          .join('');
-
-        analyticsContainer.innerHTML = `
-          <div class="bg-panel border border-brand2/30 rounded-xl p-4 shadow-sm flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
-            <div class="flex items-center gap-3">
-              <div class="w-8 h-8 rounded-lg bg-brand2/15 border border-brand2/30 flex items-center justify-center text-brand2 font-bold text-sm flex-shrink-0">
-                📊
-              </div>
-              <div>
-                <div class="text-xs uppercase tracking-wide text-muted font-semibold">Rules vs ML</div>
-                <div class="text-sm font-medium text-ink mt-0.5">${esc(winnerText)}</div>
-              </div>
-            </div>
-            <div class="flex items-center gap-6 flex-wrap">
-              <div class="flex items-center gap-4 text-xs font-mono bg-panel2 px-3 py-1.5 rounded-lg border border-line">
-                ${f1Items}
-              </div>
-              <a href="/analytics.html${querySuffix}" class="text-xs font-medium text-brand2 hover:text-cyan-300 transition-colors inline-flex items-center gap-1">
-                <span>Open analytics</span>
-                <span>→</span>
-              </a>
-            </div>
-          </div>
-        `;
-      } else {
-        analyticsContainer.innerHTML = '';
-      }
-    }
 
     // 2. Attack Patterns Bar Chart
     const byPattern = sum.by_pattern || {};
