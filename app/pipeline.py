@@ -16,6 +16,7 @@ from app.agents.impossible_travel import ImpossibleTravelAgent
 from app.agents.priv_escalation import PrivEscalationAgent, STATE_OF_ACTION
 from app.agents.token_abuse import TokenAbuseAgent
 from app.config import (
+    INPUT_DIR,
     LABELS_DIR,
     METADATA_DIR,
     RAW_CLOUDTRAIL,
@@ -54,45 +55,53 @@ class PipelineResult:
     timings_ms: dict[str, float] = field(default_factory=dict)
 
 
-def run_pipeline(use_sample: bool | None = None) -> PipelineResult:
+def run_pipeline(use_sample: bool | None = None, input_mode: str | None = None) -> PipelineResult:
     """Run end-to-end detection pipeline following context.md Section 7."""
     t_start = time.perf_counter()
     step_errors: list[str] = []
     timings_ms: dict[str, float] = {}
 
     # 1. Data selection
-    if use_sample is True:
-        data_mode = "sample"
-    elif use_sample is False:
-        data_mode = "official"
+    if input_mode == "only":
+        data_mode = "input"
+        ct_folder = INPUT_DIR / "cloudtrail"
+        okta_folder = INPUT_DIR / "okta"
     else:
-        # None: inspect if data/raw has input files
-        has_raw = False
-        if RAW_CLOUDTRAIL.exists() and any(p.is_file() for p in RAW_CLOUDTRAIL.iterdir() if not p.name.startswith(".")):
-            has_raw = True
-        elif RAW_OKTA.exists() and any(p.is_file() for p in RAW_OKTA.iterdir() if not p.name.startswith(".")):
-            has_raw = True
-
-        if has_raw:
-            data_mode = "official"
-        elif USE_SAMPLE_IF_NO_DATA:
+        if use_sample is True:
             data_mode = "sample"
-        else:
+        elif use_sample is False:
             data_mode = "official"
+        else:
+            # None: inspect if data/raw has input files
+            has_raw = False
+            if RAW_CLOUDTRAIL.exists() and any(p.is_file() for p in RAW_CLOUDTRAIL.iterdir() if not p.name.startswith(".")):
+                has_raw = True
+            elif RAW_OKTA.exists() and any(p.is_file() for p in RAW_OKTA.iterdir() if not p.name.startswith(".")):
+                has_raw = True
 
-    if data_mode == "sample":
-        ct_folder = SAMPLE_DIR
-        okta_folder = SAMPLE_DIR
-        if not (SAMPLE_DIR / "cloudtrail.json").exists() or not (SAMPLE_DIR / "okta.json").exists():
-            log.info("Sample data missing; generating sample dataset in %s", SAMPLE_DIR)
-            try:
-                sample_data.generate(SAMPLE_DIR)
-            except Exception as exc:
-                log.exception("Sample data generation failed")
-                step_errors.append(f"sample_generation: {exc}")
-    else:
-        ct_folder = RAW_CLOUDTRAIL
-        okta_folder = RAW_OKTA
+            if has_raw:
+                data_mode = "official"
+            elif USE_SAMPLE_IF_NO_DATA:
+                data_mode = "sample"
+            else:
+                data_mode = "official"
+
+        if data_mode == "sample":
+            ct_folder = SAMPLE_DIR
+            okta_folder = SAMPLE_DIR
+            if not (SAMPLE_DIR / "cloudtrail.json").exists() or not (SAMPLE_DIR / "okta.json").exists():
+                log.info("Sample data missing; generating sample dataset in %s", SAMPLE_DIR)
+                try:
+                    sample_data.generate(SAMPLE_DIR)
+                except Exception as exc:
+                    log.exception("Sample data generation failed")
+                    step_errors.append(f"sample_generation: {exc}")
+        else:
+            ct_folder = RAW_CLOUDTRAIL
+            okta_folder = RAW_OKTA
+
+        if input_mode == "merge":
+            data_mode = f"{data_mode}+input"
 
     # Step 1: Start audit entry
     try:
@@ -114,6 +123,28 @@ def run_pipeline(use_sample: bool | None = None) -> PipelineResult:
             raw_ct, sk_ct = load_cloudtrail(ct_folder)
             raw_okta, sk_okta = load_okta(okta_folder)
             skipped += (sk_ct + sk_okta)
+
+            if input_mode == "merge":
+                in_ct, in_sk_ct = load_cloudtrail(INPUT_DIR / "cloudtrail")
+                in_okta, in_sk_okta = load_okta(INPUT_DIR / "okta")
+                raw_ct.extend(in_ct)
+                raw_okta.extend(in_okta)
+                skipped += (in_sk_ct + in_sk_okta)
+
+            if input_mode == "only" and not raw_ct and not raw_okta:
+                return PipelineResult(
+                    events=pd.DataFrame(),
+                    graph=nx.MultiDiGraph(),
+                    alerts=[],
+                    metrics=Metrics(skipped_records=skipped),
+                    status="failed",
+                    detail="No input data. Add data on the Input page first.",
+                    data_mode=data_mode,
+                    signals=[],
+                    step_errors=step_errors,
+                    timings_ms=timings_ms,
+                )
+
             metadata = load_metadata(METADATA_DIR)
             labels = load_labels(LABELS_DIR)
             s.output(
