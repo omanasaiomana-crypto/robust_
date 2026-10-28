@@ -123,3 +123,40 @@ def test_pipeline_run_background_and_status():
         r_alerts = client.get("/api/alerts")
         assert r_alerts.status_code == 200
 
+
+def test_agents_endpoint_and_ids():
+    from app import trace
+    with TestClient(app) as client:
+        r = client.get("/api/agents")
+        assert r.status_code == 200
+        data = r.json()
+        assert "agents" in data and "run" in data
+        agents = data["agents"]
+        assert len(agents) == 15
+        expected_ids = [a["id"] for a in trace.AGENTS]
+        actual_ids = [a["id"] for a in agents]
+        assert actual_ids == expected_ids
+
+
+def test_scan_trace_endpoint():
+    with TestClient(app) as client:
+        r = client.get("/api/scan/trace?after=0")
+        assert r.status_code == 200
+        data = r.json()
+        for k in ("run_id", "state", "last_seq", "events"):
+            assert k in data
+        evs = data["events"]
+        if evs:
+            assert evs[0]["state"] == "started"
+            assert evs[0]["agent_id"] == "orchestrator"
+
+
+def test_audit_contains_threat_detected_entry():
+    with TestClient(app) as client:
+        r = client.get("/api/audit?limit=1000")
+        assert r.status_code == 200
+        entries = r.json()
+        threat_entries = [e for e in entries if e.get("action") == "threat_detected"]
+        assert len(threat_entries) >= 1
+
+

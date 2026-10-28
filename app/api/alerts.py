@@ -4,7 +4,7 @@ from typing import Any
 from fastapi import APIRouter, HTTPException, Request
 import pandas as pd
 
-from app import runner, store
+from app import runner, store, trace
 from app.decision import feedback, respond
 from app.decision.respond import recommend
 from app.decision.scoring import counterfactuals, score_session
@@ -94,18 +94,22 @@ def apply_alert_action(request: Request, alert_id: str, req: ActionRequest) -> A
 
     sim = get_simulator()
     approved_by = req.approved_by if "approved_by" in req.model_fields_set else None
-    try:
-        act_res = respond.apply_action(alert, req.action, approved_by=approved_by, sim=sim)
-    except (ValueError, PermissionError) as exc:
-        raise HTTPException(status_code=409, detail=str(exc))
+    with trace.step("response", f"Analyst action {req.action} on {alert_id}") as s:
+        try:
+            act_res = respond.apply_action(alert, req.action, approved_by=approved_by, sim=sim)
+        except (ValueError, PermissionError) as exc:
+            raise HTTPException(status_code=409, detail=str(exc))
 
-    if act_res.status == "refused":
-        raise HTTPException(status_code=409, detail=act_res.detail)
+        if act_res.status == "refused":
+            raise HTTPException(status_code=409, detail=act_res.detail)
 
-    alert.action_status = act_res.status
-    store.update_alert(alert)
-
-    return act_res
+        alert.action_status = act_res.status
+        store.update_alert(alert)
+        s.output(
+            {"alert_id": alert_id, "action": req.action, "status": act_res.status, "detail": act_res.detail},
+            f"Action {req.action} on {alert_id}: {act_res.status}",
+        )
+        return act_res
 
 
 @router.post("/alerts/{alert_id}/feedback", response_model=Alert)
@@ -117,40 +121,41 @@ def submit_feedback(request: Request, alert_id: str, req: FeedbackRequest) -> Al
     if alert is None:
         raise HTTPException(status_code=404, detail=f"Alert {alert_id} not found")
 
-    try:
-        new_weights = feedback.apply_feedback(alert, req.label)
-    except ValueError as exc:
-        raise HTTPException(status_code=422, detail=str(exc))
+    with trace.step("feedback", f"Analyst marked {alert_id} as {req.label}") as s:
+        try:
+            new_weights = feedback.apply_feedback(alert, req.label)
+        except ValueError as exc:
+            raise HTTPException(status_code=422, detail=str(exc))
 
-    # Rescore alert with updated weights
-    s_events = pd.DataFrame()
-    if res.events is not None and not res.events.empty and alert.session_id:
-        s_events = res.events[res.events["session_id"] == alert.session_id]
+        # Rescore alert with updated weights
+        s_events = pd.DataFrame()
+        if res.events is not None and not res.events.empty and alert.session_id:
+            s_events = res.events[res.events["session_id"] == alert.session_id]
 
-    sess_sigs = [s for s in res.signals if s.session_id == alert.session_id] if res.signals else []
-    ml_s = 0.0
-    for s in sess_sigs:
-        if s.pattern == "ML":
-            ml_s = float(s.severity)
+        sess_sigs = [sig for sig in res.signals if sig.session_id == alert.session_id] if res.signals else []
+        ml_s = 0.0
+        for sig in sess_sigs:
+            if sig.pattern == "ML":
+                ml_s = float(sig.severity)
 
-    new_risk, new_conf = score_session(
-        sess_sigs,
-        s_events,
-        weights=new_weights,
-        prediction=alert.prediction,
-        ml_score=ml_s,
-    )
-    alert.risk = new_risk
-    alert.band = to_band(new_risk)
-    alert.confidence = new_conf
-    alert.counterfactuals = counterfactuals(
-        sess_sigs,
-        s_events,
-        weights=new_weights,
-        prediction=alert.prediction,
-        ml_score=ml_s,
-    )
-    alert.recommended_action = recommend(new_risk)
-    store.update_alert(alert)
-
-    return alert
+        new_risk, new_conf = score_session(
+            sess_sigs,
+            s_events,
+            weights=new_weights,
+            prediction=alert.prediction,
+            ml_score=ml_s,
+        )
+        alert.risk = new_risk
+        alert.band = to_band(new_risk)
+        alert.confidence = new_conf
+        alert.counterfactuals = counterfactuals(
+            sess_sigs,
+            s_events,
+            weights=new_weights,
+            prediction=alert.prediction,
+            ml_score=ml_s,
+        )
+        alert.recommended_action = recommend(new_risk)
+        store.update_alert(alert)
+        s.output({"weights": new_weights}, f"Analyst marked {alert_id} as {req.label}")
+        return alert

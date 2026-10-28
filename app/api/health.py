@@ -1,6 +1,6 @@
 """Health, pipeline runner, and summary endpoints."""
 import logging
-from typing import Any
+from typing import Any, Literal
 from fastapi import APIRouter, HTTPException, Request
 from fastapi.responses import JSONResponse
 from pydantic import BaseModel
@@ -17,6 +17,7 @@ router = APIRouter(tags=["health"])
 
 class PipelineRunRequest(BaseModel):
     use_sample: bool | None = None
+    input_mode: Literal["only", "merge"] | None = None
 
 
 def _make_health(res: Any, startup_err: str = "") -> Health:
@@ -55,7 +56,8 @@ def get_health(request: Request) -> Health:
 @router.post("/pipeline/run")
 def trigger_pipeline(request: Request, body: PipelineRunRequest | None = None) -> JSONResponse:
     use_sample = body.use_sample if body is not None else None
-    started, st = runner.start(request.app, use_sample)
+    input_mode = body.input_mode if body is not None else None
+    started, st = runner.start(request.app, use_sample, input_mode)
     if not started:
         raise HTTPException(status_code=409, detail="A pipeline run is already in progress")
     return JSONResponse(status_code=202, content=clean_json(st))
