@@ -206,6 +206,18 @@ function renderHeader(container, alert) {
         >
           ${isDismissed ? 'Dismissed' : 'Dismiss'}
         </button>
+
+        <!-- Email admin Button -->
+        <button
+          id="btn-email-admin"
+          aria-label="Email the admin about this alert"
+          class="border border-line hover:bg-panel2 text-ink rounded-lg px-3.5 py-2 text-sm font-medium transition-colors inline-flex items-center gap-1.5"
+        >
+          <svg class="w-4 h-4 text-muted" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
+          </svg>
+          <span>Email admin</span>
+        </button>
       </div>
     </div>
   `;
@@ -271,6 +283,35 @@ function renderHeader(container, alert) {
       } catch (err) {
         toast(`Dismiss failed: ${err.message}`, 'error');
         dismissBtn.disabled = false;
+      }
+    };
+  }
+
+  const emailAdminBtn = document.getElementById('btn-email-admin');
+  if (emailAdminBtn) {
+    emailAdminBtn.onclick = async () => {
+      emailAdminBtn.disabled = true;
+      const origHtml = emailAdminBtn.innerHTML;
+      emailAdminBtn.innerHTML = `<span>Sending…</span>`;
+      try {
+        const res = await api(`/alerts/${encodeURIComponent(alert.alert_id)}/notify`, {
+          method: 'POST',
+        });
+        const st = (res?.status || '').toLowerCase();
+        if (st === 'sent') {
+          toast(`Email sent to ${res?.recipients || 'admin'}`, 'success');
+        } else if (st === 'outbox') {
+          toast('Email saved to outbox (demo mode)', 'success');
+        } else if (st === 'off') {
+          toast('Email is turned off', 'error');
+        } else {
+          toast(res?.detail || `Email ${st}`, 'error');
+        }
+      } catch (err) {
+        toast(`Failed to email admin: ${err.message}`, 'error');
+      } finally {
+        emailAdminBtn.disabled = false;
+        emailAdminBtn.innerHTML = origHtml;
       }
     };
   }
