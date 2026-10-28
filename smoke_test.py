@@ -14,6 +14,7 @@ def main() -> int:
             "metrics": c.get("/api/metrics"),
             "audit_verify": c.get("/api/audit/verify"),
             "index_page": c.get("/index.html"),
+            "analytics_page": c.get("/analytics.html"),
         }
         failed = [k for k, r in checks.items() if r.status_code >= 500]
         for k, r in checks.items():
