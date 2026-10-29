@@ -1,0 +1,34 @@
+{
+  "samples": [
+    {
+      "id": "attack",
+      "name": "Multi-Stage Attack Scenario (5 Threats)",
+      "filename": "sample_attack_scenario.json",
+      "records": 18,
+      "description": "Complete multi-agent attack scenario: Impossible Travel (anita.rao), Privilege Escalation (svc-report), API Anomaly (dev.kumar), Token Abuse (meera.n), and Dormant Reactivation.",
+      "sources": ["cloudtrail", "okta"],
+      "url": "/api/inputs/samples/sample_attack_scenario.json",
+      "threats": ["anita.rao (T1078)", "svc-report (T1078.004, T1098, T1548)", "dev.kumar (T1526, T1562)", "meera.n (T1539, T1550)"]
+    },
+    {
+      "id": "cloudtrail",
+      "name": "AWS CloudTrail Activity Logs",
+      "filename": "sample_cloudtrail.json",
+      "records": 51,
+      "description": "Standard AWS CloudTrail JSON format with {'Records': [...]}. Contains benign STS, S3, and EC2 calls plus privilege escalation attempts.",
+      "sources": ["cloudtrail"],
+      "url": "/api/inputs/samples/sample_cloudtrail.json",
+      "threats": ["svc-report IAM escalation", "dev.kumar defense evasion"]
+    },
+    {
+      "id": "okta",
+      "name": "Okta Authentication System Logs",
+      "filename": "sample_okta.json",
+      "records": 30,
+      "description": "Standard Okta JSON array of user sessions with legitimate India workforce logins alongside anomalous foreign logins from Germany.",
+      "sources": ["okta"],
+      "url": "/api/inputs/samples/sample_okta.json",
+      "threats": ["anita.rao impossible travel (Mumbai -> Frankfurt)", "meera.n token replay"]
+    }
+  ]
+}

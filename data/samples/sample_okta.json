@@ -1,0 +1,992 @@
+[
+  {
+    "uuid": "okta-000013",
+    "published": "2026-08-31T03:31:15Z",
+    "eventType": "user.session.start",
+    "actor": {
+      "id": "00usunitade",
+      "alternateId": "sunita.deshmukh@corp.example"
+    },
+    "outcome": {
+      "result": "SUCCESS"
+    },
+    "client": {
+      "ipAddress": "103.50.162.71",
+      "userAgent": {
+        "rawUserAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 Chrome/124.0.0.0 Safari/537.36"
+      },
+      "geographicalContext": {
+        "country": "India",
+        "city": "Chennai",
+        "geolocation": {
+          "lat": 13.0827,
+          "lon": 80.2707
+        }
+      }
+    },
+    "authenticationContext": {
+      "externalSessionId": "okta:sess-1012"
+    },
+    "securityContext": {
+      "asNumber": "AS45609"
+    },
+    "label": "benign"
+  },
+  {
+    "uuid": "okta-000010",
+    "published": "2026-08-31T03:32:24Z",
+    "eventType": "user.session.start",
+    "actor": {
+      "id": "00ukavitana",
+      "alternateId": "kavita.nair@corp.example"
+    },
+    "outcome": {
+      "result": "SUCCESS"
+    },
+    "client": {
+      "ipAddress": "103.88.220.162",
+      "userAgent": {
+        "rawUserAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 Chrome/123.0.0.0 Safari/537.36"
+      },
+      "geographicalContext": {
+        "country": "India",
+        "city": "Hyderabad",
+        "geolocation": {
+          "lat": 17.385,
+          "lon": 78.4867
+        }
+      }
+    },
+    "authenticationContext": {
+      "externalSessionId": "okta:sess-1009"
+    },
+    "securityContext": {
+      "asNumber": "AS55836"
+    },
+    "label": "benign"
+  },
+  {
+    "uuid": "okta-000016",
+    "published": "2026-08-31T03:32:57Z",
+    "eventType": "user.session.start",
+    "actor": {
+      "id": "00udivyacho",
+      "alternateId": "divya.choudhury@corp.example"
+    },
+    "outcome": {
+      "result": "SUCCESS"
+    },
+    "client": {
+      "ipAddress": "103.21.244.68",
+      "userAgent": {
+        "rawUserAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 Chrome/120.0.0.0 Safari/537.36"
+      },
+      "geographicalContext": {
+        "country": "India",
+        "city": "Bengaluru",
+        "geolocation": {
+          "lat": 12.9716,
+          "lon": 77.5946
+        }
+      }
+    },
+    "authenticationContext": {
+      "externalSessionId": "okta:sess-1015"
+    },
+    "securityContext": {
+      "asNumber": "AS9498"
+    },
+    "label": "benign"
+  },
+  {
+    "uuid": "okta-000001",
+    "published": "2026-08-31T03:38:15Z",
+    "eventType": "user.session.start",
+    "actor": {
+      "id": "00uanitarao",
+      "alternateId": "anita.rao@corp.example"
+    },
+    "outcome": {
+      "result": "SUCCESS"
+    },
+    "client": {
+      "ipAddress": "103.21.244.199",
+      "userAgent": {
+        "rawUserAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 Chrome/121.0.0.0 Safari/537.36"
+      },
+      "geographicalContext": {
+        "country": "India",
+        "city": "Bengaluru",
+        "geolocation": {
+          "lat": 12.9716,
+          "lon": 77.5946
+        }
+      }
+    },
+    "authenticationContext": {
+      "externalSessionId": "okta:sess-1000"
+    },
+    "securityContext": {
+      "asNumber": "AS9498"
+    },
+    "label": "benign"
+  },
+  {
+    "uuid": "okta-000005",
+    "published": "2026-08-31T03:39:05Z",
+    "eventType": "user.session.start",
+    "actor": {
+      "id": "00upriyapat",
+      "alternateId": "priya.patel@corp.example"
+    },
+    "outcome": {
+      "result": "SUCCESS"
+    },
+    "client": {
+      "ipAddress": "103.21.245.207",
+      "userAgent": {
+        "rawUserAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 Chrome/126.0.0.0 Safari/537.36"
+      },
+      "geographicalContext": {
+        "country": "India",
+        "city": "Mysuru",
+        "geolocation": {
+          "lat": 12.2958,
+          "lon": 76.6394
+        }
+      }
+    },
+    "authenticationContext": {
+      "externalSessionId": "okta:sess-1004"
+    },
+    "securityContext": {
+      "asNumber": "AS9498"
+    },
+    "label": "benign"
+  },
+  {
+    "uuid": "okta-000011",
+    "published": "2026-08-31T03:39:27Z",
+    "eventType": "user.session.start",
+    "actor": {
+      "id": "00urohitjos",
+      "alternateId": "rohit.joshi@corp.example"
+    },
+    "outcome": {
+      "result": "SUCCESS"
+    },
+    "client": {
+      "ipAddress": "103.50.162.38",
+      "userAgent": {
+        "rawUserAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 Chrome/121.0.0.0 Safari/537.36"
+      },
+      "geographicalContext": {
+        "country": "India",
+        "city": "Chennai",
+        "geolocation": {
+          "lat": 13.0827,
+          "lon": 80.2707
+        }
+      }
+    },
+    "authenticationContext": {
+      "externalSessionId": "okta:sess-1010"
+    },
+    "securityContext": {
+      "asNumber": "AS45609"
+    },
+    "label": "benign"
+  },
+  {
+    "uuid": "okta-000004",
+    "published": "2026-08-31T03:44:34Z",
+    "eventType": "user.session.start",
+    "actor": {
+      "id": "00urahulsha",
+      "alternateId": "rahul.sharma@corp.example"
+    },
+    "outcome": {
+      "result": "SUCCESS"
+    },
+    "client": {
+      "ipAddress": "103.21.244.196",
+      "userAgent": {
+        "rawUserAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 Chrome/120.0.0.0 Safari/537.36"
+      },
+      "geographicalContext": {
+        "country": "India",
+        "city": "Bengaluru",
+        "geolocation": {
+          "lat": 12.9716,
+          "lon": 77.5946
+        }
+      }
+    },
+    "authenticationContext": {
+      "externalSessionId": "okta:sess-1003"
+    },
+    "securityContext": {
+      "asNumber": "AS9498"
+    },
+    "label": "benign"
+  },
+  {
+    "uuid": "okta-000002",
+    "published": "2026-08-31T03:46:38Z",
+    "eventType": "user.session.start",
+    "actor": {
+      "id": "00udevkumar",
+      "alternateId": "dev.kumar@corp.example"
+    },
+    "outcome": {
+      "result": "SUCCESS"
+    },
+    "client": {
+      "ipAddress": "103.21.245.69",
+      "userAgent": {
+        "rawUserAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 Chrome/120.0.0.0 Safari/537.36"
+      },
+      "geographicalContext": {
+        "country": "India",
+        "city": "Mysuru",
+        "geolocation": {
+          "lat": 12.2958,
+          "lon": 76.6394
+        }
+      }
+    },
+    "authenticationContext": {
+      "externalSessionId": "okta:sess-1001"
+    },
+    "securityContext": {
+      "asNumber": "AS9498"
+    },
+    "label": "benign"
+  },
+  {
+    "uuid": "okta-000009",
+    "published": "2026-08-31T03:48:27Z",
+    "eventType": "user.session.start",
+    "actor": {
+      "id": "00upoojared",
+      "alternateId": "pooja.reddy@corp.example"
+    },
+    "outcome": {
+      "result": "SUCCESS"
+    },
+    "client": {
+      "ipAddress": "103.50.162.201",
+      "userAgent": {
+        "rawUserAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 Chrome/124.0.0.0 Safari/537.36"
+      },
+      "geographicalContext": {
+        "country": "India",
+        "city": "Chennai",
+        "geolocation": {
+          "lat": 13.0827,
+          "lon": 80.2707
+        }
+      }
+    },
+    "authenticationContext": {
+      "externalSessionId": "okta:sess-1008"
+    },
+    "securityContext": {
+      "asNumber": "AS45609"
+    },
+    "label": "benign"
+  },
+  {
+    "uuid": "okta-000015",
+    "published": "2026-08-31T03:50:23Z",
+    "eventType": "user.session.start",
+    "actor": {
+      "id": "00umanojpil",
+      "alternateId": "manoj.pillai@corp.example"
+    },
+    "outcome": {
+      "result": "SUCCESS"
+    },
+    "client": {
+      "ipAddress": "103.88.220.181",
+      "userAgent": {
+        "rawUserAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 Chrome/123.0.0.0 Safari/537.36"
+      },
+      "geographicalContext": {
+        "country": "India",
+        "city": "Hyderabad",
+        "geolocation": {
+          "lat": 17.385,
+          "lon": 78.4867
+        }
+      }
+    },
+    "authenticationContext": {
+      "externalSessionId": "okta:sess-1014"
+    },
+    "securityContext": {
+      "asNumber": "AS55836"
+    },
+    "label": "benign"
+  },
+  {
+    "uuid": "okta-000006",
+    "published": "2026-08-31T03:51:17Z",
+    "eventType": "user.session.start",
+    "actor": {
+      "id": "00uarjunsin",
+      "alternateId": "arjun.singh@corp.example"
+    },
+    "outcome": {
+      "result": "SUCCESS"
+    },
+    "client": {
+      "ipAddress": "103.50.162.63",
+      "userAgent": {
+        "rawUserAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 Chrome/125.0.0.0 Safari/537.36"
+      },
+      "geographicalContext": {
+        "country": "India",
+        "city": "Chennai",
+        "geolocation": {
+          "lat": 13.0827,
+          "lon": 80.2707
+        }
+      }
+    },
+    "authenticationContext": {
+      "externalSessionId": "okta:sess-1005"
+    },
+    "securityContext": {
+      "asNumber": "AS45609"
+    },
+    "label": "benign"
+  },
+  {
+    "uuid": "okta-000014",
+    "published": "2026-08-31T03:51:30Z",
+    "eventType": "user.session.start",
+    "actor": {
+      "id": "00uswatikul",
+      "alternateId": "swati.kulkarni@corp.example"
+    },
+    "outcome": {
+      "result": "SUCCESS"
+    },
+    "client": {
+      "ipAddress": "103.21.245.42",
+      "userAgent": {
+        "rawUserAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 Chrome/124.0.0.0 Safari/537.36"
+      },
+      "geographicalContext": {
+        "country": "India",
+        "city": "Mysuru",
+        "geolocation": {
+          "lat": 12.2958,
+          "lon": 76.6394
+        }
+      }
+    },
+    "authenticationContext": {
+      "externalSessionId": "okta:sess-1013"
+    },
+    "securityContext": {
+      "asNumber": "AS9498"
+    },
+    "label": "benign"
+  },
+  {
+    "uuid": "okta-000012",
+    "published": "2026-08-31T03:54:10Z",
+    "eventType": "user.session.start",
+    "actor": {
+      "id": "00usanjayiy",
+      "alternateId": "sanjay.iyer@corp.example"
+    },
+    "outcome": {
+      "result": "SUCCESS"
+    },
+    "client": {
+      "ipAddress": "103.21.245.105",
+      "userAgent": {
+        "rawUserAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 Chrome/124.0.0.0 Safari/537.36"
+      },
+      "geographicalContext": {
+        "country": "India",
+        "city": "Mysuru",
+        "geolocation": {
+          "lat": 12.2958,
+          "lon": 76.6394
+        }
+      }
+    },
+    "authenticationContext": {
+      "externalSessionId": "okta:sess-1011"
+    },
+    "securityContext": {
+      "asNumber": "AS9498"
+    },
+    "label": "benign"
+  },
+  {
+    "uuid": "okta-000003",
+    "published": "2026-08-31T03:55:10Z",
+    "eventType": "user.session.start",
+    "actor": {
+      "id": "00umeeran",
+      "alternateId": "meera.n@corp.example"
+    },
+    "outcome": {
+      "result": "SUCCESS"
+    },
+    "client": {
+      "ipAddress": "103.21.244.204",
+      "userAgent": {
+        "rawUserAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 Chrome/125.0.0.0 Safari/537.36"
+      },
+      "geographicalContext": {
+        "country": "India",
+        "city": "Bengaluru",
+        "geolocation": {
+          "lat": 12.9716,
+          "lon": 77.5946
+        }
+      }
+    },
+    "authenticationContext": {
+      "externalSessionId": "okta:sess-1002"
+    },
+    "securityContext": {
+      "asNumber": "AS9498"
+    },
+    "label": "benign"
+  },
+  {
+    "uuid": "okta-000008",
+    "published": "2026-08-31T03:59:36Z",
+    "eventType": "user.session.start",
+    "actor": {
+      "id": "00uvikramve",
+      "alternateId": "vikram.verma@corp.example"
+    },
+    "outcome": {
+      "result": "SUCCESS"
+    },
+    "client": {
+      "ipAddress": "103.21.244.64",
+      "userAgent": {
+        "rawUserAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 Chrome/125.0.0.0 Safari/537.36"
+      },
+      "geographicalContext": {
+        "country": "India",
+        "city": "Bengaluru",
+        "geolocation": {
+          "lat": 12.9716,
+          "lon": 77.5946
+        }
+      }
+    },
+    "authenticationContext": {
+      "externalSessionId": "okta:sess-1007"
+    },
+    "securityContext": {
+      "asNumber": "AS9498"
+    },
+    "label": "benign"
+  },
+  {
+    "uuid": "okta-000007",
+    "published": "2026-08-31T03:59:40Z",
+    "eventType": "user.session.start",
+    "actor": {
+      "id": "00unehagupt",
+      "alternateId": "neha.gupta@corp.example"
+    },
+    "outcome": {
+      "result": "SUCCESS"
+    },
+    "client": {
+      "ipAddress": "103.88.220.79",
+      "userAgent": {
+        "rawUserAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 Chrome/125.0.0.0 Safari/537.36"
+      },
+      "geographicalContext": {
+        "country": "India",
+        "city": "Hyderabad",
+        "geolocation": {
+          "lat": 17.385,
+          "lon": 78.4867
+        }
+      }
+    },
+    "authenticationContext": {
+      "externalSessionId": "okta:sess-1006"
+    },
+    "securityContext": {
+      "asNumber": "AS55836"
+    },
+    "label": "benign"
+  },
+  {
+    "uuid": "okta-000017",
+    "published": "2026-08-31T04:00:00Z",
+    "eventType": "user.session.start",
+    "actor": {
+      "id": "00usvc-repo",
+      "alternateId": "svc-report@corp.example"
+    },
+    "outcome": {
+      "result": "SUCCESS"
+    },
+    "client": {
+      "ipAddress": "103.21.244.5",
+      "userAgent": {
+        "rawUserAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 Chrome/124.0.0.0 Safari/537.36"
+      },
+      "geographicalContext": {
+        "country": "India",
+        "city": "Bengaluru",
+        "geolocation": {
+          "lat": 12.9716,
+          "lon": 77.5946
+        }
+      }
+    },
+    "authenticationContext": {
+      "externalSessionId": "okta:svc-sess-1016"
+    },
+    "securityContext": {
+      "asNumber": "AS9498"
+    },
+    "label": "benign"
+  },
+  {
+    "uuid": "okta-000029",
+    "published": "2026-09-01T03:30:07Z",
+    "eventType": "user.session.start",
+    "actor": {
+      "id": "00ualokmish",
+      "alternateId": "alok.mishra@corp.example"
+    },
+    "outcome": {
+      "result": "SUCCESS"
+    },
+    "client": {
+      "ipAddress": "103.88.220.153",
+      "userAgent": {
+        "rawUserAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 Chrome/120.0.0.0 Safari/537.36"
+      },
+      "geographicalContext": {
+        "country": "India",
+        "city": "Hyderabad",
+        "geolocation": {
+          "lat": 17.385,
+          "lon": 78.4867
+        }
+      }
+    },
+    "authenticationContext": {
+      "externalSessionId": "okta:sess-1028"
+    },
+    "securityContext": {
+      "asNumber": "AS55836"
+    },
+    "label": "benign"
+  },
+  {
+    "uuid": "okta-000028",
+    "published": "2026-09-01T03:31:05Z",
+    "eventType": "user.session.start",
+    "actor": {
+      "id": "00udeepamen",
+      "alternateId": "deepa.menon@corp.example"
+    },
+    "outcome": {
+      "result": "SUCCESS"
+    },
+    "client": {
+      "ipAddress": "103.50.162.226",
+      "userAgent": {
+        "rawUserAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 Chrome/125.0.0.0 Safari/537.36"
+      },
+      "geographicalContext": {
+        "country": "India",
+        "city": "Chennai",
+        "geolocation": {
+          "lat": 13.0827,
+          "lon": 80.2707
+        }
+      }
+    },
+    "authenticationContext": {
+      "externalSessionId": "okta:sess-1027"
+    },
+    "securityContext": {
+      "asNumber": "AS45609"
+    },
+    "label": "benign"
+  },
+  {
+    "uuid": "okta-000018",
+    "published": "2026-09-01T03:33:06Z",
+    "eventType": "user.session.start",
+    "actor": {
+      "id": "00uanitarao",
+      "alternateId": "anita.rao@corp.example"
+    },
+    "outcome": {
+      "result": "SUCCESS"
+    },
+    "client": {
+      "ipAddress": "103.88.220.58",
+      "userAgent": {
+        "rawUserAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 Chrome/125.0.0.0 Safari/537.36"
+      },
+      "geographicalContext": {
+        "country": "India",
+        "city": "Hyderabad",
+        "geolocation": {
+          "lat": 17.385,
+          "lon": 78.4867
+        }
+      }
+    },
+    "authenticationContext": {
+      "externalSessionId": "okta:sess-1017"
+    },
+    "securityContext": {
+      "asNumber": "AS55836"
+    },
+    "label": "benign"
+  },
+  {
+    "uuid": "okta-000027",
+    "published": "2026-09-01T03:33:47Z",
+    "eventType": "user.session.start",
+    "actor": {
+      "id": "00usanjayiy",
+      "alternateId": "sanjay.iyer@corp.example"
+    },
+    "outcome": {
+      "result": "SUCCESS"
+    },
+    "client": {
+      "ipAddress": "103.21.244.237",
+      "userAgent": {
+        "rawUserAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 Chrome/124.0.0.0 Safari/537.36"
+      },
+      "geographicalContext": {
+        "country": "India",
+        "city": "Bengaluru",
+        "geolocation": {
+          "lat": 12.9716,
+          "lon": 77.5946
+        }
+      }
+    },
+    "authenticationContext": {
+      "externalSessionId": "okta:sess-1026"
+    },
+    "securityContext": {
+      "asNumber": "AS9498"
+    },
+    "label": "benign"
+  },
+  {
+    "uuid": "okta-000023",
+    "published": "2026-09-01T03:33:56Z",
+    "eventType": "user.session.start",
+    "actor": {
+      "id": "00unehagupt",
+      "alternateId": "neha.gupta@corp.example"
+    },
+    "outcome": {
+      "result": "SUCCESS"
+    },
+    "client": {
+      "ipAddress": "103.21.245.113",
+      "userAgent": {
+        "rawUserAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 Chrome/124.0.0.0 Safari/537.36"
+      },
+      "geographicalContext": {
+        "country": "India",
+        "city": "Mysuru",
+        "geolocation": {
+          "lat": 12.2958,
+          "lon": 76.6394
+        }
+      }
+    },
+    "authenticationContext": {
+      "externalSessionId": "okta:sess-1022"
+    },
+    "securityContext": {
+      "asNumber": "AS9498"
+    },
+    "label": "benign"
+  },
+  {
+    "uuid": "okta-000019",
+    "published": "2026-09-01T03:36:12Z",
+    "eventType": "user.session.start",
+    "actor": {
+      "id": "00udevkumar",
+      "alternateId": "dev.kumar@corp.example"
+    },
+    "outcome": {
+      "result": "SUCCESS"
+    },
+    "client": {
+      "ipAddress": "103.21.244.73",
+      "userAgent": {
+        "rawUserAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 Chrome/124.0.0.0 Safari/537.36"
+      },
+      "geographicalContext": {
+        "country": "India",
+        "city": "Bengaluru",
+        "geolocation": {
+          "lat": 12.9716,
+          "lon": 77.5946
+        }
+      }
+    },
+    "authenticationContext": {
+      "externalSessionId": "okta:sess-1018"
+    },
+    "securityContext": {
+      "asNumber": "AS9498"
+    },
+    "label": "benign"
+  },
+  {
+    "uuid": "okta-000655",
+    "published": "2026-10-26T04:00:00Z",
+    "eventType": "user.session.start",
+    "actor": {
+      "id": "00uanitarao",
+      "alternateId": "anita.rao@corp.example"
+    },
+    "outcome": {
+      "result": "SUCCESS"
+    },
+    "client": {
+      "ipAddress": "103.21.244.11",
+      "userAgent": {
+        "rawUserAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 Chrome/124.0.0.0 Safari/537.36"
+      },
+      "geographicalContext": {
+        "country": "India",
+        "city": "Bengaluru",
+        "geolocation": {
+          "lat": 12.9716,
+          "lon": 77.5946
+        }
+      }
+    },
+    "authenticationContext": {
+      "externalSessionId": "okta:sess-anita-1654"
+    },
+    "securityContext": {
+      "asNumber": "AS9498"
+    },
+    "label": "impossible_travel"
+  },
+  {
+    "uuid": "okta-000656",
+    "published": "2026-10-26T04:30:00Z",
+    "eventType": "user.session.start",
+    "actor": {
+      "id": "00uanitarao",
+      "alternateId": "anita.rao@corp.example"
+    },
+    "outcome": {
+      "result": "SUCCESS"
+    },
+    "client": {
+      "ipAddress": "194.12.45.67",
+      "userAgent": {
+        "rawUserAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 Chrome/125.0.0.0 Safari/537.36"
+      },
+      "geographicalContext": {
+        "country": "Germany",
+        "city": "Frankfurt",
+        "geolocation": {
+          "lat": 50.1109,
+          "lon": 8.6821
+        }
+      }
+    },
+    "authenticationContext": {
+      "externalSessionId": "okta:sess-anita-1655"
+    },
+    "securityContext": {
+      "asNumber": "AS24940"
+    },
+    "label": "impossible_travel"
+  },
+  {
+    "uuid": "okta-000657",
+    "published": "2026-10-26T07:15:00Z",
+    "eventType": "user.session.start",
+    "actor": {
+      "id": "00usvc-repo",
+      "alternateId": "svc-report@corp.example"
+    },
+    "outcome": {
+      "result": "SUCCESS"
+    },
+    "client": {
+      "ipAddress": "103.21.244.5",
+      "userAgent": {
+        "rawUserAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 Chrome/126.0.0.0 Safari/537.36"
+      },
+      "geographicalContext": {
+        "country": "India",
+        "city": "Bengaluru",
+        "geolocation": {
+          "lat": 12.9716,
+          "lon": 77.5946
+        }
+      }
+    },
+    "authenticationContext": {
+      "externalSessionId": "okta:sess-svc-1656"
+    },
+    "securityContext": {
+      "asNumber": "AS9498"
+    },
+    "label": "dormant_reactivation"
+  },
+  {
+    "uuid": "okta-000658",
+    "published": "2026-10-27T08:00:00Z",
+    "eventType": "user.session.start",
+    "actor": {
+      "id": "00usvc-repo",
+      "alternateId": "svc-report@corp.example"
+    },
+    "outcome": {
+      "result": "SUCCESS"
+    },
+    "client": {
+      "ipAddress": "103.21.244.99",
+      "userAgent": {
+        "rawUserAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 Chrome/126.0.0.0 Safari/537.36"
+      },
+      "geographicalContext": {
+        "country": "India",
+        "city": "Bengaluru",
+        "geolocation": {
+          "lat": 12.9716,
+          "lon": 77.5946
+        }
+      }
+    },
+    "authenticationContext": {
+      "externalSessionId": "okta:sess-svc-esc-1657"
+    },
+    "securityContext": {
+      "asNumber": "AS9498"
+    },
+    "label": "privilege_escalation"
+  },
+  {
+    "uuid": "okta-000659",
+    "published": "2026-10-27T10:30:00Z",
+    "eventType": "user.session.start",
+    "actor": {
+      "id": "00udevkumar",
+      "alternateId": "dev.kumar@corp.example"
+    },
+    "outcome": {
+      "result": "SUCCESS"
+    },
+    "client": {
+      "ipAddress": "103.21.244.15",
+      "userAgent": {
+        "rawUserAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 Chrome/124.0.0.0 Safari/537.36"
+      },
+      "geographicalContext": {
+        "country": "India",
+        "city": "Bengaluru",
+        "geolocation": {
+          "lat": 12.9716,
+          "lon": 77.5946
+        }
+      }
+    },
+    "authenticationContext": {
+      "externalSessionId": "okta:sess-dev-1658"
+    },
+    "securityContext": {
+      "asNumber": "AS9498"
+    },
+    "label": "unusual_api"
+  },
+  {
+    "uuid": "okta-000660",
+    "published": "2026-10-27T11:00:00Z",
+    "eventType": "user.session.start",
+    "actor": {
+      "id": "00umeeran",
+      "alternateId": "meera.n@corp.example"
+    },
+    "outcome": {
+      "result": "SUCCESS"
+    },
+    "client": {
+      "ipAddress": "103.21.244.20",
+      "userAgent": {
+        "rawUserAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 Chrome/123.0.0.0 Safari/537.36"
+      },
+      "geographicalContext": {
+        "country": "India",
+        "city": "Bengaluru",
+        "geolocation": {
+          "lat": 12.9716,
+          "lon": 77.5946
+        }
+      }
+    },
+    "authenticationContext": {
+      "externalSessionId": "okta:sess-meera-1659"
+    },
+    "securityContext": {
+      "asNumber": "AS9498"
+    },
+    "label": "token_abuse"
+  },
+  {
+    "uuid": "okta-000661",
+    "published": "2026-10-27T11:10:00Z",
+    "eventType": "user.session.end",
+    "actor": {
+      "id": "00umeeran",
+      "alternateId": "meera.n@corp.example"
+    },
+    "outcome": {
+      "result": "SUCCESS"
+    },
+    "client": {
+      "ipAddress": "103.21.244.20",
+      "userAgent": {
+        "rawUserAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 Chrome/125.0.0.0 Safari/537.36"
+      },
+      "geographicalContext": {
+        "country": "India",
+        "city": "Bengaluru",
+        "geolocation": {
+          "lat": 12.9716,
+          "lon": 77.5946
+        }
+      }
+    },
+    "authenticationContext": {
+      "externalSessionId": "okta:sess-meera-1659"
+    },
+    "securityContext": {
+      "asNumber": "AS9498"
+    },
+    "label": "token_abuse"
+  }
+]

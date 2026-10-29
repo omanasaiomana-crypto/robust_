@@ -40,44 +40,70 @@ def source_dir(source: str):
 def detect_source(rec: object) -> str | None:
     if not isinstance(rec, dict):
         return None
-    if "eventName" in rec or "eventSource" in rec or "userIdentity" in rec:
+    # CloudTrail signals (camelCase, snake_case, AWS keys)
+    if any(k in rec for k in ("eventName", "eventSource", "userIdentity", "event_name", "event_source", "user_identity",
+                              "awsRegion", "aws_region", "sourceIPAddress", "source_ip")):
         return "cloudtrail"
-    if "eventType" in rec or "published" in rec or ("actor" in rec and "outcome" in rec):
+    # Okta signals (camelCase, snake_case, Okta context keys)
+    if any(k in rec for k in ("eventType", "published", "event_type", "actor", "outcome", "authenticationContext")):
+        return "okta"
+    if "client" in rec and isinstance(rec.get("client"), dict):
         return "okta"
     return None
 
 
 def _invalid_reason(rec: dict, source: str) -> str | None:
     if source == "cloudtrail":
-        if parse_ts(rec.get("eventTime")) is None:
+        ts = rec.get("eventTime") or rec.get("event_time") or rec.get("time") or rec.get("timestamp")
+        if parse_ts(ts) is None:
             return "missing or invalid eventTime"
-        if not rec.get("eventName"):
+        name = rec.get("eventName") or rec.get("event_name")
+        if not name:
             return "missing eventName"
     else:
-        if parse_ts(rec.get("published")) is None:
+        ts = rec.get("published") or rec.get("event_time") or rec.get("time") or rec.get("timestamp")
+        if parse_ts(ts) is None:
             return "missing or invalid published"
-        if not rec.get("eventType"):
+        ev_type = rec.get("eventType") or rec.get("event_type") or rec.get("action")
+        if not ev_type:
             return "missing eventType"
     return None
 
 
 def parse_records(text: str) -> tuple[list, list[str]]:
-    """Accept {"Records": [...]}, a JSON array, one JSON object, or JSON Lines. Returns (records, errors)."""
+    """Accept {"Records": [...]}, a JSON array, one JSON object, JSON Lines, or CSV. Returns (records, errors)."""
     text = (text or "").strip()
     if not text:
         raise InputError("No content provided")
-    try:
-        doc = json.loads(text)
-    except json.JSONDecodeError:
-        doc = None
-    if doc is not None:
-        if isinstance(doc, dict) and isinstance(doc.get("Records"), list):
-            return doc["Records"], []
-        if isinstance(doc, list):
-            return doc, []
-        if isinstance(doc, dict):
-            return [doc], []
-        raise InputError('JSON must be an object, an array, or {"Records": [...]}')
+
+    # 1. Try standard JSON first
+    if text.startswith("{") or text.startswith("["):
+        try:
+            doc = json.loads(text)
+        except json.JSONDecodeError:
+            doc = None
+        if doc is not None:
+            if isinstance(doc, dict) and isinstance(doc.get("Records"), list):
+                return doc["Records"], []
+            if isinstance(doc, list):
+                return doc, []
+            if isinstance(doc, dict):
+                return [doc], []
+            raise InputError('JSON must be an object, an array, or {"Records": [...]}')
+
+    # 2. Try CSV if comma-delimited
+    if "," in text and ("\n" in text or "\r" in text):
+        try:
+            import csv
+            import io
+            reader = csv.DictReader(io.StringIO(text))
+            rows = [dict(r) for r in reader]
+            if rows and any(any(k in r for k in ("eventName", "event_name", "eventType", "event_type", "eventTime", "published")) for r in rows[:3]):
+                return rows, []
+        except Exception:
+            pass
+
+    # 3. JSON Lines
     records: list = []
     errors: list[str] = []
     for n, line in enumerate(text.splitlines(), 1):
@@ -89,7 +115,7 @@ def parse_records(text: str) -> tuple[list, list[str]]:
         except json.JSONDecodeError as exc:
             errors.append(f"Line {n}: not valid JSON ({exc.msg})")
     if not records:
-        raise InputError("Content is not valid JSON or JSON Lines" + (f": {errors[0]}" if errors else ""))
+        raise InputError("Content is not valid JSON, JSON Lines, or CSV" + (f": {errors[0]}" if errors else ""))
     return records, errors
 
 
@@ -299,3 +325,56 @@ def clear_inputs() -> int:
                 except OSError:
                     log.warning("Could not delete %s", path.name)
     return removed
+
+
+def list_samples() -> list[dict]:
+    """Return available sample datasets for upload with descriptions and metadata."""
+    return [
+        {
+            "id": "attack",
+            "name": "Multi-Stage Attack Scenario (5 Threats)",
+            "filename": "sample_attack_scenario.json",
+            "records": 18,
+            "description": "Complete multi-agent attack scenario: Impossible Travel (anita.rao), Privilege Escalation (svc-report), API Anomaly (dev.kumar), Token Abuse (meera.n), and Dormant Reactivation.",
+            "sources": ["cloudtrail", "okta"],
+            "url": "/api/inputs/samples/sample_attack_scenario.json",
+            "threats": ["anita.rao (T1078)", "svc-report (T1078.004, T1098, T1548)", "dev.kumar (T1526, T1562)", "meera.n (T1539, T1550)"],
+        },
+        {
+            "id": "cloudtrail",
+            "name": "AWS CloudTrail Activity Logs",
+            "filename": "sample_cloudtrail.json",
+            "records": 51,
+            "description": "Standard AWS CloudTrail JSON format with {'Records': [...]}. Contains benign STS, S3, and EC2 calls plus privilege escalation attempts.",
+            "sources": ["cloudtrail"],
+            "url": "/api/inputs/samples/sample_cloudtrail.json",
+            "threats": ["svc-report IAM escalation", "dev.kumar defense evasion"],
+        },
+        {
+            "id": "okta",
+            "name": "Okta Authentication System Logs",
+            "filename": "sample_okta.json",
+            "records": 30,
+            "description": "Standard Okta JSON array of user sessions with legitimate India workforce logins alongside anomalous foreign logins from Germany.",
+            "sources": ["okta"],
+            "url": "/api/inputs/samples/sample_okta.json",
+            "threats": ["anita.rao impossible travel (Mumbai -> Frankfurt)", "meera.n token replay"],
+        },
+    ]
+
+
+def load_sample(sample_id: str = "attack") -> dict:
+    """Load one of the predefined sample datasets (attack, cloudtrail, okta) into the input inbox."""
+    samples = {s["id"]: s for s in list_samples()}
+    info = samples.get(sample_id.lower())
+    if not info:
+        raise InputError(f"Unknown sample '{sample_id}'. Choose from: attack, cloudtrail, okta")
+    filename = info["filename"]
+    path = config.DATA_DIR / "samples" / filename
+    if not path.exists():
+        path = config.STATIC_DIR / "samples" / filename
+    if not path.exists():
+        raise InputError(f"Sample file {filename} not found")
+    content = path.read_text(encoding="utf-8")
+    return save_input(content, source="auto", filename=filename)
+

@@ -43,6 +43,10 @@ class UploadBody(BaseModel):
     filename: str | None = None
 
 
+class LoadSampleBody(BaseModel):
+    sample: str = "attack"
+
+
 class ManualBody(BaseModel):
     kind: str
     fields: dict = {}
@@ -100,6 +104,31 @@ def manual_input(body: ManualBody):
 @router.delete("/inputs")
 def clear_input():
     return {"removed": inputs.clear_inputs()}
+
+
+@router.get("/inputs/samples")
+def list_samples():
+    return clean_json({"samples": inputs.list_samples()})
+
+
+@router.get("/inputs/samples/{filename}")
+def download_sample(filename: str):
+    path = config.DATA_DIR / "samples" / filename
+    if not path.exists():
+        path = config.STATIC_DIR / "samples" / filename
+    if not path.exists():
+        raise HTTPException(status_code=404, detail=f"Sample file {filename} not found")
+    return FileResponse(str(path), media_type="application/json", filename=filename)
+
+
+@router.post("/inputs/load-sample")
+def load_sample_route(body: LoadSampleBody | None = None):
+    sample_id = (body.sample if body else "attack") or "attack"
+    try:
+        return clean_json(inputs.load_sample(sample_id))
+    except inputs.InputError as exc:
+        raise HTTPException(status_code=422, detail=str(exc)) from None
+
 
 
 # ---------------------------------------------------------------- attack-path graph

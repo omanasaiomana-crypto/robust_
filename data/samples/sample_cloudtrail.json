@@ -1,0 +1,1137 @@
+{
+  "Records": [
+    {
+      "eventID": "ct-0000053",
+      "eventTime": "2026-08-31T04:15:23Z",
+      "eventName": "GetCallerIdentity",
+      "eventSource": "sts.amazonaws.com",
+      "awsRegion": "ap-south-1",
+      "sourceIPAddress": "103.88.220.181",
+      "userAgent": "aws-sdk-python/1.34.0 Boto3/1.34.0 Python/3.11.8",
+      "userIdentity": {
+        "type": "IAMUser",
+        "userName": "manoj.pillai",
+        "arn": "arn:aws:iam::123456789012:user/manoj.pillai",
+        "accessKeyId": "AKIAMANONORM223"
+      },
+      "requestParameters": {},
+      "resources": [
+        {
+          "ARN": "arn:aws:sts::123456789012:user"
+        }
+      ],
+      "label": "benign"
+    },
+    {
+      "eventID": "ct-0000045",
+      "eventTime": "2026-08-31T04:18:10Z",
+      "eventName": "GetObject",
+      "eventSource": "s3.amazonaws.com",
+      "awsRegion": "ap-south-1",
+      "sourceIPAddress": "103.21.245.105",
+      "userAgent": "aws-sdk-python/1.34.0 Boto3/1.34.0 Python/3.11.8",
+      "userIdentity": {
+        "type": "IAMUser",
+        "userName": "sanjay.iyer",
+        "arn": "arn:aws:iam::123456789012:user/sanjay.iyer",
+        "accessKeyId": "AKIASANJNORM713"
+      },
+      "requestParameters": {},
+      "resources": [
+        {
+          "ARN": "arn:aws:s3:::corp-data-lake-reports/daily.parquet"
+        }
+      ],
+      "label": "benign"
+    },
+    {
+      "eventID": "ct-0000061",
+      "eventTime": "2026-08-31T04:20:00Z",
+      "eventName": "GetObject",
+      "eventSource": "s3.amazonaws.com",
+      "awsRegion": "ap-south-1",
+      "sourceIPAddress": "103.21.244.5",
+      "userAgent": "aws-sdk-python/1.34.0 Boto3/1.34.0 Python/3.11.8",
+      "userIdentity": {
+        "type": "IAMUser",
+        "userName": "svc-report",
+        "arn": "arn:aws:iam::123456789012:user/svc-report",
+        "accessKeyId": "AKIA_SVC_REP_KEY"
+      },
+      "requestParameters": {},
+      "resources": [
+        {
+          "ARN": "arn:aws:s3:::corp-data-lake-reports/batch.json"
+        }
+      ],
+      "label": "benign"
+    },
+    {
+      "eventID": "ct-0000060",
+      "eventTime": "2026-08-31T04:35:00Z",
+      "eventName": "GetObject",
+      "eventSource": "s3.amazonaws.com",
+      "awsRegion": "ap-south-1",
+      "sourceIPAddress": "103.21.244.5",
+      "userAgent": "aws-sdk-python/1.34.0 Boto3/1.34.0 Python/3.11.8",
+      "userIdentity": {
+        "type": "IAMUser",
+        "userName": "svc-report",
+        "arn": "arn:aws:iam::123456789012:user/svc-report",
+        "accessKeyId": "AKIA_SVC_REP_KEY"
+      },
+      "requestParameters": {},
+      "resources": [
+        {
+          "ARN": "arn:aws:s3:::corp-data-lake-reports/batch.json"
+        }
+      ],
+      "label": "benign"
+    },
+    {
+      "eventID": "ct-0000002",
+      "eventTime": "2026-08-31T04:37:15Z",
+      "eventName": "GetCallerIdentity",
+      "eventSource": "sts.amazonaws.com",
+      "awsRegion": "ap-south-1",
+      "sourceIPAddress": "103.21.244.199",
+      "userAgent": "aws-sdk-python/1.34.0 Boto3/1.34.0 Python/3.11.8",
+      "userIdentity": {
+        "type": "IAMUser",
+        "userName": "anita.rao",
+        "arn": "arn:aws:iam::123456789012:user/anita.rao",
+        "accessKeyId": "AKIAANITNORM854"
+      },
+      "requestParameters": {},
+      "resources": [
+        {
+          "ARN": "arn:aws:sts::123456789012:user"
+        }
+      ],
+      "label": "benign"
+    },
+    {
+      "eventID": "ct-0000052",
+      "eventTime": "2026-08-31T04:37:23Z",
+      "eventName": "DescribeInstances",
+      "eventSource": "ec2.amazonaws.com",
+      "awsRegion": "ap-south-1",
+      "sourceIPAddress": "103.88.220.181",
+      "userAgent": "aws-sdk-python/1.34.0 Boto3/1.34.0 Python/3.11.8",
+      "userIdentity": {
+        "type": "IAMUser",
+        "userName": "manoj.pillai",
+        "arn": "arn:aws:iam::123456789012:user/manoj.pillai",
+        "accessKeyId": "AKIAMANONORM223"
+      },
+      "requestParameters": {},
+      "resources": [
+        {
+          "ARN": "arn:aws:ec2:ap-south-1:123456789012:instance/*"
+        }
+      ],
+      "label": "benign"
+    },
+    {
+      "eventID": "ct-0000017",
+      "eventTime": "2026-08-31T04:45:05Z",
+      "eventName": "DescribeSecurityGroups",
+      "eventSource": "ec2.amazonaws.com",
+      "awsRegion": "ap-south-1",
+      "sourceIPAddress": "103.21.245.207",
+      "userAgent": "aws-sdk-python/1.34.0 Boto3/1.34.0 Python/3.11.8",
+      "userIdentity": {
+        "type": "IAMUser",
+        "userName": "priya.patel",
+        "arn": "arn:aws:iam::123456789012:user/priya.patel",
+        "accessKeyId": "AKIAPRIYNORM987"
+      },
+      "requestParameters": {},
+      "resources": [
+        {
+          "ARN": "arn:aws:ec2:ap-south-1:123456789012:security-group/*"
+        }
+      ],
+      "label": "benign"
+    },
+    {
+      "eventID": "ct-0000001",
+      "eventTime": "2026-08-31T04:45:15Z",
+      "eventName": "GetCallerIdentity",
+      "eventSource": "sts.amazonaws.com",
+      "awsRegion": "ap-south-1",
+      "sourceIPAddress": "103.21.244.199",
+      "userAgent": "aws-sdk-python/1.34.0 Boto3/1.34.0 Python/3.11.8",
+      "userIdentity": {
+        "type": "IAMUser",
+        "userName": "anita.rao",
+        "arn": "arn:aws:iam::123456789012:user/anita.rao",
+        "accessKeyId": "AKIAANITNORM854"
+      },
+      "requestParameters": {},
+      "resources": [
+        {
+          "ARN": "arn:aws:sts::123456789012:user"
+        }
+      ],
+      "label": "benign"
+    },
+    {
+      "eventID": "ct-0000031",
+      "eventTime": "2026-08-31T04:49:27Z",
+      "eventName": "GetObject",
+      "eventSource": "s3.amazonaws.com",
+      "awsRegion": "ap-south-1",
+      "sourceIPAddress": "103.50.162.201",
+      "userAgent": "aws-sdk-python/1.34.0 Boto3/1.34.0 Python/3.11.8",
+      "userIdentity": {
+        "type": "IAMUser",
+        "userName": "pooja.reddy",
+        "arn": "arn:aws:iam::123456789012:user/pooja.reddy",
+        "accessKeyId": "AKIAPOOJNORM470"
+      },
+      "requestParameters": {},
+      "resources": [
+        {
+          "ARN": "arn:aws:s3:::corp-data-lake-reports/daily.parquet"
+        }
+      ],
+      "label": "benign"
+    },
+    {
+      "eventID": "ct-0000059",
+      "eventTime": "2026-08-31T04:54:57Z",
+      "eventName": "GetCallerIdentity",
+      "eventSource": "sts.amazonaws.com",
+      "awsRegion": "ap-south-1",
+      "sourceIPAddress": "103.21.244.68",
+      "userAgent": "aws-sdk-python/1.34.0 Boto3/1.34.0 Python/3.11.8",
+      "userIdentity": {
+        "type": "IAMUser",
+        "userName": "divya.choudhury",
+        "arn": "arn:aws:iam::123456789012:user/divya.choudhury",
+        "accessKeyId": "AKIADIVYNORM172"
+      },
+      "requestParameters": {},
+      "resources": [
+        {
+          "ARN": "arn:aws:sts::123456789012:user"
+        }
+      ],
+      "label": "benign"
+    },
+    {
+      "eventID": "ct-0000062",
+      "eventTime": "2026-08-31T04:55:00Z",
+      "eventName": "GetObject",
+      "eventSource": "s3.amazonaws.com",
+      "awsRegion": "ap-south-1",
+      "sourceIPAddress": "103.21.244.5",
+      "userAgent": "aws-sdk-python/1.34.0 Boto3/1.34.0 Python/3.11.8",
+      "userIdentity": {
+        "type": "IAMUser",
+        "userName": "svc-report",
+        "arn": "arn:aws:iam::123456789012:user/svc-report",
+        "accessKeyId": "AKIA_SVC_REP_KEY"
+      },
+      "requestParameters": {},
+      "resources": [
+        {
+          "ARN": "arn:aws:s3:::corp-data-lake-reports/batch.json"
+        }
+      ],
+      "label": "benign"
+    },
+    {
+      "eventID": "ct-0000009",
+      "eventTime": "2026-08-31T05:02:10Z",
+      "eventName": "GetObject",
+      "eventSource": "s3.amazonaws.com",
+      "awsRegion": "ap-south-1",
+      "sourceIPAddress": "103.21.244.204",
+      "userAgent": "aws-sdk-python/1.34.0 Boto3/1.34.0 Python/3.11.8",
+      "userIdentity": {
+        "type": "IAMUser",
+        "userName": "meera.n",
+        "arn": "arn:aws:iam::123456789012:user/meera.n",
+        "accessKeyId": "AKIAMEERNORM448"
+      },
+      "requestParameters": {},
+      "resources": [
+        {
+          "ARN": "arn:aws:s3:::corp-data-lake-reports/daily.parquet"
+        }
+      ],
+      "label": "benign"
+    },
+    {
+      "eventID": "ct-0000033",
+      "eventTime": "2026-08-31T05:21:27Z",
+      "eventName": "ListBuckets",
+      "eventSource": "s3.amazonaws.com",
+      "awsRegion": "ap-south-1",
+      "sourceIPAddress": "103.50.162.201",
+      "userAgent": "aws-sdk-python/1.34.0 Boto3/1.34.0 Python/3.11.8",
+      "userIdentity": {
+        "type": "IAMUser",
+        "userName": "pooja.reddy",
+        "arn": "arn:aws:iam::123456789012:user/pooja.reddy",
+        "accessKeyId": "AKIAPOOJNORM470"
+      },
+      "requestParameters": {},
+      "resources": [
+        {
+          "ARN": "arn:aws:s3:::*"
+        }
+      ],
+      "label": "benign"
+    },
+    {
+      "eventID": "ct-0000028",
+      "eventTime": "2026-08-31T05:25:36Z",
+      "eventName": "ListBuckets",
+      "eventSource": "s3.amazonaws.com",
+      "awsRegion": "ap-south-1",
+      "sourceIPAddress": "103.21.244.64",
+      "userAgent": "aws-sdk-python/1.34.0 Boto3/1.34.0 Python/3.11.8",
+      "userIdentity": {
+        "type": "IAMUser",
+        "userName": "vikram.verma",
+        "arn": "arn:aws:iam::123456789012:user/vikram.verma",
+        "accessKeyId": "AKIAVIKRNORM317"
+      },
+      "requestParameters": {},
+      "resources": [
+        {
+          "ARN": "arn:aws:s3:::*"
+        }
+      ],
+      "label": "benign"
+    },
+    {
+      "eventID": "ct-0000027",
+      "eventTime": "2026-08-31T05:27:36Z",
+      "eventName": "DescribeInstances",
+      "eventSource": "ec2.amazonaws.com",
+      "awsRegion": "ap-south-1",
+      "sourceIPAddress": "103.21.244.64",
+      "userAgent": "aws-sdk-python/1.34.0 Boto3/1.34.0 Python/3.11.8",
+      "userIdentity": {
+        "type": "IAMUser",
+        "userName": "vikram.verma",
+        "arn": "arn:aws:iam::123456789012:user/vikram.verma",
+        "accessKeyId": "AKIAVIKRNORM317"
+      },
+      "requestParameters": {},
+      "resources": [
+        {
+          "ARN": "arn:aws:ec2:ap-south-1:123456789012:instance/*"
+        }
+      ],
+      "label": "benign"
+    },
+    {
+      "eventID": "ct-0000058",
+      "eventTime": "2026-08-31T05:36:57Z",
+      "eventName": "GetCallerIdentity",
+      "eventSource": "sts.amazonaws.com",
+      "awsRegion": "ap-south-1",
+      "sourceIPAddress": "103.21.244.68",
+      "userAgent": "aws-sdk-python/1.34.0 Boto3/1.34.0 Python/3.11.8",
+      "userIdentity": {
+        "type": "IAMUser",
+        "userName": "divya.choudhury",
+        "arn": "arn:aws:iam::123456789012:user/divya.choudhury",
+        "accessKeyId": "AKIADIVYNORM172"
+      },
+      "requestParameters": {},
+      "resources": [
+        {
+          "ARN": "arn:aws:sts::123456789012:user"
+        }
+      ],
+      "label": "benign"
+    },
+    {
+      "eventID": "ct-0000034",
+      "eventTime": "2026-08-31T05:55:24Z",
+      "eventName": "GetCallerIdentity",
+      "eventSource": "sts.amazonaws.com",
+      "awsRegion": "ap-south-1",
+      "sourceIPAddress": "103.88.220.162",
+      "userAgent": "aws-sdk-python/1.34.0 Boto3/1.34.0 Python/3.11.8",
+      "userIdentity": {
+        "type": "IAMUser",
+        "userName": "kavita.nair",
+        "arn": "arn:aws:iam::123456789012:user/kavita.nair",
+        "accessKeyId": "AKIAKAVINORM641"
+      },
+      "requestParameters": {},
+      "resources": [
+        {
+          "ARN": "arn:aws:sts::123456789012:user"
+        }
+      ],
+      "label": "benign"
+    },
+    {
+      "eventID": "ct-0000029",
+      "eventTime": "2026-08-31T05:55:27Z",
+      "eventName": "ListBuckets",
+      "eventSource": "s3.amazonaws.com",
+      "awsRegion": "ap-south-1",
+      "sourceIPAddress": "103.50.162.201",
+      "userAgent": "aws-sdk-python/1.34.0 Boto3/1.34.0 Python/3.11.8",
+      "userIdentity": {
+        "type": "IAMUser",
+        "userName": "pooja.reddy",
+        "arn": "arn:aws:iam::123456789012:user/pooja.reddy",
+        "accessKeyId": "AKIAPOOJNORM470"
+      },
+      "requestParameters": {},
+      "resources": [
+        {
+          "ARN": "arn:aws:s3:::*"
+        }
+      ],
+      "label": "benign"
+    },
+    {
+      "eventID": "ct-0000008",
+      "eventTime": "2026-08-31T06:00:10Z",
+      "eventName": "DescribeInstances",
+      "eventSource": "ec2.amazonaws.com",
+      "awsRegion": "ap-south-1",
+      "sourceIPAddress": "103.21.244.204",
+      "userAgent": "aws-sdk-python/1.34.0 Boto3/1.34.0 Python/3.11.8",
+      "userIdentity": {
+        "type": "IAMUser",
+        "userName": "meera.n",
+        "arn": "arn:aws:iam::123456789012:user/meera.n",
+        "accessKeyId": "AKIAMEERNORM448"
+      },
+      "requestParameters": {},
+      "resources": [
+        {
+          "ARN": "arn:aws:ec2:ap-south-1:123456789012:instance/*"
+        }
+      ],
+      "label": "benign"
+    },
+    {
+      "eventID": "ct-0000057",
+      "eventTime": "2026-08-31T06:09:57Z",
+      "eventName": "DescribeSecurityGroups",
+      "eventSource": "ec2.amazonaws.com",
+      "awsRegion": "ap-south-1",
+      "sourceIPAddress": "103.21.244.68",
+      "userAgent": "aws-sdk-python/1.34.0 Boto3/1.34.0 Python/3.11.8",
+      "userIdentity": {
+        "type": "IAMUser",
+        "userName": "divya.choudhury",
+        "arn": "arn:aws:iam::123456789012:user/divya.choudhury",
+        "accessKeyId": "AKIADIVYNORM172"
+      },
+      "requestParameters": {},
+      "resources": [
+        {
+          "ARN": "arn:aws:ec2:ap-south-1:123456789012:security-group/*"
+        }
+      ],
+      "label": "benign"
+    },
+    {
+      "eventID": "ct-0000051",
+      "eventTime": "2026-08-31T06:11:23Z",
+      "eventName": "ListBuckets",
+      "eventSource": "s3.amazonaws.com",
+      "awsRegion": "ap-south-1",
+      "sourceIPAddress": "103.88.220.181",
+      "userAgent": "aws-sdk-python/1.34.0 Boto3/1.34.0 Python/3.11.8",
+      "userIdentity": {
+        "type": "IAMUser",
+        "userName": "manoj.pillai",
+        "arn": "arn:aws:iam::123456789012:user/manoj.pillai",
+        "accessKeyId": "AKIAMANONORM223"
+      },
+      "requestParameters": {},
+      "resources": [
+        {
+          "ARN": "arn:aws:s3:::*"
+        }
+      ],
+      "label": "benign"
+    },
+    {
+      "eventID": "ct-0000023",
+      "eventTime": "2026-08-31T06:11:40Z",
+      "eventName": "GetObject",
+      "eventSource": "s3.amazonaws.com",
+      "awsRegion": "ap-south-1",
+      "sourceIPAddress": "103.88.220.79",
+      "userAgent": "aws-sdk-python/1.34.0 Boto3/1.34.0 Python/3.11.8",
+      "userIdentity": {
+        "type": "IAMUser",
+        "userName": "neha.gupta",
+        "arn": "arn:aws:iam::123456789012:user/neha.gupta",
+        "accessKeyId": "AKIANEHANORM801"
+      },
+      "requestParameters": {},
+      "resources": [
+        {
+          "ARN": "arn:aws:s3:::corp-data-lake-reports/daily.parquet"
+        }
+      ],
+      "label": "benign"
+    },
+    {
+      "eventID": "ct-0000018",
+      "eventTime": "2026-08-31T06:16:05Z",
+      "eventName": "DescribeSecurityGroups",
+      "eventSource": "ec2.amazonaws.com",
+      "awsRegion": "ap-south-1",
+      "sourceIPAddress": "103.21.245.207",
+      "userAgent": "aws-sdk-python/1.34.0 Boto3/1.34.0 Python/3.11.8",
+      "userIdentity": {
+        "type": "IAMUser",
+        "userName": "priya.patel",
+        "arn": "arn:aws:iam::123456789012:user/priya.patel",
+        "accessKeyId": "AKIAPRIYNORM987"
+      },
+      "requestParameters": {},
+      "resources": [
+        {
+          "ARN": "arn:aws:ec2:ap-south-1:123456789012:security-group/*"
+        }
+      ],
+      "label": "benign"
+    },
+    {
+      "eventID": "ct-0000007",
+      "eventTime": "2026-08-31T06:32:10Z",
+      "eventName": "ListBuckets",
+      "eventSource": "s3.amazonaws.com",
+      "awsRegion": "ap-south-1",
+      "sourceIPAddress": "103.21.244.204",
+      "userAgent": "aws-sdk-python/1.34.0 Boto3/1.34.0 Python/3.11.8",
+      "userIdentity": {
+        "type": "IAMUser",
+        "userName": "meera.n",
+        "arn": "arn:aws:iam::123456789012:user/meera.n",
+        "accessKeyId": "AKIAMEERNORM448"
+      },
+      "requestParameters": {},
+      "resources": [
+        {
+          "ARN": "arn:aws:s3:::*"
+        }
+      ],
+      "label": "benign"
+    },
+    {
+      "eventID": "ct-0000044",
+      "eventTime": "2026-08-31T06:54:10Z",
+      "eventName": "DescribeSecurityGroups",
+      "eventSource": "ec2.amazonaws.com",
+      "awsRegion": "ap-south-1",
+      "sourceIPAddress": "103.21.245.105",
+      "userAgent": "aws-sdk-python/1.34.0 Boto3/1.34.0 Python/3.11.8",
+      "userIdentity": {
+        "type": "IAMUser",
+        "userName": "sanjay.iyer",
+        "arn": "arn:aws:iam::123456789012:user/sanjay.iyer",
+        "accessKeyId": "AKIASANJNORM713"
+      },
+      "requestParameters": {},
+      "resources": [
+        {
+          "ARN": "arn:aws:ec2:ap-south-1:123456789012:security-group/*"
+        }
+      ],
+      "label": "benign"
+    },
+    {
+      "eventID": "ct-0000022",
+      "eventTime": "2026-08-31T07:00:40Z",
+      "eventName": "GetObject",
+      "eventSource": "s3.amazonaws.com",
+      "awsRegion": "ap-south-1",
+      "sourceIPAddress": "103.88.220.79",
+      "userAgent": "aws-sdk-python/1.34.0 Boto3/1.34.0 Python/3.11.8",
+      "userIdentity": {
+        "type": "IAMUser",
+        "userName": "neha.gupta",
+        "arn": "arn:aws:iam::123456789012:user/neha.gupta",
+        "accessKeyId": "AKIANEHANORM801"
+      },
+      "requestParameters": {},
+      "resources": [
+        {
+          "ARN": "arn:aws:s3:::corp-data-lake-reports/daily.parquet"
+        }
+      ],
+      "label": "benign"
+    },
+    {
+      "eventID": "ct-0000011",
+      "eventTime": "2026-08-31T07:13:10Z",
+      "eventName": "DescribeInstances",
+      "eventSource": "ec2.amazonaws.com",
+      "awsRegion": "ap-south-1",
+      "sourceIPAddress": "103.21.244.204",
+      "userAgent": "aws-sdk-python/1.34.0 Boto3/1.34.0 Python/3.11.8",
+      "userIdentity": {
+        "type": "IAMUser",
+        "userName": "meera.n",
+        "arn": "arn:aws:iam::123456789012:user/meera.n",
+        "accessKeyId": "AKIAMEERNORM448"
+      },
+      "requestParameters": {},
+      "resources": [
+        {
+          "ARN": "arn:aws:ec2:ap-south-1:123456789012:instance/*"
+        }
+      ],
+      "label": "benign"
+    },
+    {
+      "eventID": "ct-0000010",
+      "eventTime": "2026-08-31T07:24:10Z",
+      "eventName": "GetObject",
+      "eventSource": "s3.amazonaws.com",
+      "awsRegion": "ap-south-1",
+      "sourceIPAddress": "103.21.244.204",
+      "userAgent": "aws-sdk-python/1.34.0 Boto3/1.34.0 Python/3.11.8",
+      "userIdentity": {
+        "type": "IAMUser",
+        "userName": "meera.n",
+        "arn": "arn:aws:iam::123456789012:user/meera.n",
+        "accessKeyId": "AKIAMEERNORM448"
+      },
+      "requestParameters": {},
+      "resources": [
+        {
+          "ARN": "arn:aws:s3:::corp-data-lake-reports/daily.parquet"
+        }
+      ],
+      "label": "benign"
+    },
+    {
+      "eventID": "ct-0000003",
+      "eventTime": "2026-08-31T07:29:15Z",
+      "eventName": "GetObject",
+      "eventSource": "s3.amazonaws.com",
+      "awsRegion": "ap-south-1",
+      "sourceIPAddress": "103.21.244.199",
+      "userAgent": "aws-sdk-python/1.34.0 Boto3/1.34.0 Python/3.11.8",
+      "userIdentity": {
+        "type": "IAMUser",
+        "userName": "anita.rao",
+        "arn": "arn:aws:iam::123456789012:user/anita.rao",
+        "accessKeyId": "AKIAANITNORM854"
+      },
+      "requestParameters": {},
+      "resources": [
+        {
+          "ARN": "arn:aws:s3:::corp-data-lake-reports/daily.parquet"
+        }
+      ],
+      "label": "benign"
+    },
+    {
+      "eventID": "ct-0000005",
+      "eventTime": "2026-08-31T07:35:38Z",
+      "eventName": "ListBuckets",
+      "eventSource": "s3.amazonaws.com",
+      "awsRegion": "ap-south-1",
+      "sourceIPAddress": "103.21.245.69",
+      "userAgent": "aws-sdk-python/1.34.0 Boto3/1.34.0 Python/3.11.8",
+      "userIdentity": {
+        "type": "IAMUser",
+        "userName": "dev.kumar",
+        "arn": "arn:aws:iam::123456789012:user/dev.kumar",
+        "accessKeyId": "AKIADEV.NORM833"
+      },
+      "requestParameters": {},
+      "resources": [
+        {
+          "ARN": "arn:aws:s3:::*"
+        }
+      ],
+      "label": "benign"
+    },
+    {
+      "eventID": "ct-0000026",
+      "eventTime": "2026-08-31T07:36:36Z",
+      "eventName": "DescribeSecurityGroups",
+      "eventSource": "ec2.amazonaws.com",
+      "awsRegion": "ap-south-1",
+      "sourceIPAddress": "103.21.244.64",
+      "userAgent": "aws-sdk-python/1.34.0 Boto3/1.34.0 Python/3.11.8",
+      "userIdentity": {
+        "type": "IAMUser",
+        "userName": "vikram.verma",
+        "arn": "arn:aws:iam::123456789012:user/vikram.verma",
+        "accessKeyId": "AKIAVIKRNORM317"
+      },
+      "requestParameters": {},
+      "resources": [
+        {
+          "ARN": "arn:aws:ec2:ap-south-1:123456789012:security-group/*"
+        }
+      ],
+      "label": "benign"
+    },
+    {
+      "eventID": "ct-0000049",
+      "eventTime": "2026-08-31T07:42:30Z",
+      "eventName": "ListBuckets",
+      "eventSource": "s3.amazonaws.com",
+      "awsRegion": "ap-south-1",
+      "sourceIPAddress": "103.21.245.42",
+      "userAgent": "aws-sdk-python/1.34.0 Boto3/1.34.0 Python/3.11.8",
+      "userIdentity": {
+        "type": "IAMUser",
+        "userName": "swati.kulkarni",
+        "arn": "arn:aws:iam::123456789012:user/swati.kulkarni",
+        "accessKeyId": "AKIASWATNORM371"
+      },
+      "requestParameters": {},
+      "resources": [
+        {
+          "ARN": "arn:aws:s3:::*"
+        }
+      ],
+      "label": "benign"
+    },
+    {
+      "eventID": "ct-0000006",
+      "eventTime": "2026-08-31T07:50:38Z",
+      "eventName": "GetCallerIdentity",
+      "eventSource": "sts.amazonaws.com",
+      "awsRegion": "ap-south-1",
+      "sourceIPAddress": "103.21.245.69",
+      "userAgent": "aws-sdk-python/1.34.0 Boto3/1.34.0 Python/3.11.8",
+      "userIdentity": {
+        "type": "IAMUser",
+        "userName": "dev.kumar",
+        "arn": "arn:aws:iam::123456789012:user/dev.kumar",
+        "accessKeyId": "AKIADEV.NORM833"
+      },
+      "requestParameters": {},
+      "resources": [
+        {
+          "ARN": "arn:aws:sts::123456789012:user"
+        }
+      ],
+      "label": "benign"
+    },
+    {
+      "eventID": "ct-0000040",
+      "eventTime": "2026-08-31T08:10:27Z",
+      "eventName": "ListBuckets",
+      "eventSource": "s3.amazonaws.com",
+      "awsRegion": "ap-south-1",
+      "sourceIPAddress": "103.50.162.38",
+      "userAgent": "aws-sdk-python/1.34.0 Boto3/1.34.0 Python/3.11.8",
+      "userIdentity": {
+        "type": "IAMUser",
+        "userName": "rohit.joshi",
+        "arn": "arn:aws:iam::123456789012:user/rohit.joshi",
+        "accessKeyId": "AKIAROHINORM103"
+      },
+      "requestParameters": {},
+      "resources": [
+        {
+          "ARN": "arn:aws:s3:::*"
+        }
+      ],
+      "label": "benign"
+    },
+    {
+      "eventID": "ct-0000056",
+      "eventTime": "2026-08-31T08:10:57Z",
+      "eventName": "ListBuckets",
+      "eventSource": "s3.amazonaws.com",
+      "awsRegion": "ap-south-1",
+      "sourceIPAddress": "103.21.244.68",
+      "userAgent": "aws-sdk-python/1.34.0 Boto3/1.34.0 Python/3.11.8",
+      "userIdentity": {
+        "type": "IAMUser",
+        "userName": "divya.choudhury",
+        "arn": "arn:aws:iam::123456789012:user/divya.choudhury",
+        "accessKeyId": "AKIADIVYNORM172"
+      },
+      "requestParameters": {},
+      "resources": [
+        {
+          "ARN": "arn:aws:s3:::*"
+        }
+      ],
+      "label": "benign"
+    },
+    {
+      "eventID": "ct-0000041",
+      "eventTime": "2026-08-31T08:13:27Z",
+      "eventName": "GetObject",
+      "eventSource": "s3.amazonaws.com",
+      "awsRegion": "ap-south-1",
+      "sourceIPAddress": "103.50.162.38",
+      "userAgent": "aws-sdk-python/1.34.0 Boto3/1.34.0 Python/3.11.8",
+      "userIdentity": {
+        "type": "IAMUser",
+        "userName": "rohit.joshi",
+        "arn": "arn:aws:iam::123456789012:user/rohit.joshi",
+        "accessKeyId": "AKIAROHINORM103"
+      },
+      "requestParameters": {},
+      "resources": [
+        {
+          "ARN": "arn:aws:s3:::corp-data-lake-reports/daily.parquet"
+        }
+      ],
+      "label": "benign"
+    },
+    {
+      "eventID": "ct-0000030",
+      "eventTime": "2026-08-31T08:23:27Z",
+      "eventName": "DescribeSecurityGroups",
+      "eventSource": "ec2.amazonaws.com",
+      "awsRegion": "ap-south-1",
+      "sourceIPAddress": "103.50.162.201",
+      "userAgent": "aws-sdk-python/1.34.0 Boto3/1.34.0 Python/3.11.8",
+      "userIdentity": {
+        "type": "IAMUser",
+        "userName": "pooja.reddy",
+        "arn": "arn:aws:iam::123456789012:user/pooja.reddy",
+        "accessKeyId": "AKIAPOOJNORM470"
+      },
+      "requestParameters": {},
+      "resources": [
+        {
+          "ARN": "arn:aws:ec2:ap-south-1:123456789012:security-group/*"
+        }
+      ],
+      "label": "benign"
+    },
+    {
+      "eventID": "ct-0000048",
+      "eventTime": "2026-08-31T08:36:30Z",
+      "eventName": "GetCallerIdentity",
+      "eventSource": "sts.amazonaws.com",
+      "awsRegion": "ap-south-1",
+      "sourceIPAddress": "103.21.245.42",
+      "userAgent": "aws-sdk-python/1.34.0 Boto3/1.34.0 Python/3.11.8",
+      "userIdentity": {
+        "type": "IAMUser",
+        "userName": "swati.kulkarni",
+        "arn": "arn:aws:iam::123456789012:user/swati.kulkarni",
+        "accessKeyId": "AKIASWATNORM371"
+      },
+      "requestParameters": {},
+      "resources": [
+        {
+          "ARN": "arn:aws:sts::123456789012:user"
+        }
+      ],
+      "label": "benign"
+    },
+    {
+      "eventID": "ct-0000021",
+      "eventTime": "2026-08-31T08:39:17Z",
+      "eventName": "ListBuckets",
+      "eventSource": "s3.amazonaws.com",
+      "awsRegion": "ap-south-1",
+      "sourceIPAddress": "103.50.162.63",
+      "userAgent": "aws-sdk-python/1.34.0 Boto3/1.34.0 Python/3.11.8",
+      "userIdentity": {
+        "type": "IAMUser",
+        "userName": "arjun.singh",
+        "arn": "arn:aws:iam::123456789012:user/arjun.singh",
+        "accessKeyId": "AKIAARJUNORM723"
+      },
+      "requestParameters": {},
+      "resources": [
+        {
+          "ARN": "arn:aws:s3:::*"
+        }
+      ],
+      "label": "benign"
+    },
+    {
+      "eventID": "ct-0000012",
+      "eventTime": "2026-08-31T08:41:34Z",
+      "eventName": "DescribeInstances",
+      "eventSource": "ec2.amazonaws.com",
+      "awsRegion": "ap-south-1",
+      "sourceIPAddress": "103.21.244.196",
+      "userAgent": "aws-sdk-python/1.34.0 Boto3/1.34.0 Python/3.11.8",
+      "userIdentity": {
+        "type": "IAMUser",
+        "userName": "rahul.sharma",
+        "arn": "arn:aws:iam::123456789012:user/rahul.sharma",
+        "accessKeyId": "AKIARAHUNORM180"
+      },
+      "requestParameters": {},
+      "resources": [
+        {
+          "ARN": "arn:aws:ec2:ap-south-1:123456789012:instance/*"
+        }
+      ],
+      "label": "benign"
+    },
+    {
+      "eventID": "ct-0002296",
+      "eventTime": "2026-10-26T04:05:00Z",
+      "eventName": "DescribeInstances",
+      "eventSource": "ec2.amazonaws.com",
+      "awsRegion": "ap-south-1",
+      "sourceIPAddress": "103.21.244.11",
+      "userAgent": "aws-sdk-python/1.34.0 Boto3/1.34.0 Python/3.11.8",
+      "userIdentity": {
+        "type": "IAMUser",
+        "userName": "anita.rao",
+        "arn": "arn:aws:iam::123456789012:user/anita.rao",
+        "accessKeyId": "AKIAANIT8244KEY"
+      },
+      "requestParameters": {},
+      "resources": [
+        {
+          "ARN": "arn:aws:ec2:ap-south-1:123456789012:instance/*"
+        }
+      ],
+      "label": "impossible_travel"
+    },
+    {
+      "eventID": "ct-0002297",
+      "eventTime": "2026-10-26T04:32:00Z",
+      "eventName": "ListBuckets",
+      "eventSource": "s3.amazonaws.com",
+      "awsRegion": "ap-south-1",
+      "sourceIPAddress": "194.12.45.67",
+      "userAgent": "aws-sdk-python/1.34.0 Boto3/1.34.0 Python/3.11.8",
+      "userIdentity": {
+        "type": "IAMUser",
+        "userName": "anita.rao",
+        "arn": "arn:aws:iam::123456789012:user/anita.rao",
+        "accessKeyId": "AKIAANIT6656KEY"
+      },
+      "requestParameters": {},
+      "resources": [
+        {
+          "ARN": "arn:aws:s3:::*"
+        }
+      ],
+      "label": "impossible_travel"
+    },
+    {
+      "eventID": "ct-0002298",
+      "eventTime": "2026-10-26T07:16:00Z",
+      "eventName": "DescribeInstances",
+      "eventSource": "ec2.amazonaws.com",
+      "awsRegion": "ap-south-1",
+      "sourceIPAddress": "103.21.244.5",
+      "userAgent": "aws-sdk-python/1.34.0 Boto3/1.34.0 Python/3.11.8",
+      "userIdentity": {
+        "type": "IAMUser",
+        "userName": "svc-report",
+        "arn": "arn:aws:iam::123456789012:user/svc-report",
+        "accessKeyId": "AKIASVC-7627KEY"
+      },
+      "requestParameters": {},
+      "resources": [
+        {
+          "ARN": "arn:aws:ec2:ap-south-1:123456789012:instance/*"
+        }
+      ],
+      "label": "dormant_reactivation"
+    },
+    {
+      "eventID": "ct-0002299",
+      "eventTime": "2026-10-27T08:01:00Z",
+      "eventName": "CreateAccessKey",
+      "eventSource": "iam.amazonaws.com",
+      "awsRegion": "ap-south-1",
+      "sourceIPAddress": "103.21.244.99",
+      "userAgent": "aws-sdk-python/1.34.0 Boto3/1.34.0 Python/3.11.8",
+      "userIdentity": {
+        "type": "IAMUser",
+        "userName": "svc-report",
+        "arn": "arn:aws:iam::123456789012:user/svc-report",
+        "accessKeyId": "AKIASVC-4232KEY"
+      },
+      "requestParameters": {
+        "userName": "svc-report"
+      },
+      "resources": [
+        {
+          "ARN": "arn:aws:iam::123456789012:user/svc-report"
+        }
+      ],
+      "label": "privilege_escalation"
+    },
+    {
+      "eventID": "ct-0002300",
+      "eventTime": "2026-10-27T08:04:00Z",
+      "eventName": "AttachUserPolicy",
+      "eventSource": "iam.amazonaws.com",
+      "awsRegion": "ap-south-1",
+      "sourceIPAddress": "103.21.244.99",
+      "userAgent": "aws-sdk-python/1.34.0 Boto3/1.34.0 Python/3.11.8",
+      "userIdentity": {
+        "type": "IAMUser",
+        "userName": "svc-report",
+        "arn": "arn:aws:iam::123456789012:user/svc-report",
+        "accessKeyId": "AKIASVC-5940KEY"
+      },
+      "requestParameters": {
+        "userName": "svc-report",
+        "policyArn": "arn:aws:iam::aws:policy/AdministratorAccess"
+      },
+      "resources": [
+        {
+          "ARN": "arn:aws:iam::123456789012:user/svc-report"
+        }
+      ],
+      "label": "privilege_escalation"
+    },
+    {
+      "eventID": "ct-0002301",
+      "eventTime": "2026-10-27T08:08:00Z",
+      "eventName": "AssumeRole",
+      "eventSource": "sts.amazonaws.com",
+      "awsRegion": "ap-south-1",
+      "sourceIPAddress": "103.21.244.99",
+      "userAgent": "aws-sdk-python/1.34.0 Boto3/1.34.0 Python/3.11.8",
+      "userIdentity": {
+        "type": "IAMUser",
+        "userName": "svc-report",
+        "arn": "arn:aws:iam::123456789012:user/svc-report",
+        "accessKeyId": "AKIASVC-2380KEY"
+      },
+      "requestParameters": {
+        "roleArn": "arn:aws:iam::123456789012:role/AdminRole"
+      },
+      "resources": [
+        {
+          "ARN": "arn:aws:iam::123456789012:role/AdminRole"
+        }
+      ],
+      "label": "privilege_escalation"
+    },
+    {
+      "eventID": "ct-0002302",
+      "eventTime": "2026-10-27T08:12:00Z",
+      "eventName": "GetSecretValue",
+      "eventSource": "secretsmanager.amazonaws.com",
+      "awsRegion": "ap-south-1",
+      "sourceIPAddress": "103.21.244.99",
+      "userAgent": "aws-sdk-python/1.34.0 Boto3/1.34.0 Python/3.11.8",
+      "userIdentity": {
+        "type": "IAMUser",
+        "userName": "svc-report",
+        "arn": "arn:aws:iam::123456789012:user/svc-report",
+        "accessKeyId": "AKIASVC-1605KEY"
+      },
+      "requestParameters": {
+        "secretId": "prod/db/credentials"
+      },
+      "resources": [
+        {
+          "ARN": "arn:aws:secretsmanager:ap-south-1:123456789012:secret:prod/db/credentials-XYZ"
+        }
+      ],
+      "label": "privilege_escalation"
+    },
+    {
+      "eventID": "ct-0002303",
+      "eventTime": "2026-10-27T10:35:00Z",
+      "eventName": "StopLogging",
+      "eventSource": "cloudtrail.amazonaws.com",
+      "awsRegion": "eu-west-3",
+      "sourceIPAddress": "103.21.244.15",
+      "userAgent": "aws-sdk-python/1.34.0 Boto3/1.34.0 Python/3.11.8",
+      "userIdentity": {
+        "type": "IAMUser",
+        "userName": "dev.kumar",
+        "arn": "arn:aws:iam::123456789012:user/dev.kumar",
+        "accessKeyId": "AKIADEV.6480KEY"
+      },
+      "requestParameters": {
+        "name": "arn:aws:cloudtrail:eu-west-3:123456789012:trail/corp-audit"
+      },
+      "resources": [
+        {
+          "ARN": "arn:aws:cloudtrail:eu-west-3:123456789012:trail/corp-audit"
+        }
+      ],
+      "label": "unusual_api"
+    },
+    {
+      "eventID": "ct-0002304",
+      "eventTime": "2026-10-27T11:00:30Z",
+      "eventName": "GetObject",
+      "eventSource": "s3.amazonaws.com",
+      "awsRegion": "ap-south-1",
+      "sourceIPAddress": "103.21.244.20",
+      "userAgent": "aws-sdk-python/1.34.0 Boto3/1.34.0 Python/3.11.8",
+      "userIdentity": {
+        "type": "IAMUser",
+        "userName": "meera.n",
+        "arn": "arn:aws:iam::123456789012:user/meera.n",
+        "accessKeyId": "ASIA_MEERA_STOLEN_99"
+      },
+      "requestParameters": {},
+      "resources": [
+        {
+          "ARN": "arn:aws:s3:::corp-data-lake-reports/finance.csv"
+        }
+      ],
+      "label": "token_abuse"
+    },
+    {
+      "eventID": "ct-0002305",
+      "eventTime": "2026-10-27T11:02:15Z",
+      "eventName": "ListBuckets",
+      "eventSource": "s3.amazonaws.com",
+      "awsRegion": "sa-east-1",
+      "sourceIPAddress": "177.18.90.12",
+      "userAgent": "aws-cli/2.15.15 Python/3.11.6 Linux/5.15.0",
+      "userIdentity": {
+        "type": "IAMUser",
+        "userName": "meera.n",
+        "arn": "arn:aws:iam::123456789012:user/meera.n",
+        "accessKeyId": "ASIA_MEERA_STOLEN_99"
+      },
+      "requestParameters": {},
+      "resources": [
+        {
+          "ARN": "arn:aws:s3:::*"
+        }
+      ],
+      "label": "token_abuse"
+    },
+    {
+      "eventID": "ct-0002306",
+      "eventTime": "2026-10-27T11:14:00Z",
+      "eventName": "DescribeInstances",
+      "eventSource": "ec2.amazonaws.com",
+      "awsRegion": "sa-east-1",
+      "sourceIPAddress": "177.18.90.12",
+      "userAgent": "aws-sdk-python/1.34.0 Boto3/1.34.0 Python/3.11.8",
+      "userIdentity": {
+        "type": "IAMUser",
+        "userName": "meera.n",
+        "arn": "arn:aws:iam::123456789012:user/meera.n",
+        "accessKeyId": "ASIA_MEERA_STOLEN_99"
+      },
+      "requestParameters": {},
+      "resources": [
+        {
+          "ARN": "arn:aws:ec2:sa-east-1:123456789012:instance/*"
+        }
+      ],
+      "label": "token_abuse"
+    }
+  ]
+}

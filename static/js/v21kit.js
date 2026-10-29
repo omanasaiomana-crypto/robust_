@@ -10,7 +10,7 @@ export const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
 
 const MOCK_MAP = [
   [/^\/agents$/, "v21_agents"], [/^\/scan\/status$/, "v21_scan_status"], [/^\/scan\/trace$/, "v21_scan_trace"],
-  [/^\/inputs$/, "v21_inputs"], [/^\/identities$/, "v21_identities"], [/^\/identities\/[^/]+\/attack$/, "v21_graph_attack"],
+  [/^\/inputs$/, "v21_inputs"], [/^\/inputs\/samples$/, "v21_samples"], [/^\/identities$/, "v21_identities"], [/^\/identities\/[^/]+\/attack$/, "v21_graph_attack"],
   [/^\/graph\/global$/, "v21_graph_global"], [/^\/alerts\/[^/]+\/events$/, "v21_events"],
   [/^\/analytics\/detectors$/, "v21_analytics_detectors"], [/^\/analytics\/heatmap\/time$/, "v21_analytics_heatmap_time"],
   [/^\/analytics\/heatmap\/identities$/, "v21_analytics_heatmap_identities"],

@@ -340,7 +340,7 @@ async function startScan() {
       await api("/scan/start", { method: "POST", body: mode === "dataset" ? { pace } : { input_mode: mode, pace } });
     } catch (err) {
       if (!/already|409|conflict/i.test(err.message || "")) { toast(err.message, "error"); setPill("failed"); return; }
-      toast("A scan is already running, attaching to it", "error");
+      toast("A scan is in progress, attaching to live stream", "info");
     }
     if (!MOCK) {
       for (let i = 0; i < 30; i++) {

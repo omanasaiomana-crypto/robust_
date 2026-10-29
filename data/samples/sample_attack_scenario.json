@@ -1,0 +1,486 @@
+[
+  {
+    "eventID": "ct-0002296",
+    "eventTime": "2026-10-26T04:05:00Z",
+    "eventName": "DescribeInstances",
+    "eventSource": "ec2.amazonaws.com",
+    "awsRegion": "ap-south-1",
+    "sourceIPAddress": "103.21.244.11",
+    "userAgent": "aws-sdk-python/1.34.0 Boto3/1.34.0 Python/3.11.8",
+    "userIdentity": {
+      "type": "IAMUser",
+      "userName": "anita.rao",
+      "arn": "arn:aws:iam::123456789012:user/anita.rao",
+      "accessKeyId": "AKIAANIT8244KEY"
+    },
+    "requestParameters": {},
+    "resources": [
+      {
+        "ARN": "arn:aws:ec2:ap-south-1:123456789012:instance/*"
+      }
+    ],
+    "label": "impossible_travel"
+  },
+  {
+    "eventID": "ct-0002297",
+    "eventTime": "2026-10-26T04:32:00Z",
+    "eventName": "ListBuckets",
+    "eventSource": "s3.amazonaws.com",
+    "awsRegion": "ap-south-1",
+    "sourceIPAddress": "194.12.45.67",
+    "userAgent": "aws-sdk-python/1.34.0 Boto3/1.34.0 Python/3.11.8",
+    "userIdentity": {
+      "type": "IAMUser",
+      "userName": "anita.rao",
+      "arn": "arn:aws:iam::123456789012:user/anita.rao",
+      "accessKeyId": "AKIAANIT6656KEY"
+    },
+    "requestParameters": {},
+    "resources": [
+      {
+        "ARN": "arn:aws:s3:::*"
+      }
+    ],
+    "label": "impossible_travel"
+  },
+  {
+    "eventID": "ct-0002298",
+    "eventTime": "2026-10-26T07:16:00Z",
+    "eventName": "DescribeInstances",
+    "eventSource": "ec2.amazonaws.com",
+    "awsRegion": "ap-south-1",
+    "sourceIPAddress": "103.21.244.5",
+    "userAgent": "aws-sdk-python/1.34.0 Boto3/1.34.0 Python/3.11.8",
+    "userIdentity": {
+      "type": "IAMUser",
+      "userName": "svc-report",
+      "arn": "arn:aws:iam::123456789012:user/svc-report",
+      "accessKeyId": "AKIASVC-7627KEY"
+    },
+    "requestParameters": {},
+    "resources": [
+      {
+        "ARN": "arn:aws:ec2:ap-south-1:123456789012:instance/*"
+      }
+    ],
+    "label": "dormant_reactivation"
+  },
+  {
+    "eventID": "ct-0002299",
+    "eventTime": "2026-10-27T08:01:00Z",
+    "eventName": "CreateAccessKey",
+    "eventSource": "iam.amazonaws.com",
+    "awsRegion": "ap-south-1",
+    "sourceIPAddress": "103.21.244.99",
+    "userAgent": "aws-sdk-python/1.34.0 Boto3/1.34.0 Python/3.11.8",
+    "userIdentity": {
+      "type": "IAMUser",
+      "userName": "svc-report",
+      "arn": "arn:aws:iam::123456789012:user/svc-report",
+      "accessKeyId": "AKIASVC-4232KEY"
+    },
+    "requestParameters": {
+      "userName": "svc-report"
+    },
+    "resources": [
+      {
+        "ARN": "arn:aws:iam::123456789012:user/svc-report"
+      }
+    ],
+    "label": "privilege_escalation"
+  },
+  {
+    "eventID": "ct-0002300",
+    "eventTime": "2026-10-27T08:04:00Z",
+    "eventName": "AttachUserPolicy",
+    "eventSource": "iam.amazonaws.com",
+    "awsRegion": "ap-south-1",
+    "sourceIPAddress": "103.21.244.99",
+    "userAgent": "aws-sdk-python/1.34.0 Boto3/1.34.0 Python/3.11.8",
+    "userIdentity": {
+      "type": "IAMUser",
+      "userName": "svc-report",
+      "arn": "arn:aws:iam::123456789012:user/svc-report",
+      "accessKeyId": "AKIASVC-5940KEY"
+    },
+    "requestParameters": {
+      "userName": "svc-report",
+      "policyArn": "arn:aws:iam::aws:policy/AdministratorAccess"
+    },
+    "resources": [
+      {
+        "ARN": "arn:aws:iam::123456789012:user/svc-report"
+      }
+    ],
+    "label": "privilege_escalation"
+  },
+  {
+    "eventID": "ct-0002301",
+    "eventTime": "2026-10-27T08:08:00Z",
+    "eventName": "AssumeRole",
+    "eventSource": "sts.amazonaws.com",
+    "awsRegion": "ap-south-1",
+    "sourceIPAddress": "103.21.244.99",
+    "userAgent": "aws-sdk-python/1.34.0 Boto3/1.34.0 Python/3.11.8",
+    "userIdentity": {
+      "type": "IAMUser",
+      "userName": "svc-report",
+      "arn": "arn:aws:iam::123456789012:user/svc-report",
+      "accessKeyId": "AKIASVC-2380KEY"
+    },
+    "requestParameters": {
+      "roleArn": "arn:aws:iam::123456789012:role/AdminRole"
+    },
+    "resources": [
+      {
+        "ARN": "arn:aws:iam::123456789012:role/AdminRole"
+      }
+    ],
+    "label": "privilege_escalation"
+  },
+  {
+    "eventID": "ct-0002302",
+    "eventTime": "2026-10-27T08:12:00Z",
+    "eventName": "GetSecretValue",
+    "eventSource": "secretsmanager.amazonaws.com",
+    "awsRegion": "ap-south-1",
+    "sourceIPAddress": "103.21.244.99",
+    "userAgent": "aws-sdk-python/1.34.0 Boto3/1.34.0 Python/3.11.8",
+    "userIdentity": {
+      "type": "IAMUser",
+      "userName": "svc-report",
+      "arn": "arn:aws:iam::123456789012:user/svc-report",
+      "accessKeyId": "AKIASVC-1605KEY"
+    },
+    "requestParameters": {
+      "secretId": "prod/db/credentials"
+    },
+    "resources": [
+      {
+        "ARN": "arn:aws:secretsmanager:ap-south-1:123456789012:secret:prod/db/credentials-XYZ"
+      }
+    ],
+    "label": "privilege_escalation"
+  },
+  {
+    "eventID": "ct-0002303",
+    "eventTime": "2026-10-27T10:35:00Z",
+    "eventName": "StopLogging",
+    "eventSource": "cloudtrail.amazonaws.com",
+    "awsRegion": "eu-west-3",
+    "sourceIPAddress": "103.21.244.15",
+    "userAgent": "aws-sdk-python/1.34.0 Boto3/1.34.0 Python/3.11.8",
+    "userIdentity": {
+      "type": "IAMUser",
+      "userName": "dev.kumar",
+      "arn": "arn:aws:iam::123456789012:user/dev.kumar",
+      "accessKeyId": "AKIADEV.6480KEY"
+    },
+    "requestParameters": {
+      "name": "arn:aws:cloudtrail:eu-west-3:123456789012:trail/corp-audit"
+    },
+    "resources": [
+      {
+        "ARN": "arn:aws:cloudtrail:eu-west-3:123456789012:trail/corp-audit"
+      }
+    ],
+    "label": "unusual_api"
+  },
+  {
+    "eventID": "ct-0002304",
+    "eventTime": "2026-10-27T11:00:30Z",
+    "eventName": "GetObject",
+    "eventSource": "s3.amazonaws.com",
+    "awsRegion": "ap-south-1",
+    "sourceIPAddress": "103.21.244.20",
+    "userAgent": "aws-sdk-python/1.34.0 Boto3/1.34.0 Python/3.11.8",
+    "userIdentity": {
+      "type": "IAMUser",
+      "userName": "meera.n",
+      "arn": "arn:aws:iam::123456789012:user/meera.n",
+      "accessKeyId": "ASIA_MEERA_STOLEN_99"
+    },
+    "requestParameters": {},
+    "resources": [
+      {
+        "ARN": "arn:aws:s3:::corp-data-lake-reports/finance.csv"
+      }
+    ],
+    "label": "token_abuse"
+  },
+  {
+    "eventID": "ct-0002305",
+    "eventTime": "2026-10-27T11:02:15Z",
+    "eventName": "ListBuckets",
+    "eventSource": "s3.amazonaws.com",
+    "awsRegion": "sa-east-1",
+    "sourceIPAddress": "177.18.90.12",
+    "userAgent": "aws-cli/2.15.15 Python/3.11.6 Linux/5.15.0",
+    "userIdentity": {
+      "type": "IAMUser",
+      "userName": "meera.n",
+      "arn": "arn:aws:iam::123456789012:user/meera.n",
+      "accessKeyId": "ASIA_MEERA_STOLEN_99"
+    },
+    "requestParameters": {},
+    "resources": [
+      {
+        "ARN": "arn:aws:s3:::*"
+      }
+    ],
+    "label": "token_abuse"
+  },
+  {
+    "eventID": "ct-0002306",
+    "eventTime": "2026-10-27T11:14:00Z",
+    "eventName": "DescribeInstances",
+    "eventSource": "ec2.amazonaws.com",
+    "awsRegion": "sa-east-1",
+    "sourceIPAddress": "177.18.90.12",
+    "userAgent": "aws-sdk-python/1.34.0 Boto3/1.34.0 Python/3.11.8",
+    "userIdentity": {
+      "type": "IAMUser",
+      "userName": "meera.n",
+      "arn": "arn:aws:iam::123456789012:user/meera.n",
+      "accessKeyId": "ASIA_MEERA_STOLEN_99"
+    },
+    "requestParameters": {},
+    "resources": [
+      {
+        "ARN": "arn:aws:ec2:sa-east-1:123456789012:instance/*"
+      }
+    ],
+    "label": "token_abuse"
+  },
+  {
+    "uuid": "okta-000655",
+    "published": "2026-10-26T04:00:00Z",
+    "eventType": "user.session.start",
+    "actor": {
+      "id": "00uanitarao",
+      "alternateId": "anita.rao@corp.example"
+    },
+    "outcome": {
+      "result": "SUCCESS"
+    },
+    "client": {
+      "ipAddress": "103.21.244.11",
+      "userAgent": {
+        "rawUserAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 Chrome/124.0.0.0 Safari/537.36"
+      },
+      "geographicalContext": {
+        "country": "India",
+        "city": "Bengaluru",
+        "geolocation": {
+          "lat": 12.9716,
+          "lon": 77.5946
+        }
+      }
+    },
+    "authenticationContext": {
+      "externalSessionId": "okta:sess-anita-1654"
+    },
+    "securityContext": {
+      "asNumber": "AS9498"
+    },
+    "label": "impossible_travel"
+  },
+  {
+    "uuid": "okta-000656",
+    "published": "2026-10-26T04:30:00Z",
+    "eventType": "user.session.start",
+    "actor": {
+      "id": "00uanitarao",
+      "alternateId": "anita.rao@corp.example"
+    },
+    "outcome": {
+      "result": "SUCCESS"
+    },
+    "client": {
+      "ipAddress": "194.12.45.67",
+      "userAgent": {
+        "rawUserAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 Chrome/125.0.0.0 Safari/537.36"
+      },
+      "geographicalContext": {
+        "country": "Germany",
+        "city": "Frankfurt",
+        "geolocation": {
+          "lat": 50.1109,
+          "lon": 8.6821
+        }
+      }
+    },
+    "authenticationContext": {
+      "externalSessionId": "okta:sess-anita-1655"
+    },
+    "securityContext": {
+      "asNumber": "AS24940"
+    },
+    "label": "impossible_travel"
+  },
+  {
+    "uuid": "okta-000657",
+    "published": "2026-10-26T07:15:00Z",
+    "eventType": "user.session.start",
+    "actor": {
+      "id": "00usvc-repo",
+      "alternateId": "svc-report@corp.example"
+    },
+    "outcome": {
+      "result": "SUCCESS"
+    },
+    "client": {
+      "ipAddress": "103.21.244.5",
+      "userAgent": {
+        "rawUserAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 Chrome/126.0.0.0 Safari/537.36"
+      },
+      "geographicalContext": {
+        "country": "India",
+        "city": "Bengaluru",
+        "geolocation": {
+          "lat": 12.9716,
+          "lon": 77.5946
+        }
+      }
+    },
+    "authenticationContext": {
+      "externalSessionId": "okta:sess-svc-1656"
+    },
+    "securityContext": {
+      "asNumber": "AS9498"
+    },
+    "label": "dormant_reactivation"
+  },
+  {
+    "uuid": "okta-000658",
+    "published": "2026-10-27T08:00:00Z",
+    "eventType": "user.session.start",
+    "actor": {
+      "id": "00usvc-repo",
+      "alternateId": "svc-report@corp.example"
+    },
+    "outcome": {
+      "result": "SUCCESS"
+    },
+    "client": {
+      "ipAddress": "103.21.244.99",
+      "userAgent": {
+        "rawUserAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 Chrome/126.0.0.0 Safari/537.36"
+      },
+      "geographicalContext": {
+        "country": "India",
+        "city": "Bengaluru",
+        "geolocation": {
+          "lat": 12.9716,
+          "lon": 77.5946
+        }
+      }
+    },
+    "authenticationContext": {
+      "externalSessionId": "okta:sess-svc-esc-1657"
+    },
+    "securityContext": {
+      "asNumber": "AS9498"
+    },
+    "label": "privilege_escalation"
+  },
+  {
+    "uuid": "okta-000659",
+    "published": "2026-10-27T10:30:00Z",
+    "eventType": "user.session.start",
+    "actor": {
+      "id": "00udevkumar",
+      "alternateId": "dev.kumar@corp.example"
+    },
+    "outcome": {
+      "result": "SUCCESS"
+    },
+    "client": {
+      "ipAddress": "103.21.244.15",
+      "userAgent": {
+        "rawUserAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 Chrome/124.0.0.0 Safari/537.36"
+      },
+      "geographicalContext": {
+        "country": "India",
+        "city": "Bengaluru",
+        "geolocation": {
+          "lat": 12.9716,
+          "lon": 77.5946
+        }
+      }
+    },
+    "authenticationContext": {
+      "externalSessionId": "okta:sess-dev-1658"
+    },
+    "securityContext": {
+      "asNumber": "AS9498"
+    },
+    "label": "unusual_api"
+  },
+  {
+    "uuid": "okta-000660",
+    "published": "2026-10-27T11:00:00Z",
+    "eventType": "user.session.start",
+    "actor": {
+      "id": "00umeeran",
+      "alternateId": "meera.n@corp.example"
+    },
+    "outcome": {
+      "result": "SUCCESS"
+    },
+    "client": {
+      "ipAddress": "103.21.244.20",
+      "userAgent": {
+        "rawUserAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 Chrome/123.0.0.0 Safari/537.36"
+      },
+      "geographicalContext": {
+        "country": "India",
+        "city": "Bengaluru",
+        "geolocation": {
+          "lat": 12.9716,
+          "lon": 77.5946
+        }
+      }
+    },
+    "authenticationContext": {
+      "externalSessionId": "okta:sess-meera-1659"
+    },
+    "securityContext": {
+      "asNumber": "AS9498"
+    },
+    "label": "token_abuse"
+  },
+  {
+    "uuid": "okta-000661",
+    "published": "2026-10-27T11:10:00Z",
+    "eventType": "user.session.end",
+    "actor": {
+      "id": "00umeeran",
+      "alternateId": "meera.n@corp.example"
+    },
+    "outcome": {
+      "result": "SUCCESS"
+    },
+    "client": {
+      "ipAddress": "103.21.244.20",
+      "userAgent": {
+        "rawUserAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 Chrome/125.0.0.0 Safari/537.36"
+      },
+      "geographicalContext": {
+        "country": "India",
+        "city": "Bengaluru",
+        "geolocation": {
+          "lat": 12.9716,
+          "lon": 77.5946
+        }
+      }
+    },
+    "authenticationContext": {
+      "externalSessionId": "okta:sess-meera-1659"
+    },
+    "securityContext": {
+      "asNumber": "AS9498"
+    },
+    "label": "token_abuse"
+  }
+]
