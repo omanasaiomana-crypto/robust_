@@ -1,0 +1,23 @@
+[
+  {
+    "version": 3,
+    "timestamp": "2026-10-30T14:40:00Z",
+    "author": "Agent 15 (Feedback & Tuning)",
+    "description": "Auto-calibrated weights after E1 verification; reinforced D-PE-08 to 1.0",
+    "is_active": true
+  },
+  {
+    "version": 2,
+    "timestamp": "2026-10-30T12:00:00Z",
+    "author": "sec-ops-lead",
+    "description": "Lowered D-ACC-03 threshold for off-hours developer activity",
+    "is_active": false
+  },
+  {
+    "version": 1,
+    "timestamp": "2026-10-30T09:00:00Z",
+    "author": "system-init",
+    "description": "Baseline system defaults per PRD §12 and Section 12 config",
+    "is_active": false
+  }
+]

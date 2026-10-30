@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>IdentityShield · Analytics & Model Performance</title>
+
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet" />
+
+  <!-- Core Theme Styles -->
+  <link rel="stylesheet" href="/v3/css/theme.css" />
+
+  <!-- Tailwind CSS -->
+  <script src="https://cdn.tailwindcss.com"></script>
+
+  <!-- Vendored Chart.js 4.4.4 -->
+  <script src="/vendor/chart.umd.min.js"></script>
+</head>
+<body>
+  <!-- Fixed 3D Particle Network Canvas -->
+  <canvas id="bg3d-canvas"></canvas>
+
+  <div id="main-content">
+    
+    <!-- Page Header -->
+    <div style="display:flex; justify-content:space-between; align-items:flex-end; margin-bottom:20px; flex-wrap:wrap; gap:16px;">
+      <div>
+        <div style="font-size:0.75rem; font-family:var(--font-mono); color:var(--cyan); text-transform:uppercase; letter-spacing:0.06em; margin-bottom:4px;">
+          Model Telemetry // Ground Truth
+        </div>
+        <h1 style="font-size:1.75rem; font-weight:700; margin:0; color:#FFFFFF; letter-spacing:-0.02em;">
+          Detection Analytics & Calibration
+        </h1>
+      </div>
+      <div style="display:flex; gap:12px; align-items:center;">
+        <span class="status-pill" style="color:var(--ok);">
+          <span class="status-dot ok"></span> CALIBRATED (Brier: 0.042)
+        </span>
+      </div>
+    </div>
+
+    <!-- Top Grid: Rules vs ML vs Hybrid + Reliability Diagram -->
+    <div style="display:grid; grid-template-columns:1.2fr 1fr; gap:20px; margin-bottom:24px;">
+      
+      <!-- Grouped Bar Chart: Rules vs ML vs Hybrid -->
+      <div class="glass" style="padding:20px; display:flex; flex-direction:column;">
+        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:14px;">
+          <h3 style="font-size:1rem; font-weight:600; margin:0; color:#FFFFFF;">Model Comparison: Precision / Recall / F1</h3>
+          <span style="font-size:0.6875rem; color:var(--muted); font-family:var(--font-mono);">OFFICIAL BENCHMARK</span>
+        </div>
+        <div style="height:240px; position:relative; width:100%;">
+          <canvas id="chart-models-comparison"></canvas>
+        </div>
+      </div>
+
+      <!-- Calibration Reliability Diagram -->
+      <div class="glass" style="padding:20px; display:flex; flex-direction:column;">
+        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:14px;">
+          <div>
+            <h3 style="font-size:1rem; font-weight:600; margin:0; color:#FFFFFF;">Risk Calibration Reliability</h3>
+            <div style="font-size:0.6875rem; color:var(--muted); font-family:var(--font-mono);">Predicted Risk vs Observed Empirical Threat Frequency</div>
+          </div>
+          <span class="status-pill" style="font-size:0.6875rem; color:var(--cyan);">Brier: 0.042</span>
+        </div>
+        <div style="height:240px; position:relative; width:100%;">
+          <canvas id="chart-calibration-diagram"></canvas>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- Per-Detector Precision & Recall Table -->
+    <div class="glass" style="padding:20px; margin-bottom:24px;">
+      <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:14px;">
+        <h3 style="font-size:1rem; font-weight:600; margin:0; color:#FFFFFF;">Per-Detector Performance & Weight Tuning</h3>
+        <span style="font-size:0.6875rem; color:var(--muted); font-family:var(--font-mono);">All 24 Detection Primitives</span>
+      </div>
+      <div class="table-wrapper">
+        <table id="detector-performance-table">
+          <thead>
+            <tr>
+              <th>Detection ID</th>
+              <th>Category</th>
+              <th>Rule Description</th>
+              <th>Precision</th>
+              <th>Recall</th>
+              <th>Weight</th>
+              <th>Status</th>
+            </tr>
+          </thead>
+          <tbody id="detector-performance-body">
+            <!-- Dynamically populated -->
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- Dual Attack Heatmaps: (Hour × Day) & (Identity × Pattern) -->
+    <div style="display:grid; grid-template-columns:1fr 1fr; gap:20px; margin-bottom:24px;">
+      
+      <!-- Heatmap 1: Temporal Attack Heatmap (Hour x Day) -->
+      <div class="glass" style="padding:20px;">
+        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:14px;">
+          <h3 style="font-size:0.9375rem; font-weight:600; margin:0; color:#FFFFFF;">Attack Temporal Distribution (Hour × Day)</h3>
+          <span style="font-size:0.6875rem; color:var(--warn); font-family:var(--font-mono);">OFF-HOURS PEAKS</span>
+        </div>
+        <div id="heatmap-temporal" style="display:grid; grid-template-columns:repeat(24, 1fr); gap:3px;">
+          <!-- 24 x 7 grid cells rendered by JS -->
+        </div>
+        <div style="display:flex; justify-content:space-between; margin-top:8px; font-size:0.6875rem; color:var(--muted); font-family:var(--font-mono);">
+          <span>00:00 UTC</span>
+          <span>12:00 UTC</span>
+          <span>23:59 UTC</span>
+        </div>
+      </div>
+
+      <!-- Heatmap 2: Identity x Threat Pattern -->
+      <div class="glass" style="padding:20px;">
+        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:14px;">
+          <h3 style="font-size:0.9375rem; font-weight:600; margin:0; color:#FFFFFF;">Identity × Threat Vector Matrix</h3>
+          <span style="font-size:0.6875rem; color:var(--crit); font-family:var(--font-mono);">MULTI-STAGE CHAINS</span>
+        </div>
+        <div id="matrix-identity-pattern" style="display:flex; flex-direction:column; gap:6px;">
+          <!-- Dynamically populated -->
+        </div>
+      </div>
+
+    </div>
+
+  </div>
+
+  <!-- Scripts -->
+  <script type="module" src="/v3/js/core/shell.js"></script>
+  <script type="module" src="/v3/js/fx/bg3d.js"></script>
+  <script type="module" src="/v3/js/fx/tilt.js"></script>
+  <script type="module" src="/v3/js/pages/analytics.js"></script>
+</body>
+</html>

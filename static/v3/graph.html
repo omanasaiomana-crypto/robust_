@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>IdentityShield · 3D Attack Graph</title>
+
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet" />
+
+  <!-- Core Theme Styles -->
+  <link rel="stylesheet" href="/v3/css/theme.css" />
+
+  <!-- Tailwind CSS -->
+  <script src="https://cdn.tailwindcss.com"></script>
+
+  <!-- Vendored 3D & 2D Graph Engines -->
+  <script src="/vendor/three.min.js"></script>
+  <script src="/vendor/3d-force-graph.min.js"></script>
+  <script src="/vendor/vis-network.min.js"></script>
+</head>
+<body>
+  <!-- Fixed 3D Particle Network Canvas -->
+  <canvas id="bg3d-canvas"></canvas>
+
+  <div id="main-content" style="display:flex; flex-direction:column; height:calc(100vh - 100px); max-height:calc(100vh - 100px); gap:16px;">
+    
+    <!-- Controls Header Bar -->
+    <div class="glass" style="padding:12px 20px; display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:16px;">
+      
+      <!-- Left: Identity Selector & View Toggles -->
+      <div style="display:flex; align-items:center; gap:14px; flex-wrap:wrap;">
+        <div style="display:flex; align-items:center; gap:6px;">
+          <span style="font-size:0.75rem; color:var(--muted);">Focus:</span>
+          <select id="select-graph-identity" style="padding:6px 12px; background:rgba(0,0,0,0.4); border:1px solid var(--panel-border); border-radius:var(--radius-control); color:#FFFFFF; font-size:0.8125rem; outline:none;">
+            <option value="global">Global Attack Graph</option>
+            <option value="svc-report">svc-report (Hero E1)</option>
+            <option value="jdoe">jdoe (Engineering)</option>
+            <option value="asmith">asmith (DevOps)</option>
+          </select>
+        </div>
+
+        <label style="display:flex; align-items:center; gap:6px; font-size:0.75rem; color:var(--text); cursor:pointer;">
+          <input id="chk-only-attack" type="checkbox" style="accent-color:var(--crit);" />
+          <span>Only Attack Path</span>
+        </label>
+
+        <label style="display:flex; align-items:center; gap:6px; font-size:0.75rem; color:var(--text); cursor:pointer;">
+          <input id="chk-campaign-links" type="checkbox" checked style="accent-color:var(--brand);" />
+          <span>Show Campaign Links</span>
+        </label>
+      </div>
+
+      <!-- Right: Camera Reset & Screenshot Button -->
+      <div style="display:flex; align-items:center; gap:10px;">
+        <button id="btn-reset-camera" class="btn btn-ghost" type="button" style="padding:6px 12px; font-size:0.8125rem;">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"/><path d="M3 3v5h5"/></svg>
+          Reset Camera
+        </button>
+
+        <button id="btn-screenshot-graph" class="btn btn-primary" type="button" style="padding:6px 12px; font-size:0.8125rem;">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/><circle cx="12" cy="13" r="4"/></svg>
+          Capture PNG
+        </button>
+      </div>
+
+    </div>
+
+    <!-- 3D Graph Workspace + Side Panel -->
+    <div style="display:grid; grid-template-columns:1fr 340px; gap:16px; flex:1; min-height:0;">
+      
+      <!-- 3D Force Graph Container -->
+      <div class="glass" style="position:relative; overflow:hidden; padding:0; display:flex; flex-direction:column;">
+        
+        <!-- Graph Legend Overlay -->
+        <div style="position:absolute; top:14px; left:16px; z-index:10; pointer-events:none; background:rgba(5,7,13,0.7); backdrop-filter:blur(8px); padding:8px 12px; border-radius:8px; border:1px solid var(--panel-border);">
+          <div style="font-size:0.6875rem; color:var(--muted); text-transform:uppercase; margin-bottom:4px; font-family:var(--font-mono);">Graph Legend</div>
+          <div style="display:flex; flex-wrap:wrap; gap:8px; font-size:0.6875rem; font-family:var(--font-mono);">
+            <span style="color:#3B82F6;">● Identity</span>
+            <span style="color:#22D3EE;">● Session</span>
+            <span style="color:#64748B;">● IP</span>
+            <span style="color:#8B5CF6;">● Key</span>
+            <span style="color:#F59E0B;">● Role</span>
+            <span style="color:#10B981;">● Resource</span>
+            <span style="color:#EF4444;">● Sensitive/Target</span>
+          </div>
+        </div>
+
+        <div style="position:absolute; bottom:14px; left:16px; z-index:10; pointer-events:none; font-family:var(--font-mono); font-size:0.6875rem; color:var(--muted); background:rgba(0,0,0,0.5); padding:4px 8px; border-radius:4px;">
+          Left Click + Drag: Rotate · Right Click: Pan · Scroll: Zoom · Click Node: Focus & Inspect
+        </div>
+
+        <!-- 3D Canvas / 2D Vis Container -->
+        <div id="graph-canvas-container" style="flex:1; width:100%; height:100%; min-height:400px;"></div>
+      </div>
+
+      <!-- Side Inspector Panel -->
+      <div class="glass" style="padding:20px; display:flex; flex-direction:column; overflow-y:auto; gap:16px;">
+        <div>
+          <span style="font-size:0.6875rem; font-family:var(--font-mono); color:var(--cyan);">ENTITY INSPECTOR</span>
+          <h3 id="panel-node-title" style="margin:2px 0 0 0; font-size:1.125rem; color:#FFFFFF; word-break:break-all;">Select a Node</h3>
+        </div>
+
+        <div id="panel-node-details" style="display:flex; flex-direction:column; gap:10px; font-size:0.8125rem;">
+          <div style="color:var(--muted); line-height:1.5;">Click any entity in the 3D attack graph to inspect its blast radius, threat score, and link to active cases.</div>
+        </div>
+
+        <!-- Linked Case Card -->
+        <div id="panel-linked-case" style="display:none; padding:12px; background:rgba(239,68,68,0.1); border:1px solid rgba(239,68,68,0.3); border-radius:8px;">
+          <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:4px;">
+            <span class="badge-band badge-band-restrict" style="font-size:0.625rem; padding:1px 6px;">E1 RESTRICT</span>
+            <span style="font-family:var(--font-mono); font-size:0.8125rem; font-weight:700; color:#EF4444;">92.4</span>
+          </div>
+          <div style="font-weight:600; color:#FFFFFF; font-size:0.8125rem; margin-bottom:6px;">Multi-Stage Escalation</div>
+          <a id="panel-btn-investigate" href="/v3/case.html?id=case-e1-svcreport" class="btn btn-primary" style="width:100%; justify-content:center; padding:6px; font-size:0.75rem;">
+            Investigate Case &rarr;
+          </a>
+        </div>
+      </div>
+
+    </div>
+
+  </div>
+
+  <!-- Scripts -->
+  <script type="module" src="/v3/js/core/shell.js"></script>
+  <script type="module" src="/v3/js/fx/bg3d.js"></script>
+  <script type="module" src="/v3/js/fx/tilt.js"></script>
+  <script type="module" src="/v3/js/pages/graph.js"></script>
+</body>
+</html>

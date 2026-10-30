@@ -64,9 +64,14 @@ class ApiClient {
     if (clean === 'actions') return '/v3/mock/actions.json';
     if (clean.startsWith('graph/')) return '/v3/mock/graph.json';
     if (clean.startsWith('geo/')) return '/v3/mock/geo.json';
+    if (clean === 'metrics/kpi' || clean === 'metrics/perf') return '/v3/mock/metrics.json';
     if (clean.startsWith('metrics/')) return '/v3/mock/metrics.json';
     if (clean === 'playbooks') return '/v3/mock/playbooks.json';
     if (clean === 'run/status') return '/v3/mock/run_status.json';
+    if (clean === 'config') return '/v3/mock/config.json';
+    if (clean === 'config/versions') return '/v3/mock/config_versions.json';
+    if (clean === 'audit') return '/v3/mock/audit.json';
+    if (clean === 'audit/verify') return '/v3/mock/audit_verify.json';
     return `/v3/mock/${clean.replace(/\//g, '_')}.json`;
   }
 

@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>IdentityShield · Hash-Chained Audit Trail</title>
+
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet" />
+
+  <!-- Core Theme Styles -->
+  <link rel="stylesheet" href="/v3/css/theme.css" />
+
+  <!-- Tailwind CSS -->
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body>
+  <!-- Fixed 3D Particle Network Canvas -->
+  <canvas id="bg3d-canvas"></canvas>
+
+  <div id="main-content">
+    
+    <!-- Page Header & Audit Verification Trigger -->
+    <div style="display:flex; justify-content:space-between; align-items:flex-end; margin-bottom:20px; flex-wrap:wrap; gap:16px;">
+      <div>
+        <div style="font-size:0.75rem; font-family:var(--font-mono); color:var(--cyan); text-transform:uppercase; letter-spacing:0.06em; margin-bottom:4px;">
+          Tamper-Evident Ledger // Integrity
+        </div>
+        <h1 style="font-size:1.75rem; font-weight:700; margin:0; color:#FFFFFF; letter-spacing:-0.02em;">
+          Hash-Chained Audit Trail
+        </h1>
+      </div>
+      <div style="display:flex; gap:10px; align-items:center;">
+        <button id="btn-verify-audit" class="btn btn-primary" type="button" style="padding:7px 16px; font-size:0.8125rem;">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><polyline points="9 12 11 14 15 10"/></svg>
+          <span id="btn-verify-text">Verify Cryptographic Chain</span>
+        </button>
+      </div>
+    </div>
+
+    <!-- Verification Result Banner -->
+    <div id="audit-verify-banner" class="glass" style="display:none; padding:16px 20px; margin-bottom:20px; border-left:4px solid var(--ok); align-items:center; justify-content:space-between;">
+      <div style="display:flex; align-items:center; gap:12px;">
+        <span id="verify-banner-dot" class="status-dot ok" style="width:12px; height:12px;"></span>
+        <div>
+          <div id="verify-banner-title" style="font-size:0.9375rem; font-weight:700; color:#FFFFFF;">Audit Chain Cryptographically Verified</div>
+          <div id="verify-banner-desc" style="font-size:0.75rem; color:var(--muted); font-family:var(--font-mono); margin-top:2px;">All SHA-256 blocks chained and unbroken across records.</div>
+        </div>
+      </div>
+      <span id="verify-banner-records" class="status-pill" style="color:var(--ok);">48 Records Verified</span>
+    </div>
+
+    <!-- Filters Bar Glass Panel -->
+    <div class="glass" style="padding:14px 20px; margin-bottom:20px; display:flex; flex-wrap:wrap; gap:14px; align-items:center; justify-content:space-between;">
+      <div style="display:flex; gap:12px; flex:1; min-width:260px;">
+        <input id="filter-audit-search" type="text" placeholder="Search actor, action, or case ID..." 
+               style="flex:1; padding:8px 14px; background:rgba(0,0,0,0.3); border:1px solid var(--panel-border); border-radius:var(--radius-control); color:#FFFFFF; font-size:0.8125rem; outline:none;" />
+      </div>
+
+      <div style="display:flex; gap:10px; align-items:center;">
+        <select id="filter-audit-actor" style="padding:7px 12px; background:rgba(0,0,0,0.4); border:1px solid var(--panel-border); border-radius:var(--radius-control); color:#FFFFFF; font-size:0.8125rem; outline:none;">
+          <option value="all">All Actors</option>
+          <option value="Agent 14 (Response)">Agent 14 (Response)</option>
+          <option value="Agent 15 (Feedback & Tuning)">Agent 15 (Feedback & Tuning)</option>
+          <option value="sec-ops-lead">sec-ops-lead</option>
+        </select>
+        <button id="btn-reset-audit-filters" class="btn btn-ghost" type="button" style="padding:6px 12px; font-size:0.8125rem;">Reset</button>
+      </div>
+    </div>
+
+    <!-- Audit Ledger Table -->
+    <div class="glass" style="padding:0; overflow:hidden;">
+      <div class="table-wrapper">
+        <table id="audit-table">
+          <thead>
+            <tr>
+              <th style="width:60px;">#</th>
+              <th>Timestamp</th>
+              <th>Actor / Agent</th>
+              <th>Action Executed</th>
+              <th>Action Detail</th>
+              <th>Previous SHA-256 Hash</th>
+              <th>Block SHA-256 Hash</th>
+            </tr>
+          </thead>
+          <tbody id="audit-table-body">
+            <tr><td colspan="7"><div class="skeleton" style="height:32px; margin:6px 12px;"></div></td></tr>
+            <tr><td colspan="7"><div class="skeleton" style="height:32px; margin:6px 12px;"></div></td></tr>
+            <tr><td colspan="7"><div class="skeleton" style="height:32px; margin:6px 12px;"></div></td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- Scripts -->
+  <script type="module" src="/v3/js/core/shell.js"></script>
+  <script type="module" src="/v3/js/fx/bg3d.js"></script>
+  <script type="module" src="/v3/js/fx/tilt.js"></script>
+  <script type="module" src="/v3/js/pages/audit.js"></script>
+</body>
+</html>

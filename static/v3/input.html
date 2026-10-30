@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>IdentityShield · Ingest & Scenario Scanner</title>
+
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet" />
+
+  <!-- Core Theme Styles -->
+  <link rel="stylesheet" href="/v3/css/theme.css" />
+
+  <!-- Tailwind CSS -->
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body>
+  <!-- Fixed 3D Particle Network Canvas -->
+  <canvas id="bg3d-canvas"></canvas>
+
+  <div id="main-content">
+    
+    <!-- Page Header -->
+    <div style="display:flex; justify-content:space-between; align-items:flex-end; margin-bottom:24px; flex-wrap:wrap; gap:16px;">
+      <div>
+        <div style="font-size:0.75rem; font-family:var(--font-mono); color:var(--cyan); text-transform:uppercase; letter-spacing:0.06em; margin-bottom:4px;">
+          Ingest & Simulation // Sandbox
+        </div>
+        <h1 style="font-size:1.75rem; font-weight:700; margin:0; color:#FFFFFF; letter-spacing:-0.02em;">
+          Upload Logs & Attack Presets (E1–E9)
+        </h1>
+      </div>
+      <div style="display:flex; gap:10px;">
+        <span class="status-pill" style="color:var(--cyan);">
+          <span class="status-dot ok"></span> HMAC Microservice Port 8001 Ready
+        </span>
+      </div>
+    </div>
+
+    <!-- 2-Column Grid: Upload/Editor + Presets & Results -->
+    <div style="display:grid; grid-template-columns:1.3fr 1fr; gap:24px; margin-bottom:24px;">
+      
+      <!-- Left Column: JSON Log Ingest / Manual Editor -->
+      <div class="glass" style="padding:22px; display:flex; flex-direction:column; gap:16px;">
+        <div style="display:flex; justify-content:space-between; align-items:center;">
+          <div>
+            <h3 style="font-size:1rem; font-weight:600; margin:0; color:#FFFFFF;">Log Payload Ingest</h3>
+            <div style="font-size:0.75rem; color:var(--muted);">Paste Okta System Log or AWS CloudTrail JSON / JSONL</div>
+          </div>
+          <div style="display:flex; gap:6px;">
+            <button id="btn-format-json" class="btn btn-ghost" type="button" style="padding:4px 8px; font-size:0.75rem;">Format</button>
+            <button id="btn-clear-input" class="btn btn-ghost" type="button" style="padding:4px 8px; font-size:0.75rem;">Clear</button>
+          </div>
+        </div>
+
+        <!-- Textarea Editor -->
+        <textarea id="input-json-editor" placeholder='Paste JSON records here or choose an E1–E9 attack preset from the right panel...' style="width:100%; height:320px; background:rgba(0,0,0,0.4); border:1px solid var(--panel-border); border-radius:8px; padding:14px; color:#A5F3FC; font-family:var(--font-mono); font-size:0.8125rem; resize:vertical; outline:none; line-height:1.5;"></textarea>
+
+        <!-- Action Buttons -->
+        <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:10px;">
+          <div style="display:flex; align-items:center; gap:8px;">
+            <input type="file" id="file-upload-input" accept=".json,.jsonl,.log" style="display:none;" />
+            <button id="btn-choose-file" class="btn btn-ghost" type="button">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
+              Upload File
+            </button>
+            <span id="file-name-label" style="font-size:0.75rem; color:var(--muted); font-family:var(--font-mono);">No file chosen</span>
+          </div>
+
+          <div style="display:flex; gap:8px;">
+            <button id="btn-scan-input" class="btn btn-primary" type="button">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+              Scan Input Only
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Right Column: E1-E9 Presets -->
+      <div class="glass" style="padding:22px; display:flex; flex-direction:column; gap:14px;">
+        <div>
+          <h3 style="font-size:1rem; font-weight:600; margin:0 0 4px 0; color:#FFFFFF;">Benchmark Attack Scenarios</h3>
+          <div style="font-size:0.75rem; color:var(--muted);">Click any scenario to load its authentic JSON records</div>
+        </div>
+
+        <div id="presets-container" style="display:flex; flex-direction:column; gap:8px; overflow-y:auto; max-height:420px;">
+          <!-- Dynamically populated with E1-E9 -->
+        </div>
+      </div>
+
+    </div>
+
+    <!-- Scan Results Panel -->
+    <div id="scan-results-panel" class="glass" style="display:none; padding:22px; margin-bottom:24px;">
+      <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:14px;">
+        <h3 style="font-size:1rem; font-weight:600; margin:0; color:#FFFFFF;">Scan Findings & Detections</h3>
+        <span id="scan-status-pill" class="status-pill" style="color:var(--ok);">SCAN COMPLETE</span>
+      </div>
+      <div id="scan-output-content" style="font-family:var(--font-mono); font-size:0.8125rem; color:var(--text);"></div>
+    </div>
+
+  </div>
+
+  <!-- Scripts -->
+  <script type="module" src="/v3/js/core/shell.js"></script>
+  <script type="module" src="/v3/js/fx/bg3d.js"></script>
+  <script type="module" src="/v3/js/fx/tilt.js"></script>
+  <script type="module" src="/v3/js/pages/input.js"></script>
+</body>
+</html>
