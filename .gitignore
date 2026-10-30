@@ -13,5 +13,8 @@ data/reports/
 data/spool/
 *.sqlite-wal
 *.sqlite-shm
+*.db-wal
+*.db-shm
+data/*.db-*
 .pytest_cache/
 data/models/

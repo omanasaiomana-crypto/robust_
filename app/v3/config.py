@@ -10,6 +10,7 @@ from pathlib import Path
 ROOT_DIR = Path(__file__).resolve().parent.parent.parent
 
 # --- Defaults from context.md Section 12 ---
+V3_ENABLED: bool = True
 SEED: int = 42
 QUEUE_MAX: int = 10000
 WATERMARK_SECONDS: int = 120
