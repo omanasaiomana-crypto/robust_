@@ -16,12 +16,29 @@ export function computeAttackPath(edges, alert, { skipLabels = ["from_ip"] } = {
   for (const id of (alert && alert.evidence_event_ids) || []) if (id && !order.includes(id)) order.push(id);
   for (const s of (alert && alert.chain) || []) if (s && s.event_id && !order.includes(s.event_id)) order.push(s.event_id);
   const rank = new Map(order.map((id, i) => [id, i]));
-  const steps = [];
+  let steps = [];
   (edges || []).forEach((e, index) => {
     if (e && e.event_id != null && rank.has(e.event_id) && !skipLabels.includes(e.label)) {
       steps.push({ index, rank: rank.get(e.event_id), ...e });
     }
   });
+
+  // Fallback: if no alert evidence matched, use suspicious edges or general action edges so every identity has an attack path
+  if (!steps.length) {
+    (edges || []).forEach((e, index) => {
+      if (e && !skipLabels.includes(e.label) && e.label !== "login") {
+        steps.push({ index, rank: e.suspicious ? 0 : index + 10, ...e });
+      }
+    });
+    if (!steps.length) {
+      (edges || []).forEach((e, index) => {
+        if (e && !skipLabels.includes(e.label)) {
+          steps.push({ index, rank: index, ...e });
+        }
+      });
+    }
+  }
+
   steps.sort((a, b) => a.rank - b.rank || a.index - b.index);
   const chainByEvent = new Map(((alert && alert.chain) || []).map((s) => [s.event_id, s]));
   const nodeIds = [];
@@ -31,7 +48,7 @@ export function computeAttackPath(edges, alert, { skipLabels = ["from_ip"] } = {
     nodeIds,
     steps: steps.map((s, i) => ({
       step: i + 1, edgeIndex: s.index, from: s.source, to: s.target, label: s.label, event_id: s.event_id,
-      state: chainByEvent.get(s.event_id)?.state ?? FRIENDLY[s.label]?.[1] ?? null,
+      state: chainByEvent.get(s.event_id)?.state ?? FRIENDLY[s.label]?.[1] ?? (s.suspicious ? "Suspicious" : "Activity"),
       action: chainByEvent.get(s.event_id)?.action ?? FRIENDLY[s.label]?.[0] ?? s.label,
       timestamp: chainByEvent.get(s.event_id)?.timestamp ?? null,
     })),

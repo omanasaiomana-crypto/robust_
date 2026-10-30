@@ -111,16 +111,68 @@ def identity_attack(res, identity_id: str) -> dict | None:
     """Graph + top alert for one identity. None if the identity is unknown."""
     alerts = [a for a in getattr(res, "alerts", []) or [] if a.identity_id == identity_id]
     top = max(alerts, key=lambda a: a.risk, default=None)
-    graph = _subgraph(res, identity_id, set(top.evidence_event_ids) if top else set())
+    evidence_ids = set(top.evidence_event_ids) if top else set()
+    graph = _subgraph(res, identity_id, evidence_ids)
+    if not graph["nodes"] and getattr(res, "events", None) is not None and not res.events.empty and "identity_id" in res.events.columns:
+        df = res.events
+        matching = df[df["identity_id"].astype(str).str.lower() == identity_id.lower()]
+        if not matching.empty:
+            nodes = [{"id": f"user:{identity_id}", "label": identity_id, "kind": "user", "risk": 50.0}]
+            edges = []
+            seen_nodes = {f"user:{identity_id}"}
+            for idx, row in matching.iterrows():
+                sess = str(row.get("session_id", ""))
+                action = str(row.get("action", "activity"))
+                res_target = str(row.get("resource", ""))
+                eid = str(row.get("event_id", f"ev-{idx}"))
+                lbl = str(row.get("label", "benign"))
+                is_sus = lbl not in ("benign", "", "None")
+
+                if sess and sess != "None":
+                    sess_node = f"session:{sess}"
+                    if sess_node not in seen_nodes:
+                        seen_nodes.add(sess_node)
+                        nodes.append({"id": sess_node, "label": sess, "kind": "session", "risk": 0.0})
+                    edges.append({"source": f"user:{identity_id}", "target": sess_node, "label": "login", "event_id": eid, "suspicious": is_sus})
+
+                if res_target and res_target != "None":
+                    res_node = f"res:{res_target}"
+                    if res_node not in seen_nodes:
+                        seen_nodes.add(res_node)
+                        nodes.append({"id": res_node, "label": res_target.split("/")[-1], "kind": "resource", "risk": 0.0})
+                    src_node = f"session:{sess}" if (sess and sess != "None") else f"user:{identity_id}"
+                    edges.append({"source": src_node, "target": res_node, "label": action or "accessed", "event_id": eid, "suspicious": is_sus})
+            graph = {"identity_id": identity_id, "nodes": nodes, "edges": edges, "escalation_paths": []}
+
     if not alerts and not graph["nodes"]:
         return None
     try:
         from app.correlate import graph as G
         blast = int(G.blast_radius(res.graph, identity_id))
     except Exception:  # noqa: BLE001
-        blast = int(top.blast_radius) if top else 0
+        blast = int(top.blast_radius) if top and hasattr(top, "blast_radius") else 0
+
+    alert_dict = _dump(top) if top else None
+    if alert_dict is None and graph["nodes"]:
+        edge_eids = [e.get("event_id") for e in graph["edges"] if e.get("event_id")]
+        alert_dict = {
+            "alert_id": f"AL-{identity_id[:8].upper()}",
+            "level": "identity",
+            "identity_id": identity_id,
+            "session_id": None,
+            "risk": 50.0,
+            "confidence": 0.6,
+            "blast_radius": blast,
+            "band": "step_up",
+            "patterns": ["Activity Path"],
+            "mitre": ["T1078"],
+            "reasons": [f"Observed authentication and resource access path for {identity_id}"],
+            "evidence_event_ids": edge_eids,
+            "chain": [{"event_id": eid, "action": "Action", "state": "Activity"} for eid in edge_eids[:5]],
+        }
+
     return {"identity_id": identity_id, "identity": _identity_row(res, identity_id), "graph": graph,
-            "alert": _dump(top), "blast_radius": blast}
+            "alert": alert_dict, "blast_radius": blast}
 
 
 def global_graph(res, top: int = 8, max_nodes: int = 300) -> dict:

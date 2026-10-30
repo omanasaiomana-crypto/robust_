@@ -81,6 +81,7 @@ function renderDetectors(d) {
     if (typeof window.Chart === "undefined") { $("an-chart").parentElement.innerHTML = errBox("Chart library failed to load"); }
     else {
       if (chart) chart.destroy();
+      const isLight = document.documentElement.getAttribute("data-theme") === "light";
       chart = new window.Chart($("an-chart"), {
         type: "bar",
         data: { labels: summary.map((r) => r.label.split(" (")[0]), datasets: [
@@ -88,12 +89,24 @@ function renderDetectors(d) {
           { label: "Recall", data: summary.map((r) => r.recall), backgroundColor: "#22D3EE", borderRadius: 4, maxBarThickness: 28 },
           { label: "F1", data: summary.map((r) => r.f1), backgroundColor: "#10B981", borderRadius: 4, maxBarThickness: 28 }] },
         options: { maintainAspectRatio: false, scales: {
-          y: { min: 0, max: 1, ticks: { color: "#8A97AD", callback: (v) => Number(v).toFixed(1) }, grid: { color: "#1F2A3C" } },
-          x: { ticks: { color: "#8A97AD" }, grid: { display: false } } },
-          plugins: { legend: { position: "bottom", labels: { color: "#8A97AD" } } } },
+          y: { min: 0, max: 1, ticks: { color: isLight ? "#64748B" : "#8A97AD", callback: (v) => Number(v).toFixed(1) }, grid: { color: isLight ? "#E2E8F0" : "#1F2A3C" } },
+          x: { ticks: { color: isLight ? "#0F172A" : "#8A97AD" }, grid: { display: false } } },
+          plugins: { legend: { position: "bottom", labels: { color: isLight ? "#0F172A" : "#8A97AD" } } } },
       });
     }
   }
+
+  window.addEventListener("theme-changed", (e) => {
+    if (!chart) return;
+    const light = e.detail && e.detail.theme === "light";
+    try {
+      chart.options.scales.y.grid.color = light ? "#E2E8F0" : "#1F2A3C";
+      chart.options.scales.y.ticks.color = light ? "#64748B" : "#8A97AD";
+      chart.options.scales.x.ticks.color = light ? "#0F172A" : "#8A97AD";
+      chart.options.plugins.legend.labels.color = light ? "#0F172A" : "#8A97AD";
+      chart.update();
+    } catch {}
+  });
   if (!d.labeled || !d.matrix.length) {
     $("an-matrix").innerHTML = empty("Labels needed to compare detectors per attack type");
   } else {

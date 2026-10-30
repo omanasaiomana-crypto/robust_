@@ -1,0 +1,63 @@
+privilege_rules:
+  level_5:
+    policies:
+      - "AdministratorAccess"
+      - "*Admin*"
+      - "PowerUserAccess"
+      - "IAMFullAccess"
+    patterns:
+      - "(?i).*admin.*"
+      - "(?i).*fullaccess.*"
+      - "(?i).*root.*"
+  level_4:
+    policies:
+      - "SecurityAudit"
+      - "IAMReadOnlyAccess"
+    patterns:
+      - "(?i).*audit.*"
+      - "(?i).*security.*"
+  level_3:
+    patterns:
+      - "(?i).*write.*"
+      - "(?i).*manage.*"
+  level_2:
+    patterns:
+      - "(?i).*read.*"
+      - "(?i).*view.*"
+  default: 1
+
+sensitivity_rules:
+  level_5:
+    services:
+      - "secretsmanager"
+      - "kms"
+    patterns:
+      - "(?i).*secretsmanager.*"
+      - "(?i).*kms:.*"
+      - "(?i).*prod.*"
+      - "(?i).*finance.*"
+      - "(?i).*pii.*"
+      - "(?i).*credit.*"
+      - "(?i).*database.*credentials.*"
+  level_4:
+    services:
+      - "iam"
+    patterns:
+      - "(?i).*iam::.*"
+      - "(?i).*role/.*"
+      - "(?i).*user/.*"
+  level_3:
+    services:
+      - "s3"
+      - "dynamodb"
+    patterns:
+      - "(?i).*data.*lake.*"
+      - "(?i).*backup.*"
+  level_2:
+    services:
+      - "ec2"
+      - "logs"
+    patterns:
+      - "(?i).*instance.*"
+      - "(?i).*log.*group.*"
+  default: 1

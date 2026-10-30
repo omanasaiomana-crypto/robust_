@@ -47,3 +47,270 @@
   background-color: #161E2E;
   border-radius: 0.5rem;
 }
+
+/* ==========================================================================
+   Light Theme System
+   ========================================================================== */
+
+:root {
+  --theme-bg: #0B0F17;
+  --theme-panel: #111827;
+  --theme-panel2: #161E2E;
+  --theme-line: #1F2A3C;
+  --theme-ink: #E6EBF2;
+  --theme-muted: #8A97AD;
+  --theme-border-subtle: #1F2A3C;
+  --theme-input-bg: #161E2E;
+  --theme-card-shadow: none;
+}
+
+[data-theme="light"],
+body.theme-light {
+  --theme-bg: #F8FAFC;
+  --theme-panel: #FFFFFF;
+  --theme-panel2: #F1F5F9;
+  --theme-line: #E2E8F0;
+  --theme-ink: #0F172A;
+  --theme-muted: #64748B;
+  --theme-border-subtle: #E2E8F0;
+  --theme-input-bg: #FFFFFF;
+  --theme-card-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.06), 0 1px 2px -1px rgba(0, 0, 0, 0.04);
+}
+
+/* Light Mode Overrides for Tailwind Utility Classes */
+[data-theme="light"] body,
+[data-theme="light"] .bg-bg {
+  background-color: #F8FAFC !important;
+  color: #0F172A !important;
+}
+
+[data-theme="light"] aside#sidebar {
+  background-color: #FFFFFF !important;
+  border-color: #E2E8F0 !important;
+  box-shadow: 1px 0 3px 0 rgba(0, 0, 0, 0.03);
+}
+
+[data-theme="light"] header {
+  background-color: rgba(255, 255, 255, 0.88) !important;
+  border-color: #E2E8F0 !important;
+  backdrop-filter: blur(12px) !important;
+}
+
+[data-theme="light"] .bg-panel {
+  background-color: #FFFFFF !important;
+  box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.05), 0 1px 2px -1px rgba(0, 0, 0, 0.05);
+}
+
+[data-theme="light"] .bg-panel\/50 {
+  background-color: rgba(255, 255, 255, 0.88) !important;
+}
+
+[data-theme="light"] .bg-panel2 {
+  background-color: #F1F5F9 !important;
+}
+
+[data-theme="light"] .bg-panel2\/80 {
+  background-color: rgba(241, 245, 249, 0.95) !important;
+}
+
+[data-theme="light"] .bg-panel2\/60 {
+  background-color: rgba(241, 245, 249, 0.75) !important;
+}
+
+[data-theme="light"] .border-line {
+  border-color: #E2E8F0 !important;
+}
+
+[data-theme="light"] .border-line\/60 {
+  border-color: rgba(226, 232, 240, 0.8) !important;
+}
+
+[data-theme="light"] .border-line\/40 {
+  border-color: rgba(226, 232, 240, 0.5) !important;
+}
+
+[data-theme="light"] .text-ink {
+  color: #0F172A !important;
+}
+
+[data-theme="light"] .text-muted {
+  color: #64748B !important;
+}
+
+[data-theme="light"] #sidebar .text-muted:hover {
+  color: #0F172A !important;
+  background-color: #F1F5F9 !important;
+}
+
+/* Form Controls in Light Mode */
+[data-theme="light"] input,
+[data-theme="light"] select,
+[data-theme="light"] textarea {
+  background-color: #FFFFFF !important;
+  color: #0F172A !important;
+  border-color: #CBD5E1 !important;
+}
+
+[data-theme="light"] input::placeholder,
+[data-theme="light"] textarea::placeholder {
+  color: #94A3B8 !important;
+}
+
+/* Tables in Light Mode */
+[data-theme="light"] table {
+  color: #0F172A !important;
+}
+
+[data-theme="light"] thead tr,
+[data-theme="light"] th {
+  background-color: #F8FAFC !important;
+  color: #475569 !important;
+  border-color: #E2E8F0 !important;
+}
+
+[data-theme="light"] tbody tr {
+  border-color: #E2E8F0 !important;
+}
+
+[data-theme="light"] tbody tr:hover {
+  background-color: #F8FAFC !important;
+}
+
+/* Scrollbars in Light Mode */
+[data-theme="light"] ::-webkit-scrollbar-track {
+  background: #F1F5F9;
+}
+[data-theme="light"] ::-webkit-scrollbar-thumb {
+  background: #CBD5E1;
+}
+[data-theme="light"] ::-webkit-scrollbar-thumb:hover {
+  background: #94A3B8;
+}
+
+/* Pre and Code in Light Mode */
+[data-theme="light"] pre,
+[data-theme="light"] code:not(.inline-code) {
+  background-color: #F1F5F9 !important;
+  color: #0F172A !important;
+  border-color: #E2E8F0 !important;
+}
+
+/* Graph Canvas & Legend in Light Mode */
+[data-theme="light"] #g-stage {
+  background: radial-gradient(ellipse at center, #FFFFFF 0%, #E2E8F0 100%) !important;
+}
+
+[data-theme="light"] #g-legend,
+[data-theme="light"] #g-caption {
+  background-color: rgba(255, 255, 255, 0.9) !important;
+  color: #0F172A !important;
+  border-color: #CBD5E1 !important;
+  backdrop-filter: blur(8px) !important;
+}
+
+/* Skeleton loader in Light Mode */
+[data-theme="light"] .skeleton-box {
+  background-color: #E2E8F0 !important;
+}
+
+/* Modals & Dialogs in Light Mode */
+[data-theme="light"] .modal-content,
+[data-theme="light"] [role="dialog"] {
+  background-color: #FFFFFF !important;
+  color: #0F172A !important;
+  border-color: #E2E8F0 !important;
+  box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 8px 10px -6px rgba(0, 0, 0, 0.1) !important;
+}
+
+/* ==========================================================================
+   Power Button & Matching Icon Styling (Light & Dark)
+   ========================================================================== */
+
+.power-button,
+.power-button-sidebar {
+  transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+  user-select: none;
+}
+.power-button:hover,
+.power-button-sidebar:hover {
+  transform: translateY(-1.5px);
+}
+.power-button:active,
+.power-button-sidebar:active {
+  transform: translateY(1px);
+}
+
+.power-svg {
+  animation: pulse-ring 3s ease-in-out infinite;
+}
+@keyframes pulse-ring {
+  0%, 100% { opacity: 0.9; }
+  50% { opacity: 1; filter: drop-shadow(0 0 4px currentColor); }
+}
+
+/* Matching Icons in Light Theme */
+[data-theme="light"] #sidebar a svg {
+  color: #475569 !important;
+  transition: color 0.2s ease, transform 0.2s ease;
+}
+[data-theme="light"] #sidebar a:hover svg {
+  color: #1E293B !important;
+  transform: translateX(1px);
+}
+[data-theme="light"] #sidebar a.bg-panel2 svg,
+[data-theme="light"] #sidebar a.active-nav svg {
+  color: #2563EB !important;
+  filter: drop-shadow(0 1px 3px rgba(37, 99, 235, 0.25));
+}
+[data-theme="light"] #sidebar a.bg-panel2,
+[data-theme="light"] #sidebar a.active-nav {
+  background-color: #EFF6FF !important;
+  color: #1D4ED8 !important;
+  border-left: 3px solid #2563EB !important;
+}
+[data-theme="light"] #sidebar .logo-box {
+  background-color: #EFF6FF !important;
+  border-color: #BFDBFE !important;
+  color: #2563EB !important;
+}
+[data-theme="light"] #btn-rerun {
+  background-color: #EFF6FF !important;
+  color: #2563EB !important;
+  border-color: #BFDBFE !important;
+}
+[data-theme="light"] #btn-rerun svg {
+  color: #2563EB !important;
+}
+[data-theme="light"] a[href*="/api/reports/download"] {
+  background-color: #ECFDF5 !important;
+  color: #047857 !important;
+  border-color: #A7F3D0 !important;
+}
+[data-theme="light"] a[href*="/api/reports/download"] svg {
+  color: #059669 !important;
+}
+
+/* Matching Icons in Dark Theme */
+#sidebar a svg {
+  color: #8A97AD;
+  transition: color 0.2s ease, transform 0.2s ease;
+}
+#sidebar a:hover svg {
+  color: #E6EBF2;
+  transform: translateX(1px);
+}
+#sidebar a.bg-panel2 svg,
+#sidebar a.active-nav svg {
+  color: #38BDF8 !important;
+  filter: drop-shadow(0 0 6px rgba(56, 189, 248, 0.5));
+}
+#sidebar a.bg-panel2,
+#sidebar a.active-nav {
+  border-left: 3px solid #38BDF8 !important;
+}
+#sidebar .logo-box {
+  background-color: rgba(59, 130, 246, 0.15);
+  border-color: rgba(59, 130, 246, 0.35);
+  color: #3B82F6;
+  filter: drop-shadow(0 0 8px rgba(59, 130, 246, 0.3));
+}

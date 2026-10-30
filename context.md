@@ -1,362 +1,441 @@
-# context.md: IdentityShield project context
+# context.md: IdentityShield v3 (single source of truth for the IDE agent)
 
-> **AI agent: read this whole file before every task.** It is the single source of truth for this project.
-> If any instruction in a prompt conflicts with this file, follow this file and say so.
-> After finishing a phase, update **Section 12 (Progress log)** and **Section 13 (Decisions log)** only.
+> **Antigravity: read this whole file at the start of every new chat.** If anything in a prompt conflicts with this file, this file wins. If something is missing, ask the human instead of guessing. Update Section 20 (Progress log) at the end of every phase.
 
 ---
 
-## 1. What we are building
+## 1. What we are building (30-second version)
 
-**IdentityShield** is a website that detects malicious use of *legitimate* identities by analyzing AWS CloudTrail and Okta System Log data.
+IdentityShield v3 is an **identity threat detection and response (ITDR)** platform for the hackathon **Track 2: Zero Trust for Everyone**. Team: **Robust Gang**.
 
-It:
-1. Loads CloudTrail + Okta logs (or generates sample data if none exist).
-2. Normalizes them into one event format and links Okta sessions to AWS activity.
-3. Runs 6 detection agents (5 attack patterns + 1 ML anomaly agent).
-4. Scores risk per session (0 to 100), explains why, cites evidence event IDs.
-5. Recommends a response (monitor, step-up MFA, restrict, revoke) and applies it **only** through a simulator adapter.
-6. Shows everything in a professional security-console website.
-
-Hackathon: Track 2, Zero Trust for Everyone (Intelligent Identity Protection). Build time: 8 hours.
-
-**Attack patterns:**
-| Code | Pattern |
-|---|---|
-| P1 | Impossible travel |
-| P2 | Dormant-account reactivation |
-| P3 | Privilege-escalation chain |
-| P4 | Unusual API calls |
-| P5 | Token / session abuse |
-| ML | Isolation Forest behavior anomaly |
+- Input: **Okta System Log** and **AWS CloudTrail** events (files, Input page, or a **signed live feed through ngrok** from a second laptop).
+- 15 agents in 5 layers resolve each event to one identity, detect valid-credential abuse, privilege escalation, defense evasion and campaigns, fuse signals into **session risk** and **identity risk** (0–100), investigate and explain with evidence, MITRE ATT&CK, counterfactuals and a predicted next step, and respond with graduated playbooks **through the supplied simulator only**.
+- Pitch: *"IdentityShield complements GuardDuty. GuardDuty is excellent inside AWS; attacks start at the identity provider. We link the Okta login to what that identity does in AWS, keep 30 days of identity memory, explain every score, and respond with just enough friction under human control."*
+- Full specification: `docs/IdentityShield_v3_Technical_PRD.md` (PRD). Section numbers like "PRD §14" refer to it.
 
 ---
 
 ## 2. Golden rules (never break these)
 
-1. Python **3.11**, **FastAPI 0.115**, **Pydantic v2** (`model_dump`, `model_validate`, `field_validator`). Never Pydantic v1 syntax.
-2. Use **only** libraries in `requirements.txt`. Never add dependencies. Never use npm, React, Vue, Node or a build step.
-3. `app/models.py` is the **frozen contract**. Never rename, remove or retype a field. Import models from it; never redefine them elsewhere.
-4. Use **synchronous** `def` everywhere (route handlers too). Only the FastAPI `lifespan` is `async`.
-5. Read external data with `dig()` and `parse_ts()` from `app/utils.py`. Missing data → default value, never `KeyError`.
-6. A bad record is **skipped and counted**, never raised. A failing agent returns `[]`, never crashes the pipeline.
-7. Absolute imports only: `from app.models import Alert`.
-8. Files: `pathlib.Path`, `open(..., encoding="utf-8")`.
-9. Logging only (`logging.getLogger(__name__)`), no `print` (except `smoke_test.py`).
-10. **Only modify the files named in the current prompt.** If another file needs a change, stop and say which and why.
-11. All config values come from `app/config.py`. No magic numbers in logic files.
-12. Every API response is a Pydantic model or passes through `clean_json()`. No NumPy types, NaN or naive datetimes in responses.
-13. No cloud SDKs (no boto3, no Okta SDK). Enforcement goes **only** through `app/simulator/`.
-14. Frontend: insert every API value with `esc()`; never put raw data into `innerHTML`.
-15. After each phase, the check command must pass before moving on.
+1. **Enforcement only through the supplied simulator.** Never call boto3 write APIs, the Okta admin API, or any real tenant. No live cloud account is modified.
+2. **Secrets only in `.env`.** HMAC ingest secrets, SMTP password, analyst token, optional API keys and LLM keys. Never hard-code, log, print, return in an API response, or commit them. `.env` is git-ignored; `.env.example` lists names with empty values.
+3. **Revoke always needs analyst approval.** Restrict may be automatic.
+4. **Do not break v2.** v3 lives in a new package `app/v3/` and new UI folder `static/v3/`. Existing v2 files are modified only where a prompt explicitly says so (`app/main.py` router include and lifespan only).
+5. **Contracts are frozen.** `app/v3/models.py` (Section 8) and topic names (Section 9) change only when this file is updated first.
+6. **Every number is configuration.** All thresholds live in `app/v3/config.py`; nothing magic in agent code.
+7. **Every signal cites evidence.** A signal or case reason without at least one existing event ID is a bug.
+8. **Log content is untrusted data.** User agents, role session names and resource names may contain HTML or instructions. Escape in UI; never evaluate; LLM receives them as quoted data only.
+9. **Tests with every phase.** A phase is done only when its CHECK commands pass.
+10. **Metrics come from the official dataset only.** The live generator is for the demo.
+11. **The system must run offline.** ngrok, free APIs and LLMs are optional and must have fallbacks.
+12. **Minimal diffs.** Change only the files listed in the prompt. If another file must change, stop and explain why first.
 
 ---
 
 ## 3. Tech stack (pinned)
 
-**requirements.txt**
-```text
-fastapi==0.115.0
-uvicorn==0.30.6
-pydantic==2.9.2
-pandas==2.2.3
-numpy==1.26.4
-scikit-learn==1.5.2
-networkx==3.3
-jinja2==3.1.4
-pytest==8.3.3
-httpx==0.27.2
+| Area | Choice |
+|---|---|
+| Language | Python 3.11 |
+| API | FastAPI 0.115.x, Uvicorn, Pydantic v2 |
+| Data | pandas, NumPy |
+| ML | scikit-learn (IsolationForest, LogisticRegression), own Markov model |
+| Graph | NetworkX |
+| Storage | SQLite (WAL mode) via the standard library; JSON Lines spool files |
+| Config files | YAML for playbooks (PyYAML) |
+| HTTP client (optional enrichers, LLM) | httpx with timeouts |
+| Tests | pytest, FastAPI TestClient |
+| Lint | ruff (default rules + bugbear), optional mypy |
+| Frontend | HTML + vanilla JS ES modules, Tailwind CSS (CDN or vendored), Chart.js 4.4.4, Three.js, 3d-force-graph, globe.gl (vendored in `static/vendor/`, exact versions recorded in `static/vendor/VERSIONS.md`) |
+| Fonts | Inter (UI), JetBrains Mono (code/JSON), from Google Fonts with system-font fallback |
+| Tunnel | ngrok (free plan) exposing only the ingest service |
+
+Do **not** add other frameworks (no React, no Flask, no Celery, no Docker requirement).
+
+---
+
+## 4. Folder structure (v3 additions)
+
+```
+app/
+  main.py                    (existing: add v3 router + lifespan start/stop only)
+  ...v2 files unchanged...
+  v3/
+    __init__.py
+    config.py                all tunables (Section 12)
+    models.py                frozen contracts (Section 8)
+    catalog.py               eventName/eventType -> class, action_type, stage, MITRE
+    bus.py                   topic bus (sync drain mode + async live mode)
+    supervisor.py            registry, capability manifests, health, pacing, scheduling
+    store.py                 SQLite access for v3 tables (Section 11)
+    audit.py                 adapter to existing hash-chained audit (or v3 table if absent)
+    trace.py                 adapter: v3 trace events -> existing app/trace.py
+    agents/
+      base.py                Agent base: process(msg, state) -> list[Message]
+      a01_collector.py
+      a02_normalizer.py
+      a03_context.py
+      a04_correlation.py
+      a05_access.py
+      a06_session.py
+      a07_credentials.py
+      a08_privesc.py
+      a09_evasion.py
+      a10_ml.py
+      a11_campaign.py
+      a12_fusion.py
+      a13_investigation.py
+      a14_response.py
+      a15_feedback.py
+    enrich/
+      offline.py             bundled lists (Tor, hosting ASNs, trusted IPs, geo table)
+      providers.py           optional free-API enrichers with cache + timeout
+    llm/
+      narrator.py            optional guarded narrative (template fallback)
+    playbooks/
+      default.yaml
+    data/
+      tor_exits.txt, hosting_asns.txt, trusted_ips.txt, geo_seed.csv, privesc_paths.yaml
+    ingest/
+      service.py             separate FastAPI app on port 8001
+      security.py            HMAC verify, nonce cache, rate limiter
+    api.py                   router mounted at /api/v3
+    sse.py                   Server-Sent Events broadcaster
+    pipeline_v3.py           dataset mode: replay files through the bus, drain, return results
+    bench.py                 benchmark runner (python -m app.v3.bench)
+    evaluate.py              KPI evaluation on official labels (python -m app.v3.evaluate)
+static/
+  v3/
+    index.html cases.html case.html live.html agents.html graph.html globe.html
+    analytics.html performance.html settings.html input.html audit.html
+    css/theme.css
+    js/core/api.js js/core/sse.js js/core/dom.js (escHtml, fmt) js/core/shell.js
+    js/fx/bg3d.js js/fx/tilt.js
+    js/pages/*.js            one module per page
+  vendor/                    three, 3d-force-graph, globe.gl, chart.js (+ VERSIONS.md)
+generator/
+  index.html                 attack generator / log forwarder (laptop 2)
+  js/generator.js js/scenarios.js js/sign.js
+  css/generator.css
+tests/
+  v3/ test_*.py              one file per phase area
+data/
+  spool/                     ingest spool (git-ignored)
 ```
 
-**Frontend (CDN only, no build):**
-- Tailwind CSS: `https://cdn.tailwindcss.com` (configured inline, see Section 10)
-- Inter font: Google Fonts `https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap`
-- Chart.js 4: `https://cdn.jsdelivr.net/npm/chart.js@4.4.4/dist/chart.umd.min.js`
-- vis-network: `https://unpkg.com/vis-network@9.1.9/standalone/umd/vis-network.min.js`
+---
 
-**Run:** `python -m uvicorn app.main:app --host 127.0.0.1 --port 8000 --reload` from project root.
+## 5. Architecture summary
+
+Layers and agents (PRD §6, §12):
+
+| # | Agent | Layer | Consumes → Publishes | Path |
+|---|---|---|---|---|
+| 1 | Collector | Data | raw.okta, raw.cloudtrail → events | hot |
+| 2 | Normalizer & Identity Resolver | Data | events → events.normalized | hot |
+| 3 | Context & Threat Intel | Data | events.normalized → events.enriched | hot |
+| 4 | Correlation & Graph | Data | events.enriched → sessions, graph.updates | hot/warm |
+| 5 | Access Anomaly | Detection | events.enriched, sessions → signals | hot |
+| 6 | Session & Token Integrity | Detection | events.enriched, sessions → signals | hot |
+| 7 | Credential Lifecycle | Detection | events.enriched, graph.updates → signals | warm |
+| 8 | Privilege Escalation | Detection | graph.updates, sessions → signals | warm |
+| 9 | Defense Evasion & Impact | Detection | events.enriched → signals | hot |
+| 10 | Behavioral ML | Detection | sessions (closed/updated) → signals | warm |
+| 11 | Campaign | Detection | events.enriched, signals → signals | warm |
+| 12 | Risk Fusion | Decision | signals, config.updates → risk | warm |
+| 13 | Investigation & Explanation | Decision | risk → cases | warm |
+| 14 | Response | Decision | cases, approvals → actions | warm |
+| 15 | Feedback & Tuning | Learning | labels → config.updates | nightly/on label |
+
+Platform (not agents): Supervisor, Bus, Ingest service, API + SSE, Store, Audit, Notifier.
+
+**Agent model (important for a strong backend):** every agent is a class with `process(message, state) -> list[Message]` that is **pure given its state** (no direct I/O except through injected store/clock). The bus calls agents. This gives:
+- **Drain mode** (dataset and tests): publish all raw events, then run the bus synchronously until every queue is empty. Deterministic and fast.
+- **Live mode** (demo): the same agents run as asyncio tasks inside the FastAPI lifespan, consuming queues continuously.
+- Same code, same results, two schedulers.
 
 ---
 
-## 4. Folder structure (exact)
+## 6. Processing paths
 
-```text
-identityshield/
-├── START_HERE.md
-├── context.md                 ← this file
-├── BUILD_PROMPTS.md           ← all prompts in one file
-├── prompts/                   ← one file per phase (same prompts)
-├── docs/                      ← PRD.md and TECH_PRD.md (reference specs)
-├── requirements.txt
-├── run.bat / run.sh
-├── smoke_test.py
-├── data/
-│   ├── raw/cloudtrail/   raw/okta/   metadata/   labels/   sample/
-├── app/
-│   ├── __init__.py  main.py  config.py  models.py  utils.py  store.py  audit.py
-│   ├── sample_data.py  pipeline.py  evaluation.py
-│   ├── ingest/      __init__.py loaders.py normalize.py enrich.py
-│   ├── correlate/   __init__.py sessions.py graph.py
-│   ├── agents/      __init__.py base.py impossible_travel.py dormant.py priv_escalation.py
-│   │                api_anomaly.py token_abuse.py baseline_ml.py
-│   ├── ml/          __init__.py features.py anomaly.py peers.py chain_model.py calibrate.py
-│   ├── decision/    __init__.py scoring.py explain.py respond.py feedback.py
-│   ├── simulator/   __init__.py base.py mock.py supplied.py
-│   └── api/         __init__.py health.py alerts.py identities.py metrics.py audit.py
-├── static/
-│   ├── index.html alerts.html alert.html identities.html graph.html timeline.html
-│   │   hygiene.html audit.html
-│   ├── css/app.css
-│   ├── mock/        (JSON files used with ?mock=1)
-│   └── js/  api.js ui.js layout.js overview.js alerts.js alert.js identities.js
-│            graph.js timeline.js hygiene.js audit.js
-└── tests/  __init__.py test_foundation.py test_utils.py test_normalize.py test_detectors.py
-            test_scoring.py test_api.py
-```
-
----
-
-## 5. Data contracts (summary of app/models.py)
-
-Full code: `docs/TECH_PRD.md` Section 8. Once `app/models.py` exists, **it** is the truth.
-
-| Model | Key fields |
-|---|---|
-| `Event` | event_id, source (cloudtrail/okta), timestamp (aware UTC), identity_id, session_id, action, category (auth/session/api), outcome, src_ip, country, city, lat, lon, asn, user_agent, device_id, token_id, region, resource, resource_sensitivity (1-5), privilege_level (1-5), label |
-| `Signal` | pattern, severity (0-1), identity_id, session_id, agent, reason, evidence_event_ids, mitre, timestamp |
-| `ChainStep` | event_id, action, state, timestamp |
-| `Prediction` | next_state, probability |
-| `Counterfactual` | without, risk |
-| `Alert` | alert_id, level, identity_id, session_id, risk, confidence, blast_radius, band, patterns, mitre, reasons, evidence_event_ids, chain, prediction, counterfactuals, recommended_action, action_status, feedback, first_seen, last_seen |
-| `ActionRequest` | action (step_up/restrict/revoke/dismiss), approved_by |
-| `ActionResult` | alert_id, action, status, detail |
-| `FeedbackRequest` | label (tp/fp) |
-| `Metrics` | event_precision, event_recall, event_f1, session_precision, baseline_event_f1, median_latency_ms, total_events, total_alerts, skipped_records |
-| `Health` | status, pipeline, detail, data_mode, events, alerts |
-| `GraphNode` / `GraphEdge` / `IdentityGraph` | id,label,kind,risk / source,target,label,event_id,suspicious / identity_id,nodes,edges,escalation_paths |
-| `AuditEntry` | seq, timestamp, agent, action, detail, prev_hash, hash |
-| `ErrorResponse` | error, detail, request_id |
-
-Alert IDs: `AL-0001`, `AL-0002`, … ordered by risk descending.
-Bands: `monitor` (<40), `step_up` (40-69), `restrict` (70-89), `revoke` (≥90).
-
----
-
-## 6. Key config names (app/config.py)
-
-Paths: `ROOT, DATA_DIR, RAW_CLOUDTRAIL, RAW_OKTA, METADATA_DIR, LABELS_DIR, SAMPLE_DIR, DB_PATH, STATIC_DIR`
-Modes: `USE_SAMPLE_IF_NO_DATA=True`, `SIMULATOR_MODE="mock"`
-Detection: `IMPOSSIBLE_TRAVEL_KMH=900`, `DORMANT_DAYS=30`, `ESCALATION_WINDOW_HOURS=6`, `API_RARITY_THRESHOLD=0.98`, `PEER_RARITY_THRESHOLD=0.95`
-Scoring: `PRIVILEGE_MULTIPLIER`, `SENSITIVITY_MULTIPLIER`, `SIGNAL_WEIGHTS={"P1":25,"P2":20,"P3":35,"P4":15,"P5":30,"ML":20}`, `COMBO_BONUS_PER_PATTERN=0.25`, `RISK_HALF_LIFE_HOURS=6`
-Response: `BAND_STEP_UP=40, BAND_RESTRICT=70, BAND_REVOKE=90, FRICTION_BUDGET_PER_DAY=2, REQUIRE_APPROVAL_FOR_REVOKE=True`
-Feedback: `FEEDBACK_LEARNING_RATE=0.1, WEIGHT_MIN=5, WEIGHT_MAX=60`
-`SENSITIVE_ACTIONS` set. `PATTERN_NAMES` (P1..ML → display name). `MITRE_BY_PATTERN` (P1..ML → list of technique IDs).
-
-**Pre-built helper functions (use these, never re-implement):**
-- `app/utils.py`: `dig`, `parse_ts`, `safe_div`, `haversine_km`, `clean_json`, `to_band`
-- `app/store.py`: `init_db`, `execute`, `save_alerts`, `update_alert`, `load_alert`, `load_alerts`, `get_weights`, `set_weight`, `friction_used`, `friction_increment`, `reset_run_tables`
-- `app/audit.py`: `append`, `verify`, `count`, `list_entries`
-
----
-
-## 7. Pipeline order (app/pipeline.py → `run_pipeline()` returns `PipelineResult`)
-
-1. Load official data from `data/raw/`; if empty and allowed, generate + load `data/sample/`.
-2. Normalize + enrich → events DataFrame (columns = Event fields, sorted by timestamp).
-3. Assign sessions (Okta `externalSessionId`; CloudTrail linked by identity + IP + time; else identity+token with 1 h gap).
-4. Build NetworkX identity graph.
-5. Train ML (skip silently if < 20 sessions).
-6. Run 6 agents → `list[Signal]`.
-7. Group signals by session → score → explain → recommend.
-8. One alert per session. Apply auto-actions via simulator (revoke needs approval).
-9. Save alerts to SQLite, append audit entries.
-10. Compute metrics if labels exist.
-
-Each step is wrapped in try/except. Failure → `status="failed"` or `"degraded"` with `detail`; the server still starts. Result lives in `app.state.result`.
-
----
-
-## 8. Scoring (app/decision/scoring.py)
-
-```text
-base       = Σ SIGNAL_WEIGHTS[p] × max_severity[p]   (+ SIGNAL_WEIGHTS["ML"] × ml_score)
-context    = PRIVILEGE_MULTIPLIER[privilege] × SENSITIVITY_MULTIPLIER[max_sensitivity]
-combo      = 1 + COMBO_BONUS_PER_PATTERN × (distinct_patterns − 1)
-chain      = 1 + prediction.probability   (if chain exists) else 1
-risk       = min(100, base × context × combo × chain)
-confidence = min(1, n_events / 10) × (distinct_patterns / max(1, n_signals))
-decay      = risk × 0.5 ** (hours_since_last_signal / RISK_HALF_LIFE_HOURS)   (not for feedback == "tp")
-counterfactual = risk recomputed with each pattern removed
-```
-
-MITRE: P1 T1078 · P2 T1078.004 · P3 T1098, T1548 · P4 T1526, T1562 · P5 T1550, T1539
-
----
-
-## 9. API (all under /api, all JSON, errors = ErrorResponse)
-
-| Method | Path | Returns |
-|---|---|---|
-| GET | /api/health | Health |
-| POST | /api/pipeline/run | Health |
-| GET | /api/summary | {by_band, by_pattern, top_identities, totals} |
-| GET | /api/alerts?min_risk&band&pattern&identity&limit&offset | list[Alert] |
-| GET | /api/alerts/{id} | Alert |
-| GET | /api/alerts/{id}/events | list[Event] |
-| POST | /api/alerts/{id}/action | ActionResult |
-| POST | /api/alerts/{id}/feedback | Alert |
-| GET | /api/identities?min_risk | list[{identity_id, risk, alerts, privilege_level, blast_radius}] |
-| GET | /api/identities/{id}/graph | IdentityGraph |
-| GET | /api/sessions/{id}/timeline | list[{event, signals}] |
-| GET | /api/hygiene | {dormant_admins, escalation_paths} |
-| GET | /api/metrics | Metrics |
-| GET | /api/audit?limit | list[AuditEntry] |
-| GET | /api/audit/verify | {valid, broken_at} |
-| GET | /api/weights | {pattern: weight} |
-
-Status codes: 404 not_found · 409 conflict · 422 validation_error · 503 pipeline_not_ready · 500 internal_error.
-Routers are included **before** the static mount in `main.py`.
-
----
-
-## 10. UI design system (professional security console)
-
-**Goal:** looks like a real enterprise SOC product (think modern cloud-security dashboards): calm, dark, dense but readable, no gimmicks.
-
-### 10.1 Tailwind config (put in every page `<head>` right after the Tailwind CDN script)
-
-```html
-<script>
-tailwind.config = {
-  theme: {
-    extend: {
-      fontFamily: { sans: ['Inter', 'system-ui', 'sans-serif'], mono: ['JetBrains Mono', 'monospace'] },
-      colors: {
-        bg:      '#0B0F17',
-        panel:   '#111827',
-        panel2:  '#161E2E',
-        line:    '#1F2A3C',
-        muted:   '#8A97AD',
-        ink:     '#E6EBF2',
-        brand:   '#3B82F6',
-        brand2:  '#22D3EE',
-        ok:      '#10B981',
-        warn:    '#F59E0B',
-        high:    '#F97316',
-        crit:    '#EF4444',
-      }
-    }
-  }
-}
-</script>
-```
-
-### 10.2 Layout
-
-- **Left sidebar** (240 px, `bg-panel`, border-right `line`): logo mark (shield SVG + "IdentityShield"), nav items with inline SVG icons: Overview, Alerts, Identities, Hygiene, Audit. Active item: `bg-panel2`, left 2px `brand` bar, `text-ink`. Collapses to a top bar with a menu button under 768 px.
-- **Top bar** (64 px, border-bottom `line`): page title + subtitle on the left; on the right a pipeline status pill (green "Pipeline OK", amber "Degraded", red "Failed"), data-mode pill ("Official data" / "Sample data"), and a "Re-run pipeline" button.
-- **Content:** `max-w-7xl`, padding 24 px, 24 px gaps.
-- Background `bg-bg`, text `text-ink`, secondary text `text-muted`.
-
-### 10.3 Components (implemented once in `static/js/ui.js`, reused everywhere)
-
-| Component | Spec |
-|---|---|
-| Card | `bg-panel border border-line rounded-xl p-5`; header row with title (`text-sm font-semibold`) and optional action |
-| Stat card | label (`text-xs uppercase tracking-wide text-muted`), value (`text-3xl font-semibold tabular-nums`), small delta/note |
-| Band badge | pill `text-xs font-medium px-2 py-0.5 rounded-full` with 15% tinted background: monitor slate, step_up warn, restrict high, revoke crit; labels "Monitor", "Step-up", "Restrict", "Revoke" |
-| Pattern chip | mono `text-[11px]` chip, `bg-panel2 border border-line`, e.g. "P3 Escalation" |
-| MITRE chip | mono chip with brand2 text, e.g. "T1098" |
-| Risk ring | SVG circular gauge 0-100, stroke color by band, number centered |
-| Risk bar | thin 4 px bar in tables, width = risk% |
-| Table | `text-sm`, sticky header `bg-panel2 text-muted text-xs uppercase`, row hover `bg-panel2`, row borders `line`, numbers `tabular-nums` |
-| Button | primary `bg-brand hover:bg-blue-500 text-white rounded-lg px-3.5 py-2 text-sm font-medium`; secondary `border border-line hover:bg-panel2`; danger `bg-crit/90 hover:bg-crit` |
-| Toast | bottom-right stack, auto-hide 4 s, success/error variants |
-| Skeleton | pulsing `bg-panel2` blocks while loading |
-| Empty state | icon + one line + optional action |
-| Error state | inline card with error text from ErrorResponse + "Retry" button |
-| Modal (confirm) | in-flow centered card used for "Approve revoke?" confirmation |
-
-### 10.4 Page layouts
-
-| Page | Layout |
-|---|---|
-| Overview (`index.html`) | Row of 4 stat cards (Total alerts · Critical (revoke) · Identities at risk · F1 vs baseline) → 2-column: "Alerts by attack pattern" bar chart (Chart.js) + "Risk distribution" doughnut by band → "Top risky identities" table (identity, risk bar, alerts, blast radius) → "Latest critical alerts" list |
-| Alerts | Filter bar (search identity, band select, pattern select, min-risk slider) → table: Risk (ring small or number+bar), Band, Identity, Session, Patterns, MITRE, Recommended, Status, Last seen; click row → alert.html?id= |
-| Alert detail | Header card: risk ring, band badge, identity, session, first/last seen, action buttons → 2-column: left "Why this was flagged" (reasons list, counterfactual table "Score without each signal"), "Attack chain" vertical stepper with states and timestamps, "Predicted next step" callout (brand2 border); right "Evidence events" table (mono event IDs), "Recommended response" card with Apply / Approve revoke / Dismiss, "Analyst feedback" (True positive / False positive) → links to Graph and Timeline |
-| Identities | Table of identities with risk, privilege, blast radius, alerts; click → graph.html?identity= |
-| Graph | Full-width card with vis-network canvas (600 px tall) + right panel: legend by node kind, escalation paths list, blast radius |
-| Timeline | Session header → horizontal slider + play button → vertical event list where events up to the slider are revealed; signals shown as chips on the event that triggered them |
-| Hygiene | Two cards: "Dormant privileged accounts" table, "Paths to admin" table |
-| Audit | Verification banner (valid = green check "Chain intact", invalid = red with seq) → audit table (seq, time, agent, action, detail, short hash in mono) |
-
-### 10.5 UX rules
-
-- Every page: skeleton while loading, empty state if no data, error state on failure.
-- Numbers right-aligned, `tabular-nums`; times shown in local time, short format.
-- Never show raw JSON to users.
-- Colors carry meaning only through band/severity; everything else neutral.
-- Responsive down to 375 px (tables scroll horizontally inside their card).
-- `?mock=1` in the URL makes `api.js` read `static/mock/*.json` instead of the API.
-
----
-
-## 11. Commands
-
-| Purpose | Command |
-|---|---|
-| Install | `python -m venv .venv` → activate → `pip install -r requirements.txt` |
-| Run | `python -m uvicorn app.main:app --reload` |
-| Smoke test | `python smoke_test.py` (must print `SMOKE TEST PASSED`) |
-| Unit tests | `pytest -q` |
-| Commit | `git add . && git commit -m "phase N ok"` |
-
----
-
-## 12. Progress log (agent updates after each phase)
-
-| Phase | Name | Status | Notes |
+| Path | Trigger | Agents | Budget (target) |
 |---|---|---|---|
-| 0 | Scaffold | ☑ | pre-built, verified |
-| 1 | Contracts, config, utils | ☑ | pre-built, verified |
-| 2 | Store and audit | ☑ | pre-built, verified |
-| 3 | Sample data | ☑ | generated 2,306 CT / 661 Okta records with S1-S5 |
-| 4 | Loaders and normalize | ☑ | normalized 2,967 events, 0 skipped, 20 identities |
-| 5 | Enrich, sessions, graph | ☑ | enriched, 661 sessions assigned, 1,173 graph nodes |
-| 6 | Rule detectors P1-P3 | ☑ | P1 (anita.rao), P2 (svc-report), P3 (svc-report 4-step chain) |
-| 7 | Rule detectors P4-P5 | ☑ | P4 (dev.kumar StopLogging), P5 (meera.n token abuse) |
-| 8 | ML module | ☑ | features (661,14), AnomalyModel IF, ChainModel Markov, PeerModel KM, Calibrator |
-| 9 | Decision + simulator | ☑ | scoring, explain, respond, feedback, simulator, test_scoring 5/5 |
-| 10 | Pipeline + evaluation | ☑ | status ok, 16 alerts, top: svc-report (revoke), meera.n, dev.kumar, anita.rao; F1 0.537 > baseline 0.0 |
-| 11 | API + main | ☑ | smoke_test passed, all 13 REST endpoints verified |
-| 12 | UI foundation | ☑ | 8 HTML shells, Tailwind dark theme, api.js with mock mode, ui.js components, layout.js, 13 mock fixtures |
-| 13 | Overview + Alerts pages | ☑ | Overview dashboard with Chart.js charts, KPIs, top identities; Alerts queue with interactive filter bar and keyboard accessible table |
-| 14 | Alert detail page | ☑ | Header with risk ring (size 96), action buttons, confirm modal for revoke, why flagged, counterfactual table, attack chain stepper, predicted next step, evidence table, feedback loop |
-| 15 | Identities, Graph, Timeline | ☑ | Interactive identities table, vis-network graph with escalation paths, and step-by-step session attack activity replay timeline |
-| 16 | Hygiene, Audit | ☑ | Posture hygiene with dormant privileged accounts and paths to admin; tamper-evident audit ledger with chain verification |
-| 17 | Live wiring + tests | ☑ | 33 pytest tests passing across utils, normalize, detectors S1-S5, API actions/feedback; mock vs live API verified |
-| 18 | Polish + demo prep | ☑ | Inline SVG shield favicon, subtle demo scenario card on overview, accessibility labels, professional README.md |
+| Hot | Every event | 1, 2, 3, 4 (session update), 5, 6, 9 | p95 ≤ 1 s receive → signal |
+| Warm | Session close (idle 15 min), session risk ≥ 40, or tick every 30 s | 7, 8, 10, 11, 12, 13, 14 | p95 ≤ 10 s → case + action |
+| Nightly | Schedule or "Retrain" | 10, 15, 3 | minutes |
 
-Status values: ☐ not started · ◐ in progress · ☑ done (check passed).
+In drain mode, the "tick" is triggered after all events are processed so warm agents see complete sessions.
 
 ---
 
-## 13. Decisions log (append only)
+## 7. Coding standards (backend must be strong)
 
-| # | Decision | Reason |
-|---|---|---|
-| 1 | Single FastAPI process serves API + static site | No CORS, one command |
-| 2 | No frontend build; Tailwind/Chart.js/vis via CDN | Avoid npm errors, faster generation |
-| 3 | SQLite via stdlib, no ORM | No migrations |
-| 4 | Synchronous pipeline at startup + re-run endpoint | Simpler, no race conditions |
-| 5 | Sidebar layout replaces the top nav described in TECH_PRD | More professional console look |
-| 6 | Phases 0–2 (contracts, config, utils, store, audit) ship pre-built and tested | Removes the highest-risk backend errors before AI generation starts |
-| 7 | Where TECH_PRD and pre-built code differ, the pre-built code wins | Code was tested; docs are reference |
+1. Type hints on every function; Pydantic models for every message payload.
+2. No bare `except:`. Catch specific exceptions; agent errors go to the `deadletter` topic with reason; never crash the bus.
+3. Structured logging via `logging` with logger per module; JSON formatter; a redaction filter that masks values of keys named like secret, token, password, key, authorization.
+4. Pure functions for detection logic (input lists/dicts → outputs) so they are unit-tested without the bus.
+5. Time is injected (a `Clock` object) so tests control time; never call `datetime.now()` inside detection logic.
+6. Determinism: fixed random seed (`config.SEED = 42`) for ML; sorted iteration where order matters.
+7. Bounded everything: queue sizes, graph nodes, investigation pivots, request sizes, LLM timeouts.
+8. SQLite: one connection per thread, WAL mode, parameterized queries only, indexes on time and identity_id, batched inserts.
+9. API handlers are thin: validate → call a service function → return a model. All handlers return JSON; errors use `HTTPException` with clear `detail`.
+10. Every new module has tests in `tests/v3/`. Target ≥ 80 % line coverage for `app/v3/` (excluding optional providers/LLM).
+11. `ruff check app/v3 tests/v3` must pass with zero errors.
+12. No network calls in tests (providers and LLM mocked or disabled).
 
 ---
 
-## 14. Known issues (agent appends if found)
+## 8. Frozen data contracts (`app/v3/models.py`)
 
-| # | Issue | Status |
+All models are Pydantic v2 `BaseModel` with `model_config = ConfigDict(frozen=True, extra="forbid")` unless marked mutable state.
+
+**Enums (str enums):**
+- `Source`: okta, cloudtrail, manual, generator
+- `EventClass`: authentication, account_change, api_activity, entity_management, data_access
+- `ActionType`: read, write, permission_change, credential_change, destructive, defense_evasion
+- `Stage`: initial_access, credential_access, discovery, privilege_escalation, persistence, defense_evasion, collection, exfiltration, impact
+- `Band`: monitor (<40), step_up (40–69), restrict (70–89), revoke (≥90)
+- `CaseStatus`: new, investigating, contained, awaiting_approval, resolved_tp, resolved_fp, resolved_benign
+- `ActionKind`: monitor, step_up, restrict, revoke_sessions, disable_key, block_ip, quarantine_identity
+- `ActionState`: proposed, pending_approval, approved, executing, applied, failed, rejected, expired, rolled_back
+- `Verdict`: true_positive, false_positive, benign_true_positive
+
+**Models (fields):**
+- `Message`: topic, msg_id, producer (agent id or "platform"), run_id, created_at, schema_version ("3.0"), partition_key (identity_id or ""), payload (one of the models below)
+- `Event`: event_id, time, source, event_class, action (eventName/eventType), identity_id, raw_principal, session_id (nullable), src_ip, user_agent, outcome (success/failure/deny/unknown), resource_arn (nullable), read_only, region (nullable), late (bool), uncatalogued (bool), resolution_confidence (0–1), raw_ref (spool or file pointer), attrs (dict of extra parsed fields: access_key_id, vpc_endpoint_id, external_session_id, policy_arn, target_user, mfa_result, etc.)
+- `Context`: country, city, lat, lon, asn, as_org, is_proxy, is_tor, is_hosting, trusted_ip, privilege_level (1–5), resource_sensitivity (1–5), action_type, stage_hint (nullable), context_complete (bool)
+- `EnrichedEvent`: event (Event), context (Context)
+- `Session`: session_id, identity_id, start, end (nullable), event_ids (list), ips, asns, devices, providers (okta/cloudtrail present), state (open/closed), fingerprint (dict)
+- `GraphDelta`: nodes (list of {id, kind, label, attrs}), edges (list of {source, target, kind, event_id, time})
+- `Signal`: signal_id, detection_id (e.g. "D-SES-02"), agent_num (5–11), identity_id, session_id (nullable), strength (0–1), confidence (0–1), evidence_event_ids (≥1), mitre (list of technique IDs), stage, summary (plain text), details (dict)
+- `RiskScore`: subject_id, kind (session/identity), score (0–100), confidence (0–1), band, factors (dict name→value), computed_at
+- `RiskUpdate`: identity_id, session_id, session_risk (RiskScore), identity_risk (RiskScore), signal_ids
+- `CaseStep`: time, event_id, action, resource (nullable), stage, mitre (list)
+- `Counterfactual`: removed_factor, score_without, delta
+- `NextStep`: action, probability
+- `Case`: case_id, identity_id, session_id, session_risk, identity_risk, confidence, band, status, signal_ids, chain (list CaseStep), reasons (list of {text, evidence_event_ids}), counterfactuals, next_steps, blast_radius, related_identities, narrative, narrative_source (template/llm), created_at, updated_at
+- `Action`: action_id, case_id, playbook_id, kind, approval_required, state, simulator_ref (nullable), reason, created_at, updated_at, expires_at (nullable), approved_by (nullable)
+- `Label`: case_id, verdict, analyst, note, time
+- `ConfigUpdate`: version, changes (dict), reason, created_at, created_by ("agent15" or analyst)
+- `TraceEvent`: (reuse existing v2 trace schema: seq, run_id, ts, agent_id, agent_num, agent_name, layer, state, level, message, duration_ms, data)
+- `IngestEnvelope`: source (okta/cloudtrail), sender_id, batch_id, events (list of dict, 1–500)
+- `IngestResult`: batch_id, accepted, rejected (list of {index, reason}), received_at
+
+---
+
+## 9. Topics (frozen names)
+
+`raw.okta`, `raw.cloudtrail`, `events`, `events.normalized`, `events.enriched`, `sessions`, `graph.updates`, `signals`, `risk`, `cases`, `actions`, `approvals`, `labels`, `config.updates`, `trace`, `deadletter`.
+
+Bus rules: bounded queue per topic (default 10,000); ordering per partition key; publish validated against producer's capability manifest; when any queue > 80 % full → Supervisor sets `backpressure=true` and ingest returns 429 with `Retry-After`.
+
+---
+
+## 10. Capability manifests (enforced by Supervisor)
+
+| Agent | May publish | May write store tables | Simulator | Network |
+|---|---|---|---|---|
+| 1 | events, deadletter | events_v3 | no | no |
+| 2 | events.normalized, deadletter | identities_v3, identity_aliases_v3 | no | no |
+| 3 | events.enriched, deadletter | enrich_cache_v3 | no | optional enrichers only |
+| 4 | sessions, graph.updates, deadletter | sessions_v3 | no | no |
+| 5–11 | signals, deadletter | signals_v3, agent_state_v3 | no | no |
+| 12 | risk, deadletter | risk_v3 | no | no |
+| 13 | cases, deadletter | cases_v3 | no | optional LLM only |
+| 14 | actions, deadletter | actions_v3, notifications | **yes** | email only |
+| 15 | config.updates, deadletter | config_versions_v3 | no | no |
+
+Any violation: blocked, audited, counted on the agent's health card.
+
+---
+
+## 11. Storage (SQLite tables, prefix `_v3`)
+
+events_v3, identities_v3, identity_aliases_v3, sessions_v3, signals_v3, risk_v3, cases_v3, actions_v3, labels_v3, config_versions_v3, agent_state_v3, enrich_cache_v3, ingest_batches_v3, metrics_v3. Audit uses the existing hash-chained audit table (new `actor` values: `agentNN`, `ingest`, `analyst`, `supervisor`). JSON columns stored as TEXT. Indexes on (identity_id, time), (session_id), (case_id), (status).
+
+---
+
+## 12. Key configuration (defaults, all in `app/v3/config.py`)
+
+| Name | Default | Meaning |
 |---|---|---|
-| 1 | ActionRequest schema defaulted approved_by='analyst', which bypassed 409 guard on unapproved revoke requests | Fixed: checked req.model_fields_set in alerts.py |
+| SEED | 42 | Random seed |
+| QUEUE_MAX | 10000 | Per-topic queue bound |
+| WATERMARK_SECONDS | 120 | Late-event reorder window |
+| SESSION_IDLE_MINUTES | 15 | Session close |
+| GRAPH_RETENTION_DAYS | 30 | Graph memory |
+| GRAPH_MAX_NODES | 50000 | Prune above |
+| MAX_SPEED_KMH | 900 | Impossible travel |
+| MIN_DISTANCE_KM | 500 | Impossible travel |
+| MIN_HISTORY_LOGINS | 5 | Cold start threshold |
+| MFA_FATIGUE_DENIES | 5 | Denies before accept |
+| MFA_WINDOW_MINUTES | 10 | MFA fatigue window |
+| DORMANT_DAYS | 30 | Dormant account |
+| NEW_KEY_WINDOW_MINUTES | 60 | New key used from new place |
+| PRIVESC_MAX_STEP_GAP_HOURS | 168 | Slow chains (7 days) |
+| SPRAY_MIN_USERS | 10 | Password spray |
+| SPRAY_WINDOW_MINUTES | 10 | Password spray |
+| SHARED_INFRA_MIN_IDENTITIES | 3 | Campaign |
+| MASS_DELETE_COUNT / WINDOW_MIN | 50 / 5 | Impact |
+| SECRET_HARVEST_COUNT / WINDOW_MIN | 5 / 10 | Impact |
+| ML_CONTAMINATION | 0.02 | IsolationForest |
+| PRIVILEGE_MULT | [0.8, 1.0, 1.15, 1.3, 1.5] | Levels 1–5 |
+| SENSITIVITY_MULT | [0.9, 1.0, 1.1, 1.25, 1.4] | Levels 1–5 |
+| ACTION_MULT | read 1.0, write 1.1, permission/credential 1.25, destructive/defense_evasion 1.4 | Worst action |
+| CHAIN_STEP | 0.15, cap 1.6 | Chain factor |
+| IDENTITY_HALF_LIFE_HOURS | 24 | Decay |
+| BANDS | 40 / 70 / 90 | Thresholds |
+| FRICTION_UNITS / WINDOW_HOURS | 2 / 8 | Friction budget |
+| APPROVAL_TIMEOUT_MINUTES | 30 | Pending approval expiry |
+| RESTRICT_TTL_MINUTES | 240 | Auto-expiry |
+| INVESTIGATION_MAX_DEPTH / ENTITIES / SECONDS | 2 / 50 / 2.0 | Agent 13 bounds |
+| NEXT_STEP_MIN_PROB | 0.3 | Show prediction |
+| LEARNING_RATE | 0.05 | Agent 15 |
+| WEIGHT_FLOORS | D-PE-*, D-DEF-* ≥ 0.6 | Never silenced |
+| INGEST_PORT | 8001 | Ingest service |
+| INGEST_MAX_BODY_BYTES | 1048576 | 1 MB |
+| INGEST_MAX_EVENTS | 500 | Per batch |
+| INGEST_RATE_RPS / EVENTS_PER_MIN | 20 / 2000 | Per key |
+| INGEST_SKEW_SECONDS | 60 | Timestamp window |
+| INGEST_NONCE_TTL_SECONDS | 300 | Replay guard |
+| EMAIL_MIN_BAND | restrict | Email at ≥ 70 |
+| LLM_ENABLED | false | Optional narrator |
+| ENRICH_PROVIDERS | [] | Optional free APIs (Section 15) |
+
+---
+
+## 13. Detections (IDs are frozen; details in PRD §13)
+
+- Access: D-ACC-01 impossible travel, D-ACC-02 new device/ASN, D-ACC-03 unusual hour, D-ACC-04 anonymizing network on privileged identity
+- Session: D-SES-01 token replay (new ASN without re-auth), D-SES-02 MFA fatigue, D-SES-03 fingerprint drift (weak), D-SES-04 privileged session without MFA
+- Credentials: D-CRD-01 dormant wakes, D-CRD-02 key for another user, D-CRD-03 new key from new place, D-CRD-04 instance credential from non-AWS IP or unexpected VPC endpoint, D-CRD-05 login profile change for another user
+- Evasion/impact: D-DEF-01 logging stopped, D-DEF-02 GuardDuty detector disabled, D-DEF-03 flow logs deleted, D-DEF-04 data made public, D-DEF-05 KMS key destruction, D-DEF-06 mass deletion, D-DEF-07 secret harvesting
+- Escalation paths: PE-01 … PE-08 (PRD §13.4); signal detection_id = "D-PE-0N"
+- ML: D-ML-01 session anomaly (IsolationForest), D-ML-02 sequence rarity (Markov)
+- Campaign: D-CMP-01 password spray, D-CMP-02 spray then success, D-CMP-03 shared infrastructure
+
+User agent is **weak evidence only** (it is spoofable). No detection may reach strength > 0.3 from user agent alone.
+
+---
+
+## 14. Risk fusion (PRD §14)
+
+- P = 1 − Π(1 − wᵢ·cᵢ·sᵢ) over session signals (noisy-OR).
+- SessionRisk = min(100, 100·P·M_privilege·M_sensitivity·M_action·F_chain).
+- IdentityRisk(t) = max(IdentityRisk₀·e^(−λΔt), latest SessionRisk), half-life 24 h.
+- Identity risk ≥ 60 lowers the next session's step-up threshold by 10.
+- Confidence = mean signal confidence × context completeness × identity resolution confidence.
+- Counterfactuals: recompute without each signal family and each multiplier; keep top 3 drops.
+- Weights wᵢ default 1.0 for rule detections and 0.8 for ML; calibrated by logistic regression on labeled sessions (Phase 17); floors apply.
+
+---
+
+## 15. Optional free APIs (see `FREE_APIS.md`)
+
+- Off by default. Enabled per provider in `.env` (`ENRICH_PROVIDERS=ipinfo_lite,abuseipdb`).
+- Never called on the hot path synchronously: Agent 3 uses the cache; misses are queued for a background prefetch task with a 2 s timeout and per-provider rate limit; results cached 24 h in `enrich_cache_v3`.
+- Any failure → offline values, `context_complete` unchanged, warning counter increment.
+- Never send anything except an IP address to a provider. Never send user names, emails or keys.
+
+---
+
+## 16. Response playbooks (PRD §16)
+
+Default playbooks PB-01 … PB-05 in `app/v3/playbooks/default.yaml`. Friction budget 2 units per 8 h. Action lifecycle: proposed → (pending_approval → approved | rejected | expired) → executing → applied | failed → rolled_back. Simulator calls are idempotent by action_id. Every state change → audit entry and `actions` topic message.
+
+**Simulator adapter:** reuse the existing v2 simulator client/module. If its interface differs, write a thin adapter in `a14_response.py`; never call anything else.
+
+---
+
+## 17. API (all v3 routes under `/api/v3`, ingest on port 8001)
+
+Ingest (port 8001): `POST /ingest/v1/events` (HMAC), `GET /ingest/v1/health`.
+
+Core `/api/v3`: `GET /health`, `GET /agents`, `GET /identities`, `GET /identities/{id}`, `GET /identities/{id}/graph`, `GET /graph/global`, `GET /geo/logins`, `GET /cases`, `GET /cases/{id}`, `POST /cases/{id}/label`, `GET /actions`, `POST /actions/{id}/approve`, `POST /actions/{id}/reject`, `POST /actions/{id}/rollback`, `GET /playbooks`, `GET /stream` (SSE), `POST /run/dataset`, `GET /run/status`, `GET /metrics/kpi`, `GET /metrics/perf`, `POST /bench/run`, `GET /config`, `GET /config/versions`, `POST /config/rollback/{version}`, `POST /inputs/scan`.
+
+Mutating endpoints require header `X-Analyst-Token` when `ANALYST_TOKEN` is set in `.env`. Port 8000 binds to 127.0.0.1 in demo mode.
+
+**HMAC ingest headers:** `X-IS-Key-Id`, `X-IS-Timestamp` (Unix seconds), `X-IS-Nonce` (16+ random bytes hex), `X-IS-Signature` = hex HMAC-SHA256(secret, timestamp + "\n" + nonce + "\n" + sha256_hex(raw_body)). Keys from `.env`: `INGEST_KEYS=keyid1:secret1,keyid2:secret2`. Errors: 401 auth, 413 size, 422 schema, 429 rate/backpressure.
+
+---
+
+## 18. UI design system: professional 3D (dark "command center")
+
+**Feel:** a security operations command center in deep space: dark, calm, glass panels, neon data, purposeful 3D. 3D is used where it carries meaning (graphs, globe, agent constellation), never as decoration that slows the page.
+
+**Tokens (CSS variables in `static/v3/css/theme.css`):**
+
+| Token | Value |
+|---|---|
+| --bg | #05070D |
+| --bg-2 | #0B0F17 |
+| --panel | rgba(17, 24, 39, 0.62) with backdrop-filter blur(14px) saturate(140%) |
+| --panel-border | rgba(148, 163, 184, 0.14) |
+| --text | #E5E7EB |
+| --muted | #94A3B8 |
+| --brand | #3B82F6 |
+| --cyan | #22D3EE |
+| --violet | #8B5CF6 |
+| --ok | #10B981 |
+| --warn | #F59E0B |
+| --crit | #EF4444 |
+| band colors | monitor #64748B, step_up #F59E0B, restrict #F97316, revoke #EF4444 |
+| radius | 14px panels, 10px controls |
+| shadow | 0 10px 30px rgba(0,0,0,.45), inner 1px top highlight rgba(255,255,255,.06) |
+| fonts | Inter 400/500/600/700; JetBrains Mono for IDs, JSON, numbers |
+
+**3D components:**
+1. **Background (`bg3d.js`):** Three.js particle network (≤ 1,500 points, slow drift, faint connecting lines), mouse parallax. Pauses when tab hidden; disabled when `prefers-reduced-motion`; falls back to a CSS radial gradient if WebGL is unavailable.
+2. **Agent constellation (Live page):** 15 agent nodes in 3D arranged in 5 rings by layer; idle = dim, running = pulsing glow, finding = amber flash, threat = red burst; bus messages animate as particles flying between nodes; click a node → agent drawer.
+3. **3D attack graph (Graph page):** 3d-force-graph; node colors by kind (identity blue, session cyan, IP slate, key violet, role amber, resource green, sensitive resource red ring); suspicious edges red with directional moving particles along the attack path; Okta→AWS edges highlighted; camera fly-to on click; side panel with node details; 2D fallback with vis-network if WebGL fails.
+4. **Login globe (Globe page and dashboard tile):** globe.gl with login points; arcs between consecutive logins of an identity; impossible-travel arcs red and animated; trusted locations green.
+5. **Tilt cards:** KPI cards tilt slightly in 3D on hover (CSS perspective, max 6°), disabled on touch and reduced motion.
+
+**Layout:** left sidebar (icons + labels, collapsible), top bar (run status pill, live event rate, ngrok/ingest status dot, clock), content grid of glass panels. Responsive down to 1280 px for the demo projector; mobile is not a goal but must not break.
+
+**Rules:** every dynamic string inserted with `escHtml` or `textContent`; no inline event handlers; charts and 3D scenes are destroyed on page change to avoid memory leaks; 60 fps target, scenes cap pixel ratio at 2; each page shows a skeleton loader and an empty state; `?mock=1` loads fixtures from `static/v3/mock/` so the UI works without the backend.
+
+---
+
+## 19. Demo facts to keep consistent
+
+- Hero scenario E1: identity `svc-report` (or the dataset's equivalent): new-country Okta login → SAML role → CreateAccessKey → AttachUserPolicy (admin) → AssumeRole → GetSecretValue. Expected: session risk ≥ 90, restrict applied, revoke pending approval, counterfactual "without escalation chain" around 44, next step GetSecretValue or secret harvesting.
+- Evasion pack E2–E9 and tamper tests T1–T5: PRD §25.3.
+- Never present targets as measured numbers.
+
+---
+
+## 20. Progress log (update at the end of every phase)
+
+| Phase | Status | Date | Notes (bugs found, decisions) |
+|---|---|---|---|
+| P0 Baseline | done | 2026-10-30 | Baseline pytest (64 passed) and smoke test verified; safety net, empty v3 packages, .env.example, and test fixtures initialized. |
+| P1 Contracts + config | done | 2026-10-30 | Frozen Pydantic models (models.py), Section 12 config constants + secret-masking Settings (config.py), and event catalog (catalog.py) implemented with 78 unit tests passing and clean ruff check. |
+| P2 Bus + Supervisor | done | 2026-10-30 | Base agent & context (agents/base.py), topic event bus with drain/live modes (bus.py), 15-slot supervisor with capabilities and health (supervisor.py), SQLite WAL store (store.py), trace adapter (trace.py), and audit adapter (audit.py) verified with 93 passing unit tests and clean ruff check. |
+| P3 Ingest service | done | 2026-10-30 | FastAPI on port 8001 with HMAC-SHA256 signature verification, NonceCache, per-key token bucket rate limiting (20 rps / 2000 epm), 1MB body limit, minimal event validation, daily spooling, backpressure handling, and audit integration verified with 10 unit tests passing and clean ruff check. |
+| P4 Agents 1–2 | done | 2026-10-30 | Agent 1 Collector (dedupe, watermark buffering, late flag, deadletter) and Agent 2 Normalizer & Identity Resolver (Okta/CloudTrail field mapping, catalog classification, IR-1..IR-6 identity resolution, _raw removal, identities/aliases persistence) verified with 11 unit tests passing and clean ruff check. |
+| P5 Agents 3–4 | done | 2026-10-30 | Agent 3 Context & Threat Intel (offline geo/ASN/Tor/hosting lists, sensitivity/privilege rules, optional background providers with cache) and Agent 4 Correlation & Graph (cross-provider session stitching, 15-min idle timeout, NetworkX MultiDiGraph, blast radius) verified with 10 unit tests passing and clean ruff check. |
+| P6 Agents 5–6 | done | 2026-10-30 | Agent 5 Access Anomaly (D-ACC-01..04: impossible travel, new device/ASN, unusual hour, anonymizing network on privileged identity, cold-start damping, trusted IP suppression) and Agent 6 Session & Token Integrity (D-SES-01..04: token replay, MFA fatigue, UA/device drift capped at 0.2, privileged session without MFA) verified with 14 unit tests passing (202 full suite) and clean ruff check. |
+| P7 Agents 7–9 | not started | | |
+| P8 Agents 10–11 | not started | | |
+| P9 Agent 12 | not started | | |
+| P10 Agent 13 | not started | | |
+| P11 Agents 14–15 | not started | | |
+| P12 API + SSE + dataset run | not started | | |
+| P13 UI foundation (3D) | not started | | |
+| P14 UI core pages | not started | | |
+| P15 UI 3D graph, globe, analytics, performance | not started | | |
+| P16 Generator + ngrok | not started | | |
+| P17 Evaluation + benchmark + calibration | not started | | |
+| P18 Hardening + docs + demo | not started | | |
+
+### Known issues / decisions
+- Integration points:
+  - `app/main.py`: Creates FastAPI application `app` with async lifespan (`store.init_db()`, `run_pipeline()`), registers routers (`health`, `alerts`, `identities`, `metrics`, `audit`, `v21` under `/api`), exception handlers (`http_error`, `validation_error`, `unhandled_error`), and mounts `static/` at `/`.
+  - Simulator (`app/simulator/`): Provides `get_simulator() -> SimulatorAdapter` (supporting `MockSimulator` and `SuppliedSimulator`) with enforcement methods `step_up(identity_id, session_id=None)`, `restrict(identity_id, scope="default")`, and `revoke(identity_id, session_id=None)`. Also invoked via `app/decision/respond.py`.
+  - Trace (`app/trace.py`): Live agent event telemetry via `emit(agent_id, state, message, data, level, duration_ms)` (thread-safe, non-raising, size-capped), `step(agent_id, message, data)` (context manager tracking execution time/state), `progress(agent_id, message, data)` (intermediate pipeline progress), `finding(agent_id, message, data)` (live threat/score findings), and terminal rendering via `render_ansi()`.
+  - Audit (`app/audit.py`): Immutable tamper-evident logging via `append(agent, action, detail)` with SHA-256 chaining against previous hash, and `verify() -> tuple[bool, int | None]` to check audit integrity.
+  - Notify (`app/notify.py`): Alert dissemination via `notify_new_alerts(alerts, total_open, async_)` (deduplicated by fingerprint), `notify_alert(alert)` (manual send), and `deliver(msg, text, kind, alert_ids, fps)` supporting off/outbox/smtp modes with rate limiting.
+  - Inputs (`app/inputs.py`): Ingestion and sample data entry via `save_input(content, source, filename)` (validates and writes JSONL to `data/input/<source>/`), `detect_source(rec)`, `add_manual(kind, fields)`, `list_inputs()`, `clear_inputs()`, `list_samples()`, and `load_sample(sample_id)`.
+  - Datasets: Official log datasets reside at `data/sample/cloudtrail.json` and `data/sample/okta.json` with metadata in `data/sample/metadata.json`; raw ingress folders at `data/raw/cloudtrail/` and `data/raw/okta/`; sample scenarios at `data/samples/sample_attack_scenario.json`, `data/samples/sample_cloudtrail.json`, `data/samples/sample_okta.json`; analyst benchmark labels stored in `data/labels/` with schema containing `threats: [{identity_id, session_id, patterns, mitre, is_threat, notes}]`.
+

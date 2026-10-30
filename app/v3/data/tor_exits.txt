@@ -1,0 +1,11 @@
+# Tor bulk exit list sample
+# To refresh from live upstream:
+# curl -s https://check.torproject.org/torbulkexitlist > app/v3/data/tor_exits.txt
+185.220.101.5
+185.220.101.6
+185.220.101.7
+198.51.100.99
+104.244.72.115
+51.15.43.205
+162.247.74.200
+171.25.193.20

@@ -140,8 +140,20 @@ def identity_subgraph(g: nx.MultiDiGraph, identity_id: str, suspicious_ids: set[
     sus_ids = suspicious_ids or set()
     start_node = f"user:{identity_id}"
 
-    if not g.has_node(start_node):
+    if not hasattr(g, "has_node"):
         return IdentityGraph(identity_id=identity_id, nodes=[], edges=[], escalation_paths=[])
+
+    if not g.has_node(start_node):
+        candidates = [n for n in g.nodes if n.lower() == start_node.lower() or n.lower() == f"user:{identity_id.lower()}"]
+        if not candidates:
+            candidates = [n for n, d in g.nodes(data=True) if str(d.get("label", "")).lower() == identity_id.lower()]
+        if not candidates:
+            short_id = identity_id.split("@")[0].lower()
+            candidates = [n for n, d in g.nodes(data=True) if str(d.get("label", "")).lower().startswith(short_id)]
+        if candidates:
+            start_node = candidates[0]
+        else:
+            return IdentityGraph(identity_id=identity_id, nodes=[], edges=[], escalation_paths=[])
 
     # Neighborhood discovery up to radius 3
     try:

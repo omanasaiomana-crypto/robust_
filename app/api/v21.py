@@ -86,24 +86,42 @@ def list_inputs():
 
 
 @router.post("/inputs/upload")
-def upload_input(body: UploadBody):
+def upload_input(body: UploadBody, request: Request):
     try:
-        return clean_json(inputs.save_input(body.content, body.source, body.filename))
+        saved = inputs.save_input(body.content, body.source, body.filename)
+        try:
+            from app import runner
+            runner.run_now(request.app, input_mode="merge")
+        except Exception as exc:
+            log.warning("Auto pipeline run after upload: %s", exc)
+        return clean_json(saved)
     except inputs.InputError as exc:
         raise HTTPException(status_code=422, detail=str(exc)) from None
 
 
 @router.post("/inputs/manual")
-def manual_input(body: ManualBody):
+def manual_input(body: ManualBody, request: Request):
     try:
-        return clean_json(inputs.add_manual(body.kind, body.fields))
+        saved = inputs.add_manual(body.kind, body.fields)
+        try:
+            from app import runner
+            runner.run_now(request.app, input_mode="merge")
+        except Exception as exc:
+            log.warning("Auto pipeline run after manual input: %s", exc)
+        return clean_json(saved)
     except inputs.InputError as exc:
         raise HTTPException(status_code=422, detail=str(exc)) from None
 
 
 @router.delete("/inputs")
-def clear_input():
-    return {"removed": inputs.clear_inputs()}
+def clear_input(request: Request):
+    removed = inputs.clear_inputs()
+    try:
+        from app import runner
+        runner.run_now(request.app, use_sample=True)
+    except Exception as exc:
+        log.warning("Auto pipeline run after clear: %s", exc)
+    return {"removed": removed}
 
 
 @router.get("/inputs/samples")
@@ -122,10 +140,16 @@ def download_sample(filename: str):
 
 
 @router.post("/inputs/load-sample")
-def load_sample_route(body: LoadSampleBody | None = None):
+def load_sample_route(request: Request, body: LoadSampleBody | None = None):
     sample_id = (body.sample if body else "attack") or "attack"
     try:
-        return clean_json(inputs.load_sample(sample_id))
+        saved = inputs.load_sample(sample_id)
+        try:
+            from app import runner
+            runner.run_now(request.app, input_mode="merge")
+        except Exception as exc:
+            log.warning("Auto pipeline run after load-sample: %s", exc)
+        return clean_json(saved)
     except inputs.InputError as exc:
         raise HTTPException(status_code=422, detail=str(exc)) from None
 

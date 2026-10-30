@@ -1,0 +1,250 @@
+[
+  {
+    "uuid": "okta-alice-0001",
+    "published": "2026-10-30T10:00:00Z",
+    "eventType": "user.session.start",
+    "actor": {
+      "id": "00ualice123",
+      "displayName": "Alice Admin",
+      "alternateId": "alice@example.com"
+    },
+    "outcome": {
+      "result": "SUCCESS"
+    },
+    "client": {
+      "ipAddress": "198.51.100.10",
+      "userAgent": {
+        "rawUserAgent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 Chrome/124.0.0.0 Safari/537.36"
+      },
+      "geographicalContext": {
+        "country": "United States",
+        "city": "San Francisco",
+        "geolocation": {
+          "lat": 37.7749,
+          "lon": -122.4194
+        }
+      }
+    },
+    "authenticationContext": {
+      "externalSessionId": "sess-alice-001"
+    },
+    "securityContext": {
+      "asNumber": 15169,
+      "asOrg": "Google LLC",
+      "isProxy": false
+    }
+  },
+  {
+    "uuid": "okta-alice-0002",
+    "published": "2026-10-30T10:00:30Z",
+    "eventType": "user.authentication.auth_via_mfa",
+    "actor": {
+      "id": "00ualice123",
+      "displayName": "Alice Admin",
+      "alternateId": "alice@example.com"
+    },
+    "outcome": {
+      "result": "SUCCESS"
+    },
+    "client": {
+      "ipAddress": "198.51.100.10",
+      "userAgent": {
+        "rawUserAgent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 Chrome/124.0.0.0 Safari/537.36"
+      }
+    },
+    "authenticationContext": {
+      "externalSessionId": "sess-alice-001"
+    }
+  },
+  {
+    "uuid": "okta-alice-0003",
+    "published": "2026-10-30T10:01:00Z",
+    "eventType": "user.authentication.sso",
+    "actor": {
+      "id": "00ualice123",
+      "displayName": "Alice Admin",
+      "alternateId": "alice@example.com"
+    },
+    "outcome": {
+      "result": "SUCCESS"
+    },
+    "client": {
+      "ipAddress": "198.51.100.10",
+      "userAgent": {
+        "rawUserAgent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 Chrome/124.0.0.0 Safari/537.36"
+      }
+    },
+    "target": [
+      {
+        "id": "app-aws-prod",
+        "displayName": "AWS Production Account",
+        "type": "AppInstance"
+      }
+    ],
+    "authenticationContext": {
+      "externalSessionId": "sess-alice-001"
+    }
+  },
+  {
+    "uuid": "okta-bob-0004",
+    "published": "2026-10-30T10:02:00Z",
+    "eventType": "user.session.start",
+    "actor": {
+      "id": "00ubob456",
+      "displayName": "Bob Dev",
+      "alternateId": "bob@example.com"
+    },
+    "outcome": {
+      "result": "SUCCESS"
+    },
+    "client": {
+      "ipAddress": "203.0.113.45",
+      "userAgent": {
+        "rawUserAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 Chrome/124.0.0.0 Safari/537.36"
+      }
+    },
+    "authenticationContext": {
+      "externalSessionId": "sess-bob-002"
+    }
+  },
+  {
+    "uuid": "okta-bob-0005",
+    "published": "2026-10-30T10:02:15Z",
+    "eventType": "user.mfa.okta_verify.deny_push",
+    "actor": {
+      "id": "00ubob456",
+      "displayName": "Bob Dev",
+      "alternateId": "bob@example.com"
+    },
+    "outcome": {
+      "result": "DENY"
+    },
+    "client": {
+      "ipAddress": "185.220.101.5",
+      "userAgent": {
+        "rawUserAgent": "curl/7.68.0"
+      }
+    },
+    "authenticationContext": {
+      "externalSessionId": "sess-bob-002"
+    }
+  },
+  {
+    "uuid": "okta-charlie-0006",
+    "published": "2026-10-30T10:03:00Z",
+    "eventType": "user.session.start",
+    "actor": {
+      "id": "00ucharlie789",
+      "displayName": "Charlie Ops",
+      "alternateId": "charlie@example.com"
+    },
+    "outcome": {
+      "result": "SUCCESS"
+    },
+    "client": {
+      "ipAddress": "198.51.100.80",
+      "userAgent": {
+        "rawUserAgent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36"
+      }
+    },
+    "authenticationContext": {
+      "externalSessionId": "sess-charlie-003"
+    }
+  },
+  {
+    "uuid": "okta-charlie-0007",
+    "published": "2026-10-30T10:03:30Z",
+    "eventType": "user.authentication.verify",
+    "actor": {
+      "id": "00ucharlie789",
+      "displayName": "Charlie Ops",
+      "alternateId": "charlie@example.com"
+    },
+    "outcome": {
+      "result": "SUCCESS"
+    },
+    "client": {
+      "ipAddress": "198.51.100.80",
+      "userAgent": {
+        "rawUserAgent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36"
+      }
+    },
+    "authenticationContext": {
+      "externalSessionId": "sess-charlie-003"
+    }
+  },
+  {
+    "uuid": "okta-alice-0008",
+    "published": "2026-10-30T10:04:00Z",
+    "eventType": "user.account.privilege.grant",
+    "actor": {
+      "id": "00ualice123",
+      "displayName": "Alice Admin",
+      "alternateId": "alice@example.com"
+    },
+    "outcome": {
+      "result": "SUCCESS"
+    },
+    "target": [
+      {
+        "id": "00ubob456",
+        "displayName": "Bob Dev",
+        "alternateId": "bob@example.com",
+        "type": "User"
+      }
+    ],
+    "client": {
+      "ipAddress": "198.51.100.10",
+      "userAgent": {
+        "rawUserAgent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36"
+      }
+    },
+    "authenticationContext": {
+      "externalSessionId": "sess-alice-001"
+    }
+  },
+  {
+    "uuid": "okta-bob-0009",
+    "published": "2026-10-30T10:05:00Z",
+    "eventType": "user.session.end",
+    "actor": {
+      "id": "00ubob456",
+      "displayName": "Bob Dev",
+      "alternateId": "bob@example.com"
+    },
+    "outcome": {
+      "result": "SUCCESS"
+    },
+    "client": {
+      "ipAddress": "203.0.113.45",
+      "userAgent": {
+        "rawUserAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36"
+      }
+    },
+    "authenticationContext": {
+      "externalSessionId": "sess-bob-002"
+    }
+  },
+  {
+    "uuid": "okta-alice-0010",
+    "published": "2026-10-30T10:06:00Z",
+    "eventType": "user.session.end",
+    "actor": {
+      "id": "00ualice123",
+      "displayName": "Alice Admin",
+      "alternateId": "alice@example.com"
+    },
+    "outcome": {
+      "result": "SUCCESS"
+    },
+    "client": {
+      "ipAddress": "198.51.100.10",
+      "userAgent": {
+        "rawUserAgent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36"
+      }
+    },
+    "authenticationContext": {
+      "externalSessionId": "sess-alice-001"
+    }
+  }
+]

@@ -1,0 +1,12 @@
+# Common cloud, VPS and hosting ASNs
+# Format: integer ASN per line with optional comments
+16509   # Amazon.com / AWS
+14618   # Amazon.com / AWS
+15169   # Google LLC
+396982  # Google Cloud Platform
+8075    # Microsoft Corporation / Azure
+14061   # DigitalOcean
+16276   # OVH SAS
+24940   # Hetzner Online GmbH
+63949   # Linode / Akamai
+20473   # The Constant Company / Vultr

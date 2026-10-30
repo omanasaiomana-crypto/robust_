@@ -257,6 +257,7 @@ async function loadOverviewData() {
     }
 
     patternWrapper.innerHTML = `<canvas id="canvas-pattern" class="w-full h-full"></canvas>`;
+    const isLight = document.documentElement.getAttribute('data-theme') === 'light';
     const patternCanvas = document.getElementById('canvas-pattern');
     if (patternCanvas && window.Chart) {
       window._patternChart = new window.Chart(patternCanvas, {
@@ -279,21 +280,21 @@ async function loadOverviewData() {
           plugins: {
             legend: { display: false },
             tooltip: {
-              backgroundColor: '#111827',
-              borderColor: '#1F2A3C',
+              backgroundColor: isLight ? '#FFFFFF' : '#111827',
+              borderColor: isLight ? '#E2E8F0' : '#1F2A3C',
               borderWidth: 1,
-              titleColor: '#E6EBF2',
-              bodyColor: '#8A97AD',
+              titleColor: isLight ? '#0F172A' : '#E6EBF2',
+              bodyColor: isLight ? '#64748B' : '#8A97AD',
             },
           },
           scales: {
             x: {
-              grid: { color: '#1F2A3C' },
-              ticks: { color: '#8A97AD', precision: 0, font: { family: 'JetBrains Mono' } },
+              grid: { color: isLight ? '#E2E8F0' : '#1F2A3C' },
+              ticks: { color: isLight ? '#64748B' : '#8A97AD', precision: 0, font: { family: 'JetBrains Mono' } },
             },
             y: {
               grid: { display: false },
-              ticks: { color: '#E6EBF2', font: { size: 11 } },
+              ticks: { color: isLight ? '#0F172A' : '#E6EBF2', font: { size: 11 } },
             },
           },
         },
@@ -326,7 +327,7 @@ async function loadOverviewData() {
             {
               data: bandValues,
               backgroundColor: bandColors,
-              borderColor: '#111827',
+              borderColor: isLight ? '#FFFFFF' : '#111827',
               borderWidth: 2,
             },
           ],
@@ -339,18 +340,18 @@ async function loadOverviewData() {
             legend: {
               position: 'bottom',
               labels: {
-                color: '#E6EBF2',
+                color: isLight ? '#0F172A' : '#E6EBF2',
                 boxWidth: 12,
                 padding: 16,
                 font: { size: 11 },
               },
             },
             tooltip: {
-              backgroundColor: '#111827',
-              borderColor: '#1F2A3C',
+              backgroundColor: isLight ? '#FFFFFF' : '#111827',
+              borderColor: isLight ? '#E2E8F0' : '#1F2A3C',
               borderWidth: 1,
-              titleColor: '#E6EBF2',
-              bodyColor: '#8A97AD',
+              titleColor: isLight ? '#0F172A' : '#E6EBF2',
+              bodyColor: isLight ? '#64748B' : '#8A97AD',
             },
           },
         },
@@ -556,3 +557,35 @@ async function loadOverviewData() {
     }
   }
 }
+
+// React dynamically to theme switches
+window.addEventListener('theme-changed', (e) => {
+  const isLight = e.detail && e.detail.theme === 'light';
+  if (window._patternChart) {
+    try {
+      window._patternChart.options.scales.x.grid.color = isLight ? '#E2E8F0' : '#1F2A3C';
+      window._patternChart.options.scales.x.ticks.color = isLight ? '#64748B' : '#8A97AD';
+      window._patternChart.options.scales.y.ticks.color = isLight ? '#0F172A' : '#E6EBF2';
+      window._patternChart.options.plugins.tooltip.backgroundColor = isLight ? '#FFFFFF' : '#111827';
+      window._patternChart.options.plugins.tooltip.borderColor = isLight ? '#E2E8F0' : '#1F2A3C';
+      window._patternChart.options.plugins.tooltip.titleColor = isLight ? '#0F172A' : '#E6EBF2';
+      window._patternChart.options.plugins.tooltip.bodyColor = isLight ? '#64748B' : '#8A97AD';
+      window._patternChart.update();
+    } catch {}
+  }
+  if (window._riskChart) {
+    try {
+      if (window._riskChart.data.datasets[0]) {
+        window._riskChart.data.datasets[0].borderColor = isLight ? '#FFFFFF' : '#111827';
+      }
+      if (window._riskChart.options.plugins.legend.labels) {
+        window._riskChart.options.plugins.legend.labels.color = isLight ? '#0F172A' : '#E6EBF2';
+      }
+      window._riskChart.options.plugins.tooltip.backgroundColor = isLight ? '#FFFFFF' : '#111827';
+      window._riskChart.options.plugins.tooltip.borderColor = isLight ? '#E2E8F0' : '#1F2A3C';
+      window._riskChart.options.plugins.tooltip.titleColor = isLight ? '#0F172A' : '#E6EBF2';
+      window._riskChart.options.plugins.tooltip.bodyColor = isLight ? '#64748B' : '#8A97AD';
+      window._riskChart.update();
+    } catch {}
+  }
+});

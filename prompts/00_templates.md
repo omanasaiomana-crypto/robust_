@@ -1,37 +1,42 @@
-# Prompt templates (use any time)
+# Templates (use in every phase)
 
-
-### T1: Session start (send once whenever you open a new Antigravity chat)
+## T1: Session start (paste at the start of EVERY new chat)
 
 ```text
-Read context.md fully. It is the single source of truth for this project.
-Summarize in 5 bullet points: what we are building, the golden rules, the tech stack,
-the current progress from Section 12, and the next phase to do.
+Read context.md completely. Then read docs/IdentityShield_v3_Technical_PRD.md sections relevant to the phase I will give you.
+Reply with exactly:
+1) Six bullets: what IdentityShield v3 is, the 12 golden rules in one line each (compressed), the agent model (process(message,state) + drain/live modes), the files you must never rewrite, the current progress from context.md Section 20, and the next phase.
+2) "Ready for phase <N>".
 Do not write any code yet.
 ```
 
-### T2: Fix an error (use whenever a CHECK fails)
+## T2: Fix a failed CHECK
 
 ```text
-Read context.md Section 2 (golden rules).
-The CHECK for Phase <N> failed with this exact output:
-<paste full traceback or console error>
-Fix ONLY the cause of this error, ONLY in these files: <file list>.
-Do not refactor, rename, add dependencies, or touch other files.
-Explain the root cause in one sentence, then show the change.
+The CHECK for phase <N> failed. Exact output:
+<paste the full output or traceback>
+Read context.md Sections 2, 7 and the files named in the traceback only.
+Find the root cause. Fix it with the smallest possible change, only in files listed for phase <N>.
+Do not change tests to make them pass unless the test contradicts context.md; if so, explain first.
+Then re-run the same CHECK commands and show me the output.
 ```
 
-### T3: Resume after interruption
+## T3: Scope guard
 
 ```text
-Read context.md. Look at Section 12 (progress log) and the files that exist in the project.
-Tell me which phase is in progress, which files of that phase exist, and what is missing.
-Do not write code until I confirm.
+Stop. You edited files outside the phase <N> file list: <list>.
+Revert those changes (git checkout -- <files>) unless they are required; if required, explain why in 3 lines and wait for my OK.
 ```
 
-### T4: Scope guard (send if the agent goes off-track)
+## T4: Context refresh mid-phase
 
 ```text
-Stop. Revert any change to files not named in the current prompt.
-Follow context.md Section 2 rule 10: only modify the files named in the prompt.
+Re-read context.md Sections 2, 5, 7, 8, 9 and the phase <N> prompt above. Summarize in 5 bullets what is done and what remains for phase <N>, then continue.
 ```
+
+## T5: End of phase
+
+```text
+Phase <N> CHECK passed. Update context.md Section 20: set phase <N> to "done", today's date, and 1–3 notes (decisions, bugs found, anything the next phase must know). Change nothing else.
+```
+

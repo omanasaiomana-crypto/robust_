@@ -1,0 +1,5 @@
+# Trusted corporate IPs / CIDRs
+# Add known corporate office or VPN egress IP/CIDR ranges below (one per line):
+# Example:
+# 10.0.0.0/8
+# 192.168.1.0/24

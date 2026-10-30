@@ -426,11 +426,28 @@ function showResult(r) {
   const totalAcc = (a.cloudtrail ?? 0) + (a.okta ?? 0);
   $("in-result").innerHTML = `
     <div class="rounded-xl border border-line bg-panel2 p-3.5 text-xs shadow-sm">
-      <div class="flex items-center gap-2 font-medium">
-        <span class="text-emerald-400 font-bold">✓ Processed:</span>
+      <div class="flex items-center gap-2 font-medium flex-wrap">
+        <span class="text-emerald-400 font-bold">✓ Records Uploaded & Correlated:</span>
         <span class="text-ink">Accepted: <b>${esc(a.cloudtrail ?? 0)}</b> CloudTrail · <b>${esc(a.okta ?? 0)}</b> Okta</span>
         <span class="text-muted">|</span>
         <span class="${r.rejected ? "text-red-300 font-bold" : "text-muted"}">Rejected: ${esc(r.rejected ?? 0)}</span>
+      </div>
+      <div class="mt-3 pt-2.5 border-t border-line flex items-center gap-3 flex-wrap">
+        <a
+          href="/explorer.html"
+          class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-brand hover:bg-blue-500 text-white font-semibold text-xs transition-colors shadow-sm"
+        >
+          <span>🔍</span>
+          <span>View Attack Path in Explorer</span>
+          <span>→</span>
+        </a>
+        <a
+          href="/scan.html?autostart=1&mode=merge"
+          class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-panel border border-line hover:bg-line text-ink font-medium text-xs transition-colors"
+        >
+          <span>🚀</span>
+          <span>Watch Live Agent Scan</span>
+        </a>
       </div>
       ${
         (r.errors || []).length

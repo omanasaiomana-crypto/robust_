@@ -48,6 +48,10 @@ root.innerHTML = `
       <button id="g-lay-lr" class="px-3 py-2 hover:bg-panel2">Left → right</button>
     </div>
     <button id="g-global" class="border border-line hover:bg-panel2 rounded-lg px-3 py-2 text-sm" aria-pressed="false">All risky identities</button>
+    <label id="g-upload-label" class="cursor-pointer bg-brand hover:bg-blue-500 text-white rounded-lg px-3 py-2 text-sm font-medium inline-flex items-center gap-1.5 shadow-sm transition-colors" title="Upload a log file to instantly generate and visualize its attack path">
+      <span>📁 Upload Log File</span>
+      <input id="g-file-input" type="file" accept=".json,.jsonl,.txt,.csv" class="hidden">
+    </label>
     <span class="ml-auto"></span>
     <button id="g-fit" class="border border-line hover:bg-panel2 rounded-lg px-3 py-2 text-sm">Fit</button>
     <button id="g-png" class="border border-line hover:bg-panel2 rounded-lg px-3 py-2 text-sm">Export PNG</button>
@@ -124,13 +128,16 @@ function nodeStyle(n) {
   const inBlast = G.showBlast && G.blast.has(n.id);
   const dim = G.focus && !onPath && !inBlast && n.id !== `user:${G.identity}`;
   const glow = onPath ? RED : inBlast ? "#F97316" : n.kind === "user" && n.risk >= 70 ? "#22D3EE" : null;
+  const isLight = document.documentElement.getAttribute("data-theme") === "light";
+  const strokeColor = isLight ? "#FFFFFF" : "#0B0F17";
+  const textColor = dim ? (isLight ? "rgba(100,116,139,0.3)" : DIM_FONT) : (isLight ? "#0F172A" : "#E6EBF2");
   return {
     id: n.id, label: n.label, shape: k.shape, size: k.size + (onPath ? 3 : 0),
-    color: dim ? { background: DIM_NODE, border: DIM_NODE } : { background: k.color, border: onPath ? "#FCA5A5" : "#0B0F17",
-      highlight: { background: k.color, border: "#FFFFFF" }, hover: { background: k.color, border: "#E6EBF2" } },
+    color: dim ? { background: isLight ? "rgba(203,213,225,0.4)" : DIM_NODE, border: isLight ? "#CBD5E1" : DIM_NODE } : { background: k.color, border: onPath ? "#FCA5A5" : strokeColor,
+      highlight: { background: k.color, border: "#FFFFFF" }, hover: { background: k.color, border: isLight ? "#0F172A" : "#E6EBF2" } },
     borderWidth: onPath ? 3 : 1.5,
-    font: { color: dim ? DIM_FONT : "#E6EBF2", size: n.kind === "user" ? 14 : 12, face: "Inter, system-ui, sans-serif",
-      strokeWidth: 3, strokeColor: "#0B0F17" },
+    font: { color: textColor, size: n.kind === "user" ? 14 : 12, face: "Inter, system-ui, sans-serif",
+      strokeWidth: 3, strokeColor },
     shadow: glow ? { enabled: true, color: glow, size: onPath ? 26 : 18, x: 0, y: 0 } : { enabled: false },
   };
 }
@@ -148,13 +155,16 @@ function edgeStyle(e, i) {
   const pending = G.mode === "identity" && rank !== -1 && rank >= G.playStep;
   const dim = G.focus && !onPath;
   const red = onPath || (G.mode === "global" && e.suspicious);
+  const isLight = document.documentElement.getAttribute("data-theme") === "light";
+  const strokeColor = isLight ? "#FFFFFF" : "#0B0F17";
+  const baseEdgeColor = isLight ? "#94A3B8" : "#334155";
   return {
     id: i, from: e.source, to: e.target, label: red ? e.label : undefined, title: `${e.label}${e.event_id ? " · " + e.event_id : ""}`,
     arrows: { to: { enabled: true, scaleFactor: 0.6 } },
-    color: { color: red ? RED : pending ? "rgba(239,68,68,0.35)" : dim ? "rgba(51,65,85,0.25)" : "#334155", highlight: "#FCA5A5", hover: "#94A3B8" },
+    color: { color: red ? RED : pending ? "rgba(239,68,68,0.35)" : dim ? (isLight ? "rgba(148,163,184,0.25)" : "rgba(51,65,85,0.25)") : baseEdgeColor, highlight: "#FCA5A5", hover: "#64748B" },
     width: red ? 3.5 : 1, dashes: pending ? [6, 6] : false,
     smooth: red ? false : { enabled: true, type: "continuous", roundness: 0.4 },
-    font: { size: red ? 11 : 0, color: "#FCA5A5", strokeWidth: 3, strokeColor: "#0B0F17", align: "top" },
+    font: { size: red ? 11 : 0, color: red ? (isLight ? "#DC2626" : "#FCA5A5") : (isLight ? "#475569" : "#94A3B8"), strokeWidth: 3, strokeColor, align: "top" },
   };
 }
 
@@ -402,7 +412,9 @@ $("g-png").addEventListener("click", () => {
   const out = document.createElement("canvas");
   out.width = canvas.width; out.height = canvas.height;
   const c = out.getContext("2d");
-  c.fillStyle = "#0B0F17"; c.fillRect(0, 0, out.width, out.height);
+  const isLight = document.documentElement.getAttribute("data-theme") === "light";
+  c.fillStyle = isLight ? "#F8FAFC" : "#0B0F17";
+  c.fillRect(0, 0, out.width, out.height);
   c.drawImage(canvas, 0, 0);
   const a = document.createElement("a");
   a.href = out.toDataURL("image/png");
@@ -424,6 +436,75 @@ document.addEventListener("fullscreenchange", () => {
   $("g-full").textContent = document.fullscreenElement ? "Exit fullscreen" : "Fullscreen";
   setTimeout(() => G.network && G.network.fit(), 200);
 });
+
+// React to light/dark theme switches
+window.addEventListener("theme-changed", () => {
+  restyle();
+});
+
+// Direct log upload from attack path explorer
+const fileInput = $("g-file-input");
+if (fileInput) {
+  fileInput.addEventListener("change", async (e) => {
+    const file = e.target.files && e.target.files[0];
+    if (!file) return;
+    try {
+      toast(`Uploading ${file.name} & computing attack path...`, "info");
+      const text = await file.text();
+      const res = await api("/inputs/upload", {
+        method: "POST",
+        body: { content: text, filename: file.name, source: "auto" }
+      });
+      toast(`Loaded ${res.event_count || 0} events. Updating graph...`, "success");
+      let ids = (await api("/identities")) || [];
+      ids.sort((a, b) => (b.risk || 0) - (a.risk || 0));
+      $("g-identity").innerHTML = ids.map((r) => `<option value="${esc(r.identity_id)}">${esc(r.identity_id)} · risk ${esc(Math.round(r.risk || 0))}</option>`).join("");
+      const topId = (ids[0] && ids[0].identity_id) || "";
+      if (topId) {
+        $("g-identity").value = topId;
+        await loadIdentity(topId);
+        setTimeout(() => play(), 300);
+      }
+    } catch (err) {
+      toast(err.message || "Failed to process uploaded log file", "error");
+    } finally {
+      e.target.value = "";
+    }
+  });
+}
+
+// Stage drag & drop file upload
+const stage = $("g-stage");
+if (stage) {
+  stage.addEventListener("dragover", (e) => { e.preventDefault(); stage.classList.add("ring-2", "ring-brand"); });
+  stage.addEventListener("dragleave", () => { stage.classList.remove("ring-2", "ring-brand"); });
+  stage.addEventListener("drop", async (e) => {
+    e.preventDefault();
+    stage.classList.remove("ring-2", "ring-brand");
+    const file = e.dataTransfer && e.dataTransfer.files && e.dataTransfer.files[0];
+    if (!file) return;
+    try {
+      toast(`Uploading ${file.name}...`, "info");
+      const text = await file.text();
+      const res = await api("/inputs/upload", {
+        method: "POST",
+        body: { content: text, filename: file.name, source: "auto" }
+      });
+      toast(`Loaded ${res.event_count || 0} events. Updating graph...`, "success");
+      let ids = (await api("/identities")) || [];
+      ids.sort((a, b) => (b.risk || 0) - (a.risk || 0));
+      $("g-identity").innerHTML = ids.map((r) => `<option value="${esc(r.identity_id)}">${esc(r.identity_id)} · risk ${esc(Math.round(r.risk || 0))}</option>`).join("");
+      const topId = (ids[0] && ids[0].identity_id) || "";
+      if (topId) {
+        $("g-identity").value = topId;
+        await loadIdentity(topId);
+        setTimeout(() => play(), 300);
+      }
+    } catch (err) {
+      toast(err.message || "Failed to process dropped file", "error");
+    }
+  });
+}
 
 (async function init() {
   legend();

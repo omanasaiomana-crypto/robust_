@@ -10,4 +10,7 @@ data/output/
 data/input/
 .v21_backup/
 data/reports/
-
+data/spool/
+*.sqlite-wal
+*.sqlite-shm
+.pytest_cache/

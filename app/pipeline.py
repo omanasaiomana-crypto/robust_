@@ -100,7 +100,14 @@ def run_pipeline(use_sample: bool | None = None, input_mode: str | None = None) 
             ct_folder = RAW_CLOUDTRAIL
             okta_folder = RAW_OKTA
 
-        if input_mode == "merge":
+        has_custom_input = False
+        try:
+            from app import inputs
+            has_custom_input = inputs.has_input()
+        except Exception:
+            pass
+
+        if input_mode == "merge" or (input_mode is None and has_custom_input):
             data_mode = f"{data_mode}+input"
 
     # Step 1: Start audit entry
@@ -126,7 +133,7 @@ def run_pipeline(use_sample: bool | None = None, input_mode: str | None = None) 
             trace.progress("ingestion", f"Read Okta – {len(raw_okta):,} records", {"records": len(raw_okta)})
             skipped += (sk_ct + sk_okta)
 
-            if input_mode == "merge":
+            if input_mode == "merge" or (input_mode is None and has_custom_input):
                 in_ct, in_sk_ct = load_cloudtrail(INPUT_DIR / "cloudtrail")
                 trace.progress("ingestion", f"Read CloudTrail (input) – {len(in_ct):,} records", {"records": len(in_ct)})
                 in_okta, in_sk_okta = load_okta(INPUT_DIR / "okta")

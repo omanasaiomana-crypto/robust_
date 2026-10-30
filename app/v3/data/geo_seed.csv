@@ -1,0 +1,10 @@
+cidr,country,city,lat,lon,asn,as_org
+198.51.100.0/24,United States,San Francisco,37.7749,-122.4194,15169,Google LLC
+203.0.113.0/24,United States,New York,40.7128,-74.0060,8075,Microsoft Corporation
+103.50.162.0/24,India,Chennai,13.0827,80.2707,45609,Bharti Airtel
+103.88.220.0/24,India,Hyderabad,17.3850,78.4867,45609,Bharti Airtel
+103.21.244.0/23,India,Mumbai,19.0760,72.8777,45609,Bharti Airtel
+185.220.101.0/24,Germany,Frankfurt,50.1109,8.6821,24940,Hetzner Online GmbH
+192.0.2.0/24,United States,Chicago,41.8781,-87.6298,16509,Amazon.com
+10.0.0.0/8,Internal,Private Network,0.0,0.0,0,Private Network
+127.0.0.0/8,Localhost,Loopback,0.0,0.0,0,Loopback

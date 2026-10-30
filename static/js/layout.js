@@ -89,7 +89,7 @@ export function renderLayout(active, title, subtitle) {
       <aside id="sidebar" class="fixed inset-y-0 left-0 z-40 w-60 bg-panel border-r border-line flex flex-col transform -translate-x-full md:translate-x-0 transition-transform duration-200 ease-in-out md:static md:h-screen md:sticky md:top-0">
         <!-- Logo -->
         <div class="h-16 px-5 border-b border-line flex items-center gap-3 flex-shrink-0">
-          <div class="w-8 h-8 rounded-lg bg-brand/15 border border-brand/30 flex items-center justify-center text-brand">
+          <div class="logo-box w-8 h-8 rounded-lg bg-brand/15 border border-brand/30 flex items-center justify-center text-brand transition-all">
             <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
             </svg>
@@ -106,8 +106,8 @@ export function renderLayout(active, title, subtitle) {
             .map((item) => {
               const isActive = active === item.id;
               const activeClass = isActive
-                ? 'bg-panel2 text-ink font-medium border-l-2 border-brand shadow-sm'
-                : 'text-muted hover:bg-panel2/60 hover:text-ink';
+                ? 'active-nav bg-panel2 text-ink font-semibold border-l-2 border-brand shadow-sm'
+                : 'nav-item text-muted hover:bg-panel2/60 hover:text-ink';
               return `
                 <a href="${item.href}" class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm transition-colors ${activeClass}">
                   ${item.icon}
@@ -139,10 +139,27 @@ export function renderLayout(active, title, subtitle) {
           </div>
         </div>
 
-        <!-- Sidebar Footer -->
-        <div class="p-4 border-t border-line text-xs text-muted flex items-center justify-between">
-          <span class="font-mono">Track 2: Zero Trust</span>
-          <span class="px-1.5 py-0.5 rounded bg-panel2 text-[10px] font-mono border border-line">v1.0</span>
+        <!-- Sidebar Footer & Power Button -->
+        <div class="p-3 border-t border-line text-xs flex flex-col gap-2.5">
+          <button id="btn-sidebar-theme" class="power-button-sidebar w-full flex items-center justify-between px-3 py-2 rounded-xl border transition-all duration-200 cursor-pointer shadow-sm" title="Power Switch: Light / Dark Mode">
+            <div class="flex items-center gap-2.5">
+              <span class="power-icon-ring flex items-center justify-center w-6 h-6 rounded-full transition-transform">
+                <svg class="w-3.5 h-3.5 power-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M18.36 6.64a9 9 0 1 1-12.73 0"></path>
+                  <line x1="12" y1="2" x2="12" y2="12"></line>
+                </svg>
+              </span>
+              <div class="text-left">
+                <div id="side-power-title" class="text-xs font-bold leading-tight">Theme Power</div>
+                <div id="side-power-sub" class="text-[10px] leading-tight font-mono text-muted">Click to toggle</div>
+              </div>
+            </div>
+            <span id="side-power-pill" class="text-[10px] font-mono uppercase px-2 py-0.5 rounded-full font-bold"></span>
+          </button>
+          <div class="flex items-center justify-between text-muted px-0.5">
+            <span class="font-mono text-[11px]">Track 2: Zero Trust</span>
+            <span class="px-1.5 py-0.5 rounded bg-panel2 text-[10px] font-mono border border-line">v1.0</span>
+          </div>
         </div>
       </aside>
 
@@ -175,6 +192,18 @@ export function renderLayout(active, title, subtitle) {
               Mode: ...
             </div>
 
+            <!-- Power Button Theme Toggle -->
+            <button id="btn-theme-toggle" aria-label="Toggle Power Theme" title="Power Button - Switch Light / Dark Theme" class="power-button relative inline-flex items-center gap-2 px-3 py-1.5 rounded-full text-xs font-bold border transition-all duration-200 cursor-pointer shadow-sm">
+              <span class="power-icon-ring relative flex items-center justify-center w-5 h-5 rounded-full transition-transform">
+                <svg class="w-3.5 h-3.5 power-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M18.36 6.64a9 9 0 1 1-12.73 0"></path>
+                  <line x1="12" y1="2" x2="12" y2="12"></line>
+                </svg>
+              </span>
+              <span id="top-power-icon" class="text-sm">☀️</span>
+              <span id="top-power-label" class="font-mono tracking-wider text-[11px] uppercase hidden sm:inline font-bold">LIGHT ON</span>
+            </button>
+
             <!-- Download Report Dropdown / Button in Top Bar -->
             <a href="/api/reports/download/docx" download class="hidden sm:inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-medium bg-emerald-500/10 hover:bg-emerald-500/20 text-emerald-400 border border-emerald-500/30 transition-colors" title="Download Word Attack Report with Heatmaps">
               <svg class="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -198,6 +227,16 @@ export function renderLayout(active, title, subtitle) {
       </div>
     </div>
   `;
+
+  // Apply theme to newly rendered UI elements
+  applyTheme(getSavedTheme());
+
+  // Setup theme toggle buttons
+  const themeToggle = document.getElementById('btn-theme-toggle');
+  if (themeToggle) themeToggle.onclick = toggleTheme;
+
+  const sidebarThemeToggle = document.getElementById('btn-sidebar-theme');
+  if (sidebarThemeToggle) sidebarThemeToggle.onclick = toggleTheme;
 
   // Setup mobile navigation toggle
   const sidebar = document.getElementById('sidebar');
@@ -270,4 +309,83 @@ export function renderLayout(active, title, subtitle) {
     });
 
   return document.getElementById('page-content');
+}
+
+// --- Theme Handling ---
+export function getSavedTheme() {
+  try {
+    return localStorage.getItem('identityshield_theme') || 'dark';
+  } catch {
+    return 'dark';
+  }
+}
+
+export function applyTheme(theme) {
+  const isLight = theme === 'light';
+  if (isLight) {
+    document.documentElement.setAttribute('data-theme', 'light');
+    if (document.body) document.body.setAttribute('data-theme', 'light');
+  } else {
+    document.documentElement.removeAttribute('data-theme');
+    if (document.body) document.body.removeAttribute('data-theme');
+  }
+  try {
+    localStorage.setItem('identityshield_theme', theme);
+  } catch {}
+
+  // Update Top Bar Power Button
+  const topBtn = document.getElementById('btn-theme-toggle');
+  const topIcon = document.getElementById('top-power-icon');
+  const topLabel = document.getElementById('top-power-label');
+  if (topBtn) {
+    if (isLight) {
+      topBtn.className = 'power-button relative inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full text-xs font-bold border transition-all duration-200 cursor-pointer shadow-sm bg-amber-500/15 border-amber-500/40 text-amber-700 shadow-[0_0_12px_rgba(245,158,11,0.25)]';
+      if (topIcon) topIcon.textContent = '☀️';
+      if (topLabel) topLabel.textContent = 'LIGHT ON';
+    } else {
+      topBtn.className = 'power-button relative inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full text-xs font-bold border transition-all duration-200 cursor-pointer shadow-sm bg-cyan-500/15 border-cyan-500/40 text-cyan-300 shadow-[0_0_14px_rgba(34,211,238,0.25)]';
+      if (topIcon) topIcon.textContent = '🌙';
+      if (topLabel) topLabel.textContent = 'DARK ON';
+    }
+  }
+
+  // Update Sidebar Power Button
+  const sideBtn = document.getElementById('btn-sidebar-theme');
+  const sideTitle = document.getElementById('side-power-title');
+  const sideSub = document.getElementById('side-power-sub');
+  const sidePill = document.getElementById('side-power-pill');
+  if (sideBtn) {
+    if (isLight) {
+      sideBtn.className = 'power-button-sidebar w-full flex items-center justify-between px-3 py-2 rounded-xl border transition-all duration-200 cursor-pointer shadow-sm bg-amber-500/10 border-amber-500/30 text-amber-800 hover:bg-amber-500/15';
+      if (sideTitle) sideTitle.textContent = 'Light Theme';
+      if (sideSub) sideSub.textContent = 'Power: ON ☀️';
+      if (sidePill) {
+        sidePill.className = 'text-[10px] font-mono uppercase px-2 py-0.5 rounded-full font-bold bg-amber-500/20 text-amber-700 border border-amber-500/40';
+        sidePill.textContent = '☀️ ACTIVE';
+      }
+    } else {
+      sideBtn.className = 'power-button-sidebar w-full flex items-center justify-between px-3 py-2 rounded-xl border transition-all duration-200 cursor-pointer shadow-sm bg-cyan-500/10 border-cyan-500/30 text-cyan-200 hover:bg-cyan-500/15';
+      if (sideTitle) sideTitle.textContent = 'Dark Theme';
+      if (sideSub) sideSub.textContent = 'Power: ON 🌙';
+      if (sidePill) {
+        sidePill.className = 'text-[10px] font-mono uppercase px-2 py-0.5 rounded-full font-bold bg-cyan-500/20 text-cyan-300 border border-cyan-500/40';
+        sidePill.textContent = '🌙 ACTIVE';
+      }
+    }
+  }
+
+  window.dispatchEvent(new CustomEvent('theme-changed', { detail: { theme } }));
+}
+
+export function toggleTheme() {
+  const current = getSavedTheme();
+  const next = current === 'light' ? 'dark' : 'light';
+  applyTheme(next);
+  toast(`Switched to ${next === 'light' ? 'Light' : 'Dark'} Theme`, 'info');
+  return next;
+}
+
+// Immediately apply theme on script execution
+if (typeof document !== 'undefined') {
+  applyTheme(getSavedTheme());
 }
