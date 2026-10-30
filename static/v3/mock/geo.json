@@ -1,0 +1,67 @@
+[
+  {
+    "identity_id": "svc-report",
+    "city": "Frankfurt",
+    "country": "Germany",
+    "lat": 50.1109,
+    "lon": 8.6821,
+    "ip": "185.220.101.5",
+    "asn": "AS24940",
+    "count": 1,
+    "impossible_travel": true,
+    "is_threat": true,
+    "timestamp": "2026-10-30T14:20:00Z"
+  },
+  {
+    "identity_id": "svc-report",
+    "city": "New York",
+    "country": "United States",
+    "lat": 40.7128,
+    "lon": -74.006,
+    "ip": "198.51.100.12",
+    "asn": "AS13335",
+    "count": 14,
+    "impossible_travel": false,
+    "is_threat": false,
+    "timestamp": "2026-10-30T14:05:00Z"
+  },
+  {
+    "identity_id": "jdoe",
+    "city": "London",
+    "country": "United Kingdom",
+    "lat": 51.5074,
+    "lon": -0.1278,
+    "ip": "203.0.113.44",
+    "asn": "AS5089",
+    "count": 28,
+    "impossible_travel": false,
+    "is_threat": false,
+    "timestamp": "2026-10-30T13:40:00Z"
+  },
+  {
+    "identity_id": "asmith",
+    "city": "San Francisco",
+    "country": "United States",
+    "lat": 37.7749,
+    "lon": -122.4194,
+    "ip": "192.0.2.89",
+    "asn": "AS7922",
+    "count": 42,
+    "impossible_travel": false,
+    "is_threat": false,
+    "timestamp": "2026-10-30T13:10:00Z"
+  },
+  {
+    "identity_id": "mlee",
+    "city": "Tokyo",
+    "country": "Japan",
+    "lat": 35.6762,
+    "lon": 139.6503,
+    "ip": "198.51.100.80",
+    "asn": "AS2516",
+    "count": 19,
+    "impossible_travel": false,
+    "is_threat": false,
+    "timestamp": "2026-10-30T12:05:00Z"
+  }
+]

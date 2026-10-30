@@ -1,0 +1,113 @@
+{
+  "case_id": "case-e1-svcreport",
+  "identity_id": "svc-report",
+  "session_id": "ses-okta-882194",
+  "title": "E1: Multi-Stage Privilege Escalation & CloudTrail Tampering (svc-report)",
+  "risk_score": 92.4,
+  "band": "restrict",
+  "confidence": 0.94,
+  "status": "open",
+  "playbook": "PB-01",
+  "mitre_tactics": ["T1078.004", "T1098", "T1562.001", "T1530"],
+  "created_at": "2026-10-30T14:35:10Z",
+  "summary": "Identity svc-report authenticated from Frankfurt (new country/ASN), assumed AWS SAML role, generated new access keys, attached AdministratorAccess, and executed StopLogging on AWS CloudTrail.",
+  "reasons": [
+    "New-country Okta login from Frankfurt (185.220.101.5) followed by AWS SAML Role assumption (Evidence: evt-okta-882194).",
+    "Privilege Escalation path PE-08 matched: CreateAccessKey for another identity followed by AttachUserPolicy AdministratorAccess (Evidence: evt-ct-401, evt-ct-402).",
+    "Defense Evasion detected: Executed StopLogging on default audit trail within 90s of privilege escalation (Evidence: evt-ct-405)."
+  ],
+  "counterfactuals": [
+    {
+      "omitted": "escalation_chain",
+      "score": 44.0,
+      "drop": 48.4,
+      "description": "Without escalation chain"
+    },
+    {
+      "omitted": "defense_evasion",
+      "score": 62.1,
+      "drop": 30.3,
+      "description": "Without defense evasion"
+    },
+    {
+      "omitted": "impossible_travel",
+      "score": 79.5,
+      "drop": 12.9,
+      "description": "Without access anomaly"
+    }
+  ],
+  "predicted_next_step": "SecretsManager:GetSecretValue or S3 Data Exfiltration within 15m",
+  "steps": [
+    {
+      "step_index": 1,
+      "timestamp": "2026-10-30T14:20:00Z",
+      "source": "Okta",
+      "event_id": "evt-okta-882194",
+      "event_name": "user.session.start",
+      "mitre": "T1078.004",
+      "description": "User login from Frankfurt, Germany (IP: 185.220.101.5, ASN: 24940)."
+    },
+    {
+      "step_index": 2,
+      "timestamp": "2026-10-30T14:22:15Z",
+      "source": "AWS CloudTrail",
+      "event_id": "evt-ct-399",
+      "event_name": "AssumeRoleWithSAML",
+      "mitre": "T1078",
+      "description": "Assumed AWS role arn:aws:iam::123456789012:role/ReportViewerRole via federated SAML token."
+    },
+    {
+      "step_index": 3,
+      "timestamp": "2026-10-30T14:26:40Z",
+      "source": "AWS CloudTrail",
+      "event_id": "evt-ct-401",
+      "event_name": "CreateAccessKey",
+      "mitre": "T1098",
+      "description": "Created new access key AKIAIOSFODNN7EXAMPLE for user svc-report."
+    },
+    {
+      "step_index": 4,
+      "timestamp": "2026-10-30T14:28:10Z",
+      "source": "AWS CloudTrail",
+      "event_id": "evt-ct-402",
+      "event_name": "AttachUserPolicy",
+      "mitre": "T1098",
+      "description": "Attached managed policy arn:aws:iam::aws:policy/AdministratorAccess."
+    },
+    {
+      "step_index": 5,
+      "timestamp": "2026-10-30T14:30:05Z",
+      "source": "AWS CloudTrail",
+      "event_id": "evt-ct-404",
+      "event_name": "AssumeRole",
+      "mitre": "T1078",
+      "description": "Assumed OrganizationAccountAccessRole using escalated privileges."
+    },
+    {
+      "step_index": 6,
+      "timestamp": "2026-10-30T14:31:50Z",
+      "source": "AWS CloudTrail",
+      "event_id": "evt-ct-405",
+      "event_name": "StopLogging",
+      "mitre": "T1562.001",
+      "description": "Disabled audit logging on trail production-trail."
+    }
+  ],
+  "action": {
+    "action_id": "act-e1-restrict-01",
+    "action_type": "restrict",
+    "status": "applied",
+    "target_identity": "svc-report",
+    "applied_at": "2026-10-30T14:35:12Z",
+    "requires_approval": false,
+    "approval_token": null
+  },
+  "pending_action": {
+    "action_id": "act-e1-revoke-02",
+    "action_type": "revoke",
+    "status": "pending_approval",
+    "target_identity": "svc-report",
+    "requires_approval": true,
+    "approval_token": "appr_tok_8829471"
+  }
+}

@@ -1,0 +1,142 @@
+{
+  "nodes": [
+    {
+      "id": "svc-report",
+      "name": "svc-report",
+      "type": "identity",
+      "kind": "identity",
+      "risk": 92.4,
+      "is_threat": true
+    },
+    {
+      "id": "ses-okta-882194",
+      "name": "Okta Session (Frankfurt)",
+      "type": "session",
+      "kind": "session",
+      "risk": 85.0,
+      "is_threat": true
+    },
+    {
+      "id": "ip-185-220-101-5",
+      "name": "185.220.101.5 (Frankfurt)",
+      "type": "ip",
+      "kind": "ip",
+      "risk": 75.0,
+      "is_threat": true
+    },
+    {
+      "id": "role-ReportViewerRole",
+      "name": "ReportViewerRole",
+      "type": "role",
+      "kind": "role",
+      "risk": 40.0,
+      "is_threat": false
+    },
+    {
+      "id": "role-OrgAdmin",
+      "name": "OrganizationAccountAccessRole",
+      "type": "role",
+      "kind": "role",
+      "risk": 95.0,
+      "is_threat": true
+    },
+    {
+      "id": "key-AKIAIOSFODNN7EXAMPLE",
+      "name": "AKIAIOSFODNN7EXAMPLE",
+      "type": "key",
+      "kind": "key",
+      "risk": 90.0,
+      "is_threat": true
+    },
+    {
+      "id": "res-cloudtrail-prod",
+      "name": "production-trail",
+      "type": "resource",
+      "kind": "sensitive_resource",
+      "risk": 88.0,
+      "is_threat": true
+    },
+    {
+      "id": "res-secretsmanager-db",
+      "name": "prod/rds/credentials",
+      "type": "resource",
+      "kind": "sensitive_resource",
+      "risk": 80.0,
+      "is_threat": false
+    },
+    {
+      "id": "jdoe",
+      "name": "jdoe",
+      "type": "identity",
+      "kind": "identity",
+      "risk": 20.0,
+      "is_threat": false
+    },
+    {
+      "id": "ses-okta-991204",
+      "name": "Okta Session (NYC)",
+      "type": "session",
+      "kind": "session",
+      "risk": 25.0,
+      "is_threat": false
+    }
+  ],
+  "links": [
+    {
+      "source": "ip-185-220-101-5",
+      "target": "ses-okta-882194",
+      "label": "Login Request",
+      "is_attack_path": true,
+      "color": "#EF4444"
+    },
+    {
+      "source": "ses-okta-882194",
+      "target": "svc-report",
+      "label": "Authenticated",
+      "is_attack_path": true,
+      "color": "#EF4444"
+    },
+    {
+      "source": "svc-report",
+      "target": "role-ReportViewerRole",
+      "label": "AssumeRoleWithSAML",
+      "is_attack_path": true,
+      "color": "#EF4444"
+    },
+    {
+      "source": "role-ReportViewerRole",
+      "target": "key-AKIAIOSFODNN7EXAMPLE",
+      "label": "CreateAccessKey",
+      "is_attack_path": true,
+      "color": "#EF4444"
+    },
+    {
+      "source": "key-AKIAIOSFODNN7EXAMPLE",
+      "target": "role-OrgAdmin",
+      "label": "AttachUserPolicy (Admin)",
+      "is_attack_path": true,
+      "color": "#EF4444"
+    },
+    {
+      "source": "role-OrgAdmin",
+      "target": "res-cloudtrail-prod",
+      "label": "StopLogging",
+      "is_attack_path": true,
+      "color": "#EF4444"
+    },
+    {
+      "source": "role-OrgAdmin",
+      "target": "res-secretsmanager-db",
+      "label": "Predicted Target",
+      "is_attack_path": false,
+      "color": "#F59E0B"
+    },
+    {
+      "source": "jdoe",
+      "target": "ses-okta-991204",
+      "label": "Normal Login",
+      "is_attack_path": false,
+      "color": "#64748B"
+    }
+  ]
+}

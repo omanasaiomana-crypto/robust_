@@ -1,0 +1,44 @@
+[
+  {
+    "case_id": "case-e1-svcreport",
+    "identity_id": "svc-report",
+    "session_id": "ses-okta-882194",
+    "title": "E1: Multi-Stage Privilege Escalation & CloudTrail Tampering (svc-report)",
+    "risk_score": 92.4,
+    "band": "restrict",
+    "confidence": 0.94,
+    "status": "open",
+    "playbook": "PB-01",
+    "mitre_tactics": ["T1078", "T1098", "T1562.001"],
+    "created_at": "2026-10-30T14:35:10Z",
+    "summary": "svc-report logged in from Germany, assumed admin role, attached AdministratorAccess, and disabled CloudTrail logging."
+  },
+  {
+    "case_id": "case-acc-02-jdoe",
+    "identity_id": "jdoe",
+    "session_id": "ses-okta-991204",
+    "title": "Impossible Travel: New York to Singapore within 25 minutes",
+    "risk_score": 76.5,
+    "band": "step_up",
+    "confidence": 0.88,
+    "status": "open",
+    "playbook": "PB-02",
+    "mitre_tactics": ["T1078.004"],
+    "created_at": "2026-10-30T13:12:00Z",
+    "summary": "Rapid succession of logins from disparate geographical ASN prefixes."
+  },
+  {
+    "case_id": "case-cmp-01-spray",
+    "identity_id": "corp-users-pool",
+    "session_id": "ses-spray-11029",
+    "title": "Distributed Password Spraying targeting 12 identities",
+    "risk_score": 68.0,
+    "band": "monitor",
+    "confidence": 0.82,
+    "status": "investigating",
+    "playbook": "PB-05",
+    "mitre_tactics": ["T1110.003"],
+    "created_at": "2026-10-30T11:45:20Z",
+    "summary": "Low-and-slow authentication failures against multiple corporate accounts from known VPN exit nodes."
+  }
+]

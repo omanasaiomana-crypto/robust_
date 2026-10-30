@@ -1,0 +1,28 @@
+{
+  "kpi": {
+    "precision": 0.965,
+    "recall": 0.982,
+    "f1": 0.973,
+    "fp_rate": 0.018,
+    "mean_time_to_detect_ms": 68.4,
+    "true_positives": 112,
+    "false_positives": 2,
+    "false_negatives": 2,
+    "true_negatives": 8420
+  },
+  "perf": {
+    "avg_latency_ms": 42.1,
+    "p99_latency_ms": 84.6,
+    "throughput_eps": 1450,
+    "memory_mb": 182.4,
+    "events_total": 52400,
+    "queue_depth": 0,
+    "agents_healthy": 15
+  },
+  "summary": {
+    "active_identities": 148,
+    "high_risk_sessions": 3,
+    "blocked_threats": 7,
+    "avg_detection_latency_ms": 42.1
+  }
+}

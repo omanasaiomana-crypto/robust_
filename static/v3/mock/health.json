@@ -1,0 +1,25 @@
+{
+  "status": "ok",
+  "v3_enabled": true,
+  "version": "3.0.0",
+  "agents": {
+    "registered": 15,
+    "healthy": 15,
+    "unhealthy": 0
+  },
+  "bus": {
+    "mode": "live",
+    "queue_depth": 0,
+    "topics_count": 12
+  },
+  "ingest": {
+    "port": 8001,
+    "status": "listening",
+    "uptime_seconds": 3840
+  },
+  "store": {
+    "mode": "wal",
+    "status": "connected",
+    "tables_count": 14
+  }
+}
