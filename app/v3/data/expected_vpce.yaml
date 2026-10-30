@@ -1,0 +1,3 @@
+# Expected VPC Endpoint IDs baseline (optional mapping)
+# identity_or_role_name: [list of allowed vpce IDs]
+{}
