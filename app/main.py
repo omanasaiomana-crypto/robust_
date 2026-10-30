@@ -81,7 +81,7 @@ async def lifespan(app: FastAPI):
             ingest_app = create_ingest_app(bus_handoff=_handoff, supervisor=v3_sup)
             ingest_cfg = uvicorn.Config(
                 ingest_app,
-                host="127.0.0.1",
+                host="0.0.0.0",
                 port=v3_config.INGEST_PORT,
                 log_level="warning",
             )
@@ -141,7 +141,7 @@ for module in (health, alerts, identities, metrics, audit):
 
 @app.get("/", include_in_schema=False)
 def root():
-    return RedirectResponse(url="/index.html")
+    return RedirectResponse(url="/v3/index.html")
 
 
 STATIC_DIR.mkdir(parents=True, exist_ok=True)

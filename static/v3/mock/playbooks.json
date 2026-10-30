@@ -1,42 +1,103 @@
 [
   {
     "id": "PB-01",
-    "name": "Privilege Escalation Rapid Containment",
-    "condition": "risk >= 85 and has_privilege_escalation",
-    "actions": ["restrict", "revoke"],
-    "requires_approval": ["revoke"],
-    "friction_budget": 2
+    "name": "MFA step-up",
+    "description": "Prompt identity for step-up MFA challenge",
+    "match": {
+      "band": [
+        "step_up"
+      ],
+      "patterns": [],
+      "min_confidence": 0.0,
+      "identity_tags": []
+    },
+    "action": "step_up",
+    "approval_required": false,
+    "ttl_minutes": null,
+    "friction_cost": 1,
+    "rollback": null,
+    "notify": null
   },
   {
     "id": "PB-02",
-    "name": "Impossible Travel Step-Up",
-    "condition": "detection == 'D-ACC-01'",
-    "actions": ["step_up"],
-    "requires_approval": [],
-    "friction_budget": 1
+    "name": "Restrict access",
+    "description": "Restrict identity: deny sensitive resources and enforce read-only",
+    "match": {
+      "band": [
+        "restrict"
+      ],
+      "patterns": [],
+      "min_confidence": 0.0,
+      "identity_tags": []
+    },
+    "action": "restrict",
+    "approval_required": false,
+    "ttl_minutes": 240,
+    "friction_cost": 0,
+    "rollback": "revert_restrict",
+    "notify": "email"
   },
   {
     "id": "PB-03",
-    "name": "Credential Abuse Isolation",
-    "condition": "detection in ['D-CRD-02', 'D-CRD-04']",
-    "actions": ["restrict"],
-    "requires_approval": [],
-    "friction_budget": 1
+    "name": "Revoke sessions and quarantine",
+    "description": "Restrict immediately and propose revoke sessions pending analyst approval",
+    "match": {
+      "band": [
+        "revoke"
+      ],
+      "patterns": [],
+      "min_confidence": 0.0,
+      "identity_tags": []
+    },
+    "action": "revoke_sessions",
+    "approval_required": true,
+    "ttl_minutes": 240,
+    "friction_cost": 0,
+    "rollback": "revert_restrict",
+    "notify": "email"
   },
   {
     "id": "PB-04",
-    "name": "Defense Evasion Emergency Lockout",
-    "condition": "detection in ['D-DEF-01', 'D-DEF-02', 'D-DEF-05']",
-    "actions": ["restrict", "revoke"],
-    "requires_approval": ["revoke"],
-    "friction_budget": 2
+    "name": "Defense evasion immediate restrict",
+    "description": "Restrict immediately regardless of score when defense evasion is detected",
+    "match": {
+      "band": [
+        "monitor",
+        "step_up",
+        "restrict",
+        "revoke"
+      ],
+      "patterns": [
+        "D-DEF-01",
+        "D-DEF-02"
+      ],
+      "min_confidence": 0.0,
+      "identity_tags": []
+    },
+    "action": "restrict",
+    "approval_required": false,
+    "ttl_minutes": 240,
+    "friction_cost": 0,
+    "rollback": "revert_restrict",
+    "notify": "email"
   },
   {
     "id": "PB-05",
-    "name": "Distributed Spray Monitoring",
-    "condition": "detection == 'D-CMP-01'",
-    "actions": ["monitor"],
-    "requires_approval": [],
-    "friction_budget": 0
+    "name": "Campaign source IP block",
+    "description": "Block coordinated campaign source IP in simulator",
+    "match": {
+      "band": [],
+      "patterns": [
+        "D-CMP-01"
+      ],
+      "min_confidence": 0.0,
+      "identity_tags": []
+    },
+    "action": "block_ip",
+    "approval_required": false,
+    "ttl_minutes": 60,
+    "friction_cost": 0,
+    "rollback": "unblock_ip",
+    "notify": "email"
   }
 ]

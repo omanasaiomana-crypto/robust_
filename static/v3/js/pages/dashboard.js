@@ -32,7 +32,7 @@ async function loadKPIs() {
     ]);
 
     // 1. Open Cases by Band
-    const cases = Array.isArray(casesData) ? casesData : [];
+    const cases = Array.isArray(casesData) ? casesData : (casesData?.items || []);
     const bands = { revoke: 0, restrict: 0, step_up: 0, monitor: 0 };
     cases.forEach((c) => {
       const b = (c.band || 'monitor').toLowerCase().replace('-', '_');
@@ -52,7 +52,7 @@ async function loadKPIs() {
     }
 
     // 2. Identities at Risk >= 60
-    const idList = Array.isArray(identities) ? identities : [];
+    const idList = Array.isArray(identities) ? identities : (identities?.items || []);
     const highRiskIdentities = idList.filter((i) => (i.identity_risk || 0) >= 60);
     const kpiRisk = document.getElementById('kpi-risk-identities');
     if (kpiRisk) {
@@ -113,7 +113,8 @@ async function loadTopIdentities() {
   if (!tbody) return;
 
   try {
-    const identities = await api.get('/identities');
+    const raw = await api.get('/identities');
+    const identities = Array.isArray(raw) ? raw : (raw?.items || []);
     if (!identities || identities.length === 0) {
       tbody.innerHTML = '<tr><td colspan="5" style="text-align:center; color:var(--muted); padding:20px;">No identities recorded yet.</td></tr>';
       return;
@@ -170,7 +171,8 @@ async function loadLiveCases() {
   if (!container) return;
 
   try {
-    const cases = await api.get('/cases');
+    const raw = await api.get('/cases');
+    const cases = Array.isArray(raw) ? raw : (raw?.items || []);
     if (!cases || cases.length === 0) {
       container.innerHTML = '<div style="color:var(--muted); font-size:0.8125rem; text-align:center; padding:20px;">No threat cases opened. System nominal.</div>';
       return;
@@ -222,7 +224,8 @@ async function initMiniGlobe() {
   }
 
   try {
-    const geoData = await api.get('/geo/logins').catch(() => []);
+    const rawGeo = await api.get('/geo/logins').catch(() => []);
+    const geoData = Array.isArray(rawGeo) ? rawGeo : (rawGeo?.points || []);
     container.innerHTML = ''; // clear loading text
 
     const width = container.clientWidth || 320;

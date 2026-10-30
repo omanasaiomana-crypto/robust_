@@ -50,5 +50,21 @@
       "reason": "Scheduled off-hours maintenance worker",
       "created_at": "2026-10-30T10:00:00Z"
     }
-  ]
+  ],
+  "v3_enabled": true,
+  "bands": {
+    "step_up": 50.0,
+    "restrict": 70.0,
+    "revoke": 90.0
+  },
+  "friction_units": 2,
+  "friction_window_hours": 8,
+  "approval_timeout_minutes": 30,
+  "restrict_ttl_minutes": 240,
+  "learning_rate": 0.05,
+  "weight_floors": {
+    "D-PE": 0.6,
+    "D-DEF": 0.6
+  },
+  "dry_run": false
 }

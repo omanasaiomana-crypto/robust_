@@ -1,29 +1,29 @@
 [
   {
-    "id": 1,
+    "seq": 1,
     "timestamp": "2026-10-30T14:35:12Z",
     "agent": "Agent 14 (Response)",
     "action": "enforce_action",
     "detail": "Applied restrictive IAM boundary on identity svc-report (Playbook PB-01)",
-    "previous_hash": "0000000000000000000000000000000000000000000000000000000000000000",
+    "prev_hash": "0000000000000000000000000000000000000000000000000000000000000000",
     "hash": "7f83b1657ff1fc53b92dc18148a1d65dfc2d4b1fa3d677284addd200126d9069"
   },
   {
-    "id": 2,
+    "seq": 2,
     "timestamp": "2026-10-30T14:36:00Z",
     "agent": "sec-ops-lead",
     "action": "approve_action",
     "detail": "Approved revocation token appr_tok_8829471 for session ses-okta-882194",
-    "previous_hash": "7f83b1657ff1fc53b92dc18148a1d65dfc2d4b1fa3d677284addd200126d9069",
+    "prev_hash": "7f83b1657ff1fc53b92dc18148a1d65dfc2d4b1fa3d677284addd200126d9069",
     "hash": "cb8379ac2098aa165029e374604e1b1450102500640eb616ac80c18240f10eef"
   },
   {
-    "id": 3,
+    "seq": 3,
     "timestamp": "2026-10-30T14:40:00Z",
     "agent": "Agent 15 (Feedback & Tuning)",
     "action": "update_config",
     "detail": "Committed new config version 3 with adjusted detection weights",
-    "previous_hash": "cb8379ac2098aa165029e374604e1b1450102500640eb616ac80c18240f10eef",
+    "prev_hash": "cb8379ac2098aa165029e374604e1b1450102500640eb616ac80c18240f10eef",
     "hash": "9f86d081884c7d659a2feaa0c55ad015a3bf4f1b2b0b822cd15d6c15b0f00a08"
   }
 ]

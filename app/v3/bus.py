@@ -72,6 +72,15 @@ class Bus:
         self._live_running = False
         self._live_tasks: list[asyncio.Task] = []
 
+    @property
+    def queue_depth(self) -> int:
+        with self._lock:
+            return sum(len(q) for q in self._queues.values())
+
+    @property
+    def topics(self) -> list[str]:
+        return list(TOPICS)
+
     def subscribe(self, agent: Agent) -> None:
         """Register agent for its subscribed topics and initialize its state."""
         with self._lock:

@@ -1,4 +1,192 @@
 {
+  "status": "completed",
+  "timestamp": "2026-10-30T21:20:16.016472+00:00",
+  "duration_seconds": 27.48,
+  "dataset_hash": "e4c21303657d828bedfc4d1df51620bb84ef5fb5bcf4d61198a6dd353f8009ef",
+  "config_hash": "916ef1c0b0b1c5e4f983d682ffe7ed121656654c1835e0aa4a9ae1dd5afcb5a6",
+  "split": {
+    "method": "identity",
+    "seed": 42,
+    "train_events": 2042,
+    "test_events": 925
+  },
+  "configurations": {
+    "rules_only": {
+      "event_precision": 0.0114,
+      "event_recall": 0.3333,
+      "event_f1": 0.0221,
+      "session_precision": 0.0156,
+      "chain_reconstruction_recall": 1.0,
+      "explanation_quality": {
+        "evidence_citing_ratio": 1.0,
+        "counterfactual_present_ratio": 1.0,
+        "mitre_present_ratio": 0.0
+      },
+      "alert_reduction_pct": 18.99,
+      "counts": {
+        "total_signals": 158,
+        "total_cases": 128,
+        "tp_events": 2,
+        "fp_events": 173,
+        "fn_events": 4
+      }
+    },
+    "ml_only": {
+      "event_precision": 1.0,
+      "event_recall": 0.0,
+      "event_f1": 0.0,
+      "session_precision": 1.0,
+      "chain_reconstruction_recall": 0.94,
+      "explanation_quality": {
+        "evidence_citing_ratio": 1.0,
+        "counterfactual_present_ratio": 1.0,
+        "mitre_present_ratio": 1.0
+      },
+      "alert_reduction_pct": 0.0,
+      "counts": {
+        "total_signals": 0,
+        "total_cases": 0,
+        "tp_events": 0,
+        "fp_events": 0,
+        "fn_events": 6
+      }
+    },
+    "hybrid": {
+      "event_precision": 0.0114,
+      "event_recall": 0.3333,
+      "event_f1": 0.0221,
+      "session_precision": 0.0156,
+      "chain_reconstruction_recall": 1.0,
+      "explanation_quality": {
+        "evidence_citing_ratio": 1.0,
+        "counterfactual_present_ratio": 1.0,
+        "mitre_present_ratio": 0.0
+      },
+      "alert_reduction_pct": 18.99,
+      "counts": {
+        "total_signals": 158,
+        "total_cases": 128,
+        "tp_events": 2,
+        "fp_events": 173,
+        "fn_events": 4
+      }
+    }
+  },
+  "calibration": {
+    "brier_score": 0.015,
+    "baseline_brier": 0.0228,
+    "reliability_diagram": [
+      {
+        "bin": 1,
+        "range": [
+          0.0,
+          0.1
+        ],
+        "predicted_mean": 0.0088,
+        "observed_frequency": 0.0152,
+        "count": 394
+      },
+      {
+        "bin": 2,
+        "range": [
+          0.1,
+          0.2
+        ],
+        "predicted_mean": 0.15,
+        "observed_frequency": 0.15,
+        "count": 0
+      },
+      {
+        "bin": 3,
+        "range": [
+          0.2,
+          0.3
+        ],
+        "predicted_mean": 0.25,
+        "observed_frequency": 0.25,
+        "count": 0
+      },
+      {
+        "bin": 4,
+        "range": [
+          0.3,
+          0.4
+        ],
+        "predicted_mean": 0.35,
+        "observed_frequency": 0.35,
+        "count": 0
+      },
+      {
+        "bin": 5,
+        "range": [
+          0.4,
+          0.5
+        ],
+        "predicted_mean": 0.45,
+        "observed_frequency": 0.45,
+        "count": 0
+      },
+      {
+        "bin": 6,
+        "range": [
+          0.5,
+          0.6
+        ],
+        "predicted_mean": 0.55,
+        "observed_frequency": 0.55,
+        "count": 0
+      },
+      {
+        "bin": 7,
+        "range": [
+          0.6,
+          0.7
+        ],
+        "predicted_mean": 0.65,
+        "observed_frequency": 0.65,
+        "count": 0
+      },
+      {
+        "bin": 8,
+        "range": [
+          0.7,
+          0.8
+        ],
+        "predicted_mean": 0.75,
+        "observed_frequency": 0.75,
+        "count": 0
+      },
+      {
+        "bin": 9,
+        "range": [
+          0.8,
+          0.9
+        ],
+        "predicted_mean": 0.85,
+        "observed_frequency": 0.85,
+        "count": 0
+      },
+      {
+        "bin": 10,
+        "range": [
+          0.9,
+          1.0
+        ],
+        "predicted_mean": 0.95,
+        "observed_frequency": 0.95,
+        "count": 0
+      }
+    ],
+    "calibrated_weights": {
+      "D-ACC": 0.4,
+      "D-SES": 1.0,
+      "D-CRD": 1.0,
+      "D-PE": 1.0,
+      "D-DEF": 1.0,
+      "D-ML": 1.0,
+      "D-CMP": 1.0
+    }
+  },
   "kpi": {
     "precision": 0.965,
     "recall": 0.982,

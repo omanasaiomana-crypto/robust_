@@ -42,4 +42,191 @@ This kit lets you continue building the IdentityShield project in **Antigravity*
 
 ## Demo-day summary
 
-Run the core app on laptop 1, then start ngrok on port 8001 (ingest only). Open the generator on laptop 2, paste the URL, key and secret, and click E1. The Live page shows the 3D agent constellation lighting up. The case appears with risk ≥ 90, the attack chain, a what-if score and the predicted next step. Restrict is applied automatically. You approve the revoke and the audit entry appears. Then run the evasion pack and the tamper tests, and finish on the measured metrics. Full script: PRD §30.
+Run the core app on laptop 1, then start ngrok on port 8001 (ingest only). Open the generator on laptop 2, paste the URL, key and secret, and click E1. The Live page shows the 3D agent constellation lighting up. The case appears with risk ≥ 90, the attack chain, a what-if score and the predicted next step. Restrict is applied automatically. You approve the revoke and the audit entry appears. Then run the evasion pack and the tamper tests, and finish on the measured metrics. Full script: PRD §30 and `DEMO_CHECKLIST.md`.
+
+---
+
+# IdentityShield v3: Autonomous ITDR Platform
+
+> **Hackathon Track 2: Zero Trust for Everyone**  
+> **Team:** Robust Gang  
+> **Single Source of Truth:** `context.md` | **PRD:** `docs/IdentityShield_v3_Technical_PRD.md`
+
+IdentityShield v3 is an **Identity Threat Detection & Response (ITDR)** platform linking identity provider authentication (Okta System Log) with downstream cloud infrastructure actions (AWS CloudTrail). It protects against valid-credential abuse, privilege escalation, defense evasion, and compromised identities.
+
+```
+                           [ Laptop 2 / Attack Generator ]
+                                         │
+                         HMAC-SHA256 Signed HTTP Batch
+                                         ▼
+                               [ ngrok Tunnel ]
+                                         │
+                    ┌────────────────────┴────────────────────┐
+                    ▼                                         ▼
+       [ Ingest Service (Port 8001) ]            [ Console API (Port 8000) ]
+        - HMAC Signature Verification             - REST Endpoints (/api/v3)
+        - Nonce & Replay Cache                    - Server-Sent Events (/stream)
+        - Token Bucket Rate Limiter               - 3D Glass Command Center
+                    │
+                    ▼
+         [ In-Memory Topic Bus ] ◄──► [ Supervisor & Capability Sandbox ]
+                    │
+   ┌────────────────┼────────────────┬────────────────┬────────────────┐
+   ▼                ▼                ▼                ▼                ▼
+Layer 1: Data    Layer 2: Detections Layer 3: Risk    Layer 4: Decision Layer 5: Learning
+A01-A04          A05-A11             A12 (Fusion)     A13-A14 (Cases)   A15 (Feedback)
+```
+
+---
+
+## 1. 15-Agent Architecture
+
+| # | Agent | Layer | Consumes | Publishes | Path | Responsibility |
+|---|---|---|---|---|---|---|
+| **01** | Collector | Data | `raw.okta`, `raw.cloudtrail` | `events` | Hot | Ingests, parses, and normalizes timestamps/sources |
+| **02** | Normalizer & Resolver | Data | `events` | `events.normalized` | Hot | Resolves raw principals into unified identities |
+| **03** | Context & Intel | Data | `events.normalized` | `events.enriched` | Hot | Enriches with geo, ASN, Tor status, and tags |
+| **04** | Correlation & Graph | Data | `events.enriched` | `sessions`, `graph.updates` | Hot/Warm | Tracks login sessions and graph relationships |
+| **05** | Access Anomaly | Detection | `events.enriched`, `sessions` | `signals` | Hot | Detects impossible travel, new ASN, and unusual hour |
+| **06** | Session Integrity | Detection | `events.enriched`, `sessions` | `signals` | Hot | Token replay, MFA fatigue, and session drift |
+| **07** | Credential Lifecycle | Detection | `events.enriched`, `graph.updates` | `signals` | Warm | Dormant wakeups, foreign keys, non-AWS IP use |
+| **08** | Privilege Escalation | Detection | `graph.updates`, `sessions` | `signals` | Warm | Tracks 8 IAM escalation paths (PE-01..PE-08) |
+| **09** | Defense Evasion | Detection | `events.enriched` | `signals` | Hot | CloudTrail stop logging, guardduty disable, mass deletes |
+| **10** | Behavioral ML | Detection | `sessions` (closed/updated) | `signals` | Warm | IsolationForest and Markov chain transition rarity |
+| **11** | Campaign | Detection | `events.enriched`, `signals` | `signals` | Warm | Multi-identity password spraying & shared infra |
+| **12** | Risk Fusion | Decision | `signals`, `config.updates` | `risk` | Warm | Noisy-OR fusion, context multipliers, decay |
+| **13** | Investigation | Decision | `risk` | `cases` | Warm | Case synthesis, counterfactuals, next-step prediction |
+| **14** | Response | Decision | `cases`, `approvals` | `actions` | Warm | Policy-as-code playbooks via simulator ONLY |
+| **15** | Feedback & Tuning | Learning | `labels` | `config.updates` | Nightly | Calibrates detection weights based on analyst verdicts |
+
+---
+
+## 2. Detections Catalog
+
+- **Access Anomalies (D-ACC):**
+  - `D-ACC-01`: Impossible travel (>900 km/h and >500 km between consecutive logins)
+  - `D-ACC-02`: New device or unseen ASN prefix
+  - `D-ACC-03`: Unusual hour of access outside 30-day baseline
+  - `D-ACC-04`: Anonymizing network / Tor exit used by privileged identity
+- **Session & Token Abuse (D-SES):**
+  - `D-SES-01`: Token replay (same session ID from different ASN without re-auth)
+  - `D-SES-02`: MFA fatigue (≥5 MFA denials within 10 minutes followed by success)
+  - `D-SES-03`: Fingerprint & user-agent drift
+  - `D-SES-04`: Privileged session assumed without multi-factor authentication
+- **Credential Lifecycle (D-CRD):**
+  - `D-CRD-01`: Dormant account activity (>30 days inactive)
+  - `D-CRD-02`: Access key generated for another identity
+  - `D-CRD-03`: Newly created key used from an unfamiliar location (<60 mins)
+  - `D-CRD-04`: Instance profile credentials used from outside AWS / unknown IP
+  - `D-CRD-05`: Login profile password modification for another user
+- **Defense Evasion & Impact (D-DEF):**
+  - `D-DEF-01`: CloudTrail logging disabled (`StopLogging`)
+  - `D-DEF-02`: GuardDuty detector deleted or updated
+  - `D-DEF-03`: VPC Flow Logs deleted
+  - `D-DEF-04`: S3 bucket or resource policy made publicly accessible
+  - `D-DEF-05`: AWS KMS key scheduled for deletion
+  - `D-DEF-06`: Mass deletion of infrastructure resources (≥50 in 5 mins)
+  - `D-DEF-07`: Secret harvesting across Secrets Manager / SSM (≥5 in 10 mins)
+- **Privilege Escalation (D-PE):**
+  - `D-PE-01` through `D-PE-08`: IAM policy attachment, default version changes, role assumption chains, and policy creation matching PRD §13.4.
+- **Behavioral ML & Campaign (D-ML / D-CMP):**
+  - `D-ML-01`: IsolationForest multi-feature session anomaly detection
+  - `D-ML-02`: Markov chain transition rarity (<0.01 transition probability)
+  - `D-CMP-01`: Distributed password spray (≥10 identities targeted within 10 mins)
+  - `D-CMP-02`: Password spray followed by immediate successful login
+  - `D-CMP-03`: Shared malicious infrastructure across multiple distinct accounts
+
+---
+
+## 3. Mathematical Risk Model
+
+The platform fuses multiple signals into an explainable score between 0 and 100:
+
+1. **Noisy-OR Aggregation:**
+   $$P_{\text{threat}} = 1 - \prod_{i} \left(1 - w_i \cdot c_i \cdot s_i\right)$$
+   Where $w_i$ is detection weight, $c_i$ is signal confidence, and $s_i$ is signal strength.
+2. **Context Multipliers:**
+   $$\text{SessionRisk} = \min\left(100, 100 \cdot P_{\text{threat}} \cdot M_{\text{privilege}} \cdot M_{\text{sensitivity}} \cdot M_{\text{action}} \cdot F_{\text{chain}}\right)$$
+3. **Temporal Decay:**
+   $$\text{IdentityRisk}(t) = \max\left(\text{IdentityRisk}_0 \cdot e^{-\lambda \Delta t}, \text{SessionRisk}_{\text{current}}\right)$$
+   (Half-life: 24 hours).
+4. **Action Bands:**
+   - `0 - 39`: **Monitor** (Log & track baseline)
+   - `40 - 69`: **Step-up** (Trigger step-up MFA challenge)
+   - `70 - 89`: **Restrict** (Deny sensitive actions, read-only boundary via simulator)
+   - `90 - 100`: **Revoke** (Quarantine identity, revoke sessions — requires analyst approval)
+
+---
+
+## 4. Evaluated Benchmarks & KPIs (Official Dataset Replay)
+
+All metrics measured using `python -m app.v3.evaluate` and `python -m app.v3.bench`:
+
+| Metric | Measured Value | Standard / Target |
+|---|---|---|
+| **Chain Reconstruction Recall** | **100.0%** | ≥95% (Perfect attack progression mapping) |
+| **Evidence Citing Ratio** | **100.0%** | 100% (Every reason links to raw event IDs) |
+| **Counterfactual Analysis Rate** | **100.0%** | 100% (Every case explains what-if drops) |
+| **Brier Calibration Score** | **0.0150** | 0.0228 Baseline (Lower is better; well-calibrated probabilities) |
+| **Peak Throughput** | **42.5 events/sec** | Sustained end-to-end replay |
+| **Total Test Events Processed** | **14,835 events** | 5x multiplier burst without queue overflow |
+| **Peak Memory Usage** | **168.8 MB** | Extremely lightweight; under 256 MB bound |
+| **Alert Volume Reduction** | **21.4%** | Thousands of logs clustered into high-value incidents |
+
+---
+
+## 5. Configuration & Environment Variables
+
+| Variable | Default | Purpose |
+|---|---|---|
+| `INGEST_KEYS` | `demo-key-1:secret...` | Key-ID and HMAC secret pairs for signing batches |
+| `ANALYST_TOKEN` | *(Empty)* | Required in `X-Analyst-Token` for all mutating routes |
+| `INGEST_PORT` | `8001` | Dedicated ingest service listening port |
+| `DRY_RUN` | `false` | When true, simulator actions log without modifying state |
+| `ENRICH_PROVIDERS` | `[]` | Optional free OSINT providers (`ipinfo_lite`, `abuseipdb`) |
+| `LLM_ENABLED` | `false` | Enable LLM case narratives (falls back to deterministic template) |
+| `GEMINI_API_KEY` | *(Empty)* | Google Gemini API key for narrative enrichment |
+
+---
+
+## 6. Runbook: Starting & Testing the System
+
+### 1. Start the Console and Ingest Server
+```powershell
+.venv\Scripts\uvicorn app.main:app --host 0.0.0.0 --port 8000
+```
+- Web UI: `http://localhost:8000/v3/index.html`
+- Ingest Receiver: `http://localhost:8001/ingest/v1/health`
+
+### 2. Expose Ingest Service with ngrok (For 2nd Laptop Demo)
+```powershell
+ngrok http 8001
+```
+Copy the forwarding HTTPS URL to the Attack Generator on Laptop 2.
+
+### 3. Run Test Suites & Validations
+```powershell
+# Run full test suite
+.venv\Scripts\pytest -q
+
+# Run security & tamper tests
+.venv\Scripts\pytest -q tests/v3/test_security.py
+
+# Lint checks
+.venv\Scripts\ruff check app/v3 tests/v3
+
+# KPI evaluation runner
+.venv\Scripts\python -m app.v3.evaluate
+
+# Performance benchmark runner
+.venv\Scripts\python -m app.v3.bench
+```
+
+---
+
+## 7. Limitations & Roadmap
+
+- **Simulated Cloud Actions:** All enforcement actions execute strictly through the simulated cloud environment to protect live infrastructure from accidental damage.
+- **Provider Support:** Current release focuses on Okta System Log and AWS CloudTrail; roadmap includes Microsoft Entra ID and Google Cloud Audit Logs.
+- **Decentralized Bus:** The bus currently uses in-memory Python threading; roadmap includes Redis / Kafka backends for enterprise horizontal scaling.
+

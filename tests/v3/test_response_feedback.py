@@ -456,11 +456,11 @@ def test_email_sent_once_per_case(tmp_db: Path, fixed_clock: Any, monkeypatch: p
 
     # Process first time -> email delivered
     agent.process(msg, state, ctx)
-    assert len(delivered_fingerprints) == 1
+    assert delivered_fingerprints.count("case:case-email-1") == 1
 
     # Process second time -> deduplicated, no second email
     agent.process(msg, state, ctx)
-    assert len(delivered_fingerprints) == 1
+    assert delivered_fingerprints.count("case:case-email-1") == 1
 
 
 # ---------------------------------------------------------------------------

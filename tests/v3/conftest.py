@@ -13,9 +13,12 @@ class FixedDatetime(datetime):
 
 
 @pytest.fixture
-def tmp_db(tmp_path: Path) -> Path:
+def tmp_db(tmp_path: Path):
     """Fixture providing a temporary SQLite database path."""
-    return tmp_path / "test_v3.db"
+    path = tmp_path / "test_v3.db"
+    yield path
+    from app.v3.store import close_connection
+    close_connection(path)
 
 
 @pytest.fixture

@@ -21,7 +21,7 @@ async function loadGeoData() {
 
   try {
     const data = await api.get('/geo/logins');
-    allGeoData = Array.isArray(data) ? data : [];
+    allGeoData = Array.isArray(data) ? data : (data?.points || []);
     renderGlobe(container, allGeoData);
     renderSideLists(allGeoData);
   } catch (err) {

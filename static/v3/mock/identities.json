@@ -1,67 +1,96 @@
-[
-  {
-    "identity_id": "svc-report",
-    "name": "svc-report (Service Account)",
-    "email": "svc-report@identityshield.internal",
-    "identity_risk": 92.4,
-    "session_risk": 92.4,
-    "band": "restrict",
-    "providers": ["okta", "aws"],
-    "roles": ["ReportViewerRole", "OrganizationAccountAccessRole"],
-    "active_sessions": 1,
-    "last_seen": "2026-10-30T14:35:10Z",
-    "is_threat": true
-  },
-  {
-    "identity_id": "jdoe",
-    "name": "John Doe",
-    "email": "jdoe@identityshield.internal",
-    "identity_risk": 76.5,
-    "session_risk": 76.5,
-    "band": "step_up",
-    "providers": ["okta"],
-    "roles": ["Engineering"],
-    "active_sessions": 1,
-    "last_seen": "2026-10-30T13:40:00Z",
-    "is_threat": false
-  },
-  {
-    "identity_id": "asmith",
-    "name": "Alice Smith",
-    "email": "asmith@identityshield.internal",
-    "identity_risk": 24.0,
-    "session_risk": 20.0,
-    "band": "monitor",
-    "providers": ["okta", "aws"],
-    "roles": ["DevOps", "DeveloperAccess"],
-    "active_sessions": 2,
-    "last_seen": "2026-10-30T13:10:00Z",
-    "is_threat": false
-  },
-  {
-    "identity_id": "mlee",
-    "name": "Michael Lee",
-    "email": "mlee@identityshield.internal",
-    "identity_risk": 15.0,
-    "session_risk": 15.0,
-    "band": "monitor",
-    "providers": ["okta"],
-    "roles": ["SecurityAnalyst"],
-    "active_sessions": 1,
-    "last_seen": "2026-10-30T12:05:00Z",
-    "is_threat": false
-  },
-  {
-    "identity_id": "admin-corp",
-    "name": "Admin Corporate",
-    "email": "admin@identityshield.internal",
-    "identity_risk": 10.0,
-    "session_risk": 10.0,
-    "band": "monitor",
-    "providers": ["aws"],
-    "roles": ["BillingAdmin"],
-    "active_sessions": 1,
-    "last_seen": "2026-10-30T11:30:00Z",
-    "is_threat": false
-  }
-]
+{
+  "total": 5,
+  "limit": 50,
+  "offset": 0,
+  "items": [
+    {
+      "identity_id": "svc-report",
+      "name": "svc-report (Service Account)",
+      "email": "svc-report@identityshield.internal",
+      "identity_risk": 92.4,
+      "session_risk": 92.4,
+      "band": "restrict",
+      "providers": [
+        "okta",
+        "aws"
+      ],
+      "roles": [
+        "ReportViewerRole",
+        "OrganizationAccountAccessRole"
+      ],
+      "active_sessions": 1,
+      "last_seen": "2026-10-30T14:35:10Z",
+      "is_threat": true
+    },
+    {
+      "identity_id": "jdoe",
+      "name": "John Doe",
+      "email": "jdoe@identityshield.internal",
+      "identity_risk": 76.5,
+      "session_risk": 76.5,
+      "band": "step_up",
+      "providers": [
+        "okta"
+      ],
+      "roles": [
+        "Engineering"
+      ],
+      "active_sessions": 1,
+      "last_seen": "2026-10-30T13:40:00Z",
+      "is_threat": false
+    },
+    {
+      "identity_id": "asmith",
+      "name": "Alice Smith",
+      "email": "asmith@identityshield.internal",
+      "identity_risk": 24.0,
+      "session_risk": 20.0,
+      "band": "monitor",
+      "providers": [
+        "okta",
+        "aws"
+      ],
+      "roles": [
+        "DevOps",
+        "DeveloperAccess"
+      ],
+      "active_sessions": 2,
+      "last_seen": "2026-10-30T13:10:00Z",
+      "is_threat": false
+    },
+    {
+      "identity_id": "mlee",
+      "name": "Michael Lee",
+      "email": "mlee@identityshield.internal",
+      "identity_risk": 15.0,
+      "session_risk": 15.0,
+      "band": "monitor",
+      "providers": [
+        "okta"
+      ],
+      "roles": [
+        "SecurityAnalyst"
+      ],
+      "active_sessions": 1,
+      "last_seen": "2026-10-30T12:05:00Z",
+      "is_threat": false
+    },
+    {
+      "identity_id": "admin-corp",
+      "name": "Admin Corporate",
+      "email": "admin@identityshield.internal",
+      "identity_risk": 10.0,
+      "session_risk": 10.0,
+      "band": "monitor",
+      "providers": [
+        "aws"
+      ],
+      "roles": [
+        "BillingAdmin"
+      ],
+      "active_sessions": 1,
+      "last_seen": "2026-10-30T11:30:00Z",
+      "is_threat": false
+    }
+  ]
+}

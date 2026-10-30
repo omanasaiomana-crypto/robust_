@@ -49,6 +49,22 @@ def get_connection(db_path: Path | str | None = None) -> sqlite3.Connection:
     return conn
 
 
+def close_connection(db_path: Path | str | None = None) -> None:
+    """Close thread-local SQLite connection for the specified path."""
+    target_path = Path(db_path) if db_path else get_db_path()
+    try:
+        thread_key = f"conn_{target_path.resolve()}"
+    except Exception:  # noqa: BLE001
+        thread_key = f"conn_{target_path}"
+    conn = getattr(_local, thread_key, None)
+    if conn is not None:
+        try:
+            conn.close()
+        except Exception:  # noqa: BLE001, S110
+            pass
+        setattr(_local, thread_key, None)
+
+
 TABLES_SCHEMA = """
 CREATE TABLE IF NOT EXISTS events_v3 (
     event_id TEXT PRIMARY KEY,

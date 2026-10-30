@@ -18,3 +18,7 @@ data/spool/
 data/*.db-*
 .pytest_cache/
 data/models/
+data/eval/
+!data/eval/.gitkeep
+data/bench/
+!data/bench/.gitkeep

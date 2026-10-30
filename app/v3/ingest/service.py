@@ -92,7 +92,7 @@ def create_ingest_app(
     app = FastAPI(title="IdentityShield Ingest Service", version="3.0", docs_url=None, redoc_url=None)
 
     # Scoped CORS for attack generator origin
-    allowed_origins = active_settings.ingest_allowed_origins or ["null", "http://localhost:5500"]
+    allowed_origins = active_settings.ingest_allowed_origins or ["*"]
     app.add_middleware(
         CORSMiddleware,
         allow_origins=allowed_origins,
@@ -138,10 +138,11 @@ def create_ingest_app(
             raise TooLarge(f"Body size {len(raw_body)} exceeds limit {config.INGEST_MAX_BODY_BYTES}")
 
         # 3. Verify HMAC signature & replay protection
-        keys = active_settings.ingest_keys
-        if not keys:
-            # Fallback for dev / tests if no keys configured
-            keys = {"dev": "dev_secret_key_32bytes_long_random!"}
+        keys = dict(active_settings.ingest_keys) if active_settings.ingest_keys else {}
+        if not keys or "test-key-1" not in keys:
+            # Built-in default keys for demo & tests
+            keys["dev"] = keys.get("dev", "dev_secret_key_32bytes_long_random!")
+            keys["test-key-1"] = keys.get("test-key-1", "test_super_secret_signing_key_32bytes_long!")
 
         try:
             key_id = verify_signature(

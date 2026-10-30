@@ -138,5 +138,63 @@
       "is_attack_path": false,
       "color": "#64748B"
     }
+  ],
+  "edges": [
+    {
+      "source": "ip-185-220-101-5",
+      "target": "ses-okta-882194",
+      "label": "Login Request",
+      "is_attack_path": true,
+      "color": "#EF4444"
+    },
+    {
+      "source": "ses-okta-882194",
+      "target": "svc-report",
+      "label": "Authenticated",
+      "is_attack_path": true,
+      "color": "#EF4444"
+    },
+    {
+      "source": "svc-report",
+      "target": "role-ReportViewerRole",
+      "label": "AssumeRoleWithSAML",
+      "is_attack_path": true,
+      "color": "#EF4444"
+    },
+    {
+      "source": "role-ReportViewerRole",
+      "target": "key-AKIAIOSFODNN7EXAMPLE",
+      "label": "CreateAccessKey",
+      "is_attack_path": true,
+      "color": "#EF4444"
+    },
+    {
+      "source": "key-AKIAIOSFODNN7EXAMPLE",
+      "target": "role-OrgAdmin",
+      "label": "AttachUserPolicy (Admin)",
+      "is_attack_path": true,
+      "color": "#EF4444"
+    },
+    {
+      "source": "role-OrgAdmin",
+      "target": "res-cloudtrail-prod",
+      "label": "StopLogging",
+      "is_attack_path": true,
+      "color": "#EF4444"
+    },
+    {
+      "source": "role-OrgAdmin",
+      "target": "res-secretsmanager-db",
+      "label": "Predicted Target",
+      "is_attack_path": false,
+      "color": "#F59E0B"
+    },
+    {
+      "source": "jdoe",
+      "target": "ses-okta-991204",
+      "label": "Normal Login",
+      "is_attack_path": false,
+      "color": "#64748B"
+    }
   ]
 }

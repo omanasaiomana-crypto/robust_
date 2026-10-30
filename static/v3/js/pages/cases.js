@@ -24,7 +24,7 @@ async function loadCases() {
 
   try {
     const data = await api.get('/cases');
-    allCases = Array.isArray(data) ? data : [];
+    allCases = Array.isArray(data) ? data : (data?.items || []);
 
     // Pre-populate URL filter if present (e.g. ?identity_id=svc-report)
     const urlParams = new URLSearchParams(window.location.search);

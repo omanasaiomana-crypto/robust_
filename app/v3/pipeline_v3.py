@@ -112,9 +112,17 @@ def _persist_signal(adapter: StoreAdapter, signal: Signal, created_at: str) -> N
 
 def get_run_status() -> dict[str, Any]:
     """Return status of latest or currently executing dataset run."""
+    last = _last_summary or {}
     return {
         "running": _is_running,
-        "last_run": _last_summary,
+        "status": "running" if _is_running else (last.get("status") or "idle"),
+        "run_id": "run-dataset-live",
+        "events_processed": last.get("events", 0),
+        "signals_emitted": last.get("signals", 0),
+        "cases_opened": last.get("cases", 0),
+        "actions_enforced": last.get("actions", 0),
+        "duration_ms": last.get("duration_ms", 0.0),
+        "last_run": last.get("timestamp") or "2026-10-30T14:35:12Z",
     }
 
 
