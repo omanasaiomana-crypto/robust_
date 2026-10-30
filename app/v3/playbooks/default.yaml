@@ -1,0 +1,88 @@
+# IdentityShield v3 Default Response Playbooks
+# Conforms to PRD §16.1 (fields) and PRD §16.2 (default playbooks PB-01..PB-05).
+
+playbooks:
+  - id: PB-01
+    name: "MFA step-up"
+    description: "Prompt identity for step-up MFA challenge"
+    match:
+      band:
+        - step_up
+      patterns: []
+      min_confidence: 0.0
+      identity_tags: []
+    action: step_up
+    approval_required: false
+    ttl_minutes: null
+    friction_cost: 1
+    rollback: null
+    notify: null
+
+  - id: PB-02
+    name: "Restrict access"
+    description: "Restrict identity: deny sensitive resources and enforce read-only"
+    match:
+      band:
+        - restrict
+      patterns: []
+      min_confidence: 0.0
+      identity_tags: []
+    action: restrict
+    approval_required: false
+    ttl_minutes: 240
+    friction_cost: 0
+    rollback: revert_restrict
+    notify: email
+
+  - id: PB-03
+    name: "Revoke sessions and quarantine"
+    description: "Restrict immediately and propose revoke sessions pending analyst approval"
+    match:
+      band:
+        - revoke
+      patterns: []
+      min_confidence: 0.0
+      identity_tags: []
+    action: revoke_sessions
+    approval_required: true
+    ttl_minutes: 240
+    friction_cost: 0
+    rollback: revert_restrict
+    notify: email
+
+  - id: PB-04
+    name: "Defense evasion immediate restrict"
+    description: "Restrict immediately regardless of score when defense evasion is detected"
+    match:
+      band:
+        - monitor
+        - step_up
+        - restrict
+        - revoke
+      patterns:
+        - D-DEF-01
+        - D-DEF-02
+      min_confidence: 0.0
+      identity_tags: []
+    action: restrict
+    approval_required: false
+    ttl_minutes: 240
+    friction_cost: 0
+    rollback: revert_restrict
+    notify: email
+
+  - id: PB-05
+    name: "Campaign source IP block"
+    description: "Block coordinated campaign source IP in simulator"
+    match:
+      band: []
+      patterns:
+        - D-CMP-01
+      min_confidence: 0.0
+      identity_tags: []
+    action: block_ip
+    approval_required: false
+    ttl_minutes: 60
+    friction_cost: 0
+    rollback: unblock_ip
+    notify: email
