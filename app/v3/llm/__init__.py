@@ -1,1 +1,1 @@
-"""IdentityShield v3 LLM package."""
+"""LLM narrative generation package for IdentityShield v3."""
