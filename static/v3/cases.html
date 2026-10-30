@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>IdentityShield · Threat Cases</title>
+
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet" />
+
+  <!-- Core Theme Styles -->
+  <link rel="stylesheet" href="/v3/css/theme.css" />
+
+  <!-- Tailwind CSS -->
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body>
+  <!-- Fixed 3D Particle Network Canvas -->
+  <canvas id="bg3d-canvas"></canvas>
+
+  <div id="main-content">
+    
+    <!-- Page Header -->
+    <div style="display:flex; justify-content:space-between; align-items:flex-end; margin-bottom:20px; flex-wrap:wrap; gap:16px;">
+      <div>
+        <div style="font-size:0.75rem; font-family:var(--font-mono); color:var(--cyan); text-transform:uppercase; letter-spacing:0.06em; margin-bottom:4px;">
+          Autonomous Detections // Investigation
+        </div>
+        <h1 style="font-size:1.75rem; font-weight:700; margin:0; color:#FFFFFF; letter-spacing:-0.02em;">
+          Threat Cases & Incidents
+        </h1>
+      </div>
+      <div style="display:flex; gap:10px;">
+        <span id="case-count-pill" class="status-pill" style="color:var(--text);">
+          <span class="status-dot ok"></span> <span id="case-count-text">Loading Cases...</span>
+        </span>
+      </div>
+    </div>
+
+    <!-- Filter Bar Glass Panel -->
+    <div class="glass" style="padding:16px 20px; margin-bottom:20px; display:flex; flex-wrap:wrap; gap:16px; align-items:center; justify-content:space-between;">
+      
+      <!-- Search Input -->
+      <div style="flex:1; min-width:240px; position:relative;">
+        <svg style="position:absolute; left:12px; top:50%; transform:translateY(-50%); width:16px; height:16px; color:var(--muted);" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+          <circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/>
+        </svg>
+        <input id="filter-search" type="text" placeholder="Search identity, case ID, session ID, or tactics..." 
+               style="width:100%; padding:9px 14px 9px 36px; background:rgba(0,0,0,0.3); border:1px solid var(--panel-border); border-radius:var(--radius-control); color:#FFFFFF; font-size:0.875rem; outline:none;" />
+      </div>
+
+      <!-- Filters: Band & Status -->
+      <div style="display:flex; gap:12px; align-items:center; flex-wrap:wrap;">
+        
+        <!-- Band Select -->
+        <div style="display:flex; align-items:center; gap:6px;">
+          <span style="font-size:0.8125rem; color:var(--muted);">Band:</span>
+          <select id="filter-band" style="padding:8px 12px; background:rgba(0,0,0,0.4); border:1px solid var(--panel-border); border-radius:var(--radius-control); color:#FFFFFF; font-size:0.8125rem; outline:none;">
+            <option value="all">All Bands</option>
+            <option value="revoke">Revoke (≥ 90)</option>
+            <option value="restrict">Restrict (70–89)</option>
+            <option value="step_up">Step-Up (50–69)</option>
+            <option value="monitor">Monitor (&lt; 50)</option>
+          </select>
+        </div>
+
+        <!-- Status Select -->
+        <div style="display:flex; align-items:center; gap:6px;">
+          <span style="font-size:0.8125rem; color:var(--muted);">Status:</span>
+          <select id="filter-status" style="padding:8px 12px; background:rgba(0,0,0,0.4); border:1px solid var(--panel-border); border-radius:var(--radius-control); color:#FFFFFF; font-size:0.8125rem; outline:none;">
+            <option value="all">All Statuses</option>
+            <option value="open">Open</option>
+            <option value="investigating">Investigating</option>
+            <option value="resolved">Resolved</option>
+            <option value="closed">Closed</option>
+          </select>
+        </div>
+
+        <button id="btn-reset-filters" class="btn btn-ghost" type="button" style="padding:7px 12px; font-size:0.8125rem;">
+          Reset
+        </button>
+      </div>
+
+    </div>
+
+    <!-- Cases Table Glass Panel -->
+    <div class="glass" style="padding:0; overflow:hidden;">
+      <div class="table-wrapper">
+        <table id="cases-table">
+          <thead>
+            <tr>
+              <th data-sort="band" style="cursor:pointer;">Band ↕</th>
+              <th data-sort="case_id" style="cursor:pointer;">Case ID & Identity ↕</th>
+              <th data-sort="risk_score" style="cursor:pointer; width:140px;">Risk Score ↕</th>
+              <th data-sort="confidence" style="cursor:pointer;">Confidence ↕</th>
+              <th data-sort="chain_length" style="cursor:pointer;">Attack Steps ↕</th>
+              <th>MITRE ATT&CK</th>
+              <th data-sort="status" style="cursor:pointer;">Status ↕</th>
+              <th data-sort="created_at" style="cursor:pointer;">Created ↕</th>
+            </tr>
+          </thead>
+          <tbody id="cases-table-body">
+            <tr><td colspan="8"><div class="skeleton" style="height:32px; margin:6px 12px;"></div></td></tr>
+            <tr><td colspan="8"><div class="skeleton" style="height:32px; margin:6px 12px;"></div></td></tr>
+            <tr><td colspan="8"><div class="skeleton" style="height:32px; margin:6px 12px;"></div></td></tr>
+            <tr><td colspan="8"><div class="skeleton" style="height:32px; margin:6px 12px;"></div></td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- Scripts -->
+  <script type="module" src="/v3/js/core/shell.js"></script>
+  <script type="module" src="/v3/js/fx/bg3d.js"></script>
+  <script type="module" src="/v3/js/fx/tilt.js"></script>
+  <script type="module" src="/v3/js/pages/cases.js"></script>
+</body>
+</html>

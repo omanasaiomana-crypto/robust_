@@ -1,0 +1,264 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>IdentityShield · Case Investigation</title>
+
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet" />
+
+  <!-- Core Theme Styles -->
+  <link rel="stylesheet" href="/v3/css/theme.css" />
+
+  <!-- Tailwind CSS -->
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body>
+  <!-- Fixed 3D Particle Network Canvas -->
+  <canvas id="bg3d-canvas"></canvas>
+
+  <div id="main-content">
+    
+    <!-- Top Nav Back Link -->
+    <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:16px;">
+      <a href="/v3/cases.html" style="display:flex; align-items:center; gap:6px; color:var(--muted); text-decoration:none; font-size:0.875rem;" onmouseenter="this.style.color='#FFFFFF'" onmouseleave="this.style.color='var(--muted)'">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
+        Back to All Cases
+      </a>
+      <div style="display:flex; gap:8px;">
+        <span id="case-badge-band" class="badge-band badge-band-restrict">RESTRICT</span>
+        <span id="case-badge-status" class="status-pill"><span class="status-dot crit"></span> OPEN</span>
+      </div>
+    </div>
+
+    <!-- Case Header Glass Panel with SVG Arc Risk Gauge -->
+    <div class="glass" style="padding:24px; margin-bottom:24px; display:flex; flex-wrap:wrap; justify-content:space-between; align-items:center; gap:24px;">
+      
+      <!-- Left: Identity, Session, Title -->
+      <div style="flex:1; min-width:320px;">
+        <div style="display:flex; align-items:center; gap:10px; margin-bottom:6px;">
+          <span id="case-id-tag" style="font-family:var(--font-mono); font-size:0.8125rem; color:var(--cyan); font-weight:700;">CASE-E1-SVCREPORT</span>
+          <span style="color:var(--panel-border-bright);">|</span>
+          <span id="case-session-tag" style="font-family:var(--font-mono); font-size:0.8125rem; color:var(--muted);">ses-okta-882194</span>
+        </div>
+        <h1 id="case-title" style="font-size:1.625rem; font-weight:700; margin:0 0 8px 0; color:#FFFFFF; letter-spacing:-0.02em;">
+          E1: Multi-Stage Privilege Escalation & CloudTrail Tampering
+        </h1>
+        <p id="case-summary" style="font-size:0.875rem; color:var(--muted); margin:0; max-width:760px; line-height:1.6;">
+          Identity svc-report authenticated from Frankfurt (new country/ASN), assumed AWS SAML role, generated new access keys, attached AdministratorAccess, and executed StopLogging on AWS CloudTrail.
+        </p>
+      </div>
+
+      <!-- Right: Risk Gauge & Metric Indicators -->
+      <div style="display:flex; align-items:center; gap:28px;">
+        
+        <!-- SVG Arc Risk Gauge -->
+        <div style="display:flex; flex-direction:column; align-items:center; position:relative; width:130px; height:105px;">
+          <svg viewBox="0 0 100 65" style="width:130px; height:85px; overflow:visible;">
+            <!-- Background Track -->
+            <path d="M 10 55 A 40 40 0 0 1 90 55" fill="none" stroke="rgba(255,255,255,0.08)" stroke-width="8" stroke-linecap="round" />
+            <!-- Animated Value Arc -->
+            <path id="gauge-arc" d="M 10 55 A 40 40 0 0 1 90 55" fill="none" stroke="#EF4444" stroke-width="8" stroke-linecap="round"
+                  stroke-dasharray="126" stroke-dashoffset="12" style="transition:stroke-dashoffset 1s ease-out, stroke 0.5s ease;" />
+          </svg>
+          <div style="position:absolute; bottom:18px; text-align:center;">
+            <div id="gauge-score" style="font-size:1.75rem; font-weight:800; font-family:var(--font-mono); color:#EF4444; line-height:1;">92.4</div>
+            <div style="font-size:0.625rem; text-transform:uppercase; color:var(--muted); font-family:var(--font-mono); letter-spacing:0.04em;">Session Risk</div>
+          </div>
+        </div>
+
+        <!-- Identity Risk & Confidence Stack -->
+        <div style="display:flex; flex-direction:column; gap:8px; border-left:1px solid var(--panel-border); padding-left:20px;">
+          <div>
+            <div style="font-size:0.6875rem; color:var(--muted); text-transform:uppercase; font-family:var(--font-mono);">Identity Risk</div>
+            <div id="metric-identity-risk" style="font-size:1.25rem; font-weight:700; font-family:var(--font-mono); color:#EF4444;">92.4</div>
+          </div>
+          <div>
+            <div style="font-size:0.6875rem; color:var(--muted); text-transform:uppercase; font-family:var(--font-mono);">Confidence</div>
+            <div id="metric-confidence" style="font-size:1.25rem; font-weight:700; font-family:var(--font-mono); color:var(--cyan);">94.0%</div>
+          </div>
+        </div>
+
+      </div>
+
+    </div>
+
+    <!-- 2-Column Investigation Grid -->
+    <div style="display:grid; grid-template-columns:1.5fr 1fr; gap:24px; margin-bottom:24px;">
+      
+      <!-- Left Column: Attack Chain & Narrative -->
+      <div style="display:flex; flex-direction:column; gap:24px;">
+        
+        <!-- Attack Chain Vertical Timeline -->
+        <div class="glass" style="padding:22px;">
+          <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:18px;">
+            <div style="display:flex; align-items:center; gap:8px;">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--cyan)" stroke-width="2"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
+              <h2 style="font-size:1rem; font-weight:600; margin:0; color:#FFFFFF;">
+                Attack Chain Timeline
+              </h2>
+            </div>
+            <span style="font-size:0.75rem; color:var(--muted); font-family:var(--font-mono);">Grouped by MITRE Kill-Chain</span>
+          </div>
+
+          <!-- Vertical Timeline Steps Container -->
+          <div id="attack-chain-container" style="display:flex; flex-direction:column; gap:16px; position:relative; padding-left:20px;">
+            <!-- Rendered dynamically -->
+          </div>
+        </div>
+
+        <!-- Investigation Narrative Card -->
+        <div class="glass" style="padding:20px;">
+          <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:10px;">
+            <h3 style="font-size:0.9375rem; font-weight:600; margin:0; color:#FFFFFF;">Investigation Narrative</h3>
+            <span id="narrative-source-tag" class="status-pill" style="font-size:0.6875rem; color:var(--cyan);">[TEMPLATE NARRATIVE]</span>
+          </div>
+          <p id="narrative-text" style="font-size:0.875rem; color:var(--text); line-height:1.6; margin:0;">
+            Loading case explanation...
+          </p>
+        </div>
+
+      </div>
+
+      <!-- Right Column: Evidence, Counterfactuals, Next Step, Actions -->
+      <div style="display:flex; flex-direction:column; gap:24px;">
+        
+        <!-- Why this Score (Top 3 Reasons) -->
+        <div class="glass" style="padding:20px;">
+          <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:12px;">
+            <h3 style="font-size:0.9375rem; font-weight:600; margin:0; color:#FFFFFF;">Why This Score</h3>
+            <span style="font-size:0.6875rem; color:var(--muted); font-family:var(--font-mono);">TOP EVIDENCE</span>
+          </div>
+          <div id="reasons-container" style="display:flex; flex-direction:column; gap:10px;">
+            <!-- Rendered dynamically with clickable evidence IDs -->
+          </div>
+        </div>
+
+        <!-- Counterfactuals ("What if" Bars) -->
+        <div class="glass" style="padding:20px;">
+          <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:12px;">
+            <h3 style="font-size:0.9375rem; font-weight:600; margin:0; color:#FFFFFF;">Counterfactual Analysis ("What If")</h3>
+            <span style="font-size:0.6875rem; color:var(--cyan); font-family:var(--font-mono);">FUSION DROPS</span>
+          </div>
+          <div id="counterfactuals-container" style="display:flex; flex-direction:column; gap:12px;">
+            <!-- Rendered dynamically -->
+          </div>
+        </div>
+
+        <!-- Predicted Next Step Card -->
+        <div class="glass" style="padding:20px; border-left:3px solid var(--warn);">
+          <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px;">
+            <h3 style="font-size:0.9375rem; font-weight:600; margin:0; color:var(--warn); display:flex; align-items:center; gap:6px;">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg>
+              Predicted Next Step
+            </h3>
+            <span class="status-pill" style="font-size:0.6875rem; color:var(--warn);">84% PROBABILITY</span>
+          </div>
+          <div id="predicted-next-step" style="font-size:0.875rem; color:#FFFFFF; font-weight:500; margin-bottom:6px;">
+            SecretsManager:GetSecretValue or S3 Data Exfiltration within 15m
+          </div>
+          <div style="font-size:0.75rem; color:var(--muted);">
+            Markov sequence rarity model detects transition to confidential data discovery.
+          </div>
+        </div>
+
+        <!-- Blast Radius & Related Identities -->
+        <div class="glass" style="padding:20px;">
+          <h3 style="font-size:0.9375rem; font-weight:600; margin:0 0 12px 0; color:#FFFFFF;">Blast Radius & Pivots</h3>
+          <div style="display:grid; grid-template-columns:1fr 1fr; gap:12px; margin-bottom:12px;">
+            <div style="padding:10px; background:rgba(0,0,0,0.3); border-radius:8px; border:1px solid var(--panel-border);">
+              <div style="font-size:0.6875rem; color:var(--muted); text-transform:uppercase;">Compromised Roles / Keys</div>
+              <div id="blast-radius-count" style="font-size:1.25rem; font-weight:700; font-family:var(--font-mono); color:#FFFFFF; margin-top:2px;">4 Entities</div>
+            </div>
+            <div style="padding:10px; background:rgba(0,0,0,0.3); border-radius:8px; border:1px solid var(--panel-border);">
+              <div style="font-size:0.6875rem; color:var(--muted); text-transform:uppercase;">Related Identities</div>
+              <div id="related-identities-text" style="font-size:1.25rem; font-weight:700; font-family:var(--font-mono); color:var(--cyan); margin-top:2px;">2 Linked</div>
+            </div>
+          </div>
+          <div id="blast-radius-list" style="display:flex; flex-wrap:wrap; gap:6px;">
+            <span class="mitre-chip" style="color:var(--text); border-color:var(--panel-border);">ReportViewerRole</span>
+            <span class="mitre-chip" style="color:var(--text); border-color:var(--panel-border);">AKIAIOSFODNN7EXAMPLE</span>
+            <span class="mitre-chip" style="color:var(--text); border-color:var(--panel-border);">production-trail</span>
+          </div>
+        </div>
+
+        <!-- Actions Panel & Analyst Workflow -->
+        <div class="glass" style="padding:20px;">
+          <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:14px;">
+            <h3 style="font-size:0.9375rem; font-weight:600; margin:0; color:#FFFFFF;">Simulator Response Actions</h3>
+            <span style="font-size:0.6875rem; color:var(--muted); font-family:var(--font-mono);">PLAYBOOK PB-01</span>
+          </div>
+          
+          <div id="actions-list" style="display:flex; flex-direction:column; gap:10px; margin-bottom:16px;">
+            <!-- Rendered dynamically -->
+          </div>
+
+          <!-- Analyst Ground Truth Labeling Buttons -->
+          <div style="border-top:1px solid var(--panel-border); padding-top:14px;">
+            <div style="font-size:0.75rem; color:var(--muted); margin-bottom:8px; text-transform:uppercase; font-family:var(--font-mono);">
+              Feedback Loop // Analyst Label
+            </div>
+            <div style="display:flex; gap:8px;">
+              <button id="btn-label-tp" class="btn btn-primary" type="button" style="flex:1; padding:6px 10px; font-size:0.8125rem;">
+                TP (Threat)
+              </button>
+              <button id="btn-label-fp" class="btn btn-ghost" type="button" style="flex:1; padding:6px 10px; font-size:0.8125rem;">
+                FP (False Alarm)
+              </button>
+              <button id="btn-label-benign" class="btn btn-ghost" type="button" style="flex:1; padding:6px 10px; font-size:0.8125rem;">
+                Benign TP
+              </button>
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+    </div>
+
+  </div>
+
+  <!-- Slide-Out Evidence Drawer -->
+  <div id="evidence-drawer" style="position:fixed; top:0; right:-550px; width:520px; height:100vh; background:rgba(11, 15, 23, 0.96); backdrop-filter:blur(20px); border-left:1px solid var(--panel-border-bright); box-shadow:-10px 0 40px rgba(0,0,0,0.8); z-index:95; display:flex; flex-direction:column; transition:right 0.3s cubic-bezier(0.2, 0, 0.2, 1);">
+    <div style="padding:18px 24px; border-bottom:1px solid var(--panel-border); display:flex; justify-content:space-between; align-items:center;">
+      <div>
+        <div style="font-size:0.75rem; font-family:var(--font-mono); color:var(--cyan);">AUDIT EVIDENCE INSPECTOR</div>
+        <h3 id="drawer-event-id" style="margin:2px 0 0 0; font-size:1.125rem; color:#FFFFFF; font-family:var(--font-mono);">evt-okta-882194</h3>
+      </div>
+      <button id="btn-close-drawer" class="btn btn-ghost" type="button" style="padding:6px 10px;">
+        ✕ Close
+      </button>
+    </div>
+    <div style="flex:1; overflow-y:auto; padding:20px;">
+      <pre id="drawer-event-json" style="margin:0; font-family:var(--font-mono); font-size:0.8125rem; color:#A5F3FC; background:rgba(0,0,0,0.4); padding:16px; border-radius:8px; border:1px solid var(--panel-border); white-space:pre-wrap; word-break:break-all;"></pre>
+    </div>
+  </div>
+
+  <!-- Action Approval Modal -->
+  <div id="action-modal" style="position:fixed; inset:0; background:rgba(5,7,13,0.85); backdrop-filter:blur(8px); z-index:98; display:none; align-items:center; justify-content:center;">
+    <div class="glass" style="width:90%; max-width:480px; padding:24px; border:1px solid var(--panel-border-bright);">
+      <h3 id="modal-title" style="margin:0 0 8px 0; font-size:1.125rem; color:#FFFFFF;">Confirm Response Action</h3>
+      <p id="modal-desc" style="font-size:0.875rem; color:var(--muted); margin:0 0 16px 0; line-height:1.5;">
+        You are about to enforce simulator revocation on this identity.
+      </p>
+      <div style="margin-bottom:16px;">
+        <label style="display:block; font-size:0.75rem; color:var(--muted); text-transform:uppercase; margin-bottom:6px;">Analyst Name / Reason</label>
+        <input id="modal-analyst-input" type="text" value="sec-ops-lead" style="width:100%; padding:10px 14px; background:rgba(0,0,0,0.4); border:1px solid var(--panel-border); border-radius:var(--radius-control); color:#FFFFFF; font-size:0.875rem; outline:none;" />
+      </div>
+      <div style="display:flex; justify-content:flex-end; gap:10px;">
+        <button id="modal-btn-cancel" class="btn btn-ghost" type="button">Cancel</button>
+        <button id="modal-btn-confirm" class="btn btn-danger" type="button">Enforce Action</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Scripts -->
+  <script type="module" src="/v3/js/core/shell.js"></script>
+  <script type="module" src="/v3/js/fx/bg3d.js"></script>
+  <script type="module" src="/v3/js/fx/tilt.js"></script>
+  <script type="module" src="/v3/js/pages/case.js"></script>
+</body>
+</html>

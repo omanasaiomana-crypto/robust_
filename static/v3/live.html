@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>IdentityShield · Live Constellation</title>
+
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet" />
+
+  <!-- Core Theme Styles -->
+  <link rel="stylesheet" href="/v3/css/theme.css" />
+
+  <!-- Tailwind CSS -->
+  <script src="https://cdn.tailwindcss.com"></script>
+
+  <!-- Vendored Three.js -->
+  <script src="/vendor/three.min.js"></script>
+</head>
+<body>
+  <!-- Fixed 3D Particle Network Canvas -->
+  <canvas id="bg3d-canvas"></canvas>
+
+  <div id="main-content" style="display:flex; flex-direction:column; height:calc(100vh - 100px); max-height:calc(100vh - 100px); gap:16px;">
+    
+    <!-- Top Action & Telemetry Controls Bar -->
+    <div class="glass" style="padding:14px 20px; display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:16px;">
+      
+      <!-- Left: Status pill & Counters -->
+      <div style="display:flex; align-items:center; gap:18px;">
+        <span id="live-status-pill" class="status-pill" style="color:#FFFFFF;">
+          <span id="live-status-dot" class="status-dot ok"></span>
+          <span id="live-status-text">LIVE · STREAMING</span>
+        </span>
+
+        <div style="display:flex; gap:14px; font-family:var(--font-mono); font-size:0.8125rem;">
+          <span style="color:var(--muted);">Events: <strong id="cnt-events" style="color:#FFFFFF;">0</strong></span>
+          <span style="color:var(--muted);">Signals: <strong id="cnt-signals" style="color:var(--cyan);">0</strong></span>
+          <span style="color:var(--muted);">Cases: <strong id="cnt-cases" style="color:var(--warn);">0</strong></span>
+          <span style="color:var(--muted);">Threats: <strong id="cnt-threats" style="color:var(--crit);">0</strong></span>
+        </div>
+      </div>
+
+      <!-- Right: Scan Controls & Pace Selector -->
+      <div style="display:flex; align-items:center; gap:12px;">
+        <div style="display:flex; align-items:center; gap:6px;">
+          <span style="font-size:0.75rem; color:var(--muted);">Pace:</span>
+          <select id="select-pace" style="padding:6px 10px; background:rgba(0,0,0,0.4); border:1px solid var(--panel-border); border-radius:var(--radius-control); color:#FFFFFF; font-size:0.8125rem; outline:none;">
+            <option value="0.0">Instant (0s)</option>
+            <option value="0.4">Fast (0.4s)</option>
+            <option value="1.0" selected>Normal (1.0s)</option>
+            <option value="1.8">Slow (1.8s)</option>
+          </select>
+        </div>
+
+        <button id="btn-start-scan" class="btn btn-primary" type="button" style="padding:6px 14px; font-size:0.8125rem;">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="5 3 19 12 5 21 5 3"/></svg>
+          Start Scan
+        </button>
+
+        <button id="btn-replay-last" class="btn btn-ghost" type="button" style="padding:6px 12px; font-size:0.8125rem;">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 4v6h6M23 20v-6h-6"/><path d="M20.49 9A9 9 0 0 0 5.64 5.64L1 10m22 4l-4.64 4.36A9 9 0 0 1 3.51 15"/></svg>
+          Replay Last
+        </button>
+      </div>
+
+    </div>
+
+    <!-- Main Live Workspace: 3D Constellation (Left) + Terminal Trace (Right) -->
+    <div style="display:grid; grid-template-columns:1.35fr 1fr; gap:16px; flex:1; min-height:0;">
+      
+      <!-- 3D Constellation Canvas Panel -->
+      <div class="glass" style="position:relative; overflow:hidden; display:flex; flex-direction:column; padding:0;">
+        <div style="position:absolute; top:14px; left:16px; z-index:10; pointer-events:none;">
+          <div style="font-size:0.875rem; font-weight:700; color:#FFFFFF;">15-Agent Multi-Layer Constellation</div>
+          <div style="font-size:0.6875rem; color:var(--muted); font-family:var(--font-mono);">5 Concentric Functional Rings (Data → Decision)</div>
+        </div>
+        
+        <div style="position:absolute; bottom:14px; left:16px; z-index:10; pointer-events:none; font-family:var(--font-mono); font-size:0.6875rem; color:var(--muted); background:rgba(0,0,0,0.5); padding:4px 8px; border-radius:4px;">
+          Drag to Orbit · Scroll to Zoom
+        </div>
+
+        <!-- 3D Canvas / 2D SVG Container -->
+        <div id="constellation-container" style="flex:1; width:100%; height:100%; min-height:360px;"></div>
+      </div>
+
+      <!-- Right Panel: Terminal Trace Log & Details -->
+      <div class="glass" style="display:flex; flex-direction:column; padding:0; overflow:hidden;">
+        
+        <!-- Terminal Header & Filters -->
+        <div style="padding:12px 16px; border-bottom:1px solid var(--panel-border); display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:8px;">
+          <div style="display:flex; align-items:center; gap:8px;">
+            <div style="width:10px; height:10px; border-radius:50%; background:#EF4444; opacity:0.8;"></div>
+            <div style="width:10px; height:10px; border-radius:50%; background:#F59E0B; opacity:0.8;"></div>
+            <div style="width:10px; height:10px; border-radius:50%; background:#10B981; opacity:0.8;"></div>
+            <span style="font-size:0.8125rem; font-weight:600; color:#FFFFFF; font-family:var(--font-mono); margin-left:6px;">Topic Bus Telemetry</span>
+          </div>
+
+          <div style="display:flex; gap:6px;">
+            <button id="btn-pause-trace" class="btn btn-ghost" type="button" style="padding:4px 8px; font-size:0.6875rem;">Pause</button>
+            <button id="btn-clear-trace" class="btn btn-ghost" type="button" style="padding:4px 8px; font-size:0.6875rem;">Clear</button>
+          </div>
+        </div>
+
+        <!-- Filter Bar -->
+        <div style="padding:8px 16px; border-bottom:1px solid rgba(148,163,184,0.08); display:flex; gap:10px; background:rgba(0,0,0,0.2);">
+          <select id="filter-trace-agent" style="flex:1; padding:4px 8px; background:rgba(0,0,0,0.4); border:1px solid var(--panel-border); border-radius:6px; color:#FFFFFF; font-size:0.75rem; font-family:var(--font-mono); outline:none;">
+            <option value="all">All 15 Agents</option>
+            <option value="a01">a01 Collector</option>
+            <option value="a02">a02 Normalizer</option>
+            <option value="a03">a03 Context</option>
+            <option value="a04">a04 Correlation</option>
+            <option value="a05">a05 Access</option>
+            <option value="a06">a06 Session</option>
+            <option value="a07">a07 Credentials</option>
+            <option value="a08">a08 Privesc</option>
+            <option value="a09">a09 Evasion</option>
+            <option value="a10">a10 Behavioral ML</option>
+            <option value="a11">a11 Campaign</option>
+            <option value="a12">a12 Fusion</option>
+            <option value="a13">a13 Investigation</option>
+            <option value="a14">a14 Response</option>
+            <option value="a15">a15 Feedback</option>
+          </select>
+
+          <select id="filter-trace-level" style="width:110px; padding:4px 8px; background:rgba(0,0,0,0.4); border:1px solid var(--panel-border); border-radius:6px; color:#FFFFFF; font-size:0.75rem; font-family:var(--font-mono); outline:none;">
+            <option value="all">All States</option>
+            <option value="running">running</option>
+            <option value="finding">finding</option>
+            <option value="threat">threat</option>
+          </select>
+        </div>
+
+        <!-- Scrollable Trace Log Output -->
+        <div id="terminal-trace-log" style="flex:1; overflow-y:auto; padding:12px; font-family:var(--font-mono); font-size:0.75rem; display:flex; flex-direction:column; gap:6px; background:rgba(5,7,13,0.6);">
+          <!-- Trace items rendered here -->
+        </div>
+
+        <!-- Selected Trace Inspector Footer -->
+        <div id="trace-inspector" style="height:110px; border-top:1px solid var(--panel-border); padding:8px 12px; background:rgba(0,0,0,0.5); overflow-y:auto; font-family:var(--font-mono); font-size:0.6875rem; color:#A5F3FC;">
+          <div style="color:var(--muted); font-size:0.6875rem;">Click any trace event above to inspect full message JSON payload.</div>
+        </div>
+
+      </div>
+
+    </div>
+
+  </div>
+
+  <!-- Scripts -->
+  <script type="module" src="/v3/js/core/shell.js"></script>
+  <script type="module" src="/v3/js/fx/bg3d.js"></script>
+  <script type="module" src="/v3/js/fx/tilt.js"></script>
+  <script type="module" src="/v3/js/pages/live.js"></script>
+</body>
+</html>

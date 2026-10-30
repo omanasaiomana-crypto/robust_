@@ -57,11 +57,16 @@ class ApiClient {
     const clean = endpoint.split('?')[0].replace(/^\/+/, '');
     if (clean === 'health') return '/v3/mock/health.json';
     if (clean === 'agents') return '/v3/mock/agents.json';
+    if (clean === 'identities') return '/v3/mock/identities.json';
+    if (clean.startsWith('identities/')) return '/v3/mock/identities.json';
     if (clean === 'cases') return '/v3/mock/cases.json';
     if (clean.startsWith('cases/')) return '/v3/mock/case_detail.json';
+    if (clean === 'actions') return '/v3/mock/actions.json';
     if (clean.startsWith('graph/')) return '/v3/mock/graph.json';
     if (clean.startsWith('geo/')) return '/v3/mock/geo.json';
     if (clean.startsWith('metrics/')) return '/v3/mock/metrics.json';
+    if (clean === 'playbooks') return '/v3/mock/playbooks.json';
+    if (clean === 'run/status') return '/v3/mock/run_status.json';
     return `/v3/mock/${clean.replace(/\//g, '_')}.json`;
   }
 

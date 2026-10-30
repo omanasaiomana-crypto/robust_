@@ -1,0 +1,10 @@
+{
+  "status": "idle",
+  "run_id": "run-dataset-e1",
+  "events_processed": 14200,
+  "signals_emitted": 71,
+  "cases_opened": 3,
+  "actions_enforced": 2,
+  "duration_ms": 1248.5,
+  "last_run": "2026-10-30T14:35:12Z"
+}

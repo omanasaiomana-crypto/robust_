@@ -1,0 +1,42 @@
+[
+  {
+    "id": "PB-01",
+    "name": "Privilege Escalation Rapid Containment",
+    "condition": "risk >= 85 and has_privilege_escalation",
+    "actions": ["restrict", "revoke"],
+    "requires_approval": ["revoke"],
+    "friction_budget": 2
+  },
+  {
+    "id": "PB-02",
+    "name": "Impossible Travel Step-Up",
+    "condition": "detection == 'D-ACC-01'",
+    "actions": ["step_up"],
+    "requires_approval": [],
+    "friction_budget": 1
+  },
+  {
+    "id": "PB-03",
+    "name": "Credential Abuse Isolation",
+    "condition": "detection in ['D-CRD-02', 'D-CRD-04']",
+    "actions": ["restrict"],
+    "requires_approval": [],
+    "friction_budget": 1
+  },
+  {
+    "id": "PB-04",
+    "name": "Defense Evasion Emergency Lockout",
+    "condition": "detection in ['D-DEF-01', 'D-DEF-02', 'D-DEF-05']",
+    "actions": ["restrict", "revoke"],
+    "requires_approval": ["revoke"],
+    "friction_budget": 2
+  },
+  {
+    "id": "PB-05",
+    "name": "Distributed Spray Monitoring",
+    "condition": "detection == 'D-CMP-01'",
+    "actions": ["monitor"],
+    "requires_approval": [],
+    "friction_budget": 0
+  }
+]
