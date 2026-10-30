@@ -14,3 +14,4 @@ data/spool/
 *.sqlite-wal
 *.sqlite-shm
 .pytest_cache/
+data/models/
