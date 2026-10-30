@@ -1,0 +1,120 @@
+{
+  "identities": [
+    {
+      "identity_id": "svc-report",
+      "name": "svc-report (Analytics Service)",
+      "email": "svc-report@corp.example",
+      "type": "ServiceAccount",
+      "usual_city": "San Francisco",
+      "usual_country": "United States",
+      "usual_ip": "198.51.100.24",
+      "usual_asn": 15169,
+      "usual_isp": "Google LLC",
+      "roles": [
+        "arn:aws:iam::123456789012:role/AnalyticsReportingRole"
+      ],
+      "admin_role": "arn:aws:iam::123456789012:role/OrganizationAccountAccessRole",
+      "target_secret": "arn:aws:secretsmanager:us-east-1:123456789012:secret:prod/db/credentials",
+      "target_bucket": "prod-analytics-exports",
+      "vpc_endpoint": "vpce-0a1b2c3d4e5f67890"
+    },
+    {
+      "identity_id": "sunita.deshmukh",
+      "name": "Sunita Deshmukh",
+      "email": "sunita.deshmukh@corp.example",
+      "type": "Employee",
+      "usual_city": "Chennai",
+      "usual_country": "India",
+      "usual_ip": "103.50.162.71",
+      "usual_asn": 55836,
+      "usual_isp": "Reliance Jio",
+      "roles": [
+        "arn:aws:iam::123456789012:role/DevOpsAdmin"
+      ],
+      "target_bucket": "corp-devops-artifacts",
+      "vpc_endpoint": "vpce-0a1b2c3d4e5f67890"
+    },
+    {
+      "identity_id": "manoj.pillai",
+      "name": "Manoj Pillai",
+      "email": "manoj.pillai@corp.example",
+      "type": "Employee",
+      "usual_city": "Mumbai",
+      "usual_country": "India",
+      "usual_ip": "103.88.220.181",
+      "usual_asn": 45609,
+      "usual_isp": "Bharti Airtel",
+      "roles": [
+        "arn:aws:iam::123456789012:role/Engineer"
+      ],
+      "target_bucket": "corp-engineering-data",
+      "vpc_endpoint": "vpce-0a1b2c3d4e5f67890"
+    },
+    {
+      "identity_id": "sanjay.iyer",
+      "name": "Sanjay Iyer",
+      "email": "sanjay.iyer@corp.example",
+      "type": "Employee",
+      "usual_city": "Bengaluru",
+      "usual_country": "India",
+      "usual_ip": "103.21.245.105",
+      "usual_asn": 45609,
+      "usual_isp": "Bharti Airtel",
+      "roles": [
+        "arn:aws:iam::123456789012:role/Engineer"
+      ],
+      "target_bucket": "corp-dev-logs",
+      "vpc_endpoint": "vpce-0a1b2c3d4e5f67890"
+    },
+    {
+      "identity_id": "bob.admin",
+      "name": "Bob Admin",
+      "email": "bob.admin@corp.example",
+      "type": "Admin",
+      "usual_city": "San Jose",
+      "usual_country": "United States",
+      "usual_ip": "198.51.100.88",
+      "usual_asn": 15169,
+      "usual_isp": "Google LLC",
+      "roles": [
+        "arn:aws:iam::123456789012:role/CloudAdmin"
+      ],
+      "target_secret": "arn:aws:secretsmanager:us-east-1:123456789012:secret:prod/iam/keys",
+      "vpc_endpoint": "vpce-0a1b2c3d4e5f67890"
+    },
+    {
+      "identity_id": "admin-corp",
+      "name": "Corporate Administrator",
+      "email": "admin@corp.example",
+      "type": "Admin",
+      "usual_city": "San Francisco",
+      "usual_country": "United States",
+      "usual_ip": "198.51.100.10",
+      "usual_asn": 15169,
+      "usual_isp": "Google LLC",
+      "roles": [
+        "arn:aws:iam::123456789012:role/SuperAdmin"
+      ],
+      "vpc_endpoint": "vpce-0a1b2c3d4e5f67890"
+    }
+  ],
+  "spray_users": [
+    "alex.jones@corp.example",
+    "brian.wilson@corp.example",
+    "carol.danvers@corp.example",
+    "david.miller@corp.example",
+    "emma.watson@corp.example",
+    "frank.castle@corp.example",
+    "george.clark@corp.example",
+    "helen.hunt@corp.example",
+    "ian.wright@corp.example",
+    "julia.roberts@corp.example",
+    "kevin.bacon@corp.example",
+    "laura.croft@corp.example",
+    "michael.scott@corp.example",
+    "natalie.portman@corp.example",
+    "ivan.intern@corp.example"
+  ],
+  "aws_account_id": "123456789012",
+  "default_region": "us-east-1"
+}

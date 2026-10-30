@@ -98,7 +98,14 @@ def create_ingest_app(
         allow_origins=allowed_origins,
         allow_credentials=False,
         allow_methods=["POST", "GET", "OPTIONS"],
-        allow_headers=["Content-Type", "X-IS-Key-Id", "X-IS-Timestamp", "X-IS-Nonce", "X-IS-Signature"],
+        allow_headers=[
+            "Content-Type",
+            "X-IS-Key-Id",
+            "X-IS-Timestamp",
+            "X-IS-Nonce",
+            "X-IS-Signature",
+            "ngrok-skip-browser-warning",
+        ],
     )
 
     # Ingestion metrics

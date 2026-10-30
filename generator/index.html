@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>IdentityShield v3 — Attack Generator &amp; Log Forwarder (Laptop 2)</title>
+  <link rel="stylesheet" href="css/generator.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+
+  <!-- Top Header Bar -->
+  <header class="generator-header">
+    <div class="brand-title">
+      <div class="brand-icon">
+        <svg viewBox="0 0 24 24"><path d="M12 1L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-4zm0 10.99h7c-.53 4.12-3.28 7.79-7 8.94V12H5V6.3l7-3.11v8.8z"/></svg>
+      </div>
+      <div class="brand-text">
+        <h1>IdentityShield v3 — Attack Generator &amp; Log Forwarder</h1>
+        <p>Laptop 2 Attacker Simulation &amp; HMAC-SHA256 Signed Ingest Forwarder</p>
+      </div>
+    </div>
+
+    <div class="header-status">
+      <!-- ngrok Free Quota Tracker -->
+      <div class="quota-indicator">
+        <span style="color: var(--muted);">Quota:</span>
+        <div class="quota-bar"><div class="quota-fill" id="quotaFill"></div></div>
+        <span id="quotaText">0 / 20,000 monthly</span>
+      </div>
+
+      <!-- Connection Pill -->
+      <div class="conn-pill" id="connStatusPill">
+        <span class="conn-dot"></span>
+        <span id="connStatusText">Testing...</span>
+      </div>
+    </div>
+  </header>
+
+  <!-- 1. Connection Panel -->
+  <section class="glass-panel">
+    <div class="panel-header">
+      <div class="panel-title">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/></svg>
+        Ingest Connection &amp; Authentication
+      </div>
+      <span style="font-size: 0.75rem; color: var(--muted); font-family: var(--font-mono);">Web Crypto HMAC-SHA256</span>
+    </div>
+
+    <div class="connection-grid">
+      <div class="form-group">
+        <label class="form-label" for="targetUrl">Target Ingest Base URL</label>
+        <input type="text" class="form-input" id="targetUrl" value="http://127.0.0.1:8001" placeholder="https://<ngrok-domain>.ngrok-free.app or http://127.0.0.1:8001">
+      </div>
+
+      <div class="form-group">
+        <label class="form-label" for="keyId">Key ID</label>
+        <input type="text" class="form-input" id="keyId" value="test-key-1" placeholder="key-generator">
+      </div>
+
+      <div class="form-group">
+        <label class="form-label" for="secretKey">Signing Secret (In-Memory Only)</label>
+        <div class="input-wrapper">
+          <input type="password" class="form-input" id="secretKey" value="test_super_secret_signing_key_32bytes_long!" placeholder="HMAC Secret Key">
+          <button class="toggle-pwd-btn" id="togglePwdBtn" type="button" title="Toggle visibility">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+          </button>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label class="form-label" for="senderId">Sender ID</label>
+        <input type="text" class="form-input" id="senderId" value="laptop-2-generator">
+      </div>
+
+      <button class="btn btn-primary" id="testConnBtn" type="button">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
+        Test Connection
+      </button>
+    </div>
+  </section>
+
+  <!-- 2. Scenarios Panel (N1, E1-E9) -->
+  <section class="glass-panel">
+    <div class="panel-header">
+      <div class="panel-title">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>
+        Attack Scenario Library &amp; Evasion Pack (PRD §25.3)
+      </div>
+      <span style="font-size: 0.75rem; color: var(--muted);">10 Scenarios (N1 Baseline, E1 Hero, E2–E9 Advanced Evasion)</span>
+    </div>
+
+    <div class="scenarios-grid" id="scenariosGrid">
+      <!-- Generated dynamically by generator.js -->
+    </div>
+  </section>
+
+  <!-- 3. Cryptographic Tamper Suite (T1-T5) -->
+  <section class="glass-panel">
+    <div class="panel-header">
+      <div class="panel-title">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+        Cryptographic Tamper Suite (T1–T5 SEC Live Proof)
+      </div>
+      <button class="btn btn-crit btn-sm" id="runAllTamperBtn" type="button">Run All Tamper Tests</button>
+    </div>
+
+    <div class="tamper-grid" id="tamperGrid">
+      <!-- Generated dynamically by generator.js -->
+    </div>
+  </section>
+
+  <!-- 4. Background Benign Noise & Rate Limiter -->
+  <section class="glass-panel">
+    <div class="panel-header">
+      <div class="panel-title">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M2 10s3-3 6-3 6 3 6 3 3-3 6-3"/><path d="M2 14s3-3 6-3 6 3 6 3 3-3 6-3"/><path d="M2 18s3-3 6-3 6 3 6 3 3-3 6-3"/></svg>
+        Background Benign Noise Simulator
+      </div>
+      <span class="noise-countdown" id="noiseCountdown">Noise generator inactive</span>
+    </div>
+
+    <div class="noise-container">
+      <div class="noise-toggle-group">
+        <label class="switch">
+          <input type="checkbox" id="noiseToggle">
+          <span class="slider-round"></span>
+        </label>
+        <div>
+          <div style="font-weight: 600; font-size: 0.85rem; color: var(--text-bright);">Simulate Corporate Background Traffic</div>
+          <div style="font-size: 0.75rem; color: var(--muted);">Sends batches of up to 20 benign read events (min 3s rate for ngrok free tier)</div>
+        </div>
+      </div>
+
+      <div class="slider-group">
+        <span style="font-size: 0.75rem; color: var(--muted);">Interval:</span>
+        <input type="range" class="range-slider" id="noiseRateSlider" min="3" max="30" value="5" step="1">
+        <span style="font-family: var(--font-mono); font-size: 0.85rem; color: var(--cyan); width: 35px;" id="noiseRateVal">5s</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- 5. Real-Time Transmission Metrics -->
+  <div class="metrics-row">
+    <div class="metric-card">
+      <span class="metric-label">Total Requests</span>
+      <span class="metric-val" id="metricTotalReqs">0</span>
+    </div>
+    <div class="metric-card">
+      <span class="metric-label">Accepted (202)</span>
+      <span class="metric-val ok" id="metricAccepted">0</span>
+    </div>
+    <div class="metric-card">
+      <span class="metric-label">Rejected (4xx / 5xx)</span>
+      <span class="metric-val crit" id="metricRejected">0</span>
+    </div>
+    <div class="metric-card">
+      <span class="metric-label">Total Events Ingested</span>
+      <span class="metric-val cyan" id="metricTotalEvents">0</span>
+    </div>
+    <div class="metric-card">
+      <span class="metric-label">Avg Ingest Latency</span>
+      <span class="metric-val" id="metricAvgLatency">0 ms</span>
+    </div>
+  </div>
+
+  <!-- 6. Transmission & Ingest Log Console -->
+  <section class="glass-panel">
+    <div class="panel-header">
+      <div class="panel-title">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="4 17 10 11 4 5"/><line x1="12" y1="19" x2="20" y2="19"/></svg>
+        Transmission &amp; Ingest Response Log
+      </div>
+      <button class="btn btn-secondary btn-sm" id="clearLogBtn" type="button">Clear Logs</button>
+    </div>
+
+    <div class="log-table-wrap">
+      <table class="log-table">
+        <thead>
+          <tr>
+            <th>Time</th>
+            <th>Scenario / Action</th>
+            <th>Source</th>
+            <th>Events</th>
+            <th>HTTP Status</th>
+            <th>Latency</th>
+            <th>Server Received At</th>
+            <th>Inspector</th>
+          </tr>
+        </thead>
+        <tbody id="logTableBody">
+          <!-- Populated dynamically by generator.js -->
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <!-- Modal Inspector / Stepper -->
+  <div class="modal-overlay" id="modalOverlay">
+    <div class="modal-content">
+      <div class="modal-header">
+        <div class="modal-title" id="modalTitle">Payload Inspector</div>
+        <button class="modal-close" id="modalClose" type="button">&times;</button>
+      </div>
+      <div class="modal-body" id="modalBody"></div>
+      <div class="modal-footer" id="modalFooter"></div>
+    </div>
+  </div>
+
+  <!-- Scripts -->
+  <script src="js/sign.js"></script>
+  <script src="js/scenarios.js"></script>
+  <script src="js/generator.js"></script>
+</body>
+</html>
