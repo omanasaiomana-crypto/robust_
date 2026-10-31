@@ -1,8 +1,7 @@
 /**
  * IdentityShield v3 — "Shield Core" Standalone 3D Hero Element
- * Specification: UI_DESIGN.md Section 4
- *
- * Exports: mountShieldCore(container, options) -> { pulse(), threat(), destroy() }
+ * Cyber Stealth Obsidian Theme: Dark Crystal Shield, Emerald Fingerprint Core, Amber/Teal/Gold Orbs
+ * ZERO blue, ZERO purple.
  */
 
 import * as THREE from 'three';
@@ -26,15 +25,13 @@ export function mountShieldCore(container, options = {}) {
   })();
 
   if (!hasWebGL) {
-    // Static CSS Fallback (UI_DESIGN.md §4)
     container.innerHTML = `
       <div style="position:relative; width:100%; height:100%; min-height:280px; display:flex; align-items:center; justify-content:center; overflow:hidden;">
-        <div style="position:absolute; width:180px; height:180px; border-radius:50%; background:radial-gradient(circle, #DCE8FF 0%, transparent 70%); filter:blur(24px); opacity:0.8;"></div>
-        <div style="position:absolute; width:150px; height:150px; border-radius:50%; background:radial-gradient(circle, #ECE6FF 0%, transparent 70%); filter:blur(20px); transform:translate(30px, -20px); opacity:0.7;"></div>
-        <div style="position:absolute; width:140px; height:140px; border-radius:50%; background:radial-gradient(circle, #FFE4D3 0%, transparent 70%); filter:blur(20px); transform:translate(-30px, 25px); opacity:0.7;"></div>
-        <svg width="84" height="100" viewBox="0 0 24 28" fill="none" stroke="#3D6FE0" stroke-width="2" style="position:relative; z-index:2; filter:drop-shadow(0 8px 16px rgba(61,111,224,0.25));">
-          <path d="M12 2L3 6v8c0 6.5 4.5 11 9 12 4.5-1 9-5.5 9-12V6l-9-4z" fill="#FFFFFF" fill-opacity="0.85"/>
-          <path d="M12 9v6m-3-3h6" stroke="#3D6FE0" stroke-width="2" stroke-linecap="round"/>
+        <div style="position:absolute; width:180px; height:180px; border-radius:50%; background:radial-gradient(circle, rgba(16,185,129,0.25) 0%, transparent 70%); filter:blur(24px);"></div>
+        <div style="position:absolute; width:150px; height:150px; border-radius:50%; background:radial-gradient(circle, rgba(245,158,11,0.2) 0%, transparent 70%); filter:blur(20px); transform:translate(30px, -20px);"></div>
+        <svg width="84" height="100" viewBox="0 0 24 28" fill="none" stroke="#10B981" stroke-width="2" style="position:relative; z-index:2; filter:drop-shadow(0 8px 16px rgba(16,185,129,0.4));">
+          <path d="M12 2L3 6v8c0 6.5 4.5 11 9 12 4.5-1 9-5.5 9-12V6l-9-4z" fill="#121824" fill-opacity="0.9"/>
+          <path d="M12 9v6m-3-3h6" stroke="#10B981" stroke-width="2" stroke-linecap="round"/>
         </svg>
       </div>
     `;
@@ -53,7 +50,7 @@ export function mountShieldCore(container, options = {}) {
   renderer.setSize(width, height);
   renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 2));
   renderer.toneMapping = THREE.ACESFilmicToneMapping;
-  renderer.toneMappingExposure = 1.0;
+  renderer.toneMappingExposure = 1.1;
   if ('outputColorSpace' in renderer) {
     renderer.outputColorSpace = THREE.SRGBColorSpace;
   }
@@ -67,31 +64,31 @@ export function mountShieldCore(container, options = {}) {
   const envTexture = pmremGen.fromScene(envScene).texture;
   scene.environment = envTexture;
 
-  // Lights (UI_DESIGN.md §4)
-  const hemiLight = new THREE.HemisphereLight(0xffffff, 0xf6f1e9, 0.8);
+  // Lights
+  const hemiLight = new THREE.HemisphereLight(0x223344, 0x090d12, 1.0);
   scene.add(hemiLight);
 
-  const warmKeyLight = new THREE.DirectionalLight(0xffe9d6, 1.0);
+  const warmKeyLight = new THREE.DirectionalLight(0xf59e0b, 1.2);
   warmKeyLight.position.set(-6, 8, 8);
   scene.add(warmKeyLight);
 
-  const coolRimLight = new THREE.DirectionalLight(0xdce8ff, 0.8);
-  coolRimLight.position.set(6, -2, -5);
-  scene.add(coolRimLight);
+  const emeraldRimLight = new THREE.DirectionalLight(0x10b981, 1.5);
+  emeraldRimLight.position.set(6, -2, -5);
+  scene.add(emeraldRimLight);
 
-  // Root Assembly Group (floats & tilts)
+  // Root Group
   const rootGroup = new THREE.Group();
   scene.add(rootGroup);
 
-  // a) Soft Contact Shadow Plane
+  // a) Contact Shadow Plane
   const shadowCanvas = document.createElement('canvas');
   shadowCanvas.width = 256;
   shadowCanvas.height = 256;
   const sCtx = shadowCanvas.getContext('2d');
   const radGrad = sCtx.createRadialGradient(128, 128, 10, 128, 128, 120);
-  radGrad.addColorStop(0, 'rgba(31, 36, 48, 0.22)');
-  radGrad.addColorStop(0.5, 'rgba(31, 36, 48, 0.08)');
-  radGrad.addColorStop(1, 'rgba(31, 36, 48, 0)');
+  radGrad.addColorStop(0, 'rgba(0, 0, 0, 0.7)');
+  radGrad.addColorStop(0.5, 'rgba(0, 0, 0, 0.25)');
+  radGrad.addColorStop(1, 'rgba(0, 0, 0, 0)');
   sCtx.fillStyle = radGrad;
   sCtx.fillRect(0, 0, 256, 256);
 
@@ -108,9 +105,8 @@ export function mountShieldCore(container, options = {}) {
   shadowMesh.position.y = -3.8;
   scene.add(shadowMesh);
 
-  // b) Pearlescent Glass Shield (Extruded 2D Shape with Bevel)
+  // b) Dark Obsidian Shield (Beveled Extrusion)
   const shape = new THREE.Shape();
-  // Shield coordinates: top width 4, height 5.2, curved bottom point
   shape.moveTo(-1.9, 2.3);
   shape.lineTo(1.9, 2.3);
   shape.bezierCurveTo(2.1, 2.3, 2.2, 2.1, 2.2, 1.8);
@@ -119,29 +115,27 @@ export function mountShieldCore(container, options = {}) {
   shape.bezierCurveTo(-2.2, 2.1, -2.1, 2.3, -1.9, 2.3);
 
   const extrudeSettings = {
-    depth: 0.24,
+    depth: 0.28,
     bevelEnabled: true,
     bevelSegments: 4,
     steps: 1,
-    bevelSize: 0.07,
-    bevelThickness: 0.07,
+    bevelSize: 0.08,
+    bevelThickness: 0.08,
   };
 
   const shieldGeom = new THREE.ExtrudeGeometry(shape, extrudeSettings);
   shieldGeom.center();
 
   const shieldMat = new THREE.MeshPhysicalMaterial({
-    color: 0xffffff,
-    roughness: 0.12,
-    metalness: 0.0,
+    color: 0x162233,
+    roughness: 0.15,
+    metalness: 0.1,
     clearcoat: 1.0,
     clearcoatRoughness: 0.1,
-    iridescence: 0.65,
-    iridescenceIOR: 1.3,
-    transmission: 0.62,
-    thickness: 0.45,
-    ior: 1.42,
-    attenuationColor: new THREE.Color(0xdce8ff),
+    transmission: 0.35,
+    thickness: 0.5,
+    ior: 1.45,
+    attenuationColor: new THREE.Color(0x10b981),
     transparent: true,
     opacity: 0.95,
   });
@@ -149,22 +143,22 @@ export function mountShieldCore(container, options = {}) {
   const shieldMesh = new THREE.Mesh(shieldGeom, shieldMat);
   rootGroup.add(shieldMesh);
 
-  // Shield Ripple Ring (Deflection Effect)
-  const rippleGeom = new THREE.RingGeometry(0.1, 0.15, 32);
+  // Ripple Ring (Threat Deflection)
+  const rippleGeom = new THREE.RingGeometry(0.1, 0.16, 32);
   const rippleMat = new THREE.MeshBasicMaterial({
-    color: 0xe5484d,
+    color: 0xef4444,
     transparent: true,
     opacity: 0,
     side: THREE.DoubleSide,
     depthWrite: false,
   });
   const rippleMesh = new THREE.Mesh(rippleGeom, rippleMat);
-  rippleMesh.position.set(0, 0, 0.22);
+  rippleMesh.position.set(0, 0, 0.24);
   rootGroup.add(rippleMesh);
 
-  // c) Identity Core (Fingerprint Partial Arcs inside Shield)
+  // c) Identity Core (Electric Emerald Fingerprint Arcs)
   const fpGroup = new THREE.Group();
-  fpGroup.position.set(0, 0.1, 0.18);
+  fpGroup.position.set(0, 0.1, 0.2);
   rootGroup.add(fpGroup);
 
   const arcMeshes = [];
@@ -177,40 +171,39 @@ export function mountShieldCore(container, options = {}) {
     const geom = new THREE.BufferGeometry().setFromPoints(points);
 
     const mat = new THREE.LineBasicMaterial({
-      color: 0x3d6fe0,
+      color: 0x10b981,
       linewidth: 2,
       transparent: true,
-      opacity: 0.85,
+      opacity: 0.9,
     });
     const line = new THREE.Line(geom, mat);
     fpGroup.add(line);
     arcMeshes.push(line);
   });
 
-  // Sweeping Scan Line
-  const scanGeom = new THREE.PlaneGeometry(3.2, 0.05);
+  // Sweeping Mint Scan Line
+  const scanGeom = new THREE.PlaneGeometry(3.2, 0.06);
   const scanMat = new THREE.MeshBasicMaterial({
-    color: 0x7db9ff,
+    color: 0x34d399,
     transparent: true,
-    opacity: 0.6,
+    opacity: 0.7,
     side: THREE.DoubleSide,
     depthWrite: false,
   });
   const scanMesh = new THREE.Mesh(scanGeom, scanMat);
-  scanMesh.position.set(0, 1.2, 0.2);
+  scanMesh.position.set(0, 1.2, 0.22);
   rootGroup.add(scanMesh);
 
-  // d) 15 Agent Orbs on 4 Tilted Orbit Rings + 1 Oversight Ring
+  // d) 15 Agent Orbs across 5 Rings (NO Blue, NO Purple)
   const ringsGroup = new THREE.Group();
   rootGroup.add(ringsGroup);
 
-  // Ring configurations
   const RING_SPECS = [
-    { name: 'Data', count: 4, radius: 3.2, tiltX: 0.35, tiltY: 0.2, speed: 0.007, color: 0xb9d0ff, strong: 0x3d6fe0 },
-    { name: 'Detection', count: 7, radius: 4.2, tiltX: -0.45, tiltY: -0.25, speed: -0.0055, color: 0xcdbeff, strong: 0x6d4fd8 },
-    { name: 'Decision', count: 3, radius: 5.1, tiltX: 0.25, tiltY: -0.3, speed: 0.0045, color: 0xffc9a8, strong: 0xc2410c },
-    { name: 'Learning', count: 1, radius: 5.9, tiltX: -0.3, tiltY: 0.35, speed: -0.0035, color: 0xa9e5d3, strong: 0x0f8a6a },
-    { name: 'Oversight', count: 0, radius: 6.6, tiltX: 0.1, tiltY: 0.1, speed: 0.002, color: 0xf7d774, strong: 0xa16207 },
+    { name: 'Data', count: 4, radius: 3.2, tiltX: 0.35, tiltY: 0.2, speed: 0.007, color: 0x10b981 },
+    { name: 'Detection', count: 7, radius: 4.2, tiltX: -0.45, tiltY: -0.25, speed: -0.0055, color: 0xf59e0b },
+    { name: 'Decision', count: 3, radius: 5.1, tiltX: 0.25, tiltY: -0.3, speed: 0.0045, color: 0xf97316 },
+    { name: 'Learning', count: 1, radius: 5.9, tiltX: -0.3, tiltY: 0.35, speed: -0.0035, color: 0x14b8a6 },
+    { name: 'Oversight', count: 0, radius: 6.6, tiltX: 0.1, tiltY: 0.1, speed: 0.002, color: 0xeab308 },
   ];
 
   const ringObjects = [];
@@ -223,25 +216,25 @@ export function mountShieldCore(container, options = {}) {
     ringAnchor.rotation.y = spec.tiltY;
     ringsGroup.add(ringAnchor);
 
-    // Torus ring track
-    const torusGeom = new THREE.TorusGeometry(spec.radius, 0.018, 8, 64);
+    const torusGeom = new THREE.TorusGeometry(spec.radius, 0.02, 8, 64);
     const torusMat = new THREE.MeshBasicMaterial({
       color: spec.color,
       transparent: true,
-      opacity: spec.count === 0 ? 0.75 : 0.45,
+      opacity: spec.count === 0 ? 0.7 : 0.35,
     });
     const torusMesh = new THREE.Mesh(torusGeom, torusMat);
     ringAnchor.add(torusMesh);
 
-    // Spheres
     const orbs = [];
-    const orbGeom = new THREE.SphereGeometry(0.16, 16, 12);
+    const orbGeom = new THREE.SphereGeometry(0.17, 16, 12);
     for (let i = 0; i < spec.count; i++) {
       const angle = (i / spec.count) * Math.PI * 2;
       const orbMat = new THREE.MeshStandardMaterial({
         color: spec.color,
-        roughness: 0.45,
-        metalness: 0.08,
+        emissive: spec.color,
+        emissiveIntensity: 0.25,
+        roughness: 0.35,
+        metalness: 0.1,
       });
       const orb = new THREE.Mesh(orbGeom, orbMat);
       orb.position.set(Math.cos(angle) * spec.radius, Math.sin(angle) * spec.radius, 0);
@@ -256,18 +249,18 @@ export function mountShieldCore(container, options = {}) {
     ringObjects.push({ anchor: ringAnchor, spec, orbs, angle: 0 });
   });
 
-  // e) Threat Deflection Particle
-  const threatGeom = new THREE.SphereGeometry(0.18, 16, 16);
+  // e) Threat Deflection Particle (Ruby Crimson)
+  const threatGeom = new THREE.SphereGeometry(0.19, 16, 16);
   const threatMat = new THREE.MeshStandardMaterial({
-    color: 0xe5484d,
-    emissive: 0x991b1b,
-    emissiveIntensity: 0.5,
+    color: 0xef4444,
+    emissive: 0xdc2626,
+    emissiveIntensity: 0.8,
   });
   const threatParticle = new THREE.Mesh(threatGeom, threatMat);
   threatParticle.visible = false;
   scene.add(threatParticle);
 
-  let threatAnim = null; // { start, target, progress, reflecting }
+  let threatAnim = null;
 
   function triggerThreat() {
     if (threatAnim) return;
@@ -286,7 +279,6 @@ export function mountShieldCore(container, options = {}) {
       progress: 0,
       reflecting: false,
       reflectDir: new THREE.Vector3(startX, startY, startZ).normalize().multiplyScalar(10),
-      hitPoint: new THREE.Vector3(0, 0, 0.22),
     };
   }
 
@@ -296,7 +288,6 @@ export function mountShieldCore(container, options = {}) {
     pulseStartTime = performance.now();
   }
 
-  // Click Trigger
   container.addEventListener('click', () => {
     triggerPulse();
   });
@@ -319,11 +310,10 @@ export function mountShieldCore(container, options = {}) {
     const rect = container.getBoundingClientRect();
     const nx = ((e.clientX - rect.left) / rect.width) * 2 - 1;
     const ny = -(((e.clientY - rect.top) / rect.height) * 2 - 1);
-    targetTiltY = nx * 0.17; // max ~10 deg
+    targetTiltY = nx * 0.17;
     targetTiltX = -ny * 0.17;
   });
 
-  // Animation Loop Variables
   let isVisible = true;
   let isTabActive = true;
   let rafId = null;
@@ -338,16 +328,16 @@ export function mountShieldCore(container, options = {}) {
       const t = now * 0.001;
 
       // 1. Float & Yaw
-      rootGroup.position.y = Math.sin(t * 1.05) * 0.18; // ~6px equivalent
-      rootGroup.rotation.y = Math.sin(t * 0.52) * 0.22; // ~12.5 deg yaw
+      rootGroup.position.y = Math.sin(t * 1.05) * 0.18;
+      rootGroup.rotation.y = Math.sin(t * 0.52) * 0.22;
 
-      // 2. Cursor Tilt Damping
+      // 2. Tilt Damping
       curTiltX += (targetTiltX - curTiltX) * 0.08;
       curTiltY += (targetTiltY - curTiltY) * 0.08;
       rootGroup.rotation.x = curTiltX;
       rootGroup.rotation.y += curTiltY;
 
-      // 3. Scan Line Sweep (4s cycle top->bottom)
+      // 3. Scan Line Sweep (4s cycle)
       const scanPhase = (t % 4.0) / 4.0;
       scanMesh.position.y = 1.6 - scanPhase * 3.2;
 
@@ -358,28 +348,27 @@ export function mountShieldCore(container, options = {}) {
         ro.anchor.rotation.z = ro.angle;
       });
 
-      // 5. Pulse Animation (600ms ring by ring)
+      // 5. Pulse (Emerald Wave)
       if (pulseStartTime > 0) {
         const pElapsed = now - pulseStartTime;
         if (pElapsed < 700) {
           const arcIdx = Math.floor((pElapsed / 600) * arcMeshes.length);
           arcMeshes.forEach((mesh, idx) => {
             if (idx === arcIdx) {
-              mesh.material.color.setHex(0xdce8ff);
+              mesh.material.color.setHex(0x34d399);
               mesh.material.opacity = 1.0;
             } else {
-              mesh.material.color.setHex(0x3d6fe0);
+              mesh.material.color.setHex(0x10b981);
               mesh.material.opacity = 0.85;
             }
           });
-          // Orb glow pop
           orbObjects.forEach((o) => {
             o.mesh.scale.set(1.25, 1.25, 1.25);
           });
         } else {
           pulseStartTime = 0;
           arcMeshes.forEach((m) => {
-            m.material.color.setHex(0x3d6fe0);
+            m.material.color.setHex(0x10b981);
             m.material.opacity = 0.85;
           });
           orbObjects.forEach((o) => {
@@ -402,14 +391,13 @@ export function mountShieldCore(container, options = {}) {
           if (threatAnim.progress < 1.0) {
             threatParticle.position.lerpVectors(threatAnim.start, threatAnim.target, threatAnim.progress);
           } else {
-            // Impact beat: nearest detection orb flashes, ripple ring expands
             threatAnim.reflecting = true;
             threatAnim.progress = 0;
 
             if (detectionOrbs.length > 0) {
               const nearestOrb = detectionOrbs[Math.floor(Math.random() * detectionOrbs.length)];
               nearestOrb.mesh.scale.set(1.6, 1.6, 1.6);
-              nearestOrb.mesh.material.color.setHex(0xe5484d);
+              nearestOrb.mesh.material.color.setHex(0xef4444);
               setTimeout(() => {
                 nearestOrb.mesh.scale.set(1, 1, 1);
                 nearestOrb.mesh.material.color.setHex(nearestOrb.baseColor);
@@ -417,18 +405,16 @@ export function mountShieldCore(container, options = {}) {
             }
 
             rippleMesh.scale.set(1, 1, 1);
-            rippleMat.opacity = 0.65;
+            rippleMat.opacity = 0.8;
           }
         } else {
-          // Reflecting away and fading
           const rP = threatAnim.progress;
           threatParticle.position.lerpVectors(threatAnim.target, threatAnim.reflectDir, rP);
           threatMat.opacity = 1.0 - rP;
 
-          // Expand and fade ripple on shield
           const ripScale = 1.0 + rP * 6.0;
           rippleMesh.scale.set(ripScale, ripScale, ripScale);
-          rippleMat.opacity = Math.max(0, 0.65 - rP);
+          rippleMat.opacity = Math.max(0, 0.8 - rP);
 
           if (rP >= 1.0) {
             threatParticle.visible = false;
@@ -447,14 +433,12 @@ export function mountShieldCore(container, options = {}) {
     }
   }
 
-  // Start Loop or Render Single Still Frame
   if (isStill || isReducedMotion) {
     renderFrame(performance.now());
   } else {
     rafId = requestAnimationFrame(renderFrame);
   }
 
-  // Observers & Listeners
   const io = new IntersectionObserver(([entry]) => {
     isVisible = entry.isIntersecting;
   }, { threshold: 0.05 });
@@ -478,7 +462,6 @@ export function mountShieldCore(container, options = {}) {
   });
   ro.observe(container);
 
-  // Return Controller API
   return {
     pulse: () => triggerPulse(),
     threat: () => triggerThreat(),
@@ -488,7 +471,6 @@ export function mountShieldCore(container, options = {}) {
       ro.disconnect();
       document.removeEventListener('visibilitychange', onVisChange);
 
-      // Clean disposal
       pmremGen.dispose();
       envScene.dispose();
       envTexture.dispose();

@@ -1,63 +1,68 @@
 /**
- * IdentityShield v3 — Chart.js Theme for Cream Light
- * Specification: UI_DESIGN.md Section 2 (chart palette)
+ * IdentityShield v3 — Cyber Stealth Chart & Visualization Theme
+ * Colors: Emerald (#10B981), Amber (#F59E0B), Tangerine (#F97316), Teal (#14B8A6), Gold (#EAB308), Crimson (#EF4444)
+ * ZERO Blue, ZERO Purple. Dark contrast background with bright white labels.
  */
 
-export const CHART_PALETTE = [
-  '#3D6FE0', // Sky
-  '#0F8A6A', // Mint
-  '#F08A4B', // Peach
-  '#6D4FD8', // Lavender
-  '#E0A800', // Butter
-  '#E5484D', // Rose
-];
+export const CHART_PALETTE = {
+  emerald: '#10B981',
+  amber: '#F59E0B',
+  orange: '#F97316',
+  teal: '#14B8A6',
+  gold: '#EAB308',
+  crimson: '#EF4444',
+  series: ['#10B981', '#F59E0B', '#F97316', '#14B8A6', '#EAB308', '#EF4444'],
+  grid: '#1F293D',
+  text: '#F8FAFC',
+  textMuted: '#94A3B8',
+  tooltipBg: '#121824',
+  tooltipBorder: '#2E3C57',
+};
 
 export const HEATMAP_SCALE = {
-  min: '#FFFDF9',
-  mid: '#FFE4D3',
-  max: '#E5484D',
+  low: '#121824',
+  mid: '#F59E0B',
+  high: '#EF4444',
 };
 
 export const BAND_COLORS = {
-  monitor: '#94A3B8',
-  step_up: '#E0A800',
-  'step-up': '#E0A800',
-  restrict: '#F08A4B',
-  revoke: '#E5484D',
+  monitor: '#64748B',
+  step_up: '#F59E0B',
+  'step-up': '#F59E0B',
+  restrict: '#F97316',
+  revoke: '#EF4444',
 };
 
-export function applyChartTheme(Chart) {
-  if (!Chart || !Chart.defaults) return;
-
-  Chart.defaults.font.family = "'Inter', -apple-system, BlinkMacSystemFont, sans-serif";
-  Chart.defaults.font.size = 12;
-  Chart.defaults.color = '#4B5263'; // axis text
-
-  // Global scale defaults
-  if (Chart.defaults.scales) {
-    if (Chart.defaults.scales.linear) {
-      if (Chart.defaults.scales.linear.grid) Chart.defaults.scales.linear.grid.color = '#EFE8DC';
-      if (Chart.defaults.scales.linear.ticks) Chart.defaults.scales.linear.ticks.color = '#4B5263';
-    }
-    if (Chart.defaults.scales.category) {
-      if (Chart.defaults.scales.category.grid) Chart.defaults.scales.category.grid.color = '#EFE8DC';
-      if (Chart.defaults.scales.category.ticks) Chart.defaults.scales.category.ticks.color = '#4B5263';
-    }
-  }
-
-  // Tooltip defaults
-  if (Chart.defaults.plugins && Chart.defaults.plugins.tooltip) {
-    Chart.defaults.plugins.tooltip.backgroundColor = '#FFFFFF';
-    Chart.defaults.plugins.tooltip.titleColor = '#1F2430';
-    Chart.defaults.plugins.tooltip.bodyColor = '#1F2430';
-    Chart.defaults.plugins.tooltip.borderColor = '#E8E1D6';
-    Chart.defaults.plugins.tooltip.borderWidth = 1;
-    Chart.defaults.plugins.tooltip.padding = 10;
-    Chart.defaults.plugins.tooltip.cornerRadius = 8;
-  }
-}
-
-// Auto-apply if global Chart exists
-if (typeof window !== 'undefined' && window.Chart) {
-  applyChartTheme(window.Chart);
+export function getChartThemeOptions() {
+  return {
+    responsive: true,
+    maintainAspectRatio: false,
+    color: CHART_PALETTE.text,
+    scales: {
+      x: {
+        grid: { color: CHART_PALETTE.grid, borderColor: CHART_PALETTE.grid },
+        ticks: { color: CHART_PALETTE.textMuted, font: { family: 'JetBrains Mono', size: 11 } },
+      },
+      y: {
+        grid: { color: CHART_PALETTE.grid, borderColor: CHART_PALETTE.grid },
+        ticks: { color: CHART_PALETTE.textMuted, font: { family: 'JetBrains Mono', size: 11 } },
+      },
+    },
+    plugins: {
+      legend: {
+        labels: { color: CHART_PALETTE.text, font: { family: 'Inter', size: 12, weight: 600 } },
+      },
+      tooltip: {
+        backgroundColor: CHART_PALETTE.tooltipBg,
+        borderColor: CHART_PALETTE.tooltipBorder,
+        borderWidth: 1,
+        titleColor: CHART_PALETTE.text,
+        bodyColor: CHART_PALETTE.text,
+        titleFont: { family: 'Inter', weight: 700 },
+        bodyFont: { family: 'JetBrains Mono' },
+        padding: 10,
+        boxPadding: 4,
+      },
+    },
+  };
 }
