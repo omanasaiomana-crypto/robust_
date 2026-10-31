@@ -1,0 +1,136 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>IdentityShield · 30-Day Memory</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#FBF8F3; --surface:#FFFFFF; --surface-2:#F6F1E9; --surface-3:#EFE8DC; --border:#E8E1D6;
+  --ink:#1F2430; --ink-2:#4B5263; --muted:#6B7280; --focus:#3D6FE0;
+  --sky:#DCE8FF; --sky-s:#3D6FE0; --mint:#D9F2EA; --mint-s:#0F8A6A; --peach:#FFE4D3; --peach-s:#C2410C;
+  --butter:#FFF3C4; --butter-s:#A16207; --rose:#FFE0E0; --rose-s:#C81E1E; --lav:#ECE6FF; --lav-s:#6D4FD8;
+  --stone:#EEF0F3; --stone-s:#475569;
+  --shadow:0 1px 2px rgba(31,36,48,.04),0 8px 24px rgba(31,36,48,.06);
+  --shadow-up:0 2px 4px rgba(31,36,48,.05),0 16px 40px rgba(31,36,48,.09);
+}
+*{box-sizing:border-box}
+body{margin:0;font-family:Inter,system-ui,-apple-system,"Segoe UI",sans-serif;color:var(--ink);
+  background:linear-gradient(180deg,#FFFDF9 0%,#FBF8F3 55%,#F7F2EA 100%) fixed;font-size:14px;line-height:1.45}
+a{color:var(--sky-s)}
+.wrap{max-width:1240px;margin:0 auto;padding:24px 24px 64px}
+.top{display:flex;align-items:flex-end;justify-content:space-between;gap:16px;flex-wrap:wrap;margin-bottom:20px}
+.top h1{font-size:28px;font-weight:600;margin:0 0 4px}
+.top p{margin:0;color:var(--ink-2)}
+.back{font-size:13px;text-decoration:none;color:var(--ink-2)}
+.actions{display:flex;gap:10px;flex-wrap:wrap;align-items:center}
+.card{background:var(--surface);border:1px solid var(--border);border-radius:18px;box-shadow:var(--shadow);padding:20px}
+.grid{display:grid;gap:20px}
+.tiles{grid-template-columns:repeat(6,minmax(0,1fr))}
+@media (max-width:1100px){.tiles{grid-template-columns:repeat(3,minmax(0,1fr))}}
+@media (max-width:640px){.tiles{grid-template-columns:repeat(2,minmax(0,1fr))}}
+.tile .k{font-size:12px;font-weight:500;color:var(--ink-2)}
+.tile .v{font-size:22px;font-weight:600;margin-top:4px;font-family:"JetBrains Mono",monospace}
+.tile .s{font-size:12px;color:var(--muted);margin-top:2px}
+.main{grid-template-columns:minmax(0,5fr) minmax(0,7fr);margin-top:20px}
+@media (max-width:1000px){.main{grid-template-columns:1fr}}
+h2{font-size:18px;font-weight:600;margin:0 0 12px}
+.btn{position:relative;overflow:hidden;border:0;border-radius:12px;padding:10px 16px;font:600 14px Inter,sans-serif;
+  cursor:pointer;transition:transform .12s cubic-bezier(.2,.8,.2,1),box-shadow .12s,background .12s;
+  display:inline-flex;align-items:center;gap:8px}
+.btn-primary{background:#3D6FE0;color:#fff;box-shadow:0 3px 0 #2A4FA8,0 6px 14px rgba(61,111,224,.18)}
+.btn-primary:hover{background:#355FC4;transform:translateY(-1px)}
+.btn-primary:active{transform:translateY(3px);box-shadow:0 0 0 #2A4FA8,0 2px 6px rgba(61,111,224,.18)}
+.btn-secondary{background:#fff;color:var(--ink);border:1px solid var(--border);box-shadow:0 3px 0 #D8CFC2}
+.btn-secondary:hover{transform:translateY(-1px)}
+.btn-secondary:active{transform:translateY(3px);box-shadow:0 0 0 #D8CFC2}
+.btn:focus-visible{outline:2px solid var(--focus);outline-offset:2px}
+.btn[disabled]{opacity:.5;cursor:not-allowed;transform:none}
+.btn.is-loading{color:transparent}
+.btn.is-loading::after{content:"";position:absolute;inset:0;margin:auto;width:16px;height:16px;border-radius:50%;
+  border:2px solid rgba(255,255,255,.9);border-right-color:transparent;animation:spin .7s linear infinite}
+.btn-secondary.is-loading::after{border-color:var(--sky-s);border-right-color:transparent}
+@keyframes spin{to{transform:rotate(360deg)}}
+.token{border:1px solid var(--border);background:#fff;border-radius:10px;padding:9px 10px;font:13px Inter,sans-serif;
+  width:150px;box-shadow:inset 0 1px 2px rgba(31,36,48,.06)}
+.token:focus{outline:2px solid var(--focus);outline-offset:1px}
+.banner{margin-top:20px;display:flex;gap:12px;align-items:center;background:var(--mint);color:var(--mint-s);
+  border:1px solid #BFE6D8;border-radius:14px;padding:12px 16px;font-weight:500}
+.banner.warn{background:var(--butter);color:var(--butter-s);border-color:#F2E2A0}
+.tag{font-size:11px;font-weight:700;letter-spacing:.04em;border-radius:999px;padding:3px 8px;background:#fff;
+  border:1px solid currentColor}
+.finding{border:1px solid var(--border);border-radius:14px;padding:14px;margin-bottom:12px;cursor:pointer;
+  transition:box-shadow .15s,transform .15s;background:#fff}
+.finding:hover,.finding.active{box-shadow:var(--shadow-up);transform:translateY(-1px)}
+.finding.active{border-color:#B9CCF7}
+.frow{display:flex;justify-content:space-between;gap:8px;align-items:center}
+.who{font-weight:600;font-family:"JetBrains Mono",monospace;font-size:13px;word-break:break-all}
+.badge{border-radius:999px;padding:3px 10px;font-size:12px;font-weight:700;white-space:nowrap}
+.b-monitor{background:var(--stone);color:var(--stone-s)}.b-step_up{background:var(--butter);color:var(--butter-s)}
+.b-restrict{background:var(--peach);color:var(--peach-s)}.b-revoke{background:var(--rose);color:var(--rose-s)}
+.chips{display:flex;flex-wrap:wrap;gap:6px;margin:10px 0 6px}
+.chip{border-radius:999px;padding:2px 9px;font-size:12px;font-weight:600;background:var(--lav);color:var(--lav-s)}
+.meta{font-size:12px;color:var(--ink-2)}
+.narr{font-size:13px;color:var(--ink-2);margin-top:6px}
+.empty{color:var(--ink-2);padding:24px;text-align:center;background:var(--surface-2);border-radius:14px}
+.strip-wrap{overflow-x:auto}
+svg text{font-family:Inter,sans-serif}
+.legend{display:flex;gap:14px;flex-wrap:wrap;font-size:12px;color:var(--ink-2);margin:8px 0 4px}
+.legend i{display:inline-block;width:10px;height:10px;border-radius:3px;margin-right:5px;vertical-align:-1px}
+table{width:100%;border-collapse:collapse;font-size:13px}
+th{text-align:left;background:var(--surface-2);color:var(--ink-2);font-weight:600;padding:8px 10px;position:sticky;top:0}
+td{padding:8px 10px;border-top:1px solid var(--border);vertical-align:top}
+td.mono{font-family:"JetBrains Mono",monospace;font-size:12px}
+.stage{border-radius:999px;padding:2px 8px;font-size:11px;font-weight:700;white-space:nowrap}
+.st-initial_access{background:var(--sky);color:var(--sky-s)}.st-persistence{background:var(--butter);color:var(--butter-s)}
+.st-discovery{background:var(--stone);color:var(--stone-s)}.st-privilege_escalation{background:var(--peach);color:var(--peach-s)}
+.st-collection{background:var(--lav);color:var(--lav-s)}.st-impact{background:var(--rose);color:var(--rose-s)}
+.st-exfiltration{background:var(--rose);color:var(--rose-s)}.st-defense_evasion{background:var(--rose);color:var(--rose-s)}
+.linkbtn{background:none;border:0;color:var(--sky-s);font:600 12px Inter,sans-serif;cursor:pointer;padding:0}
+pre{background:#FFFDF9;border:1px solid var(--border);border-radius:12px;padding:12px;font:12px "JetBrains Mono",monospace;
+  white-space:pre-wrap;word-break:break-word;max-height:320px;overflow:auto;margin:10px 0 0}
+.toast{position:fixed;right:20px;bottom:20px;background:#fff;border:1px solid var(--border);box-shadow:var(--shadow-up);
+  border-radius:12px;padding:12px 16px;max-width:420px;display:none}
+.toast.err{border-color:#F5C2C2;color:var(--rose-s)}
+.skel{height:14px;border-radius:7px;background:linear-gradient(90deg,#F6F1E9,#EFE8DC,#F6F1E9);background-size:200% 100%;
+  animation:sh 1.2s infinite}
+@keyframes sh{to{background-position:-200% 0}}
+@media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="top">
+    <div>
+      <a class="back" href="/">← Back to dashboard</a>
+      <h1>30-Day Identity Memory</h1>
+      <p>Slow attacks spread over days or weeks, linked into one story per identity. Raw events kept 7 days, evidence kept with its case, a compact daily memory kept 30 days.</p>
+    </div>
+    <div class="actions">
+      <input id="token" class="token" type="password" placeholder="Analyst token" autocomplete="off" aria-label="Analyst token">
+      <button id="btnSynth" class="btn btn-primary" type="button">Generate 30-day test data</button>
+      <button id="btnIngest" class="btn btn-secondary" type="button">Ingest dataset</button>
+      <button id="btnPrune" class="btn btn-secondary" type="button">Apply retention</button>
+    </div>
+  </div>
+
+  <div id="tiles" class="grid tiles"></div>
+  <div id="banner"></div>
+
+  <div class="grid main">
+    <section class="card">
+      <h2>Linked multi-day findings</h2>
+      <div id="findings"><div class="skel"></div></div>
+    </section>
+    <section class="card">
+      <h2 id="idTitle">Identity memory</h2>
+      <div id="identity"><div class="empty">Select a finding to see that identity's last 30 days.</div></div>
+    </section>
+  </div>
+</div>
+<div id="toast" class="toast" role="status" aria-live="polite"></div>
+<script type="module" src="/js/memory30.js"></script>
+</body>
+</html>

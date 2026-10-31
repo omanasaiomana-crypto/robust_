@@ -22,3 +22,7 @@ data/eval/
 !data/eval/.gitkeep
 data/bench/
 !data/bench/.gitkeep
+
+data/memory30.sqlite*
+data/synth/
+scratch/

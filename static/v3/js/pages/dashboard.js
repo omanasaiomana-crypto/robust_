@@ -24,6 +24,7 @@ export async function initDashboard() {
   await loadKPIs();
   await loadTopIdentities();
   await loadLiveCases();
+  await load30DayMemoryCard();
   initMiniGlobe();
   setupSSEListeners();
   tilt.scan();
@@ -402,7 +403,88 @@ function setupSSEListeners() {
   setInterval(() => {
     loadKPIs();
     loadTopIdentities();
+    load30DayMemoryCard();
   }, 4000);
+}
+
+/**
+ * 7. Load and Render 30-Day Memory Card (Task M1)
+ */
+async function load30DayMemoryCard() {
+  const container = document.getElementById('dashboard-memory-content');
+  if (!container) return;
+
+  try {
+    const [statsRes, findingsRes] = await Promise.all([
+      fetch('/api/memory/stats').then((r) => (r.ok ? r.json() : null)).catch(() => null),
+      fetch('/api/memory/findings?limit=3').then((r) => (r.ok ? r.json() : null)).catch(() => null),
+    ]);
+
+    if (!statsRes) {
+      container.innerHTML = '<div style="font-size:0.8125rem; color:var(--muted); padding:6px 0;">Memory not loaded yet</div>';
+      return;
+    }
+
+    const findingsCount = statsRes.rows?.findings ?? (findingsRes?.findings?.length || 0);
+    const dbSize = statsRes.db_size_mb !== undefined ? `${statsRes.db_size_mb} MB` : '0.0 MB';
+
+    let windowText = 'No data yet';
+    if (statsRes.memory_days && statsRes.memory_days.first && statsRes.memory_days.last) {
+      windowText = `${escHtml(statsRes.memory_days.first)} &rarr; ${escHtml(statsRes.memory_days.last)}`;
+    }
+
+    const findingsList = Array.isArray(findingsRes?.findings) ? findingsRes.findings : [];
+
+    let rowsHtml = '';
+    if (findingsList.length === 0) {
+      rowsHtml = '<div style="font-size:0.75rem; color:var(--muted); font-style:italic; padding:4px 0;">No correlated findings yet.</div>';
+    } else {
+      rowsHtml = findingsList.slice(0, 3).map((f) => {
+        const ident = escHtml(f.identity || f.target || 'unknown');
+        const risk = Number(f.risk || f.score || 0).toFixed(0);
+        const stagesCount = Array.isArray(f.stages) ? f.stages.length : (f.stages_count || 1);
+        const stagesText = `${stagesCount} stage${stagesCount === 1 ? '' : 's'}`;
+
+        let riskColor = 'var(--ok)';
+        if (risk >= 90) riskColor = 'var(--crit)';
+        else if (risk >= 70) riskColor = 'var(--band-restrict)';
+        else if (risk >= 40) riskColor = 'var(--warn)';
+
+        return `
+          <div style="display:flex; justify-content:space-between; align-items:center; padding:6px 10px; background:var(--surface-2); border-radius:6px; font-size:0.75rem;">
+            <div style="display:flex; align-items:center; gap:6px;">
+              <span style="font-family:var(--font-mono); font-weight:600; color:var(--ink);">${ident}</span>
+              <span style="color:var(--muted); font-size:0.6875rem;">(${stagesText})</span>
+            </div>
+            <span style="font-family:var(--font-mono); font-weight:700; color:${riskColor};">Risk ${risk}</span>
+          </div>
+        `;
+      }).join('');
+    }
+
+    container.innerHTML = `
+      <div style="display:grid; grid-template-columns:repeat(3, 1fr); gap:8px; padding-bottom:8px; border-bottom:1px solid var(--border);">
+        <div>
+          <div style="font-size:0.6875rem; color:var(--muted); text-transform:uppercase;">Findings</div>
+          <div style="font-size:1.125rem; font-weight:700; font-family:var(--font-mono); color:var(--ink);">${findingsCount}</div>
+        </div>
+        <div>
+          <div style="font-size:0.6875rem; color:var(--muted); text-transform:uppercase;">DB Size</div>
+          <div style="font-size:1.125rem; font-weight:700; font-family:var(--font-mono); color:var(--ink);">${dbSize}</div>
+        </div>
+        <div>
+          <div style="font-size:0.6875rem; color:var(--muted); text-transform:uppercase;">Window</div>
+          <div style="font-size:0.6875rem; font-family:var(--font-mono); color:var(--ink); margin-top:4px;">${windowText}</div>
+        </div>
+      </div>
+      <div style="display:flex; flex-direction:column; gap:6px; margin-top:4px;">
+        <div style="font-size:0.6875rem; color:var(--muted); text-transform:uppercase; font-family:var(--font-mono);">Top Findings (30-Day Span)</div>
+        ${rowsHtml}
+      </div>
+    `;
+  } catch (err) {
+    container.innerHTML = '<div style="font-size:0.8125rem; color:var(--muted); padding:6px 0;">Memory not loaded yet</div>';
+  }
 }
 
 // Cleanup on page teardown

@@ -34,6 +34,12 @@ const NAV_ITEMS = [
     icon: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><circle cx="12" cy="11" r="3"/></svg>`,
   },
   {
+    id: 'memory',
+    label: '30-Day Memory',
+    href: '/memory.html',
+    icon: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><polyline points="12 6 12 12 16 14"/><path d="M4 12a8 8 0 0 1 8-8"/></svg>`,
+  },
+  {
     id: 'graph',
     label: 'Graph 3D',
     href: '/v3/graph.html',

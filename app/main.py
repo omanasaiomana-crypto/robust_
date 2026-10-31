@@ -218,6 +218,9 @@ if getattr(v3_config, "V3_ENABLED", True):
 
     app.include_router(v3_router)
 
+from app.memory30 import api as _mem30_api  # 30-day memory kit
+app.include_router(_mem30_api.router, prefix="/api/memory")
+
 _gen_dir = v3_config.ROOT_DIR / "generator"
 if _gen_dir.is_dir():
     app.mount("/generator", StaticFiles(directory=_gen_dir, html=True), name="generator")
