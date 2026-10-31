@@ -387,12 +387,18 @@ def get_geo_logins() -> dict[str, Any]:
         if r.get("attrs"):
             try:
                 attrs = json.loads(r["attrs"]) if isinstance(r["attrs"], str) else r["attrs"]
-                geo = attrs.get("geographicalContext") or attrs.get("geo") or {}
-                loc = geo.get("geolocation") or attrs
-                lat = float(loc.get("lat", loc.get("latitude", 0.0)))
-                lon = float(loc.get("lon", loc.get("longitude", 0.0)))
-                city = geo.get("city") or attrs.get("city") or "Unknown"
-                country = geo.get("country") or attrs.get("country") or "Unknown"
+                raw = attrs.get("_raw") if isinstance(attrs, dict) and isinstance(attrs.get("_raw"), dict) else attrs
+                client = raw.get("client") if isinstance(raw, dict) and isinstance(raw.get("client"), dict) else {}
+                geo = client.get("geographicalContext") or attrs.get("geographicalContext") or attrs.get("geo") or {}
+                loc = (geo.get("geolocation") if isinstance(geo, dict) else None) or attrs or {}
+                if not isinstance(loc, dict):
+                    loc = {}
+                lat_val = loc.get("lat") or loc.get("latitude") or 0.0
+                lon_val = loc.get("lon") or loc.get("longitude") or 0.0
+                lat = float(lat_val)
+                lon = float(lon_val)
+                city = (geo.get("city") if isinstance(geo, dict) else None) or (attrs.get("city") if isinstance(attrs, dict) else "Unknown") or "Unknown"
+                country = (geo.get("country") if isinstance(geo, dict) else None) or (attrs.get("country") if isinstance(attrs, dict) else "Unknown") or "Unknown"
             except (json.JSONDecodeError, TypeError, ValueError, KeyError):
                 pass
 

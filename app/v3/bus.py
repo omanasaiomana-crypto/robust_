@@ -252,30 +252,36 @@ class Bus:
     # Async Live Mode
     # -----------------------------------------------------------------------
 
-    async def _agent_worker(self, agent: Agent) -> None:
-        """Worker task consuming subscribed messages for an agent."""
+    async def _dispatcher_worker(self) -> None:
+        """Central async bus dispatcher delivering messages to all topic subscribers in pipeline order."""
         while self._live_running:
-            msg: Message | None = None
-            with self._lock:
-                for topic in agent.subscribes:
-                    if self._queues[topic]:
-                        msg = self._queues[topic].popleft()
-                        break
+            processed_any = False
+            for topic in TOPICS:
+                if topic == "deadletter":
+                    continue
 
-            if msg is None:
-                await asyncio.sleep(0.02)
-                continue
+                batch: list[Message] = []
+                with self._lock:
+                    q = self._queues[topic]
+                    if not q:
+                        continue
+                    while q:
+                        batch.append(q.popleft())
 
-            pace = self.supervisor.get_pace()
-            if pace > 0.0:
-                await asyncio.sleep(pace * 0.35)
+                if not batch:
+                    continue
 
-            out = self._deliver_message_to_agent(agent, msg)
-            for out_msg in out:
-                self.publish(out_msg, agent=agent)
+                for msg in batch:
+                    subscribers = list(self._subscribers.get(topic, []))
+                    for ag in subscribers:
+                        self._delivered += 1
+                        out = self._deliver_message_to_agent(ag, msg)
+                        for out_msg in out:
+                            self.publish(out_msg, agent=ag)
+                    processed_any = True
 
-            if pace > 0.0:
-                await asyncio.sleep(pace * 0.45)
+            if not processed_any:
+                await asyncio.sleep(0.01)
 
     async def _warm_ticker(self) -> None:
         """Background ticker for warm agents."""
@@ -299,9 +305,7 @@ class Bus:
             return
         self._live_running = True
         self._live_tasks = []
-        for ag in self.supervisor.get_registered_agents():
-            task = asyncio.create_task(self._agent_worker(ag), name=f"agent_{ag.agent_id}")
-            self._live_tasks.append(task)
+        self._live_tasks.append(asyncio.create_task(self._dispatcher_worker(), name="bus_dispatcher"))
         self._live_tasks.append(asyncio.create_task(self._warm_ticker(), name="bus_warm_ticker"))
 
     async def stop(self) -> None:

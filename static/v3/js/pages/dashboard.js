@@ -374,7 +374,15 @@ function setupSSEListeners() {
     });
 
     container.prepend(div);
+    loadKPIs();
+    loadTopIdentities();
   });
+
+  // Auto-refresh dynamic telemetry every 4 seconds
+  setInterval(() => {
+    loadKPIs();
+    loadTopIdentities();
+  }, 4000);
 }
 
 // Cleanup on page teardown

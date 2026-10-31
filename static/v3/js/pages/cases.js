@@ -209,6 +209,10 @@ function setupSSE() {
     if (countText) countText.textContent = `${allCases.length} Total Incidents`;
     renderFilteredCases();
   });
+
+  setInterval(() => {
+    loadCases();
+  }, 4000);
 }
 
 // Auto-run
