@@ -227,7 +227,7 @@ function openAgentDrawer(agentId) {
       traceList.innerHTML = '<div style="color:var(--muted); padding:8px 0;">No trace messages captured in current session.</div>';
     } else {
       traceList.innerHTML = traces.map((t) => `
-        <div style="padding:6px 10px; background:rgba(0,0,0,0.3); border:1px solid var(--panel-border); border-radius:6px;">
+        <div style="padding:6px 10px; background:var(--surface-2); border:1px solid var(--panel-border); border-radius:6px;">
           <div style="display:flex; justify-content:space-between; color:var(--muted); font-size:0.6875rem;">
             <span>${escHtml(t.timestamp || new Date().toISOString().substring(11, 19))}</span>
             <span style="color:var(--cyan); font-weight:700;">${escHtml(t.state || 'running')}</span>

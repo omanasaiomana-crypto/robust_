@@ -308,7 +308,7 @@ function renderActions(data) {
     const isApplied = act.state === 'applied';
 
     return `
-      <div style="padding:10px 14px; background:rgba(0,0,0,0.3); border:1px solid var(--panel-border); border-radius:8px; display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:8px;">
+      <div style="padding:10px 14px; background:var(--surface-2); border:1px solid var(--panel-border); border-radius:8px; display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:8px;">
         <div>
           <div style="display:flex; align-items:center; gap:8px;">
             <span style="font-size:0.8125rem; font-weight:700; color:var(--ink); text-transform:uppercase;">${escHtml(act.action_type)}</span>

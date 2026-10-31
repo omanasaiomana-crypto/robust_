@@ -242,13 +242,13 @@ function setupScanAction() {
       if (resultsPanel && resultsOutput) {
         resultsPanel.style.display = 'block';
         resultsOutput.innerHTML = `
-          <div style="padding:12px; background:rgba(0,0,0,0.3); border-radius:6px; border:1px solid var(--panel-border); margin-bottom:12px;">
+          <div style="padding:12px; background:var(--surface-2); border-radius:6px; border:1px solid var(--panel-border); margin-bottom:12px;">
             <div style="color:var(--ok); font-weight:700; margin-bottom:6px;">Scan Execution Summary</div>
             <div>Events Parsed: <strong>${resp.events_count ?? 5}</strong></div>
             <div>Signals Triggered: <strong>${resp.signals_count ?? 3}</strong></div>
             <div>Elevated Risk Score: <strong style="color:var(--crit);">${resp.risk_score ?? 92.4}</strong></div>
           </div>
-          <pre style="margin:0; padding:12px; background:rgba(0,0,0,0.5); border-radius:6px; max-height:240px; overflow-y:auto; color:#A5F3FC;">${escHtml(JSON.stringify(resp, null, 2))}</pre>
+          <pre style="margin:0; padding:12px; background:var(--surface-2); color:var(--ink); border-radius:6px; max-height:240px; overflow-y:auto; color:#A5F3FC;">${escHtml(JSON.stringify(resp, null, 2))}</pre>
         `;
         resultsPanel.scrollIntoView({ behavior: 'smooth' });
       }

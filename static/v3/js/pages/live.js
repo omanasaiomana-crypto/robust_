@@ -371,7 +371,7 @@ function appendTraceLine(trace) {
 
   const row = document.createElement('div');
   row.style.cssText = 'padding:4px 8px; border-radius:4px; display:flex; gap:8px; align-items:baseline; cursor:pointer; transition:background 0.1s;';
-  row.onmouseenter = () => (row.style.background = 'rgba(255,255,255,0.05)');
+  row.onmouseenter = () => (row.style.background = 'rgba(0,0,0,0.04)');
   row.onmouseleave = () => (row.style.background = 'transparent');
 
   row.innerHTML = `
@@ -391,6 +391,7 @@ function appendTraceLine(trace) {
     }
   });
 
+  if (state === 'threat') { row.style.background = '#FFE0E0'; row.style.border = '1px solid #E5484D'; }
   container.appendChild(row);
 
   // Keep max 200 items in log
