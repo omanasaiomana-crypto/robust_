@@ -92,20 +92,12 @@ def create_ingest_app(
     app = FastAPI(title="IdentityShield Ingest Service", version="3.0", docs_url=None, redoc_url=None)
 
     # Scoped CORS for attack generator origin
-    allowed_origins = active_settings.ingest_allowed_origins or ["*"]
     app.add_middleware(
         CORSMiddleware,
-        allow_origins=allowed_origins,
+        allow_origins=["*"],
         allow_credentials=False,
-        allow_methods=["POST", "GET", "OPTIONS"],
-        allow_headers=[
-            "Content-Type",
-            "X-IS-Key-Id",
-            "X-IS-Timestamp",
-            "X-IS-Nonce",
-            "X-IS-Signature",
-            "ngrok-skip-browser-warning",
-        ],
+        allow_methods=["*"],
+        allow_headers=["*"],
     )
 
     # Ingestion metrics

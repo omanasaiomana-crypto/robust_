@@ -424,10 +424,13 @@ function setupPaceAndRunControls() {
       if (statusText) statusText.textContent = 'LIVE · SIMULATING';
       if (statusPill) statusPill.style.background = 'rgba(239, 68, 68, 0.2)';
 
-      const resp = await api.post('/run/dataset', { pace });
+      const resp = await api.post('/run/dataset', {
+        paths: 'tests/v3/fixtures/e1_attack.json',
+        pace,
+      });
       window.dispatchEvent(
         new CustomEvent('is:toast', {
-          detail: { message: `Replay active: ${resp.run_id || 'e1_attack'}`, type: 'success' },
+          detail: { message: `Replay active: ${resp.run_id || 'e1_attack'} (${resp.events || 10} events)`, type: 'success' },
         })
       );
     } catch (err) {

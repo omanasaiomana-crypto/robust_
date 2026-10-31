@@ -4,7 +4,7 @@
  */
 
 class ApiClient {
-  constructor(baseUrl = '/api/v3', timeoutMs = 10000) {
+  constructor(baseUrl = '/api/v3', timeoutMs = 60000) {
     this.baseUrl = baseUrl;
     this.timeoutMs = timeoutMs;
     this._checkMockMode();

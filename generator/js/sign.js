@@ -30,44 +30,77 @@
    * @returns {string}
    */
   function generateNonce() {
-    const bytes = new Uint8Array(16);
-    window.crypto.getRandomValues(bytes);
-    return bufToHex(bytes.buffer);
+    if (window.crypto && typeof window.crypto.getRandomValues === 'function') {
+      try {
+        const bytes = new Uint8Array(16);
+        window.crypto.getRandomValues(bytes);
+        return bufToHex(bytes.buffer);
+      } catch (e) {
+        console.warn('getRandomValues failed, using fallback nonce generator', e);
+      }
+    }
+    let hex = '';
+    for (let i = 0; i < 32; i++) {
+      hex += Math.floor(Math.random() * 16).toString(16);
+    }
+    return hex;
   }
 
   /**
    * Computes the SHA-256 hash of a UTF-8 string.
+   * Uses Web Crypto API when available, otherwise falls back to pure JS window.sha256.
    * @param {string} text
    * @returns {Promise<string>} Hex representation of SHA-256
    */
   async function sha256Hex(text) {
-    const enc = new TextEncoder();
-    const data = enc.encode(text);
-    const hashBuf = await window.crypto.subtle.digest('SHA-256', data);
-    return bufToHex(hashBuf);
+    if (window.crypto && window.crypto.subtle) {
+      try {
+        const enc = new TextEncoder();
+        const data = enc.encode(text);
+        const hashBuf = await window.crypto.subtle.digest('SHA-256', data);
+        return bufToHex(hashBuf);
+      } catch (e) {
+        console.warn('WebCrypto digest failed, falling back to window.sha256', e);
+      }
+    }
+    if (typeof window.sha256 === 'function') {
+      return window.sha256(text);
+    }
+    throw new Error('No SHA-256 implementation available');
   }
 
   /**
    * Computes HMAC-SHA256 of message string using secret key.
+   * Uses Web Crypto API when available, otherwise falls back to pure JS window.sha256.hmac.
    * @param {string} secret
    * @param {string} message
    * @returns {Promise<string>} Hex representation of HMAC-SHA256
    */
   async function hmacSha256Hex(secret, message) {
-    const enc = new TextEncoder();
-    const keyData = enc.encode(secret);
-    const msgData = enc.encode(message);
+    if (window.crypto && window.crypto.subtle) {
+      try {
+        const enc = new TextEncoder();
+        const keyData = enc.encode(secret);
+        const msgData = enc.encode(message);
 
-    const cryptoKey = await window.crypto.subtle.importKey(
-      'raw',
-      keyData,
-      { name: 'HMAC', hash: 'SHA-256' },
-      false,
-      ['sign']
-    );
+        const cryptoKey = await window.crypto.subtle.importKey(
+          'raw',
+          keyData,
+          { name: 'HMAC', hash: 'SHA-256' },
+          false,
+          ['sign']
+        );
 
-    const sigBuf = await window.crypto.subtle.sign('HMAC', cryptoKey, msgData);
-    return bufToHex(sigBuf);
+        const sigBuf = await window.crypto.subtle.sign('HMAC', cryptoKey, msgData);
+        return bufToHex(sigBuf);
+      } catch (e) {
+        console.warn('WebCrypto sign failed, falling back to window.sha256.hmac', e);
+      }
+    }
+    if (typeof window.sha256 === 'function' && typeof window.sha256.hmac === 'function') {
+      return window.sha256.hmac(secret, message);
+    }
+    throw new Error('No HMAC-SHA256 implementation available');
   }
 
   /**

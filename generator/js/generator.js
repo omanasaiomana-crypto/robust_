@@ -8,8 +8,20 @@
   'use strict';
 
   // In-memory runtime state
+  const detectedTargetUrl = (() => {
+    try {
+      const h = window.location.hostname;
+      if (h && h !== 'localhost' && h !== '127.0.0.1' && h !== '') {
+        return `${window.location.protocol}//${h}:8001`;
+      }
+    } catch {
+      // ignore
+    }
+    return 'http://127.0.0.1:8001';
+  })();
+
   const state = {
-    targetUrl: 'http://127.0.0.1:8001',
+    targetUrl: detectedTargetUrl,
     keyId: 'test-key-1',
     secret: 'test_super_secret_signing_key_32bytes_long!',
     senderId: 'laptop-2-generator',
@@ -215,20 +227,44 @@
     const sc = window.ShieldScenarios.SCENARIOS[scenarioId];
     if (!sc) return;
 
-    const batches = sc.buildBatches();
-    // Update sender_id in each batch
-    batches.forEach(b => { b.sender_id = state.senderId; });
+    const btn = $(`btn-send-${sc.id}`);
+    if (btn) {
+      btn.disabled = true;
+      btn.textContent = 'Sending...';
+    }
 
-    for (let i = 0; i < batches.length; i++) {
-      const batch = batches[i];
-      await sendIngestBatch(batch, {
-        scenarioId: sc.id,
-        expectedStatus: 202
+    try {
+      const batches = sc.buildBatches();
+      batches.forEach(b => { b.sender_id = state.senderId; });
+
+      for (let i = 0; i < batches.length; i++) {
+        const batch = batches[i];
+        await sendIngestBatch(batch, {
+          scenarioId: sc.id,
+          expectedStatus: 202
+        });
+
+        // 150 ms delay between sequential batches per PRD §25
+        if (i < batches.length - 1) {
+          await new Promise(r => setTimeout(r, 150));
+        }
+      }
+    } catch (err) {
+      console.error('Execute scenario failed', err);
+      addLogEntry({
+        scenario: sc.id,
+        source: 'generator',
+        eventCount: 0,
+        status: 0,
+        expectedStatus: 202,
+        latency: 0,
+        response: { error: `Execution failed: ${err.message}` }
       });
-
-      // 150 ms delay between sequential batches per PRD §25
-      if (i < batches.length - 1) {
-        await new Promise(r => setTimeout(r, 150));
+      alert(`Send All failed: ${err.message}`);
+    } finally {
+      if (btn) {
+        btn.disabled = false;
+        btn.textContent = 'Send All';
       }
     }
   }

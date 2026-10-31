@@ -154,4 +154,8 @@ if getattr(v3_config, "V3_ENABLED", True):
 
     app.include_router(v3_router)
 
+_gen_dir = v3_config.ROOT_DIR / "generator"
+if _gen_dir.is_dir():
+    app.mount("/generator", StaticFiles(directory=_gen_dir, html=True), name="generator")
+
 app.mount("/", StaticFiles(directory=STATIC_DIR, html=True), name="static")
