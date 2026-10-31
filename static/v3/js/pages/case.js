@@ -36,6 +36,7 @@ async function loadCaseDetail(caseId) {
     renderBlastRadius(data);
     renderNarrative(data);
     renderActions(data);
+    renderMemoryButtons(data);
   } catch (err) {
     console.error('Failed to load case detail:', err);
     window.dispatchEvent(
@@ -523,7 +524,59 @@ function setupLabelHandlers(caseId) {
 }
 
 /**
- * 12. SSE Stream Listener for this Case
+ * 12. 30-Day Memory Secondary Buttons (Task M3)
+ */
+async function renderMemoryButtons(data) {
+  const btnTop = document.getElementById('btn-case-memory');
+  const btnAction = document.getElementById('btn-action-memory');
+  const buttons = [btnTop, btnAction].filter(Boolean);
+  if (buttons.length === 0) return;
+
+  const identity = data.identity_id || data.target_identity || data.identity;
+  if (!identity) {
+    buttons.forEach((b) => (b.style.display = 'none'));
+    return;
+  }
+
+  try {
+    const res = await fetch(`/api/memory/identity/${encodeURIComponent(identity)}?days=30`);
+    if (!res.ok) {
+      buttons.forEach((b) => (b.style.display = 'none'));
+      return;
+    }
+    const memData = await res.json();
+    const findingsCount = Array.isArray(memData.findings) ? memData.findings.length : 0;
+
+    buttons.forEach((btn) => {
+      btn.style.display = 'inline-flex';
+      const textEl = btn.querySelector('#btn-case-memory-text') || btn.querySelector('#btn-action-memory-text');
+      if (textEl) {
+        textEl.textContent = 'Open 30-day memory';
+      } else {
+        btn.textContent = 'Open 30-day memory';
+      }
+
+      const badgeEl = btn.querySelector('#btn-case-memory-badge') || btn.querySelector('#btn-action-memory-badge');
+      if (badgeEl) {
+        if (findingsCount > 0) {
+          badgeEl.textContent = String(findingsCount);
+          badgeEl.style.display = 'inline-block';
+        } else {
+          badgeEl.style.display = 'none';
+        }
+      }
+
+      btn.onclick = () => {
+        window.location.href = `/memory.html?identity=${encodeURIComponent(identity)}`;
+      };
+    });
+  } catch {
+    buttons.forEach((b) => (b.style.display = 'none'));
+  }
+}
+
+/**
+ * 13. SSE Stream Listener for this Case
  */
 function setupSSE(caseId) {
   sse.on('action', (actionData) => {

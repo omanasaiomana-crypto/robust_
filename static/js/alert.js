@@ -214,6 +214,16 @@ function renderHeader(container, alert) {
         >
           ${isDismissed ? 'Dismissed' : 'Dismiss'}
         </button>
+
+        <!-- 30-Day Memory Secondary Button (Task M3) -->
+        <button
+          id="btn-alert-memory"
+          style="display:none;"
+          class="border border-line hover:bg-panel2 text-ink rounded-lg px-4 py-2 text-sm font-medium transition-colors inline-flex items-center gap-2"
+        >
+          <span id="btn-alert-memory-text"></span>
+          <span id="btn-alert-memory-badge" class="hidden px-1.5 py-0.5 rounded-full text-xs font-mono font-bold bg-brand text-white"></span>
+        </button>
       </div>
     </div>
   `;
@@ -306,6 +316,40 @@ function renderHeader(container, alert) {
         emailBtn.disabled = false;
       }
     };
+  }
+
+  // 30-Day Memory Secondary Button handler (Task M3)
+  const memBtn = document.getElementById('btn-alert-memory');
+  const memText = document.getElementById('btn-alert-memory-text');
+  const memBadge = document.getElementById('btn-alert-memory-badge');
+  const identityId = alert.identity_id || alert.target_identity || alert.identity;
+
+  if (memBtn && identityId) {
+    fetch(`/api/memory/identity/${encodeURIComponent(identityId)}?days=30`)
+      .then((r) => (r.ok ? r.json() : null))
+      .then((data) => {
+        if (!data) {
+          memBtn.style.display = 'none';
+          return;
+        }
+        memBtn.style.display = 'inline-flex';
+        if (memText) {
+          memText.textContent = 'Open 30-day memory';
+        }
+        const findings = Array.isArray(data.findings) ? data.findings : [];
+        if (findings.length > 0 && memBadge) {
+          memBadge.textContent = String(findings.length);
+          memBadge.classList.remove('hidden');
+        } else if (memBadge) {
+          memBadge.classList.add('hidden');
+        }
+        memBtn.onclick = () => {
+          window.location.href = `/memory.html?identity=${encodeURIComponent(identityId)}`;
+        };
+      })
+      .catch(() => {
+        memBtn.style.display = 'none';
+      });
   }
 }
 

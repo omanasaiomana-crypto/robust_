@@ -281,9 +281,43 @@ async function inspect(nodeId) {
     <div class="mt-1 font-mono text-[11px] text-muted break-all">${esc(n.id)}</div>
     ${n.risk ? `<div class="mt-2 text-xs">Risk <span class="font-semibold text-crit">${esc(Math.round(n.risk))}</span></div>` : ""}
     ${G.blast.has(n.id) ? `<div class="mt-1 text-xs text-high">Reachable from this identity (blast radius)</div>` : ""}
+    <div id="g-inspect-memory-wrap" class="mt-2"></div>
     <ul class="mt-3 text-xs">${rows || `<li class="text-muted">No connections.</li>`}</ul>
     ${rel.length > 12 ? `<div class="text-[11px] text-muted">+${rel.length - 12} more</div>` : ""}
     <pre id="g-ev-json" class="mt-3 hidden max-h-64 overflow-auto rounded-lg border border-line p-3 font-mono text-[11px] leading-5 whitespace-pre-wrap" style="background:#05070C"></pre>`;
+  
+  // 30-Day Memory link check (Task M3)
+  const targetIdentity = (n.kind === "user" || n.id.startsWith("user:")) ? (n.id.startsWith("user:") ? n.id.slice(5) : n.label) : (G.identity || null);
+  if (targetIdentity) {
+    const wrap = $("g-inspect-memory-wrap");
+    fetch(`/api/memory/identity/${encodeURIComponent(targetIdentity)}?days=30`)
+      .then((r) => (r.ok ? r.json() : null))
+      .then((data) => {
+        if (!data || !wrap || G.selected !== nodeId) return;
+        wrap.innerHTML = `
+          <button id="g-inspect-memory-btn" class="border border-line hover:bg-panel2 rounded-lg px-2.5 py-1 text-xs font-medium inline-flex items-center gap-1.5 text-ink transition-colors">
+            <span id="g-inspect-memory-text"></span>
+            <span id="g-inspect-memory-badge" style="display:none;" class="px-1.5 py-0.2 rounded-full text-[10px] font-mono font-bold bg-brand text-white"></span>
+          </button>
+        `;
+        const textEl = $("g-inspect-memory-text");
+        const badgeEl = $("g-inspect-memory-badge");
+        if (textEl) textEl.textContent = "Open 30-day memory";
+        const findings = Array.isArray(data.findings) ? data.findings : [];
+        if (findings.length > 0 && badgeEl) {
+          badgeEl.textContent = String(findings.length);
+          badgeEl.style.display = "inline-block";
+        }
+        const btn = $("g-inspect-memory-btn");
+        if (btn) {
+          btn.onclick = () => {
+            window.location.href = `/memory.html?identity=${encodeURIComponent(targetIdentity)}`;
+          };
+        }
+      })
+      .catch(() => {});
+  }
+
   if (G.network) G.network.selectNodes([nodeId]);
 }
 
