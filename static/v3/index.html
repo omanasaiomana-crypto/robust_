@@ -1,50 +1,68 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>IdentityShield · Dashboard</title>
-
-  <!-- Google Fonts: Inter & JetBrains Mono -->
-  <link rel="preconnect" href="https://fonts.googleapis.com" />
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet" />
-
-  <!-- Theme Stylesheet -->
-  <link rel="stylesheet" href="/v3/css/theme.css" />
-
-  <!-- Tailwind CSS CDN with offline fallback -->
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>IdentityShield v3 — Security Command Dashboard</title>
+  
+  <!-- Design System & Tokens -->
+  <link rel="stylesheet" href="/v3/css/theme.css">
+  
+  <!-- Google Fonts: Space Grotesk & JetBrains Mono -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+  
+  <!-- Tailwind CSS -->
   <script src="https://cdn.tailwindcss.com"></script>
 
   <!-- Vendored Libraries -->
   <script src="/vendor/three.min.js"></script>
   <script src="/vendor/globe.gl.min.js"></script>
+  <!-- ES Module Import Map for Three.js & Addons -->
+  <script type="importmap">
+  {
+    "imports": {
+      "three": "/vendor/three/three.module.js",
+      "three/examples/jsm/environments/RoomEnvironment.js": "/vendor/three/RoomEnvironment.js"
+    }
+  }
+  </script>
 </head>
 <body>
 
   <!-- Main Content Rendered into App Shell -->
   <div id="main-content">
     
-    <!-- Top Action Header -->
-    <div style="display:flex; justify-content:space-between; align-items:flex-end; margin-bottom:20px; flex-wrap:wrap; gap:16px;">
+    <!-- Top Hero Card: Shield Core Standalone 3D (UI_DESIGN.md §4) -->
+    <div class="glass hero-card" style="padding:28px 32px; margin-bottom:24px; display:grid; grid-template-columns:1.2fr 1fr; gap:28px; align-items:center;">
       <div>
-        <div style="font-size:0.75rem; font-family:var(--font-mono); color:var(--cyan); text-transform:uppercase; letter-spacing:0.06em; margin-bottom:4px;">
-          Autonomous Identity Defense // Operations
+        <div style="font-size:0.75rem; font-family:var(--font-mono); color:var(--sky-strong); text-transform:uppercase; letter-spacing:0.06em; margin-bottom:8px; font-weight:700;">
+          Autonomous Identity Threat Detection & Response
         </div>
-        <h1 style="font-size:1.75rem; font-weight:700; margin:0; color:var(--ink); letter-spacing:-0.02em;">
-          Security Command Dashboard
+        <h1 style="font-size:2.1rem; font-weight:700; margin:0 0 10px 0; color:var(--ink); letter-spacing:-0.025em; line-height:1.2;">
+          IdentityShield is guarding <span id="hero-ident-count" style="color:var(--sky-strong); font-family:var(--font-mono);">12</span> identities
         </h1>
+        <p style="font-size:0.95rem; color:var(--ink-2); margin:0 0 20px 0; max-width:540px; line-height:1.55;">
+          15 autonomous agents watching Okta and AWS in real time. Continuous multi-factor identity resolution, blast radius isolation, and sub-250ms active containment.
+        </p>
+        <div style="display:flex; align-items:center; gap:12px; flex-wrap:wrap;">
+          <button id="btn-run-dataset" class="btn btn-primary" type="button">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="5 3 19 12 5 21 5 3"/></svg>
+            <span id="btn-run-dataset-text">Run Dataset Replay</span>
+          </button>
+          <a href="/v3/cases.html" class="btn btn-secondary">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><circle cx="12" cy="11" r="3"/></svg>
+            Open Cases
+          </a>
+          <a href="/v3/live.html" class="btn btn-ghost">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
+            Live Constellation
+          </a>
+        </div>
       </div>
-      <div style="display:flex; align-items:center; gap:12px;">
-        <button id="btn-run-dataset" class="btn btn-primary" type="button">
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="5 3 19 12 5 21 5 3"/></svg>
-          <span id="btn-run-dataset-text">Run Dataset Replay</span>
-        </button>
-        <a href="/v3/live.html" class="btn btn-ghost">
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
-          Live Constellation
-        </a>
-      </div>
+      <!-- Right Column: Standalone 3D Shield Core -->
+      <div id="shield-core-hero" style="min-height:340px; height:340px; width:100%; position:relative; overflow:hidden;"></div>
     </div>
 
     <!-- 5 KPI Tilt Cards -->

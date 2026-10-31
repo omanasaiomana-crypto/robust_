@@ -1,3 +1,4 @@
+import { mountShieldCore } from '../fx/shieldCore.js';
 /**
  * IdentityShield v3 — Dashboard Page Controller
  * Handles 5 KPI cards, Top Identities table, Live Cases SSE feed, Mini 3D Globe, and Run Dataset action.
@@ -9,9 +10,16 @@ import { fmt, escHtml, bandColor } from '../core/dom.js';
 import { tilt } from '../fx/tilt.js';
 
 let miniGlobeInstance = null;
+let shieldCoreInstance = null;
 
 export async function initDashboard() {
   setupRunDatasetButton();
+    // Mount 3D Shield Core Hero Element (UI_DESIGN.md §4)
+  const heroContainer = document.getElementById('shield-core-hero');
+  if (heroContainer) {
+    if (shieldCoreInstance) shieldCoreInstance.destroy();
+    shieldCoreInstance = mountShieldCore(heroContainer, { height: 340 });
+  }
   await loadKPIs();
   await loadTopIdentities();
   await loadLiveCases();
@@ -115,6 +123,10 @@ async function loadTopIdentities() {
   try {
     const raw = await api.get('/identities');
     const identities = Array.isArray(raw) ? raw : (raw?.items || []);
+    const heroIdent = document.getElementById('hero-ident-count');
+    if (heroIdent && identities.length > 0) {
+      heroIdent.textContent = identities.length;
+    }
     if (!identities || identities.length === 0) {
       tbody.innerHTML = '<tr><td colspan="5" style="text-align:center; color:var(--muted); padding:20px;">No identities recorded yet.</td></tr>';
       return;
@@ -347,10 +359,16 @@ function setupSSEListeners() {
   // Prepend live case events to the feed
   sse.on('case', (caseItem) => {
     if (!caseItem) return;
+
+    // Optional tie-in (UI_DESIGN.md §4 / U3): threat deflection when revoke arrives
+    const band = (caseItem.band || 'monitor').toLowerCase().replace('-', '_');
+    if (band === 'revoke' && shieldCoreInstance) {
+      shieldCoreInstance.threat();
+    }
+
     const container = document.getElementById('live-cases-feed');
     if (!container) return;
 
-    const band = (caseItem.band || 'monitor').toLowerCase().replace('-', '_');
     const color = bandColor(band);
 
     const div = document.createElement('div');
@@ -387,6 +405,9 @@ function setupSSEListeners() {
 
 // Cleanup on page teardown
 window.addEventListener('beforeunload', () => {
+  if (shieldCoreInstance) {
+    shieldCoreInstance.destroy();
+  }
   if (miniGlobeInstance && miniGlobeInstance._destructor) {
     miniGlobeInstance._destructor();
   }

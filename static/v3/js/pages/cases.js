@@ -1,3 +1,4 @@
+import { mountShieldCore } from '../fx/shieldCore.js';
 /**
  * IdentityShield v3 — Cases Page Controller
  * Handles filtering, sorting, MITRE chip rendering, and navigation to Case Detail.
@@ -138,7 +139,19 @@ function renderFilteredCases() {
   });
 
   if (list.length === 0) {
-    tbody.innerHTML = '<tr><td colspan="8" style="text-align:center; color:var(--muted); padding:32px;">No matching threat cases found.</td></tr>';
+    tbody.innerHTML = `
+      <tr>
+        <td colspan="8" style="text-align:center; padding:36px 16px; color:var(--muted);">
+          <div id="cases-empty-shield" style="width:200px; height:200px; margin:0 auto 12px auto; position:relative;"></div>
+          <div style="font-size:1.125rem; font-weight:600; margin-bottom:4px; color:var(--ink);">No Threat Cases Found</div>
+          <div style="font-size:0.8125rem;">All monitored identities look normal. No active threat containment required.</div>
+        </td>
+      </tr>
+    `;
+    const emptyContainer = document.getElementById('cases-empty-shield');
+    if (emptyContainer) {
+      mountShieldCore(emptyContainer, { still: true, height: 200 });
+    }
     return;
   }
 
