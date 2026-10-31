@@ -1,3 +1,4 @@
+import { setLoading, flashSuccess } from '../fx/buttons.js';
 import { mountShieldCore } from '../fx/shieldCore.js';
 /**
  * IdentityShield v3 — Dashboard Page Controller
@@ -314,7 +315,7 @@ function setupRunDatasetButton() {
 
   btn.addEventListener('click', async () => {
     try {
-      btn.disabled = true;
+      setLoading(btn, true);
       if (btnText) btnText.textContent = 'Running Replay...';
 
       const resp = await api.post('/run/dataset', { pace: 0.0 });
@@ -329,8 +330,9 @@ function setupRunDatasetButton() {
         await loadKPIs();
         await loadTopIdentities();
         await loadLiveCases();
-        btn.disabled = false;
+        setLoading(btn, false);
         if (btnText) btnText.textContent = 'Run Dataset Replay';
+        await flashSuccess(btn, 900);
       }, 1500);
     } catch (err) {
       btn.disabled = false;

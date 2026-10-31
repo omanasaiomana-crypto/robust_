@@ -1,3 +1,4 @@
+import { initButtons } from '../fx/buttons.js';
 /**
  * IdentityShield v3 — Navigation Shell, Topbar, Toasts, & Command Palette
  * Context.md Section 18 / PRD §18: Professional Dark Command Center Shell
@@ -112,6 +113,7 @@ export class Shell {
     this._setupHealthPoll();
     this._setupSSEMetrics();
     this._setupCommandPalette();
+    initButtons(document);
     this._listenToasts();
   }
 

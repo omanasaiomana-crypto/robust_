@@ -1,3 +1,4 @@
+import { setLoading, flashSuccess } from '../fx/buttons.js';
 import { CHART_PALETTE } from '../core/chartTheme.js';
 /**
  * IdentityShield v3 — Performance & Benchmark Page Controller
@@ -131,7 +132,7 @@ function setupBenchmarkButton() {
 
   btn.addEventListener('click', async () => {
     const scale = parseInt(select?.value || '1', 10);
-    btn.disabled = true;
+    setLoading(btn, true);
     if (btnText) btnText.textContent = `Benchmarking ${scale}x...`;
 
     try {
@@ -166,7 +167,8 @@ function setupBenchmarkButton() {
         })
       );
     } finally {
-      btn.disabled = false;
+      setLoading(btn, false);
+      await flashSuccess(btn, 900);
       if (btnText) btnText.textContent = 'Run Benchmark';
     }
   });

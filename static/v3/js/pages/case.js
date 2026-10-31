@@ -1,3 +1,5 @@
+import { lockIcon, keyIcon, checkIcon } from '../fx/icons.js';
+import { setLoading, flashSuccess } from '../fx/buttons.js';
 /**
  * IdentityShield v3 — Case Detail Controller
  * Handles SVG Arc gauge, attack chain timeline, evidence drawer, counterfactual bars,
@@ -321,10 +323,10 @@ function renderActions(data) {
         <div style="display:flex; gap:6px;">
           ${
             isPending
-              ? `<button class="btn btn-primary btn-action-approve" data-action-id="${escHtml(act.action_id)}" type="button" style="padding:4px 10px; font-size:0.75rem;">Approve</button>
-                 <button class="btn btn-ghost btn-action-reject" data-action-id="${escHtml(act.action_id)}" type="button" style="padding:4px 10px; font-size:0.75rem;">Reject</button>`
+              ? `<button class="btn btn-danger btn-3d btn-tilt btn-ripple btn-action-approve" data-action-id="${escHtml(act.action_id)}" type="button" style="padding:4px 10px; font-size:0.75rem; display:inline-flex; align-items:center; gap:5px;">${lockIcon()} Approve</button>
+                 <button class="btn btn-ghost btn-3d btn-ripple btn-action-reject" data-action-id="${escHtml(act.action_id)}" type="button" style="padding:4px 10px; font-size:0.75rem;">Reject</button>`
               : isApplied
-              ? `<button class="btn btn-ghost btn-action-rollback" data-action-id="${escHtml(act.action_id)}" type="button" style="padding:4px 10px; font-size:0.75rem;">Rollback</button>`
+              ? `<button class="btn btn-secondary btn-3d btn-ripple btn-action-rollback" data-action-id="${escHtml(act.action_id)}" type="button" style="padding:4px 10px; font-size:0.75rem; display:inline-flex; align-items:center; gap:5px;">${keyIcon()} Rollback</button>`
               : ''
           }
         </div>
@@ -482,8 +484,9 @@ function setupLabelHandlers(caseId) {
   const fpBtn = document.getElementById('btn-label-fp');
   const benignBtn = document.getElementById('btn-label-benign');
 
-  const submitLabel = async (verdict) => {
+  const submitLabel = async (verdict, btn) => {
     try {
+      if (btn) setLoading(btn, true);
       await api.post(`/cases/${encodeURIComponent(caseId)}/label`, {
         verdict,
         analyst: 'sec-ops-lead',
@@ -494,7 +497,9 @@ function setupLabelHandlers(caseId) {
           detail: { message: `Case ${caseId} labeled as ${verdict}`, type: 'success' },
         })
       );
+      if (btn) await flashSuccess(btn, 900);
     } catch (err) {
+      if (btn) setLoading(btn, false);
       window.dispatchEvent(
         new CustomEvent('is:toast', {
           detail: { message: `Label failed: ${err.message}`, type: 'error' },
@@ -503,9 +508,18 @@ function setupLabelHandlers(caseId) {
     }
   };
 
-  if (tpBtn) tpBtn.addEventListener('click', () => submitLabel('true_positive'));
-  if (fpBtn) fpBtn.addEventListener('click', () => submitLabel('false_positive'));
-  if (benignBtn) benignBtn.addEventListener('click', () => submitLabel('benign_true_positive'));
+  if (tpBtn) {
+    tpBtn.innerHTML = `${checkIcon()} TP (Threat)`;
+    tpBtn.addEventListener('click', () => submitLabel('true_positive', tpBtn));
+  }
+  if (fpBtn) {
+    fpBtn.innerHTML = `${checkIcon()} FP (False Alarm)`;
+    fpBtn.addEventListener('click', () => submitLabel('false_positive', fpBtn));
+  }
+  if (benignBtn) {
+    benignBtn.innerHTML = `${checkIcon()} Benign TP`;
+    benignBtn.addEventListener('click', () => submitLabel('benign_true_positive', benignBtn));
+  }
 }
 
 /**

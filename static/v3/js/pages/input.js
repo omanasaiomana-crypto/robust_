@@ -1,3 +1,4 @@
+import { setLoading, flashSuccess } from '../fx/buttons.js';
 /**
  * IdentityShield v3 — Input & Scanner Page Controller
  * Handles manual log entry, file upload, E1–E9 preset loading, and POST /inputs/scan execution.
@@ -220,7 +221,7 @@ function setupScanAction() {
       return;
     }
 
-    btn.disabled = true;
+    setLoading(btn, true);
     btn.innerHTML = '<span class="status-dot warn"></span> Scanning...';
 
     try {
@@ -258,7 +259,8 @@ function setupScanAction() {
         })
       );
     } finally {
-      btn.disabled = false;
+      setLoading(btn, false);
+      await flashSuccess(btn, 900);
       btn.innerHTML = '<circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/> Scan Input Only';
     }
   });
