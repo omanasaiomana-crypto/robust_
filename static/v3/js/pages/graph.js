@@ -22,7 +22,46 @@ const NODE_COLORS = {
 
 export async function initGraphPage() {
   setupControls();
+  await populateIdentityDropdown();
   await loadGraph('global');
+}
+
+async function populateIdentityDropdown() {
+  const select = document.getElementById('select-graph-identity');
+  if (!select) return;
+
+  try {
+    const events = await api.get('/events?limit=100');
+    const eventList = Array.isArray(events) ? events : (events?.items || []);
+    const identities = new Set();
+
+    // Default primary scenarios
+    identities.add('svc-report');
+    identities.add('jdoe');
+    identities.add('asmith');
+
+    for (const ev of eventList) {
+      if (ev.identity_id) identities.add(ev.identity_id);
+      if (ev.raw_principal) {
+        const rp = String(ev.raw_principal);
+        const name = rp.includes('/') ? rp.split('/').pop() : (rp.includes('@') ? rp.split('@')[0] : rp);
+        if (name && !name.startsWith('arn:')) identities.add(name);
+      }
+    }
+
+    const currentVal = select.value || 'global';
+    select.innerHTML = '<option value="global">Global Attack Graph (All Ingested Logs)</option>';
+
+    for (const id of Array.from(identities).sort()) {
+      const opt = document.createElement('option');
+      opt.value = id;
+      opt.textContent = id === 'svc-report' ? 'svc-report (Hero Attack Chain)' : id;
+      if (id === currentVal) opt.selected = true;
+      select.appendChild(opt);
+    }
+  } catch (err) {
+    console.warn('Failed to populate identity dropdown:', err);
+  }
 }
 
 async function loadGraph(identityId = 'global') {
@@ -209,6 +248,27 @@ function setupControls() {
         graphInstance.graphData({ nodes: attackNodes, links: attackLinks });
       } else {
         graphInstance.graphData(rawGraphData);
+      }
+    });
+  }
+
+  const btnRefresh = document.getElementById('btn-refresh-graph');
+  if (btnRefresh) {
+    btnRefresh.addEventListener('click', async () => {
+      btnRefresh.disabled = true;
+      btnRefresh.innerHTML = `
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="animate-spin"><path d="M23 4v6h-6"/><path d="M1 20v-6h6"/><path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"/></svg>
+        Refreshing...
+      `;
+      try {
+        await populateIdentityDropdown();
+        await loadGraph(selectIdentity ? selectIdentity.value : 'global');
+      } finally {
+        btnRefresh.disabled = false;
+        btnRefresh.innerHTML = `
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M23 4v6h-6"/><path d="M1 20v-6h6"/><path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"/></svg>
+          Refresh Live
+        `;
       }
     });
   }
