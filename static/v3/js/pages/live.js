@@ -112,8 +112,7 @@ function initConstellation() {
       const x = Math.cos(agent.angle) * agent.ringRadius;
       const y = Math.sin(agent.angle) * agent.ringRadius;
 
-      // Outer glow sphere
-            // Node layer color mapping (UI_DESIGN.md §2 & §6)
+      // Node layer color mapping (UI_DESIGN.md §2 & §6)
       let nodeColorHex = 0xdce8ff; // sky
       let strongOutline = 0x3d6fe0;
       if (agent.layer === 'Detection') { nodeColorHex = 0xece6ff; strongOutline = 0x6d4fd8; }
