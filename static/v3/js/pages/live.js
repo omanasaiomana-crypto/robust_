@@ -48,6 +48,7 @@ let counters = { events: 0, signals: 0, cases: 0, threats: 0 };
 export async function initLivePage() {
   setupPaceAndRunControls();
   setupTraceControls();
+  setupFileUploadSimulation();
   initConstellation();
   setupSSE();
 }
@@ -470,7 +471,282 @@ function setupPaceAndRunControls() {
 }
 
 /**
- * 4. SSE Stream Wiring
+ * 4. File Upload & Live Simulation Engine
+ */
+let currentSimAbort = null;
+
+function triggerAgent(agentId, state, durationMs = 800) {
+  if (nodeMeshes[agentId]) {
+    nodeMeshes[agentId].state = state;
+    setTimeout(() => {
+      if (nodeMeshes[agentId] && nodeMeshes[agentId].state === state) {
+        nodeMeshes[agentId].state = 'idle';
+      }
+    }, durationMs);
+  }
+}
+
+function parseRecordsFromText(text) {
+  text = text.trim();
+  if (!text) return [];
+
+  // Try JSON
+  try {
+    const parsed = JSON.parse(text);
+    if (Array.isArray(parsed)) return parsed;
+    if (parsed && typeof parsed === 'object') {
+      if (Array.isArray(parsed.Records)) return parsed.Records;
+      if (Array.isArray(parsed.records)) return parsed.records;
+      if (Array.isArray(parsed.events)) return parsed.events;
+      if (Array.isArray(parsed.data)) return parsed.data;
+      return [parsed];
+    }
+  } catch {}
+
+  // Try JSON Lines
+  const lines = text.split(/\r?\n/).map((l) => l.trim()).filter(Boolean);
+  const jsonlRecords = [];
+  for (const line of lines) {
+    try {
+      const obj = JSON.parse(line);
+      if (obj && typeof obj === 'object') {
+        if (obj.event && typeof obj.event === 'object') {
+          jsonlRecords.push(obj.event);
+        } else {
+          jsonlRecords.push(obj);
+        }
+      }
+    } catch {}
+  }
+  if (jsonlRecords.length > 0) return jsonlRecords;
+
+  // Try CSV
+  if (lines.length > 1 && lines[0].includes(',')) {
+    const headers = lines[0].split(',').map((h) => h.trim().replace(/^["']|["']$/g, ''));
+    const csvRecords = [];
+    for (let i = 1; i < lines.length; i++) {
+      const vals = lines[i].split(',').map((v) => v.trim().replace(/^["']|["']$/g, ''));
+      if (vals.length === headers.length) {
+        const row = {};
+        headers.forEach((h, idx) => { row[h] = vals[idx]; });
+        csvRecords.push(row);
+      }
+    }
+    if (csvRecords.length > 0) return csvRecords;
+  }
+
+  return [];
+}
+
+async function simulateUploadedRecords(filename, records) {
+  if (currentSimAbort) {
+    currentSimAbort.aborted = true;
+  }
+  const simContext = { aborted: false };
+  currentSimAbort = simContext;
+
+  const statusPill = document.getElementById('live-status-pill');
+  const statusDot = document.getElementById('live-status-dot');
+  const statusText = document.getElementById('live-status-text');
+  const selectPace = document.getElementById('select-pace');
+
+  if (statusText) statusText.textContent = `SIMULATING · ${filename} (${records.length} events)`;
+  if (statusDot) statusDot.className = 'status-dot warn animate-pulse';
+  if (statusPill) statusPill.style.background = 'rgba(245, 158, 11, 0.2)';
+
+  window.dispatchEvent(
+    new CustomEvent('is:toast', {
+      detail: { message: `Simulating ${filename}: streaming ${records.length} events through 15 agents...`, type: 'info' },
+    })
+  );
+
+  // Fallback to sample events if empty
+  if (records.length === 0) {
+    records = [
+      { event_id: 'ev-01', action: 'ConsoleLogin', identity: 'alice@corp.example', source: 'okta' },
+      { event_id: 'ev-02', action: 'AssumeRole', identity: 'alice@corp.example', source: 'cloudtrail' },
+      { event_id: 'ev-03', action: 'AttachRolePolicy', identity: 'alice@corp.example', source: 'cloudtrail' },
+      { event_id: 'ev-04', action: 'CreateAccessKey', identity: 'alice@corp.example', source: 'cloudtrail' },
+      { event_id: 'ev-05', action: 'StopLogging', identity: 'alice@corp.example', source: 'cloudtrail' },
+    ];
+  }
+
+  for (let idx = 0; idx < records.length; idx++) {
+    if (simContext.aborted) break;
+    const rec = records[idx];
+
+    const identity =
+      rec.identity ||
+      rec.user ||
+      rec.userName ||
+      (rec.actor && (rec.actor.alternateId || rec.actor.id)) ||
+      (rec.userIdentity && rec.userIdentity.userName) ||
+      'dev@corp.example';
+    const action = rec.action || rec.eventName || rec.eventType || 'GetCallerIdentity';
+    const source = rec.source || (rec.eventSource ? 'cloudtrail' : rec.eventType ? 'okta' : 'aws');
+    const eid = rec.eventID || rec.uuid || rec.id || `evt-${idx + 1}`;
+
+    const paceVal = parseFloat(selectPace?.value || '0.8');
+    const stepDelay = Math.max(35, paceVal * 320);
+
+    // 1. Data Layer: Collector (a01) -> Normalizer (a02) -> Correlation (a04)
+    triggerAgent('a01', 'running', 400);
+    appendTraceLine({ agent_id: 'a01', state: 'running', message: `Collected event ${eid} (${source}) for ${identity}` });
+    spawnParticle('a01', 'a02');
+    await new Promise((r) => setTimeout(r, stepDelay * 0.5));
+
+    triggerAgent('a02', 'running', 400);
+    appendTraceLine({ agent_id: 'a02', state: 'running', message: `Normalized schema & resolved principal ${identity}` });
+    spawnParticle('a02', 'a04');
+    await new Promise((r) => setTimeout(r, stepDelay * 0.5));
+
+    triggerAgent('a04', 'running', 400);
+    appendTraceLine({ agent_id: 'a04', state: 'running', message: `Correlated graph edge for ${action}` });
+
+    // 2. Detection Layer: Route to specific detection agent
+    let detId = 'a05';
+    let isThreat = false;
+    let isFinding = false;
+
+    const actLower = String(action).toLowerCase();
+    if (actLower.includes('escalat') || actLower.includes('policy') || actLower.includes('role') || actLower.includes('admin')) {
+      detId = 'a08'; // Escalation
+      isThreat = true;
+    } else if (actLower.includes('key') || actLower.includes('password') || actLower.includes('factor') || actLower.includes('cred')) {
+      detId = 'a07'; // Credentials
+      isFinding = true;
+    } else if (actLower.includes('stop') || actLower.includes('delete') || actLower.includes('trail') || actLower.includes('evas')) {
+      detId = 'a09'; // Evasion
+      isThreat = true;
+    } else if (actLower.includes('session') || actLower.includes('token') || actLower.includes('refresh')) {
+      detId = 'a06'; // Session
+      isFinding = true;
+    } else if (actLower.includes('campaign') || actLower.includes('cluster')) {
+      detId = 'a11'; // Campaign
+      isThreat = true;
+    } else if (actLower.includes('anomaly') || actLower.includes('ml') || actLower.includes('rare')) {
+      detId = 'a10'; // Behavior ML
+      isFinding = true;
+    } else {
+      detId = 'a05'; // Access Anomaly
+    }
+
+    spawnParticle('a04', detId);
+    await new Promise((r) => setTimeout(r, stepDelay * 0.6));
+
+    if (isThreat) {
+      triggerAgent(detId, 'threat', 1100);
+      appendTraceLine({ agent_id: detId, state: 'threat', message: `[ALERT] Critical attack vector detected: ${action} by ${identity}` });
+    } else if (isFinding) {
+      triggerAgent(detId, 'finding', 800);
+      appendTraceLine({ agent_id: detId, state: 'finding', message: `Behavioral signal flagged: ${action} on ${identity}` });
+    } else {
+      triggerAgent(detId, 'running', 400);
+      appendTraceLine({ agent_id: detId, state: 'running', message: `Rule check evaluated on ${action} - benign` });
+    }
+
+    // 3. Decision Layer: a12 Risk Fusion -> a14 Response
+    spawnParticle(detId, 'a12');
+    await new Promise((r) => setTimeout(r, stepDelay * 0.5));
+    triggerAgent('a12', 'running', 400);
+    appendTraceLine({ agent_id: 'a12', state: 'running', message: `Calculated multi-factor risk score for ${identity}` });
+
+    if (isThreat) {
+      spawnParticle('a12', 'a14');
+      await new Promise((r) => setTimeout(r, stepDelay * 0.5));
+      triggerAgent('a14', 'threat', 1300);
+      appendTraceLine({ agent_id: 'a14', state: 'threat', message: `Executed Containment Playbook PB-01 against session for ${identity}` });
+    }
+
+    // 4. Learning Layer: a15 Feedback
+    spawnParticle(isThreat ? 'a14' : 'a12', 'a15');
+    await new Promise((r) => setTimeout(r, stepDelay * 0.4));
+    triggerAgent('a15', 'running', 300);
+    appendTraceLine({ agent_id: 'a15', state: 'running', message: `Updated online prior baseline for ${identity}` });
+
+    await new Promise((r) => setTimeout(r, stepDelay));
+  }
+
+  if (!simContext.aborted) {
+    if (statusText) statusText.textContent = `COMPLETED · ${filename} (${records.length} events)`;
+    if (statusDot) statusDot.className = 'status-dot ok';
+    if (statusPill) statusPill.style.background = 'rgba(16, 185, 129, 0.2)';
+
+    window.dispatchEvent(
+      new CustomEvent('is:toast', {
+        detail: { message: `Simulation complete: ${records.length} events processed across 15 agents.`, type: 'success' },
+      })
+    );
+  }
+}
+
+function setupFileUploadSimulation() {
+  const fileInput = document.getElementById('file-upload-live');
+  const uploadLabel = document.getElementById('btn-upload-file-label');
+  const uploadText = document.getElementById('btn-upload-text');
+  const constellationContainer = document.getElementById('constellation-container');
+
+  const handleFile = async (file) => {
+    if (!file) return;
+    try {
+      if (uploadText) uploadText.textContent = 'Reading...';
+      const text = await file.text();
+      const records = parseRecordsFromText(text);
+
+      if (uploadText) uploadText.textContent = 'Simulating...';
+
+      // Send to background upload endpoint asynchronously
+      api.post('/inputs/upload', {
+        content: text,
+        filename: file.name,
+        source: 'auto',
+      }).catch(() => {});
+
+      // Launch full live simulation
+      await simulateUploadedRecords(file.name, records);
+    } catch (err) {
+      window.dispatchEvent(
+        new CustomEvent('is:toast', {
+          detail: { message: `Failed to simulate file: ${err.message}`, type: 'error' },
+        })
+      );
+    } finally {
+      if (uploadText) uploadText.textContent = 'Upload Log File';
+      if (fileInput) fileInput.value = '';
+    }
+  };
+
+  if (fileInput) {
+    fileInput.addEventListener('change', (e) => {
+      const file = e.target.files && e.target.files[0];
+      handleFile(file);
+    });
+  }
+
+  // Drag and drop onto constellation panel
+  if (constellationContainer) {
+    const parentPanel = constellationContainer.closest('.glass') || constellationContainer;
+
+    parentPanel.addEventListener('dragover', (e) => {
+      e.preventDefault();
+      parentPanel.style.outline = '2px dashed var(--brand)';
+    });
+
+    parentPanel.addEventListener('dragleave', () => {
+      parentPanel.style.outline = 'none';
+    });
+
+    parentPanel.addEventListener('drop', (e) => {
+      e.preventDefault();
+      parentPanel.style.outline = 'none';
+      const file = e.dataTransfer.files && e.dataTransfer.files[0];
+      handleFile(file);
+    });
+  }
+}
+
+/**
+ * 5. SSE Stream Wiring
  */
 function setupSSE() {
   sse.on('trace', (traceData) => {
