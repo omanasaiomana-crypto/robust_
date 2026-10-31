@@ -11,8 +11,8 @@ let graphInstance = null;
 let rawGraphData = null;
 
 const NODE_COLORS = {
-  identity: '#10B981',
-  session: '#F59E0B',
+  identity: '#3D6FE0',
+  session: '#6D4FD8',
   ip: '#475569',
   key: '#A16207',
   role: '#C2410C',
@@ -93,22 +93,22 @@ function render3DGraph(container, data) {
     const graph = window.ForceGraph3D()(container)
       .width(width)
       .height(height)
-      .backgroundColor('#090D14')
+      .backgroundColor('#FFFFFF')
       .graphData(data)
       // Node styling
       .nodeLabel((node) => `
         <div style="background:var(--surface); border:1px solid var(--border); box-shadow:var(--panel-shadow); padding:8px 12px; border:1px solid rgba(148,163,184,0.3); border-radius:6px; font-family:sans-serif; font-size:12px; color:var(--ink);">
-          <div style="font-weight:700; color:${NODE_COLORS[node.kind || node.type] || '#10B981'}; text-transform:uppercase; font-size:10px;">${escHtml(node.kind || node.type || 'Entity')}</div>
+          <div style="font-weight:700; color:${NODE_COLORS[node.kind || node.type] || '#3B82F6'}; text-transform:uppercase; font-size:10px;">${escHtml(node.kind || node.type || 'Entity')}</div>
           <div style="margin-top:2px;">${escHtml(node.name || node.id)}</div>
           <div style="margin-top:4px; font-family:monospace; color:#EF4444;">Risk: ${Number(node.risk || 0).toFixed(1)}</div>
         </div>
       `)
-      .nodeColor((node) => NODE_COLORS[node.kind || node.type] || '#10B981')
+      .nodeColor((node) => NODE_COLORS[node.kind || node.type] || '#3B82F6')
       .nodeVal((node) => Math.max(4, (node.risk || 20) / 4))
       .nodeOpacity(0.9)
       // Edge styling: directional particles along attack paths
       .linkWidth((link) => (link.is_attack_path ? 2.5 : 1))
-      .linkColor((link) => link.color || (link.is_attack_path ? '#E5484D' : (link.source?.kind === 'identity' || link.target?.kind === 'role' ? '#10B981' : '#233044')))
+      .linkColor((link) => link.color || (link.is_attack_path ? '#E5484D' : (link.source?.kind === 'identity' || link.target?.kind === 'role' ? '#3D6FE0' : '#CBD5E1')))
       .linkDirectionalParticles((link) => (link.is_attack_path ? 4 : 0))
       .linkDirectionalParticleWidth(2.5)
       .linkDirectionalParticleSpeed(0.008)
@@ -158,7 +158,7 @@ function render2DVisFallback(container, data) {
   const nodes = (data?.nodes || []).map((n) => ({
     id: n.id,
     label: n.name || n.id,
-    color: NODE_COLORS[n.kind || n.type] || '#10B981',
+    color: NODE_COLORS[n.kind || n.type] || '#3B82F6',
     font: { color: '#FFFFFF', size: 12 },
   }));
 
@@ -200,7 +200,7 @@ function inspectNode(node) {
     details.innerHTML = `
       <div style="display:flex; justify-content:space-between; padding:8px 0; border-bottom:1px solid rgba(148,163,184,0.1);">
         <span style="color:var(--muted);">Entity Type:</span>
-        <span style="font-weight:700; color:${NODE_COLORS[node.kind || node.type] || '#10B981'}; text-transform:uppercase;">${escHtml(node.kind || node.type || 'Entity')}</span>
+        <span style="font-weight:700; color:${NODE_COLORS[node.kind || node.type] || '#3B82F6'}; text-transform:uppercase;">${escHtml(node.kind || node.type || 'Entity')}</span>
       </div>
       <div style="display:flex; justify-content:space-between; padding:8px 0; border-bottom:1px solid rgba(148,163,184,0.1);">
         <span style="color:var(--muted);">Entity ID:</span>
