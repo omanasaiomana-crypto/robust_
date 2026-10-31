@@ -749,9 +749,7 @@ tbody tr:hover {
 .cmd-palette-backdrop {
   position: fixed;
   inset: 0;
-  background: rgba(31, 36, 48, 0.4);
-  backdrop-filter: blur(4px);
-  -webkit-backdrop-filter: blur(4px);
+  background: rgba(31, 36, 48, 0.45);
   z-index: 90;
   display: flex;
   align-items: flex-start;
