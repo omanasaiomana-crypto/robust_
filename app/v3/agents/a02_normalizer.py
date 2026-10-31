@@ -455,6 +455,16 @@ class Normalizer(Agent):
             if v is not None:
                 clean_attrs[k] = v
 
+        # Preserve geo context for globe and live tables
+        client_dict = raw_dict.get("client") if isinstance(raw_dict, dict) else {}
+        client_geo = client_dict.get("geographicalContext") if isinstance(client_dict, dict) else {}
+        if isinstance(client_geo, dict):
+            if client_geo.get("city"): clean_attrs["city"] = client_geo["city"]
+            if client_geo.get("country"): clean_attrs["country"] = client_geo["country"]
+            if isinstance(client_geo.get("geolocation"), dict):
+                clean_attrs["lat"] = client_geo["geolocation"].get("lat")
+                clean_attrs["lon"] = client_geo["geolocation"].get("lon")
+
         # Read-only flag from CloudTrail raw if present, else from catalog
         is_read_only = bool(raw_dict.get("readOnly", cat_entry.read_only))
 

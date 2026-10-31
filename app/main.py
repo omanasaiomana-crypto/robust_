@@ -75,12 +75,13 @@ async def lifespan(app: FastAPI):
                                 "timestamp": message.created_at,
                             })
                             broadcaster.publish("metrics", {"signals_count": 1})
-                        elif message.topic == "events" and isinstance(message.payload, Event):
+                        elif message.topic in ("events", "events.normalized") and isinstance(message.payload, Event):
                             _persist_event(adapter, message.payload)
+                            ident_label = message.payload.identity_id or message.payload.raw_principal or "user"
                             broadcaster.publish("trace", {
                                 "agent_id": message.producer or "a02_normalizer",
                                 "state": "success",
-                                "detail": f"Event {message.payload.action} by {message.payload.identity_id}",
+                                "detail": f"Event {message.payload.action} by {ident_label}",
                                 "timestamp": message.payload.time,
                             })
                             broadcaster.publish("metrics", {"eps": 1.0})

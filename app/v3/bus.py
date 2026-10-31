@@ -289,6 +289,17 @@ class Bus:
             await asyncio.sleep(config.WARM_TICK_SECONDS)
             if not self._live_running:
                 break
+            # Flush collector buffer if any
+            a01 = self.supervisor.get_agent("a01")
+            if a01 is not None:
+                state = self._agent_states.setdefault("a01", a01.init_state())
+                if state.get("buffer"):
+                    try:
+                        for m in a01.on_tick(state, self.ctx):
+                            self.publish(m, agent=a01)
+                    except Exception:
+                        log.exception("Collector buffer flush error")
+
             warm_agents = [ag for ag in self.supervisor.get_registered_agents() if ag.path == "warm"]
             for ag in warm_agents:
                 state = self._agent_states.setdefault(ag.agent_id, ag.init_state())

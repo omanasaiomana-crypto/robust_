@@ -451,17 +451,39 @@ def get_events(limit: int = 100, identity: str | None = None) -> list[dict[str, 
     """Return recently ingested event logs (normal workday and attacks) from events_v3."""
     if identity:
         rows = store.fetch_all(
-            "SELECT * FROM events_v3 WHERE identity_id LIKE ? ORDER BY time DESC LIMIT ?",
-            (f"%{identity}%", limit),
+            "SELECT * FROM events_v3 WHERE (identity_id LIKE ? OR raw_principal LIKE ?) ORDER BY rowid DESC LIMIT ?",
+            (f"%{identity}%", f"%{identity}%", limit),
         )
     else:
         rows = store.fetch_all(
-            "SELECT * FROM events_v3 ORDER BY time DESC LIMIT ?",
+            "SELECT * FROM events_v3 ORDER BY rowid DESC LIMIT ?",
             (limit,),
         )
     results: list[dict[str, Any]] = []
     for r in rows:
         d = dict(r)
+        
+        # Populate identity if blank
+        ident = d.get("identity_id") or ""
+        if not ident:
+            raw_p = d.get("raw_principal") or ""
+            if "/" in raw_p:
+                ident = raw_p.split("/")[-1]
+            elif "@" in raw_p:
+                ident = raw_p.split("@")[0]
+            else:
+                ident = raw_p or "user"
+            d["identity_id"] = ident
+
+        # Normalize outcome display
+        outcome = (d.get("outcome") or "").upper()
+        if outcome in ("SUCCESS", "SUCCESSFUL"):
+            d["outcome"] = "SUCCESS"
+        elif outcome in ("FAILURE", "FAIL", "FAILED", "DENY", "DENIED"):
+            d["outcome"] = "FAILURE"
+        else:
+            d["outcome"] = outcome if outcome and outcome != "UNKNOWN" else "SUCCESS"
+
         city = "Unknown"
         country = "Unknown"
         if d.get("attrs"):

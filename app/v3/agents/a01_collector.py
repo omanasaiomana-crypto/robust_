@@ -175,24 +175,41 @@ class Collector(Agent):
     def _make_event(self, item: dict[str, Any], late: bool, raw_ref: str | None) -> Event:
         """Construct minimal Event payload with raw dict in attrs['_raw']."""
         raw_dict = item.get("raw", {})
+        raw_principal = item.get("raw_principal") or ""
+        ident = ""
+        if "/" in raw_principal:
+            ident = raw_principal.split("/")[-1]
+        elif "@" in raw_principal:
+            ident = raw_principal.split("@")[0]
+        else:
+            ident = raw_principal
+
+        outcome = "unknown"
+        if isinstance(raw_dict, dict):
+            out_obj = raw_dict.get("outcome")
+            if isinstance(out_obj, dict):
+                outcome = out_obj.get("result", "unknown")
+            elif "responseElements" in raw_dict:
+                outcome = "SUCCESS"
+
         return Event(
             event_id=item["event_id"],
             time=item["time"],
             source=item["source"],
             event_class=EventClass.api_activity,
             action=item["action"],
-            identity_id="",
-            raw_principal=item["raw_principal"],
+            identity_id=ident,
+            raw_principal=raw_principal,
             session_id=None,
             src_ip=item["src_ip"],
             user_agent=item["user_agent"],
-            outcome="unknown",
+            outcome=outcome,
             resource_arn=None,
             read_only=False,
             region=item.get("region"),
             late=late,
             uncatalogued=False,
-            resolution_confidence=0.0,
+            resolution_confidence=0.5 if ident else 0.0,
             raw_ref=raw_ref,
             attrs={"_raw": raw_dict},
         )
@@ -306,8 +323,8 @@ class Collector(Agent):
 
             for entry in state["buffer"]:
                 ev_ts, is_late, parsed, ref = entry
-                # Late events or events that have passed the watermark window are released
-                if is_late or ev_ts <= release_cutoff:
+                # In live mode (ingest_8001 / watermark_sec <= 0) or late or older than cutoff, release immediately
+                if msg.producer == "ingest_8001" or watermark_sec <= 0 or is_late or ev_ts <= release_cutoff:
                     ready.append(entry)
                 else:
                     remaining.append(entry)
