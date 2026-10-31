@@ -121,6 +121,7 @@ export async function initInputPage() {
   setupEditor();
   renderPresets();
   setupScanAction();
+  setupLiveEventsFeed();
 }
 
 function setupEditor() {
@@ -261,6 +262,60 @@ function setupScanAction() {
       btn.innerHTML = '<circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/> Scan Input Only';
     }
   });
+}
+
+async function loadLiveEvents() {
+  const tbody = document.getElementById('live-events-table-body');
+  if (!tbody) return;
+
+  try {
+    const data = await api.get('/events?limit=50');
+    const events = Array.isArray(data) ? data : (data?.items || []);
+
+    if (events.length === 0) {
+      tbody.innerHTML = '<tr><td colspan="7" style="padding:24px; text-align:center; color:var(--muted);">No events ingested yet. Send a scenario from Laptop 2 to see it appear here live!</td></tr>';
+      return;
+    }
+
+    tbody.innerHTML = events.map(ev => {
+      const isOkta = (ev.source || '').toLowerCase().includes('okta');
+      const srcBadge = isOkta
+        ? '<span style="background:rgba(59,130,246,0.15); color:#60A5FA; border:1px solid rgba(59,130,246,0.3); padding:2px 8px; border-radius:4px; font-size:0.6875rem; font-weight:600;">Okta</span>'
+        : '<span style="background:rgba(245,158,11,0.15); color:#FBBF24; border:1px solid rgba(245,158,11,0.3); padding:2px 8px; border-radius:4px; font-size:0.6875rem; font-weight:600;">CloudTrail</span>';
+
+      const isThreat = (ev.action || '').includes('Attach') || (ev.action || '').includes('StopLogging') || (ev.action || '').includes('Delete') || (ev.action || '').includes('AssumeRole');
+      const classBadge = isThreat
+        ? '<span style="color:#EF4444; font-weight:600; display:flex; align-items:center; gap:4px;"><span style="width:6px; height:6px; border-radius:50%; background:#EF4444;"></span> Threat / High Risk</span>'
+        : '<span style="color:#10B981; font-weight:600; display:flex; align-items:center; gap:4px;"><span style="width:6px; height:6px; border-radius:50%; background:#10B981;"></span> Normal Workday</span>';
+
+      const locationStr = (ev.city && ev.city !== 'Unknown') ? `${ev.city}, ${ev.country || ''}` : (ev.src_ip || 'Internal');
+
+      return `
+        <tr style="border-bottom:1px solid rgba(255,255,255,0.04); font-size:0.75rem;">
+          <td style="padding:10px 12px; font-family:var(--font-mono); color:var(--muted);">${fmt.timeAgo(ev.time)}</td>
+          <td style="padding:10px 12px; font-weight:600; color:#FFFFFF;">${escHtml(ev.identity_id)}</td>
+          <td style="padding:10px 12px;">${srcBadge}</td>
+          <td style="padding:10px 12px; font-family:var(--font-mono); color:var(--cyan);">${escHtml(ev.action)}</td>
+          <td style="padding:10px 12px; color:var(--text);">${escHtml(locationStr)}</td>
+          <td style="padding:10px 12px;"><span style="color:${ev.outcome === 'SUCCESS' ? '#10B981' : 'var(--warn)'};">${escHtml(ev.outcome || 'SUCCESS')}</span></td>
+          <td style="padding:10px 12px;">${classBadge}</td>
+        </tr>
+      `;
+    }).join('');
+  } catch (err) {
+    console.warn('Failed to load live events:', err);
+  }
+}
+
+function setupLiveEventsFeed() {
+  loadLiveEvents();
+  const btnRefresh = document.getElementById('btn-refresh-events');
+  if (btnRefresh) btnRefresh.addEventListener('click', () => loadLiveEvents());
+
+  // Auto-refresh feed every 3 seconds
+  setInterval(() => {
+    loadLiveEvents();
+  }, 3000);
 }
 
 // Auto-run

@@ -446,6 +446,40 @@ def get_geo_logins() -> dict[str, Any]:
     }
 
 
+@router.get("/events")
+def get_events(limit: int = 100, identity: str | None = None) -> list[dict[str, Any]]:
+    """Return recently ingested event logs (normal workday and attacks) from events_v3."""
+    if identity:
+        rows = store.fetch_all(
+            "SELECT * FROM events_v3 WHERE identity_id LIKE ? ORDER BY time DESC LIMIT ?",
+            (f"%{identity}%", limit),
+        )
+    else:
+        rows = store.fetch_all(
+            "SELECT * FROM events_v3 ORDER BY time DESC LIMIT ?",
+            (limit,),
+        )
+    results: list[dict[str, Any]] = []
+    for r in rows:
+        d = dict(r)
+        city = "Unknown"
+        country = "Unknown"
+        if d.get("attrs"):
+            try:
+                attrs = json.loads(d["attrs"]) if isinstance(d["attrs"], str) else d["attrs"]
+                raw = attrs.get("_raw") or attrs
+                client = raw.get("client") if isinstance(raw, dict) else {}
+                geo = client.get("geographicalContext") if isinstance(client, dict) else {}
+                city = geo.get("city") or attrs.get("city") or "Unknown"
+                country = geo.get("country") or attrs.get("country") or "Unknown"
+            except Exception:
+                pass
+        d["city"] = city
+        d["country"] = country
+        results.append(d)
+    return results
+
+
 # ---------------------------------------------------------------------------
 # 4. Cases & Investigation
 # ---------------------------------------------------------------------------

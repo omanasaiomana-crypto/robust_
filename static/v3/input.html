@@ -92,6 +92,42 @@
 
     </div>
 
+    <!-- Live Ingested Logs Feed (Normal Workday & Attacks) -->
+    <div class="glass" style="padding:22px; margin-bottom:24px;">
+      <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:14px; flex-wrap:wrap; gap:10px;">
+        <div>
+          <h3 style="font-size:1.125rem; font-weight:700; margin:0; color:#FFFFFF; display:flex; align-items:center; gap:8px;">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--cyan)" stroke-width="2"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
+            Live Ingested Event Feed (Normal Workday & Attacks)
+          </h3>
+          <div style="font-size:0.75rem; color:var(--muted); margin-top:2px;">Real-time stream of all logs ingested via Port 8001 (auto-refreshing every 3s)</div>
+        </div>
+        <div style="display:flex; gap:10px; align-items:center;">
+          <span class="status-pill" style="color:var(--ok);" id="events-live-pill"><span class="status-dot ok"></span> STREAMING</span>
+          <button id="btn-refresh-events" class="btn btn-ghost" type="button" style="font-size:0.75rem; padding:4px 10px;">Refresh Feed</button>
+        </div>
+      </div>
+
+      <div style="overflow-x:auto;">
+        <table class="w-full text-left" style="font-size:0.8125rem; border-collapse:collapse;">
+          <thead>
+            <tr style="border-bottom:1px solid var(--panel-border); color:var(--muted); font-size:0.6875rem; font-family:var(--font-mono); text-transform:uppercase;">
+              <th style="padding:10px 12px;">Time</th>
+              <th style="padding:10px 12px;">Identity / User</th>
+              <th style="padding:10px 12px;">Source</th>
+              <th style="padding:10px 12px;">Action / Event</th>
+              <th style="padding:10px 12px;">IP & Location</th>
+              <th style="padding:10px 12px;">Outcome</th>
+              <th style="padding:10px 12px;">Classification</th>
+            </tr>
+          </thead>
+          <tbody id="live-events-table-body">
+            <tr><td colspan="7" style="padding:20px; text-align:center; color:var(--muted);">Loading ingested events...</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
     <!-- Scan Results Panel -->
     <div id="scan-results-panel" class="glass" style="display:none; padding:22px; margin-bottom:24px;">
       <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:14px;">
