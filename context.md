@@ -361,39 +361,7 @@ Mutating endpoints require header `X-Analyst-Token` when `ANALYST_TOKEN` is set 
 
 ## 18. UI design system: professional 3D (dark "command center")
 
-**Feel:** a security operations command center in deep space: dark, calm, glass panels, neon data, purposeful 3D. 3D is used where it carries meaning (graphs, globe, agent constellation), never as decoration that slows the page.
-
-**Tokens (CSS variables in `static/v3/css/theme.css`):**
-
-| Token | Value |
-|---|---|
-| --bg | #05070D |
-| --bg-2 | #0B0F17 |
-| --panel | rgba(17, 24, 39, 0.62) with backdrop-filter blur(14px) saturate(140%) |
-| --panel-border | rgba(148, 163, 184, 0.14) |
-| --text | #E5E7EB |
-| --muted | #94A3B8 |
-| --brand | #3B82F6 |
-| --cyan | #22D3EE |
-| --violet | #8B5CF6 |
-| --ok | #10B981 |
-| --warn | #F59E0B |
-| --crit | #EF4444 |
-| band colors | monitor #64748B, step_up #F59E0B, restrict #F97316, revoke #EF4444 |
-| radius | 14px panels, 10px controls |
-| shadow | 0 10px 30px rgba(0,0,0,.45), inner 1px top highlight rgba(255,255,255,.06) |
-| fonts | Inter 400/500/600/700; JetBrains Mono for IDs, JSON, numbers |
-
-**3D components:**
-1. **Background (`bg3d.js`):** Three.js particle network (≤ 1,500 points, slow drift, faint connecting lines), mouse parallax. Pauses when tab hidden; disabled when `prefers-reduced-motion`; falls back to a CSS radial gradient if WebGL is unavailable.
-2. **Agent constellation (Live page):** 15 agent nodes in 3D arranged in 5 rings by layer; idle = dim, running = pulsing glow, finding = amber flash, threat = red burst; bus messages animate as particles flying between nodes; click a node → agent drawer.
-3. **3D attack graph (Graph page):** 3d-force-graph; node colors by kind (identity blue, session cyan, IP slate, key violet, role amber, resource green, sensitive resource red ring); suspicious edges red with directional moving particles along the attack path; Okta→AWS edges highlighted; camera fly-to on click; side panel with node details; 2D fallback with vis-network if WebGL fails.
-4. **Login globe (Globe page and dashboard tile):** globe.gl with login points; arcs between consecutive logins of an identity; impossible-travel arcs red and animated; trusted locations green.
-5. **Tilt cards:** KPI cards tilt slightly in 3D on hover (CSS perspective, max 6°), disabled on touch and reduced motion.
-
-**Layout:** left sidebar (icons + labels, collapsible), top bar (run status pill, live event rate, ngrok/ingest status dot, clock), content grid of glass panels. Responsive down to 1280 px for the demo projector; mobile is not a goal but must not break.
-
-**Rules:** every dynamic string inserted with `escHtml` or `textContent`; no inline event handlers; charts and 3D scenes are destroyed on page change to avoid memory leaks; 60 fps target, scenes cap pixel ratio at 2; each page shows a skeleton loader and an empty state; `?mock=1` loads fixtures from `static/v3/mock/` so the UI works without the backend.
+Design system moved to UI_DESIGN.md (Cream Light theme, Shield Core 3D hero, 3D button micro-animations). UI_DESIGN.md wins on any visual question.
 
 ---
 
@@ -428,6 +396,8 @@ Mutating endpoints require header `X-Analyst-Token` when `ANALYST_TOKEN` is set 
 | P16 Generator + ngrok | done | 2026-10-30 | Standalone attack generator on Laptop 2 (generator/index.html, css/generator.css, js/sign.js, js/scenarios.js, js/generator.js, data/identities.json): Web Crypto HMAC-SHA256 signing (${timestamp}\n${nonce}\n${body_sha256_hex}), secret in-memory only, ngrok-skip-browser-warning; Scenarios N1, E1 (hero), E2–E9 with step-by-step and inspect modes; Tamper suite T1–T5 proving SEC controls live with ✓/✗ badges; Benign background noise with rate slider and ngrok 20,000 monthly quota tracker; RUNBOOK_NGROK.md with core on 8000, ingest on 8001, ngrok tunnel, inspector on 4040, LAN/localhost fallbacks, and troubleshooting matrix; 4 integration tests passing (224 full v3 suite) and clean ruff check. |
 | P17 Evaluation + benchmark + calibration | done | 2026-10-31 | Evaluation suite (evaluate.py): 70/30 stratified identity split (2042 train / 925 test), Rules vs ML vs Hybrid comparison, 100% chain reconstruction recall, 100% evidence citation, Brier score 0.0150 (baseline 0.0228, 10 bins), weight floors D-PE/DEF >= 0.6; Benchmark (bench.py): multiplier 1x and 5x (14,835 events, 42.5 events/s, peak memory 168.8MB, p50 signal latency 1993ms, 21.4% alert reduction); API endpoints /metrics/kpi, /metrics/perf, and /bench/run wired; 7 tests passing (295 full suite). |
 | P18 Hardening + docs + demo | done | 2026-10-31 | Security review & hardening verified: require_analyst_token protects all mutating endpoints (/api/v3/cases/{id}/label, /api/v3/actions/{id}/approve|reject|rollback, /api/v3/run/dataset, /api/v3/inputs/scan, /api/v3/bench/run, /api/v3/config/rollback/{ver}); test_security.py (9 tests) verifies raw untrusted data XSS preservation, supervisor undeclared topic blocked, simulator unauthorized agent access blocked, anti-tamper suite T1-T4, and zero secrets leakage in /api/v3/config; full mock key parity verified across all 15 fixtures in static/v3/mock/; DEMO_CHECKLIST.md with pre-flight, contingency modes, roster, and 5-min PRD §30 script created; README.md expanded with complete v3 architecture, 15-agent table, detections catalog, mathematical risk model, evaluated KPIs, runbook, and limitations/roadmap. |
+| UI refresh U0 | done | 2026-10-31 | UI refresh setup verified: static/v3/ is live UI; cataloged 12 HTML pages, theme.css, and 12 JS modules rendering colors/3D/charts; vendored Three.js r128 ES module (three.module.js) and RoomEnvironment.js into static/vendor/three/ with SHA-256 in VERSIONS.md; context.md Section 18 points to UI_DESIGN.md. |
+
 
 ### Known issues / decisions
 - Integration points:
