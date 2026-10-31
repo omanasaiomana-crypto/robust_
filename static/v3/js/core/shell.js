@@ -252,12 +252,35 @@ export class Shell {
     this.epsEl = epsMetric.querySelector('#topbar-eps');
     topbarLeft.appendChild(epsMetric);
 
-    const ingestStatus = document.createElement('div');
+    const ingestStatus = document.createElement('button');
+    ingestStatus.type = 'button';
     ingestStatus.className = 'topbar-metric';
+    ingestStatus.id = 'topbar-ingest-status-btn';
+    ingestStatus.title = api.isMock ? 'Currently in MOCK MODE. Click to switch to LIVE Backend Mode!' : 'Ingest Port 8001 Active. Click to switch to Mock Mode.';
+    ingestStatus.style.cursor = 'pointer';
+    ingestStatus.style.background = api.isMock ? 'rgba(239, 68, 68, 0.2)' : 'rgba(16, 185, 129, 0.15)';
+    ingestStatus.style.border = api.isMock ? '1px solid rgba(239, 68, 68, 0.5)' : '1px solid rgba(16, 185, 129, 0.4)';
+    ingestStatus.style.borderRadius = '6px';
+    ingestStatus.style.padding = '4px 8px';
+    ingestStatus.style.display = 'inline-flex';
+    ingestStatus.style.alignItems = 'center';
+    ingestStatus.style.gap = '6px';
     ingestStatus.innerHTML = `
-      <span class="status-dot ok" id="ingest-status-dot" style="margin-right:2px;"></span>
-      <span>INGEST :</span> <strong id="ingest-status-text">8001 ACTIVE</strong>
+      <span class="status-dot ${api.isMock ? 'warn' : 'ok'}" id="ingest-status-dot"></span>
+      <span style="font-weight:600;">INGEST:</span>
+      <strong id="ingest-status-text">${api.isMock ? 'MOCK MODE (Click for LIVE)' : '8001 ACTIVE'}</strong>
     `;
+    ingestStatus.addEventListener('click', () => {
+      if (api.isMock) {
+        api.setMock(false);
+        const u = new URL(window.location.href);
+        u.searchParams.delete('mock');
+        window.location.href = u.toString();
+      } else {
+        api.setMock(true);
+        window.location.reload();
+      }
+    });
     this.ingestDot = ingestStatus.querySelector('#ingest-status-dot');
     this.ingestText = ingestStatus.querySelector('#ingest-status-text');
     topbarLeft.appendChild(ingestStatus);
@@ -325,8 +348,8 @@ export class Shell {
       try {
         const data = await api.get('/health');
         if (data && data.status === 'ok') {
-          if (this.ingestDot) this.ingestDot.className = 'status-dot ok';
-          if (this.ingestText) this.ingestText.textContent = api.isMock ? 'MOCK MODE' : '8001 ACTIVE';
+          if (this.ingestDot) this.ingestDot.className = api.isMock ? 'status-dot warn' : 'status-dot ok';
+          if (this.ingestText) this.ingestText.textContent = api.isMock ? 'MOCK MODE (Click for LIVE)' : '8001 ACTIVE';
         } else {
           if (this.ingestDot) this.ingestDot.className = 'status-dot warn';
           if (this.ingestText) this.ingestText.textContent = 'DEGRADED';

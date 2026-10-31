@@ -13,15 +13,32 @@ class ApiClient {
   _checkMockMode() {
     try {
       const params = new URLSearchParams(window.location.search);
-      const urlMock = params.get('mock') === '1';
-      if (urlMock) {
+      const urlMock = params.get('mock');
+      if (urlMock === '1' || urlMock === 'true') {
         localStorage.setItem('identityshield_mock', '1');
         this.isMock = true;
+      } else if (urlMock === '0' || urlMock === 'false' || params.has('live')) {
+        localStorage.removeItem('identityshield_mock');
+        this.isMock = false;
       } else {
         this.isMock = localStorage.getItem('identityshield_mock') === '1';
       }
     } catch {
       this.isMock = false;
+    }
+  }
+
+  setMock(enabled) {
+    try {
+      if (enabled) {
+        localStorage.setItem('identityshield_mock', '1');
+        this.isMock = true;
+      } else {
+        localStorage.removeItem('identityshield_mock');
+        this.isMock = false;
+      }
+    } catch {
+      this.isMock = !!enabled;
     }
   }
 
@@ -72,6 +89,7 @@ class ApiClient {
     if (clean === 'config/versions') return '/v3/mock/config_versions.json';
     if (clean === 'audit') return '/v3/mock/audit.json';
     if (clean === 'audit/verify') return '/v3/mock/audit_verify.json';
+    if (clean === 'events' || clean.startsWith('events')) return '/v3/mock/events.json';
     return `/v3/mock/${clean.replace(/\//g, '_')}.json`;
   }
 

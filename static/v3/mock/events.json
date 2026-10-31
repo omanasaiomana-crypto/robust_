@@ -1,0 +1,167 @@
+[
+  {
+    "event_id": "mock-ev-01",
+    "identity_id": "svc-report",
+    "source": "aws.cloudtrail",
+    "action": "StopLogging",
+    "time": "2026-10-31T02:08:45Z",
+    "outcome": "SUCCESS",
+    "src_ip": "185.220.101.5",
+    "city": "Frankfurt",
+    "country": "Germany"
+  },
+  {
+    "event_id": "mock-ev-02",
+    "identity_id": "svc-report",
+    "source": "aws.iam",
+    "action": "AttachUserPolicy",
+    "time": "2026-10-31T02:08:12Z",
+    "outcome": "SUCCESS",
+    "src_ip": "185.220.101.5",
+    "city": "Frankfurt",
+    "country": "Germany"
+  },
+  {
+    "event_id": "mock-ev-03",
+    "identity_id": "svc-report",
+    "source": "aws.iam",
+    "action": "CreateAccessKey",
+    "time": "2026-10-31T02:07:30Z",
+    "outcome": "SUCCESS",
+    "src_ip": "185.220.101.5",
+    "city": "Frankfurt",
+    "country": "Germany"
+  },
+  {
+    "event_id": "mock-ev-04",
+    "identity_id": "svc-report",
+    "source": "aws.sts",
+    "action": "AssumeRoleWithSAML",
+    "time": "2026-10-31T02:06:55Z",
+    "outcome": "SUCCESS",
+    "src_ip": "185.220.101.5",
+    "city": "Frankfurt",
+    "country": "Germany"
+  },
+  {
+    "event_id": "mock-ev-05",
+    "identity_id": "svc-report",
+    "source": "okta",
+    "action": "user.session.start",
+    "time": "2026-10-31T02:05:40Z",
+    "outcome": "SUCCESS",
+    "src_ip": "185.220.101.5",
+    "city": "Frankfurt",
+    "country": "Germany"
+  },
+  {
+    "event_id": "mock-ev-06",
+    "identity_id": "jdoe",
+    "source": "okta",
+    "action": "user.session.start",
+    "time": "2026-10-31T02:00:15Z",
+    "outcome": "SUCCESS",
+    "src_ip": "203.0.113.88",
+    "city": "Singapore",
+    "country": "Singapore"
+  },
+  {
+    "event_id": "mock-ev-07",
+    "identity_id": "jdoe",
+    "source": "okta",
+    "action": "user.session.start",
+    "time": "2026-10-31T01:42:00Z",
+    "outcome": "SUCCESS",
+    "src_ip": "198.51.100.12",
+    "city": "New York",
+    "country": "United States"
+  },
+  {
+    "event_id": "mock-ev-08",
+    "identity_id": "alice.chen@corp.internal",
+    "source": "okta",
+    "action": "user.session.start",
+    "time": "2026-10-31T01:30:10Z",
+    "outcome": "SUCCESS",
+    "src_ip": "10.0.12.44",
+    "city": "San Francisco",
+    "country": "United States"
+  },
+  {
+    "event_id": "mock-ev-09",
+    "identity_id": "alice.chen@corp.internal",
+    "source": "aws.s3",
+    "action": "GetObject",
+    "time": "2026-10-31T01:32:44Z",
+    "outcome": "SUCCESS",
+    "src_ip": "10.0.12.44",
+    "city": "San Francisco",
+    "country": "United States"
+  },
+  {
+    "event_id": "mock-ev-10",
+    "identity_id": "bob.builder@corp.internal",
+    "source": "okta",
+    "action": "user.session.start",
+    "time": "2026-10-31T01:25:00Z",
+    "outcome": "SUCCESS",
+    "src_ip": "10.0.14.89",
+    "city": "Austin",
+    "country": "United States"
+  },
+  {
+    "event_id": "mock-ev-11",
+    "identity_id": "bob.builder@corp.internal",
+    "source": "aws.ec2",
+    "action": "DescribeInstances",
+    "time": "2026-10-31T01:26:15Z",
+    "outcome": "SUCCESS",
+    "src_ip": "10.0.14.89",
+    "city": "Austin",
+    "country": "United States"
+  },
+  {
+    "event_id": "mock-ev-12",
+    "identity_id": "asmith",
+    "source": "okta",
+    "action": "user.mfa.approve",
+    "time": "2026-10-31T01:15:30Z",
+    "outcome": "SUCCESS",
+    "src_ip": "192.0.2.77",
+    "city": "Chicago",
+    "country": "United States"
+  },
+  {
+    "event_id": "mock-ev-13",
+    "identity_id": "asmith",
+    "source": "okta",
+    "action": "user.mfa.reject",
+    "time": "2026-10-31T01:14:50Z",
+    "outcome": "FAILURE",
+    "src_ip": "192.0.2.77",
+    "city": "Chicago",
+    "country": "United States"
+  },
+  {
+    "event_id": "mock-ev-14",
+    "identity_id": "legacy-deployer",
+    "source": "aws.s3",
+    "action": "ListBuckets",
+    "time": "2026-10-31T01:05:22Z",
+    "outcome": "SUCCESS",
+    "src_ip": "192.0.2.14",
+    "city": "London",
+    "country": "United Kingdom"
+  },
+  {
+    "event_id": "mock-ev-15",
+    "identity_id": "dev-user",
+    "source": "aws.iam",
+    "action": "CreateAccessKey",
+    "time": "2026-10-31T00:55:00Z",
+    "outcome": "SUCCESS",
+    "src_ip": "10.0.18.2",
+    "city": "Seattle",
+    "country": "United States"
+  }
+]
