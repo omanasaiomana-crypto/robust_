@@ -74,7 +74,7 @@ async function loadConfigVersions() {
         <div style="padding:12px; background:rgba(0,0,0,0.25); border:1px solid ${isActive ? 'var(--brand)' : 'var(--panel-border)'}; border-radius:8px; display:flex; justify-content:space-between; align-items:center;">
           <div>
             <div style="display:flex; align-items:center; gap:8px;">
-              <span style="font-family:var(--font-mono); font-weight:700; color:#FFFFFF;">v${v.version}</span>
+              <span style="font-family:var(--font-mono); font-weight:700; color:var(--ink);">v${v.version}</span>
               ${isActive ? '<span class="status-pill" style="font-size:0.625rem; color:var(--cyan);"><span class="status-dot ok"></span> ACTIVE</span>' : ''}
               <span style="font-size:0.6875rem; color:var(--muted); font-family:var(--font-mono);">${fmt.timeAgo(v.timestamp)}</span>
             </div>
@@ -146,7 +146,7 @@ async function loadThresholdsAndPlaybooks() {
       threshGrid.innerHTML = Object.entries(thresholds).map(([k, v]) => `
         <div style="padding:10px 12px; background:rgba(0,0,0,0.25); border:1px solid var(--panel-border); border-radius:6px;">
           <div style="font-size:0.6875rem; color:var(--muted); font-family:var(--font-mono);">${escHtml(k)}</div>
-          <div style="font-size:1.125rem; font-weight:700; color:#FFFFFF; font-family:var(--font-mono); margin-top:2px;">${v}</div>
+          <div style="font-size:1.125rem; font-weight:700; color:var(--ink); font-family:var(--font-mono); margin-top:2px;">${v}</div>
         </div>
       `).join('');
     }
@@ -160,7 +160,7 @@ async function loadThresholdsAndPlaybooks() {
       supList.innerHTML = sups.map((s) => `
         <div style="padding:10px 12px; background:rgba(0,0,0,0.25); border:1px solid var(--panel-border); border-radius:8px;">
           <div style="display:flex; justify-content:space-between; align-items:center;">
-            <span style="font-weight:700; color:#FFFFFF; font-size:0.8125rem;">${escHtml(s.identity_id)}</span>
+            <span style="font-weight:700; color:var(--ink); font-size:0.8125rem;">${escHtml(s.identity_id)}</span>
             <span class="mitre-chip">${escHtml(s.detection_id)}</span>
           </div>
           <div style="font-size:0.75rem; color:var(--muted); margin:4px 0 8px 0;">${escHtml(s.reason)}</div>

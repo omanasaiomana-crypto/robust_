@@ -42,7 +42,7 @@ async function loadKPIs() {
     const kpiCases = document.getElementById('kpi-open-cases');
     if (kpiCases) {
       kpiCases.innerHTML = `
-        <div style="font-size:1.75rem; font-weight:700; color:#FFFFFF; font-family:var(--font-mono);">${cases.length} Total</div>
+        <div style="font-size:1.75rem; font-weight:700; color:var(--ink); font-family:var(--font-mono);">${cases.length} Total</div>
         <div style="display:flex; gap:6px; margin-top:6px; font-size:0.6875rem; font-family:var(--font-mono);">
           <span style="color:var(--crit);">${bands.revoke} Revoke</span> ·
           <span style="color:var(--band-restrict);">${bands.restrict} Restrict</span> ·
@@ -132,7 +132,7 @@ async function loadTopIdentities() {
       return `
         <tr style="cursor:pointer;" onclick="window.location.href='/v3/cases.html?identity_id=${encodeURIComponent(item.identity_id)}'">
           <td>
-            <div style="font-weight:600; color:#FFFFFF;">${escHtml(item.name || item.identity_id)}</div>
+            <div style="font-weight:600; color:var(--ink);">${escHtml(item.name || item.identity_id)}</div>
             <div style="font-size:0.6875rem; color:var(--muted); font-family:var(--font-mono);">${escHtml(item.email || item.identity_id)}</div>
           </td>
           <td>
@@ -197,7 +197,7 @@ function renderCasesFeed(cases) {
         <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:4px;">
           <div style="display:flex; align-items:center; gap:6px;">
             <span class="badge-band badge-band-${band}" style="padding:1px 6px; font-size:0.6875rem;">${escHtml(band)}</span>
-            <span style="font-size:0.75rem; font-weight:600; color:#FFFFFF;">${escHtml(c.identity_id)}</span>
+            <span style="font-size:0.75rem; font-weight:600; color:var(--ink);">${escHtml(c.identity_id)}</span>
           </div>
           <span style="font-family:var(--font-mono); font-size:0.8125rem; font-weight:700; color:${color};">
             ${Number(c.risk_score || 0).toFixed(1)}
@@ -359,7 +359,7 @@ function setupSSEListeners() {
       <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:4px;">
         <div style="display:flex; align-items:center; gap:6px;">
           <span class="badge-band badge-band-${band}" style="padding:1px 6px; font-size:0.6875rem;">${escHtml(band)}</span>
-          <span style="font-size:0.75rem; font-weight:600; color:#FFFFFF;">${escHtml(caseItem.identity_id)}</span>
+          <span style="font-size:0.75rem; font-weight:600; color:var(--ink);">${escHtml(caseItem.identity_id)}</span>
         </div>
         <span style="font-family:var(--font-mono); font-size:0.8125rem; font-weight:700; color:${color};">
           ${Number(caseItem.risk_score || 0).toFixed(1)}

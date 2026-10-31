@@ -295,7 +295,7 @@ async function loadLiveEvents() {
       return `
         <tr style="border-bottom:1px solid rgba(255,255,255,0.04); font-size:0.75rem;">
           <td style="padding:10px 12px; font-family:var(--font-mono); color:var(--muted);" title="${escHtml(ev.time)}">${fmt.timeAgo(ev.time)}</td>
-          <td style="padding:10px 12px; font-weight:600; color:#FFFFFF;">${escHtml(identityDisplay)}</td>
+          <td style="padding:10px 12px; font-weight:600; color:var(--ink);">${escHtml(identityDisplay)}</td>
           <td style="padding:10px 12px;">${srcBadge}</td>
           <td style="padding:10px 12px; font-family:var(--font-mono); color:var(--cyan);">${escHtml(ev.action)}</td>
           <td style="padding:10px 12px; color:var(--text);">${escHtml(locationStr)}</td>

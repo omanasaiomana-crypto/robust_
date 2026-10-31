@@ -17,8 +17,6 @@
   <script src="https://cdn.tailwindcss.com"></script>
 </head>
 <body>
-  <!-- Fixed 3D Particle Network Canvas -->
-  <canvas id="bg3d-canvas"></canvas>
 
   <div id="main-content">
     
@@ -28,7 +26,7 @@
         <div style="font-size:0.75rem; font-family:var(--font-mono); color:var(--cyan); text-transform:uppercase; letter-spacing:0.06em; margin-bottom:4px;">
           Ingest & Simulation // Sandbox
         </div>
-        <h1 style="font-size:1.75rem; font-weight:700; margin:0; color:#FFFFFF; letter-spacing:-0.02em;">
+        <h1 style="font-size:1.75rem; font-weight:700; margin:0; color:var(--ink); letter-spacing:-0.02em;">
           Upload Logs & Attack Presets (E1–E9)
         </h1>
       </div>
@@ -46,7 +44,7 @@
       <div class="glass" style="padding:22px; display:flex; flex-direction:column; gap:16px;">
         <div style="display:flex; justify-content:space-between; align-items:center;">
           <div>
-            <h3 style="font-size:1rem; font-weight:600; margin:0; color:#FFFFFF;">Log Payload Ingest</h3>
+            <h3 style="font-size:1rem; font-weight:600; margin:0; color:var(--ink);">Log Payload Ingest</h3>
             <div style="font-size:0.75rem; color:var(--muted);">Paste Okta System Log or AWS CloudTrail JSON / JSONL</div>
           </div>
           <div style="display:flex; gap:6px;">
@@ -56,7 +54,7 @@
         </div>
 
         <!-- Textarea Editor -->
-        <textarea id="input-json-editor" placeholder='Paste JSON records here or choose an E1–E9 attack preset from the right panel...' style="width:100%; height:320px; background:rgba(0,0,0,0.4); border:1px solid var(--panel-border); border-radius:8px; padding:14px; color:#A5F3FC; font-family:var(--font-mono); font-size:0.8125rem; resize:vertical; outline:none; line-height:1.5;"></textarea>
+        <textarea id="input-json-editor" placeholder='Paste JSON records here or choose an E1–E9 attack preset from the right panel...' style="width:100%; height:320px; background:var(--surface); border:1px solid var(--panel-border); border-radius:8px; padding:14px; color:#A5F3FC; font-family:var(--font-mono); font-size:0.8125rem; resize:vertical; outline:none; line-height:1.5;"></textarea>
 
         <!-- Action Buttons -->
         <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:10px;">
@@ -81,7 +79,7 @@
       <!-- Right Column: E1-E9 Presets -->
       <div class="glass" style="padding:22px; display:flex; flex-direction:column; gap:14px;">
         <div>
-          <h3 style="font-size:1rem; font-weight:600; margin:0 0 4px 0; color:#FFFFFF;">Benchmark Attack Scenarios</h3>
+          <h3 style="font-size:1rem; font-weight:600; margin:0 0 4px 0; color:var(--ink);">Benchmark Attack Scenarios</h3>
           <div style="font-size:0.75rem; color:var(--muted);">Click any scenario to load its authentic JSON records</div>
         </div>
 
@@ -96,7 +94,7 @@
     <div class="glass" style="padding:22px; margin-bottom:24px;">
       <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:14px; flex-wrap:wrap; gap:10px;">
         <div>
-          <h3 style="font-size:1.125rem; font-weight:700; margin:0; color:#FFFFFF; display:flex; align-items:center; gap:8px;">
+          <h3 style="font-size:1.125rem; font-weight:700; margin:0; color:var(--ink); display:flex; align-items:center; gap:8px;">
             <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--cyan)" stroke-width="2"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
             Live Ingested Event Feed (Normal Workday & Attacks)
           </h3>
@@ -131,7 +129,7 @@
     <!-- Scan Results Panel -->
     <div id="scan-results-panel" class="glass" style="display:none; padding:22px; margin-bottom:24px;">
       <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:14px;">
-        <h3 style="font-size:1rem; font-weight:600; margin:0; color:#FFFFFF;">Scan Findings & Detections</h3>
+        <h3 style="font-size:1rem; font-weight:600; margin:0; color:var(--ink);">Scan Findings & Detections</h3>
         <span id="scan-status-pill" class="status-pill" style="color:var(--ok);">SCAN COMPLETE</span>
       </div>
       <div id="scan-output-content" style="font-family:var(--font-mono); font-size:0.8125rem; color:var(--text);"></div>
@@ -141,7 +139,6 @@
 
   <!-- Scripts -->
   <script type="module" src="/v3/js/core/shell.js"></script>
-  <script type="module" src="/v3/js/fx/bg3d.js"></script>
   <script type="module" src="/v3/js/fx/tilt.js"></script>
   <script type="module" src="/v3/js/pages/input.js"></script>
 </body>

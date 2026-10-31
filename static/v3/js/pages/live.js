@@ -373,7 +373,7 @@ function appendTraceLine(trace) {
     <span style="color:var(--muted); font-size:0.6875rem;">${time}</span>
     <span style="color:${levelColor}; font-weight:700; font-size:0.6875rem;">[${levelBadge}]</span>
     <span style="color:var(--brand); font-weight:600; font-size:0.6875rem;">[${escHtml(trace.agent_id || agentId)}]</span>
-    <span style="color:#FFFFFF; flex:1; word-break:break-all;">${escHtml(trace.message || 'Processing event batch')}</span>
+    <span style="color:var(--ink); flex:1; word-break:break-all;">${escHtml(trace.message || 'Processing event batch')}</span>
   `;
 
   row.addEventListener('click', () => {

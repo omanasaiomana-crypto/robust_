@@ -22,8 +22,6 @@
   <script src="/vendor/vis-network.min.js"></script>
 </head>
 <body>
-  <!-- Fixed 3D Particle Network Canvas -->
-  <canvas id="bg3d-canvas"></canvas>
 
   <div id="main-content" style="display:flex; flex-direction:column; height:calc(100vh - 100px); max-height:calc(100vh - 100px); gap:16px;">
     
@@ -34,7 +32,7 @@
       <div style="display:flex; align-items:center; gap:14px; flex-wrap:wrap;">
         <div style="display:flex; align-items:center; gap:6px;">
           <span style="font-size:0.75rem; color:var(--muted);">Focus:</span>
-          <select id="select-graph-identity" style="padding:6px 12px; background:rgba(0,0,0,0.4); border:1px solid var(--panel-border); border-radius:var(--radius-control); color:#FFFFFF; font-size:0.8125rem; outline:none;">
+          <select id="select-graph-identity" style="padding:6px 12px; background:var(--surface); border:1px solid var(--panel-border); border-radius:var(--radius-control); color:var(--ink); font-size:0.8125rem; outline:none;">
             <option value="global">Global Attack Graph</option>
             <option value="svc-report">svc-report (Hero E1)</option>
             <option value="jdoe">jdoe (Engineering)</option>
@@ -105,7 +103,7 @@
       <div class="glass" style="padding:20px; display:flex; flex-direction:column; overflow-y:auto; gap:16px;">
         <div>
           <span style="font-size:0.6875rem; font-family:var(--font-mono); color:var(--cyan);">ENTITY INSPECTOR</span>
-          <h3 id="panel-node-title" style="margin:2px 0 0 0; font-size:1.125rem; color:#FFFFFF; word-break:break-all;">Select a Node</h3>
+          <h3 id="panel-node-title" style="margin:2px 0 0 0; font-size:1.125rem; color:var(--ink); word-break:break-all;">Select a Node</h3>
         </div>
 
         <div id="panel-node-details" style="display:flex; flex-direction:column; gap:10px; font-size:0.8125rem;">
@@ -118,7 +116,7 @@
             <span class="badge-band badge-band-restrict" style="font-size:0.625rem; padding:1px 6px;">E1 RESTRICT</span>
             <span style="font-family:var(--font-mono); font-size:0.8125rem; font-weight:700; color:#EF4444;">92.4</span>
           </div>
-          <div style="font-weight:600; color:#FFFFFF; font-size:0.8125rem; margin-bottom:6px;">Multi-Stage Escalation</div>
+          <div style="font-weight:600; color:var(--ink); font-size:0.8125rem; margin-bottom:6px;">Multi-Stage Escalation</div>
           <a id="panel-btn-investigate" href="/v3/case.html?id=case-e1-svcreport" class="btn btn-primary" style="width:100%; justify-content:center; padding:6px; font-size:0.75rem;">
             Investigate Case &rarr;
           </a>
@@ -131,7 +129,6 @@
 
   <!-- Scripts -->
   <script type="module" src="/v3/js/core/shell.js"></script>
-  <script type="module" src="/v3/js/fx/bg3d.js"></script>
   <script type="module" src="/v3/js/fx/tilt.js"></script>
   <script type="module" src="/v3/js/pages/graph.js"></script>
 </body>

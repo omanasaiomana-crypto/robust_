@@ -1,41 +1,75 @@
 /* =============================================================================
-   IdentityShield v3 — Design System & Theme Tokens
-   Context.md Section 18 / PRD §18: Dark "Command Center" Aesthetic
+   IdentityShield v3 — Design System: Cream Light Theme
+   Specification: UI_DESIGN.md (Sections 1, 2, 3, 6)
+   Replaces dark "command center" theme. UI_DESIGN.md wins on any visual question.
    ============================================================================= */
 
 :root {
-  /* Core Color Tokens */
-  --bg: #05070D;
-  --bg-2: #0B0F17;
-  --panel: rgba(17, 24, 39, 0.62);
-  --panel-hover: rgba(26, 36, 56, 0.72);
-  --panel-border: rgba(148, 163, 184, 0.14);
-  --panel-border-bright: rgba(148, 163, 184, 0.28);
-  --text: #E5E7EB;
-  --muted: #94A3B8;
-  --brand: #3B82F6;
-  --brand-hover: #2563EB;
-  --cyan: #22D3EE;
-  --cyan-glow: rgba(34, 211, 238, 0.35);
-  --violet: #8B5CF6;
-  --ok: #10B981;
-  --warn: #F59E0B;
-  --crit: #EF4444;
+  /* --- 1. Base Cream Light Tokens (UI_DESIGN.md §2) --- */
+  --bg: #FBF8F3;
+  --bg-grad: linear-gradient(180deg, #FFFDF9 0%, #FBF8F3 55%, #F7F2EA 100%);
+  --surface: #FFFFFF;
+  --surface-2: #F6F1E9;
+  --surface-3: #EFE8DC;
+  --border: #E8E1D6;
+  --ink: #1F2430;
+  --ink-2: #4B5263;
+  --muted: #6B7280;
+  --focus: #3D6FE0;
 
-  /* Band Colors */
-  --band-monitor: #64748B;
-  --band-step_up: #F59E0B;
-  --band-step-up: #F59E0B;
-  --band-restrict: #F97316;
-  --band-revoke: #EF4444;
+  /* --- 2. Pastel Accents & Strong Partners (UI_DESIGN.md §2) --- */
+  --sky-pastel: #DCE8FF;
+  --sky-strong: #3D6FE0;
+  --mint-pastel: #D9F2EA;
+  --mint-strong: #0F8A6A;
+  --peach-pastel: #FFE4D3;
+  --peach-strong: #C2410C;
+  --butter-pastel: #FFF3C4;
+  --butter-strong: #A16207;
+  --rose-pastel: #FFE0E0;
+  --rose-strong: #C81E1E;
+  --lavender-pastel: #ECE6FF;
+  --lavender-strong: #6D4FD8;
+  --stone-pastel: #EEF0F3;
+  --stone-strong: #475569;
 
-  /* Geometry & Shadows */
-  --radius-panel: 14px;
-  --radius-control: 10px;
-  --panel-shadow: 0 10px 30px rgba(0, 0, 0, 0.45);
-  --top-highlight: inset 0 1px 0 rgba(255, 255, 255, 0.06);
+  /* --- 3. Backward Compatibility Aliases for Existing Pages --- */
+  --panel: var(--surface);
+  --panel-hover: var(--surface-2);
+  --panel-border: var(--border);
+  --panel-border-bright: #D8D0C3;
+  --text: var(--ink);
+  --text-secondary: var(--ink-2);
+  --brand: var(--sky-strong);
+  --brand-hover: #355FC4;
+  --brand-pressed: #2E54AD;
+  --cyan: var(--sky-strong);
+  --cyan-glow: rgba(61, 111, 224, 0.12);
+  --violet: var(--lavender-strong);
+  --ok: var(--mint-strong);
+  --warn: var(--peach-strong);
+  --crit: var(--rose-strong);
 
-  /* Typography Stacks */
+  /* --- 4. Band Gauge & Indicator Colors --- */
+  --band-monitor: #94A3B8;
+  --band-step_up: #E0A800;
+  --band-step-up: #E0A800;
+  --band-restrict: #F08A4B;
+  --band-revoke: #E5484D;
+
+  /* --- 5. Shape, Depth, Shadows & Geometry (UI_DESIGN.md §3) --- */
+  --radius-panel: 18px;
+  --radius-card: 18px;
+  --radius-control: 12px;
+  --radius-input: 10px;
+  --radius-chip: 999px;
+  --panel-shadow: 0 1px 2px rgba(31, 36, 48, 0.04), 0 8px 24px rgba(31, 36, 48, 0.06);
+  --panel-shadow-raised: 0 2px 4px rgba(31, 36, 48, 0.05), 0 16px 40px rgba(31, 36, 48, 0.09);
+  --top-highlight: none;
+  --input-inset: inset 0 1px 2px rgba(31, 36, 48, 0.06);
+  --easing-out: cubic-bezier(0.2, 0.8, 0.2, 1);
+
+  /* --- 6. Typography Stacks --- */
   --font-sans: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
   --font-mono: 'JetBrains Mono', ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
 
@@ -55,9 +89,9 @@ html, body {
   padding: 0;
   min-height: 100vh;
   background-color: var(--bg);
-  background: linear-gradient(180deg, var(--bg) 0%, var(--bg-2) 100%);
+  background-image: var(--bg-grad);
   background-attachment: fixed;
-  color: var(--text);
+  color: var(--ink);
   font-family: var(--font-sans);
   font-size: 14px;
   line-height: 1.5;
@@ -66,48 +100,56 @@ html, body {
   overflow-x: hidden;
 }
 
+/* Headings inherit ink color with strong contrast */
+h1, h2, h3, h4, h5, h6 {
+  color: var(--ink);
+  margin-top: 0;
+  letter-spacing: -0.015em;
+}
+
 /* Focus Visible Accessibility */
 :focus-visible {
-  outline: 2px solid var(--cyan) !important;
+  outline: 2px solid var(--focus) !important;
   outline-offset: 2px !important;
 }
 
-/* Scrollbar Customization */
+/* Light Scrollbar Customization */
 ::-webkit-scrollbar {
   width: 8px;
   height: 8px;
 }
 
 ::-webkit-scrollbar-track {
-  background: rgba(0, 0, 0, 0.2);
+  background: var(--surface-2);
 }
 
 ::-webkit-scrollbar-thumb {
-  background: rgba(148, 163, 184, 0.25);
+  background: var(--border);
   border-radius: 4px;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: rgba(148, 163, 184, 0.45);
+  background: #D3C8B7;
 }
 
-/* Glassmorphism Panel Class */
-.glass {
-  background: var(--panel);
-  backdrop-filter: blur(14px) saturate(140%);
-  -webkit-backdrop-filter: blur(14px) saturate(140%);
-  border: 1px solid var(--panel-border);
-  box-shadow: var(--panel-shadow), var(--top-highlight);
-  border-radius: var(--radius-panel);
+/* --- Panel & Card Surfaces (UI_DESIGN.md §3) --- */
+.glass, .panel-surface {
+  background: var(--surface) !important;
+  border: 1px solid var(--border) !important;
+  box-shadow: var(--panel-shadow) !important;
+  border-radius: var(--radius-panel) !important;
   position: relative;
-  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+  transition: transform 0.2s var(--easing-out), box-shadow 0.2s var(--easing-out), border-color 0.2s ease;
+  backdrop-filter: none !important;
+  -webkit-backdrop-filter: none !important;
 }
 
-.glass:hover {
-  border-color: var(--panel-border-bright);
+.glass.is-clickable:hover, [data-tilt]:hover {
+  box-shadow: var(--panel-shadow-raised) !important;
+  border-color: #D3C9B8 !important;
 }
 
-/* Shell Layout Grid */
+/* --- Shell Layout Grid --- */
 .app-shell {
   display: flex;
   min-height: 100vh;
@@ -116,25 +158,26 @@ html, body {
   z-index: 1;
 }
 
+/* --- Sidebar: Cream Surface-2 (UI_DESIGN.md §2) --- */
 .app-sidebar {
   width: var(--sidebar-w);
   min-width: var(--sidebar-w);
   max-width: var(--sidebar-w);
-  background: rgba(5, 7, 13, 0.78);
-  backdrop-filter: blur(16px);
-  -webkit-backdrop-filter: blur(16px);
-  border-right: 1px solid var(--panel-border);
+  background: var(--surface-2) !important;
+  border-right: 1px solid var(--border) !important;
   display: flex;
   flex-direction: column;
-  transition: width 0.25s cubic-bezier(0.4, 0, 0.2, 1),
-              min-width 0.25s cubic-bezier(0.4, 0, 0.2, 1),
-              max-width 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+  transition: width 0.25s var(--easing-out),
+              min-width 0.25s var(--easing-out),
+              max-width 0.25s var(--easing-out);
   position: sticky;
   top: 0;
   height: 100vh;
   z-index: 30;
   overflow-y: auto;
   overflow-x: hidden;
+  backdrop-filter: none !important;
+  -webkit-backdrop-filter: none !important;
 }
 
 .app-sidebar.collapsed {
@@ -148,7 +191,7 @@ html, body {
   display: flex;
   align-items: center;
   padding: 0 16px;
-  border-bottom: 1px solid var(--panel-border);
+  border-bottom: 1px solid var(--border);
   gap: 12px;
 }
 
@@ -157,7 +200,7 @@ html, body {
   align-items: center;
   gap: 10px;
   text-decoration: none;
-  color: #FFFFFF;
+  color: var(--ink);
   font-weight: 700;
   font-size: 1rem;
   letter-spacing: -0.02em;
@@ -178,24 +221,25 @@ html, body {
   gap: 12px;
   padding: 10px 12px;
   border-radius: var(--radius-control);
-  color: var(--muted);
+  color: var(--ink-2);
   text-decoration: none;
   font-size: 0.875rem;
   font-weight: 500;
-  transition: all 0.15s ease;
+  transition: all 0.15s var(--easing-out);
   white-space: nowrap;
   position: relative;
 }
 
 .nav-item:hover {
-  color: #FFFFFF;
-  background: rgba(255, 255, 255, 0.05);
+  color: var(--ink);
+  background: var(--surface-3);
 }
 
+/* Active Nav Item: Sky Pastel Fill + Strong Sky Text + 3px Left Bar (UI_DESIGN.md §2) */
 .nav-item.active {
-  color: #FFFFFF;
-  background: rgba(59, 130, 246, 0.15);
-  border: 1px solid rgba(59, 130, 246, 0.3);
+  color: var(--sky-strong) !important;
+  background: var(--sky-pastel) !important;
+  border: 1px solid transparent !important;
   font-weight: 600;
 }
 
@@ -206,9 +250,9 @@ html, body {
   top: 6px;
   bottom: 6px;
   width: 3px;
-  background: var(--brand);
+  background: var(--sky-strong);
   border-radius: 0 2px 2px 0;
-  box-shadow: 0 0 8px var(--brand);
+  box-shadow: none;
 }
 
 .nav-item svg {
@@ -233,7 +277,7 @@ html, body {
 
 .app-sidebar-footer {
   padding: 12px 8px;
-  border-top: 1px solid var(--panel-border);
+  border-top: 1px solid var(--border);
 }
 
 .sidebar-toggle-btn {
@@ -242,18 +286,18 @@ html, body {
   align-items: center;
   gap: 10px;
   padding: 8px 12px;
-  background: transparent;
-  border: 1px solid var(--panel-border);
+  background: var(--surface);
+  border: 1px solid var(--border);
   border-radius: var(--radius-control);
-  color: var(--muted);
+  color: var(--ink-2);
   cursor: pointer;
   font-size: 0.8125rem;
   transition: all 0.15s ease;
 }
 
 .sidebar-toggle-btn:hover {
-  background: rgba(255, 255, 255, 0.06);
-  color: #FFFFFF;
+  background: var(--surface-3);
+  color: var(--ink);
 }
 
 .app-sidebar.collapsed .sidebar-toggle-btn {
@@ -264,7 +308,7 @@ html, body {
   display: none;
 }
 
-/* Main Content Area */
+/* --- Main Content Area --- */
 .app-main {
   flex: 1;
   display: flex;
@@ -273,14 +317,12 @@ html, body {
   min-height: 100vh;
 }
 
-/* Topbar */
+/* --- Topbar: White Surface with Bottom Border (UI_DESIGN.md §2) --- */
 .app-topbar {
   height: var(--topbar-h);
   min-height: var(--topbar-h);
-  background: rgba(5, 7, 13, 0.72);
-  backdrop-filter: blur(16px);
-  -webkit-backdrop-filter: blur(16px);
-  border-bottom: 1px solid var(--panel-border);
+  background: var(--surface) !important;
+  border-bottom: 1px solid var(--border) !important;
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -288,6 +330,8 @@ html, body {
   position: sticky;
   top: 0;
   z-index: 20;
+  backdrop-filter: none !important;
+  -webkit-backdrop-filter: none !important;
 }
 
 .topbar-left, .topbar-right {
@@ -308,8 +352,9 @@ html, body {
   letter-spacing: 0.04em;
   text-transform: uppercase;
   font-family: var(--font-mono);
-  background: rgba(255, 255, 255, 0.05);
-  border: 1px solid var(--panel-border);
+  background: var(--surface-2);
+  border: 1px solid var(--border);
+  color: var(--ink-2);
 }
 
 .status-dot {
@@ -320,18 +365,18 @@ html, body {
 }
 
 .status-dot.ok {
-  background: var(--ok);
-  box-shadow: 0 0 8px rgba(16, 185, 129, 0.6);
+  background: var(--mint-strong);
+  box-shadow: 0 0 6px rgba(15, 138, 106, 0.4);
 }
 
 .status-dot.warn {
-  background: var(--warn);
-  box-shadow: 0 0 8px rgba(245, 158, 11, 0.6);
+  background: var(--peach-strong);
+  box-shadow: 0 0 6px rgba(194, 65, 12, 0.4);
 }
 
 .status-dot.crit {
-  background: var(--crit);
-  box-shadow: 0 0 8px rgba(239, 68, 68, 0.6);
+  background: var(--rose-strong);
+  box-shadow: 0 0 6px rgba(200, 30, 30, 0.4);
 }
 
 .topbar-metric {
@@ -339,22 +384,22 @@ html, body {
   align-items: center;
   gap: 6px;
   font-size: 0.8125rem;
-  color: var(--muted);
+  color: var(--ink-2);
   font-family: var(--font-mono);
 }
 
 .topbar-metric strong {
-  color: var(--text);
+  color: var(--ink);
 }
 
 .topbar-clock {
   font-family: var(--font-mono);
   font-size: 0.8125rem;
-  color: var(--muted);
+  color: var(--ink-2);
   padding: 4px 8px;
   border-radius: 6px;
-  background: rgba(0, 0, 0, 0.3);
-  border: 1px solid rgba(255, 255, 255, 0.05);
+  background: var(--surface-2);
+  border: 1px solid var(--border);
 }
 
 /* Command Palette Trigger Button */
@@ -363,29 +408,29 @@ html, body {
   align-items: center;
   gap: 8px;
   padding: 6px 12px;
-  background: rgba(255, 255, 255, 0.04);
-  border: 1px solid var(--panel-border);
+  background: var(--surface-2);
+  border: 1px solid var(--border);
   border-radius: var(--radius-control);
-  color: var(--muted);
+  color: var(--ink-2);
   cursor: pointer;
   font-size: 0.8125rem;
   transition: all 0.15s ease;
 }
 
 .cmd-palette-btn:hover {
-  background: rgba(255, 255, 255, 0.08);
-  border-color: var(--panel-border-bright);
-  color: var(--text);
+  background: var(--surface-3);
+  border-color: #D3C9B8;
+  color: var(--ink);
 }
 
 .cmd-kbd {
-  background: rgba(255, 255, 255, 0.1);
-  border: 1px solid rgba(255, 255, 255, 0.15);
+  background: var(--surface);
+  border: 1px solid var(--border);
   border-radius: 4px;
   padding: 1px 5px;
   font-size: 0.6875rem;
   font-family: var(--font-mono);
-  color: var(--text);
+  color: var(--ink-2);
 }
 
 /* Content Viewport */
@@ -400,7 +445,7 @@ html, body {
   margin: 0 auto;
 }
 
-/* Buttons */
+/* --- Buttons (UI_DESIGN.md §2) --- */
 .btn {
   display: inline-flex;
   align-items: center;
@@ -411,7 +456,7 @@ html, body {
   font-weight: 500;
   font-size: 0.875rem;
   cursor: pointer;
-  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+  transition: all 0.15s var(--easing-out);
   border: 1px solid transparent;
   text-decoration: none;
   font-family: inherit;
@@ -419,56 +464,67 @@ html, body {
 }
 
 .btn:disabled {
-  opacity: 0.45;
+  opacity: 0.5;
   cursor: not-allowed;
   pointer-events: none;
 }
 
+/* Primary Button: #3D6FE0 with White text (contrast >= 4.5:1) */
 .btn-primary {
-  background: var(--brand);
-  color: #FFFFFF;
-  border-color: rgba(255, 255, 255, 0.1);
-  box-shadow: 0 0 16px rgba(59, 130, 246, 0.35);
+  background: var(--sky-strong);
+  color: #FFFFFF !important;
+  border-color: var(--sky-strong);
+  box-shadow: 0 1px 2px rgba(61, 111, 224, 0.2);
 }
 
 .btn-primary:hover:not(:disabled) {
-  background: var(--brand-hover);
-  box-shadow: 0 0 22px rgba(59, 130, 246, 0.55);
+  background: #355FC4;
+  border-color: #355FC4;
+  box-shadow: 0 4px 12px rgba(61, 111, 224, 0.3);
   transform: translateY(-1px);
 }
 
-.btn-ghost {
-  background: transparent;
-  border-color: var(--panel-border);
-  color: var(--muted);
+.btn-primary:active:not(:disabled) {
+  background: #2E54AD;
+  transform: translateY(0);
 }
 
-.btn-ghost:hover:not(:disabled) {
-  color: var(--text);
-  border-color: var(--panel-border-bright);
-  background: rgba(255, 255, 255, 0.05);
+/* Secondary Button: White fill, --ink text, --border */
+.btn-secondary, .btn-ghost {
+  background: var(--surface);
+  border-color: var(--border);
+  color: var(--ink);
+  box-shadow: 0 1px 2px rgba(31, 36, 48, 0.04);
 }
 
+.btn-secondary:hover:not(:disabled), .btn-ghost:hover:not(:disabled) {
+  color: var(--ink);
+  border-color: #D3C9B8;
+  background: var(--surface-2);
+}
+
+/* Danger Button: #C81E1E fill with White text */
 .btn-danger {
-  background: var(--crit);
-  color: #FFFFFF;
-  border-color: rgba(255, 255, 255, 0.1);
-  box-shadow: 0 0 16px rgba(239, 68, 68, 0.35);
+  background: var(--rose-strong);
+  color: #FFFFFF !important;
+  border-color: var(--rose-strong);
+  box-shadow: 0 1px 2px rgba(200, 30, 30, 0.2);
 }
 
 .btn-danger:hover:not(:disabled) {
-  background: #DC2626;
-  box-shadow: 0 0 22px rgba(239, 68, 68, 0.55);
+  background: #B01A1A;
+  border-color: #B01A1A;
+  box-shadow: 0 4px 12px rgba(200, 30, 30, 0.3);
   transform: translateY(-1px);
 }
 
-/* Band Badges */
+/* --- Band Badges: Pastel Fill + Strong Text (UI_DESIGN.md §2) --- */
 .badge-band {
   display: inline-flex;
   align-items: center;
   gap: 5px;
-  padding: 3px 8px;
-  border-radius: 6px;
+  padding: 4px 10px;
+  border-radius: var(--radius-chip);
   font-size: 0.75rem;
   font-family: var(--font-mono);
   font-weight: 600;
@@ -477,48 +533,72 @@ html, body {
   border: 1px solid transparent;
 }
 
+/* monitor (<40): fill #EEF0F3, text #475569 */
 .badge-band-monitor {
-  background: rgba(100, 116, 139, 0.15);
-  border-color: rgba(100, 116, 139, 0.35);
-  color: #94A3B8;
+  background: var(--stone-pastel) !important;
+  border-color: rgba(71, 85, 105, 0.2) !important;
+  color: var(--stone-strong) !important;
 }
 
+/* step_up (40–69): fill #FFF3C4, text #A16207 */
 .badge-band-step_up, .badge-band-step-up {
-  background: rgba(245, 158, 11, 0.15);
-  border-color: rgba(245, 158, 11, 0.35);
-  color: #FBBF24;
+  background: var(--butter-pastel) !important;
+  border-color: rgba(161, 98, 7, 0.2) !important;
+  color: var(--butter-strong) !important;
 }
 
+/* restrict (70–89): fill #FFE4D3, text #C2410C */
 .badge-band-restrict {
-  background: rgba(249, 115, 22, 0.15);
-  border-color: rgba(249, 115, 22, 0.35);
-  color: #FB923C;
+  background: var(--peach-pastel) !important;
+  border-color: rgba(194, 65, 12, 0.2) !important;
+  color: var(--peach-strong) !important;
 }
 
+/* revoke (>=90): fill #FFE0E0, text #C81E1E */
 .badge-band-revoke {
-  background: rgba(239, 68, 68, 0.15);
-  border-color: rgba(239, 68, 68, 0.35);
-  color: #F87171;
+  background: var(--rose-pastel) !important;
+  border-color: rgba(200, 30, 30, 0.2) !important;
+  color: var(--rose-strong) !important;
 }
 
-/* MITRE ATT&CK Chips */
+/* --- MITRE ATT&CK Chips: Lavender Pastel + Strong Lavender Text --- */
 .mitre-chip {
   font-family: var(--font-mono);
   font-size: 0.75rem;
-  padding: 2px 8px;
+  padding: 3px 8px;
   border-radius: 6px;
-  background: rgba(139, 92, 246, 0.12);
-  border: 1px solid rgba(139, 92, 246, 0.32);
-  color: #C4B5FD;
+  background: var(--lavender-pastel);
+  border: 1px solid rgba(109, 79, 216, 0.2);
+  color: var(--lavender-strong);
   display: inline-flex;
   align-items: center;
   gap: 4px;
+  font-weight: 600;
 }
 
-/* Tables */
+/* --- Form Controls: Inputs & Selects (UI_DESIGN.md §2) --- */
+input, select, textarea {
+  background: var(--surface) !important;
+  color: var(--ink) !important;
+  border: 1px solid var(--border) !important;
+  border-radius: var(--radius-input) !important;
+  box-shadow: var(--input-inset) !important;
+  font-family: inherit;
+  transition: border-color 0.15s ease, box-shadow 0.15s ease;
+}
+
+input:focus, select:focus, textarea:focus {
+  border-color: var(--focus) !important;
+  outline: 2px solid var(--focus) !important;
+  outline-offset: 2px !important;
+}
+
+/* --- Tables: Clean Light Theme (UI_DESIGN.md §2 & §6) --- */
 .table-wrapper {
   overflow-x: auto;
   border-radius: var(--radius-panel);
+  background: var(--surface);
+  border: 1px solid var(--border);
 }
 
 table {
@@ -526,29 +606,28 @@ table {
   border-collapse: separate;
   border-spacing: 0;
   font-size: 0.875rem;
+  background: var(--surface);
 }
 
 th {
   position: sticky;
   top: 0;
-  background: rgba(11, 15, 23, 0.95);
-  backdrop-filter: blur(8px);
-  -webkit-backdrop-filter: blur(8px);
+  background: var(--surface-2) !important;
   z-index: 10;
   padding: 12px 16px;
   text-align: left;
   font-size: 0.75rem;
   text-transform: uppercase;
   letter-spacing: 0.05em;
-  color: var(--muted);
-  border-bottom: 1px solid var(--panel-border);
+  color: var(--ink-2);
+  border-bottom: 1px solid var(--border);
   font-weight: 600;
 }
 
 td {
   padding: 12px 16px;
-  border-bottom: 1px solid rgba(148, 163, 184, 0.08);
-  color: var(--text);
+  border-bottom: 1px solid var(--border);
+  color: var(--ink);
   vertical-align: middle;
 }
 
@@ -557,15 +636,15 @@ tbody tr {
 }
 
 tbody tr:nth-child(even) {
-  background: rgba(255, 255, 255, 0.015);
+  background: #FDFAF6;
 }
 
 tbody tr:hover {
-  background: rgba(59, 130, 246, 0.07);
+  background: var(--surface-2) !important;
 }
 
-/* Skeleton Loading Shimmer */
-@keyframes shimmer {
+/* --- Skeleton Loading Shimmer: Cream Tones (#F6F1E9 -> #EFE8DC) --- */
+@keyframes shimmer-cream {
   0% {
     background-position: -200% 0;
   }
@@ -577,34 +656,58 @@ tbody tr:hover {
 .skeleton {
   background: linear-gradient(
     90deg,
-    rgba(255, 255, 255, 0.03) 25%,
-    rgba(255, 255, 255, 0.08) 50%,
-    rgba(255, 255, 255, 0.03) 75%
-  );
-  background-size: 200% 100%;
-  animation: shimmer 1.8s infinite ease-in-out;
+    #F6F1E9 25%,
+    #EFE8DC 50%,
+    #F6F1E9 75%
+  ) !important;
+  background-size: 200% 100% !important;
+  animation: shimmer-cream 1.8s infinite ease-in-out !important;
   border-radius: 6px;
   display: block;
 }
 
-/* Tilt Card Glare & Base */
+/* --- JSON Viewer & Panels (UI_DESIGN.md §6) --- */
+.json-viewer, pre.code-block {
+  background: var(--surface) !important;
+  border: 1px solid var(--border) !important;
+  border-radius: var(--radius-control);
+  padding: 14px;
+  font-family: var(--font-mono);
+  font-size: 0.8125rem;
+  color: var(--ink);
+  overflow-x: auto;
+}
+
+.json-key { color: #3D6FE0; font-weight: 600; }
+.json-string { color: #0F8A6A; }
+.json-number { color: #C2410C; }
+.json-boolean { color: #6D4FD8; font-weight: 600; }
+.json-null { color: #6B7280; font-style: italic; }
+
+/* --- Live Trace Log: Light Terminal (UI_DESIGN.md §6) --- */
+.trace-terminal {
+  background: #FFFDF9 !important;
+  border: 1px solid var(--border) !important;
+  border-radius: var(--radius-control);
+  color: var(--ink);
+  font-family: var(--font-mono);
+  padding: 12px;
+}
+
+.trace-line-threat {
+  background: var(--rose-pastel) !important;
+  color: var(--rose-strong) !important;
+  font-weight: 600;
+  border-left: 3px solid var(--rose-strong);
+}
+
+/* Tilt Card Base */
 [data-tilt] {
   transform-style: preserve-3d;
   will-change: transform;
 }
 
-.tilt-glare {
-  position: absolute;
-  inset: 0;
-  border-radius: inherit;
-  pointer-events: none;
-  background: radial-gradient(circle at 50% 50%, rgba(255, 255, 255, 0.12), transparent 70%);
-  opacity: 0;
-  transition: opacity 0.2s ease;
-  z-index: 2;
-}
-
-/* Toast Notifications Container */
+/* --- Toast Notifications (Light Surface) --- */
 #toast-container {
   position: fixed;
   top: 72px;
@@ -623,67 +726,46 @@ tbody tr:hover {
   align-items: flex-start;
   gap: 12px;
   padding: 12px 16px;
-  background: rgba(17, 24, 39, 0.92);
-  backdrop-filter: blur(16px);
-  -webkit-backdrop-filter: blur(16px);
-  border: 1px solid var(--panel-border-bright);
-  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.6);
+  background: var(--surface) !important;
+  border: 1px solid var(--border) !important;
+  box-shadow: var(--panel-shadow-raised) !important;
   border-radius: var(--radius-control);
-  color: var(--text);
+  color: var(--ink);
   font-size: 0.875rem;
   animation: toast-in 0.25s ease-out forwards;
-  transition: transform 0.2s ease, opacity 0.2s ease;
 }
 
-.toast.toast-success {
-  border-left: 3px solid var(--ok);
-}
-
-.toast.toast-error {
-  border-left: 3px solid var(--crit);
-}
-
-.toast.toast-warn {
-  border-left: 3px solid var(--warn);
-}
-
-.toast.toast-info {
-  border-left: 3px solid var(--brand);
-}
+.toast.toast-success { border-left: 4px solid var(--mint-strong) !important; }
+.toast.toast-error { border-left: 4px solid var(--rose-strong) !important; }
+.toast.toast-warn { border-left: 4px solid var(--peach-strong) !important; }
+.toast.toast-info { border-left: 4px solid var(--sky-strong) !important; }
 
 @keyframes toast-in {
-  from {
-    opacity: 0;
-    transform: translateY(-8px) scale(0.96);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0) scale(1);
-  }
+  from { opacity: 0; transform: translateY(-8px) scale(0.96); }
+  to { opacity: 1; transform: translateY(0) scale(1); }
 }
 
-/* Command Palette Modal */
+/* --- Command Palette Modal (Light Surface) --- */
 .cmd-palette-backdrop {
   position: fixed;
   inset: 0;
-  background: rgba(5, 7, 13, 0.8);
-  backdrop-filter: blur(8px);
-  -webkit-backdrop-filter: blur(8px);
+  background: rgba(31, 36, 48, 0.4);
+  backdrop-filter: blur(4px);
+  -webkit-backdrop-filter: blur(4px);
   z-index: 90;
   display: flex;
   align-items: flex-start;
   justify-content: center;
   padding-top: 14vh;
-  animation: fade-in 0.15s ease-out forwards;
 }
 
 .cmd-palette-modal {
   width: 90%;
   max-width: 600px;
-  background: rgba(17, 24, 39, 0.96);
-  border: 1px solid var(--panel-border-bright);
+  background: var(--surface);
+  border: 1px solid var(--border);
   border-radius: var(--radius-panel);
-  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.8);
+  box-shadow: var(--panel-shadow-raised);
   overflow: hidden;
   display: flex;
   flex-direction: column;
@@ -693,8 +775,9 @@ tbody tr:hover {
   display: flex;
   align-items: center;
   padding: 14px 18px;
-  border-bottom: 1px solid var(--panel-border);
+  border-bottom: 1px solid var(--border);
   gap: 12px;
+  background: var(--surface);
 }
 
 .cmd-palette-input {
@@ -702,7 +785,7 @@ tbody tr:hover {
   background: transparent;
   border: none;
   outline: none;
-  color: #FFFFFF;
+  color: var(--ink);
   font-size: 1rem;
   font-family: inherit;
 }
@@ -722,27 +805,20 @@ tbody tr:hover {
   justify-content: space-between;
   padding: 10px 14px;
   border-radius: 8px;
-  color: var(--muted);
+  color: var(--ink-2);
   cursor: pointer;
   transition: all 0.1s ease;
   font-size: 0.875rem;
 }
 
 .cmd-palette-item:hover, .cmd-palette-item.selected {
-  background: rgba(59, 130, 246, 0.16);
-  color: #FFFFFF;
+  background: var(--sky-pastel);
+  color: var(--sky-strong);
 }
 
-@keyframes fade-in {
-  from { opacity: 0; }
-  to { opacity: 1; }
-}
-
-/* Reduced Motion Accessibility Overrides */
+/* Reduced Motion Overrides */
 @media (prefers-reduced-motion: reduce) {
-  *,
-  *::before,
-  *::after {
+  *, *::before, *::after {
     animation-duration: 0.01ms !important;
     animation-iteration-count: 1 !important;
     transition-duration: 0.01ms !important;

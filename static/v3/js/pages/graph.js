@@ -97,7 +97,7 @@ function render3DGraph(container, data) {
       .graphData(data)
       // Node styling
       .nodeLabel((node) => `
-        <div style="background:rgba(17,24,39,0.95); padding:8px 12px; border:1px solid rgba(148,163,184,0.3); border-radius:6px; font-family:sans-serif; font-size:12px; color:#FFFFFF;">
+        <div style="background:var(--surface); border:1px solid var(--border); box-shadow:var(--panel-shadow); padding:8px 12px; border:1px solid rgba(148,163,184,0.3); border-radius:6px; font-family:sans-serif; font-size:12px; color:var(--ink);">
           <div style="font-weight:700; color:${NODE_COLORS[node.kind || node.type] || '#3B82F6'}; text-transform:uppercase; font-size:10px;">${escHtml(node.kind || node.type || 'Entity')}</div>
           <div style="margin-top:2px;">${escHtml(node.name || node.id)}</div>
           <div style="margin-top:4px; font-family:monospace; color:#EF4444;">Risk: ${Number(node.risk || 0).toFixed(1)}</div>
@@ -204,7 +204,7 @@ function inspectNode(node) {
       </div>
       <div style="display:flex; justify-content:space-between; padding:8px 0; border-bottom:1px solid rgba(148,163,184,0.1);">
         <span style="color:var(--muted);">Entity ID:</span>
-        <span style="font-family:var(--font-mono); color:#FFFFFF;">${escHtml(node.id)}</span>
+        <span style="font-family:var(--font-mono); color:var(--ink);">${escHtml(node.id)}</span>
       </div>
       <div style="display:flex; justify-content:space-between; padding:8px 0; border-bottom:1px solid rgba(148,163,184,0.1);">
         <span style="color:var(--muted);">Risk Score:</span>

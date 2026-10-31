@@ -64,7 +64,7 @@ function renderLayerCards(container, agents) {
       <div>
         <div style="display:flex; align-items:center; gap:10px; margin-bottom:12px;">
           <span style="display:inline-block; width:12px; height:12px; border-radius:50%; background:${layer.color}; box-shadow:0 0 10px ${layer.color};"></span>
-          <h2 style="font-size:1.0625rem; font-weight:700; color:#FFFFFF; margin:0;">${escHtml(layer.name)}</h2>
+          <h2 style="font-size:1.0625rem; font-weight:700; color:var(--ink); margin:0;">${escHtml(layer.name)}</h2>
         </div>
 
         <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(290px, 1fr)); gap:16px;">
@@ -106,7 +106,7 @@ function renderAgentCard(agent, layerColor) {
         <div style="display:flex; justify-content:space-between; align-items:flex-start; margin-bottom:4px;">
           <div>
             <span style="font-family:var(--font-mono); font-size:0.6875rem; color:${layerColor}; font-weight:700;">${escHtml(aid.toUpperCase())}</span>
-            <h3 style="font-size:0.9375rem; font-weight:700; color:#FFFFFF; margin:2px 0 0 0;">${escHtml(name)}</h3>
+            <h3 style="font-size:0.9375rem; font-weight:700; color:var(--ink); margin:2px 0 0 0;">${escHtml(name)}</h3>
           </div>
           <span class="status-pill" style="font-size:0.625rem; padding:1px 6px;">
             <span class="status-dot ${isHealthy ? 'ok' : 'crit'}"></span>
@@ -127,7 +127,7 @@ function renderAgentCard(agent, layerColor) {
       <div style="display:grid; grid-template-columns:repeat(3, 1fr); gap:6px; background:rgba(0,0,0,0.25); border-radius:6px; padding:8px 6px; text-align:center;">
         <div>
           <div style="font-size:0.625rem; color:var(--muted); text-transform:uppercase;">Processed</div>
-          <div style="font-size:0.8125rem; font-weight:700; font-family:var(--font-mono); color:#FFFFFF;">${fmt.number(processed)}</div>
+          <div style="font-size:0.8125rem; font-weight:700; font-family:var(--font-mono); color:var(--ink);">${fmt.number(processed)}</div>
         </div>
         <div>
           <div style="font-size:0.625rem; color:var(--muted); text-transform:uppercase;">Findings</div>
@@ -231,7 +231,7 @@ function openAgentDrawer(agentId) {
             <span>${escHtml(t.timestamp || new Date().toISOString().substring(11, 19))}</span>
             <span style="color:var(--cyan); font-weight:700;">${escHtml(t.state || 'running')}</span>
           </div>
-          <div style="color:#FFFFFF; margin-top:2px;">${escHtml(t.message || '')}</div>
+          <div style="color:var(--ink); margin-top:2px;">${escHtml(t.message || '')}</div>
         </div>
       `).join('');
     }

@@ -20,8 +20,6 @@
   <script src="/vendor/three.min.js"></script>
 </head>
 <body>
-  <!-- Fixed 3D Particle Network Canvas -->
-  <canvas id="bg3d-canvas"></canvas>
 
   <div id="main-content" style="display:flex; flex-direction:column; height:calc(100vh - 100px); max-height:calc(100vh - 100px); gap:16px;">
     
@@ -30,13 +28,13 @@
       
       <!-- Left: Status pill & Counters -->
       <div style="display:flex; align-items:center; gap:18px;">
-        <span id="live-status-pill" class="status-pill" style="color:#FFFFFF;">
+        <span id="live-status-pill" class="status-pill" style="color:var(--ink);">
           <span id="live-status-dot" class="status-dot ok"></span>
           <span id="live-status-text">LIVE · STREAMING</span>
         </span>
 
         <div style="display:flex; gap:14px; font-family:var(--font-mono); font-size:0.8125rem;">
-          <span style="color:var(--muted);">Events: <strong id="cnt-events" style="color:#FFFFFF;">0</strong></span>
+          <span style="color:var(--muted);">Events: <strong id="cnt-events" style="color:var(--ink);">0</strong></span>
           <span style="color:var(--muted);">Signals: <strong id="cnt-signals" style="color:var(--cyan);">0</strong></span>
           <span style="color:var(--muted);">Cases: <strong id="cnt-cases" style="color:var(--warn);">0</strong></span>
           <span style="color:var(--muted);">Threats: <strong id="cnt-threats" style="color:var(--crit);">0</strong></span>
@@ -47,7 +45,7 @@
       <div style="display:flex; align-items:center; gap:12px;">
         <div style="display:flex; align-items:center; gap:6px;">
           <span style="font-size:0.75rem; color:var(--muted);">Pace:</span>
-          <select id="select-pace" style="padding:6px 10px; background:rgba(0,0,0,0.4); border:1px solid var(--panel-border); border-radius:var(--radius-control); color:#FFFFFF; font-size:0.8125rem; outline:none;">
+          <select id="select-pace" style="padding:6px 10px; background:var(--surface); border:1px solid var(--panel-border); border-radius:var(--radius-control); color:var(--ink); font-size:0.8125rem; outline:none;">
             <option value="0.0">Instant (0s)</option>
             <option value="0.4">Fast (0.4s)</option>
             <option value="1.0" selected>Normal (1.0s)</option>
@@ -74,7 +72,7 @@
       <!-- 3D Constellation Canvas Panel -->
       <div class="glass" style="position:relative; overflow:hidden; display:flex; flex-direction:column; padding:0;">
         <div style="position:absolute; top:14px; left:16px; z-index:10; pointer-events:none;">
-          <div style="font-size:0.875rem; font-weight:700; color:#FFFFFF;">15-Agent Multi-Layer Constellation</div>
+          <div style="font-size:0.875rem; font-weight:700; color:var(--ink);">15-Agent Multi-Layer Constellation</div>
           <div style="font-size:0.6875rem; color:var(--muted); font-family:var(--font-mono);">5 Concentric Functional Rings (Data → Decision)</div>
         </div>
         
@@ -95,7 +93,7 @@
             <div style="width:10px; height:10px; border-radius:50%; background:#EF4444; opacity:0.8;"></div>
             <div style="width:10px; height:10px; border-radius:50%; background:#F59E0B; opacity:0.8;"></div>
             <div style="width:10px; height:10px; border-radius:50%; background:#10B981; opacity:0.8;"></div>
-            <span style="font-size:0.8125rem; font-weight:600; color:#FFFFFF; font-family:var(--font-mono); margin-left:6px;">Topic Bus Telemetry</span>
+            <span style="font-size:0.8125rem; font-weight:600; color:var(--ink); font-family:var(--font-mono); margin-left:6px;">Topic Bus Telemetry</span>
           </div>
 
           <div style="display:flex; gap:6px;">
@@ -106,7 +104,7 @@
 
         <!-- Filter Bar -->
         <div style="padding:8px 16px; border-bottom:1px solid rgba(148,163,184,0.08); display:flex; gap:10px; background:rgba(0,0,0,0.2);">
-          <select id="filter-trace-agent" style="flex:1; padding:4px 8px; background:rgba(0,0,0,0.4); border:1px solid var(--panel-border); border-radius:6px; color:#FFFFFF; font-size:0.75rem; font-family:var(--font-mono); outline:none;">
+          <select id="filter-trace-agent" style="flex:1; padding:4px 8px; background:var(--surface); border:1px solid var(--panel-border); border-radius:6px; color:var(--ink); font-size:0.75rem; font-family:var(--font-mono); outline:none;">
             <option value="all">All 15 Agents</option>
             <option value="a01">a01 Collector</option>
             <option value="a02">a02 Normalizer</option>
@@ -125,7 +123,7 @@
             <option value="a15">a15 Feedback</option>
           </select>
 
-          <select id="filter-trace-level" style="width:110px; padding:4px 8px; background:rgba(0,0,0,0.4); border:1px solid var(--panel-border); border-radius:6px; color:#FFFFFF; font-size:0.75rem; font-family:var(--font-mono); outline:none;">
+          <select id="filter-trace-level" style="width:110px; padding:4px 8px; background:var(--surface); border:1px solid var(--panel-border); border-radius:6px; color:var(--ink); font-size:0.75rem; font-family:var(--font-mono); outline:none;">
             <option value="all">All States</option>
             <option value="running">running</option>
             <option value="finding">finding</option>
@@ -151,7 +149,6 @@
 
   <!-- Scripts -->
   <script type="module" src="/v3/js/core/shell.js"></script>
-  <script type="module" src="/v3/js/fx/bg3d.js"></script>
   <script type="module" src="/v3/js/fx/tilt.js"></script>
   <script type="module" src="/v3/js/pages/live.js"></script>
 </body>

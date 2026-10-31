@@ -20,8 +20,6 @@
   <script src="/vendor/chart.umd.min.js"></script>
 </head>
 <body>
-  <!-- Fixed 3D Particle Network Canvas -->
-  <canvas id="bg3d-canvas"></canvas>
 
   <div id="main-content">
     
@@ -31,12 +29,12 @@
         <div style="font-size:0.75rem; font-family:var(--font-mono); color:var(--cyan); text-transform:uppercase; letter-spacing:0.06em; margin-bottom:4px;">
           Autonomous Architecture // Supervisor
         </div>
-        <h1 style="font-size:1.75rem; font-weight:700; margin:0; color:#FFFFFF; letter-spacing:-0.02em;">
+        <h1 style="font-size:1.75rem; font-weight:700; margin:0; color:var(--ink); letter-spacing:-0.02em;">
           15 Specialized Threat Agents
         </h1>
       </div>
       <div style="display:flex; gap:12px; align-items:center;">
-        <span class="status-pill" style="color:#FFFFFF;">
+        <span class="status-pill" style="color:var(--ink);">
           <span class="status-dot ok"></span>
           <span id="agents-health-pill">15/15 OPERATIONAL</span>
         </span>
@@ -68,7 +66,7 @@
     <div style="padding:18px 24px; border-bottom:1px solid var(--panel-border); display:flex; justify-content:space-between; align-items:center;">
       <div>
         <div style="font-size:0.75rem; font-family:var(--font-mono); color:var(--cyan);">AGENT TELEMETRY DRAWER</div>
-        <h3 id="drawer-agent-title" style="margin:2px 0 0 0; font-size:1.125rem; color:#FFFFFF; font-family:var(--font-mono);">a01 Collector</h3>
+        <h3 id="drawer-agent-title" style="margin:2px 0 0 0; font-size:1.125rem; color:var(--ink); font-family:var(--font-mono);">a01 Collector</h3>
       </div>
       <button id="btn-close-agent-drawer" class="btn btn-ghost" type="button" style="padding:6px 10px;">
         ✕ Close
@@ -93,7 +91,6 @@
 
   <!-- Scripts -->
   <script type="module" src="/v3/js/core/shell.js"></script>
-  <script type="module" src="/v3/js/fx/bg3d.js"></script>
   <script type="module" src="/v3/js/fx/tilt.js"></script>
   <script type="module" src="/v3/js/pages/agents.js"></script>
 </body>

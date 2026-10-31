@@ -173,11 +173,11 @@ export class Shell {
     header.className = 'app-sidebar-header';
     header.innerHTML = `
       <a href="/v3/index.html" class="app-sidebar-brand">
-        <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#3B82F6" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#3D6FE0" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
           <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
           <polyline points="9 12 11 14 15 10"/>
         </svg>
-        <span>IdentityShield <span style="font-size:0.6875rem; color:#22D3EE; font-family:var(--font-mono); font-weight:700;">v3</span></span>
+        <span>IdentityShield <span style="font-size:0.6875rem; color:#3D6FE0; font-family:var(--font-mono); font-weight:700;">v3</span></span>
       </a>
     `;
     sidebar.appendChild(header);
@@ -256,10 +256,10 @@ export class Shell {
     ingestStatus.type = 'button';
     ingestStatus.className = 'topbar-metric';
     ingestStatus.id = 'topbar-ingest-status-btn';
-    ingestStatus.title = api.isMock ? 'Currently in MOCK MODE. Click to switch to LIVE Backend Mode!' : 'Ingest Port 8001 Active. Click to switch to Mock Mode.';
     ingestStatus.style.cursor = 'pointer';
-    ingestStatus.style.background = api.isMock ? 'rgba(239, 68, 68, 0.2)' : 'rgba(16, 185, 129, 0.15)';
-    ingestStatus.style.border = api.isMock ? '1px solid rgba(239, 68, 68, 0.5)' : '1px solid rgba(16, 185, 129, 0.4)';
+    ingestStatus.style.background = api.isMock ? 'var(--rose-pastel)' : 'var(--mint-pastel)';
+    ingestStatus.style.border = api.isMock ? '1px solid rgba(200, 30, 30, 0.3)' : '1px solid rgba(15, 138, 106, 0.3)';
+    ingestStatus.style.color = api.isMock ? 'var(--rose-strong)' : 'var(--mint-strong)';
     ingestStatus.style.borderRadius = '6px';
     ingestStatus.style.padding = '4px 8px';
     ingestStatus.style.display = 'inline-flex';

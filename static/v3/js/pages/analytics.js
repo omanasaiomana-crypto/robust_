@@ -186,10 +186,10 @@ function renderDetectorTable() {
     <tr>
       <td style="font-family:var(--font-mono); font-weight:700; color:var(--brand);">${escHtml(d.id)}</td>
       <td style="color:var(--muted);">${escHtml(d.cat)}</td>
-      <td style="color:#FFFFFF;">${escHtml(d.desc)}</td>
+      <td style="color:var(--ink);">${escHtml(d.desc)}</td>
       <td style="font-family:var(--font-mono); color:var(--ok); font-weight:700;">${fmt.percent(d.p)}</td>
       <td style="font-family:var(--font-mono); color:var(--cyan); font-weight:700;">${fmt.percent(d.r)}</td>
-      <td style="font-family:var(--font-mono); color:#FFFFFF;">${d.w.toFixed(1)}</td>
+      <td style="font-family:var(--font-mono); color:var(--ink);">${d.w.toFixed(1)}</td>
       <td>
         <span class="status-pill" style="font-size:0.625rem; color:var(--ok);">
           <span class="status-dot ok"></span> ACTIVE
@@ -247,7 +247,7 @@ function renderIdentityMatrix() {
     <div style="padding:10px 12px; background:rgba(255,255,255,0.02); border:1px solid var(--panel-border); border-radius:6px; display:flex; justify-content:space-between; align-items:center;">
       <div>
         <div style="display:flex; align-items:center; gap:8px;">
-          <span style="font-weight:700; color:#FFFFFF; font-size:0.8125rem;">${escHtml(r.identity)}</span>
+          <span style="font-weight:700; color:var(--ink); font-size:0.8125rem;">${escHtml(r.identity)}</span>
           <span class="badge-band badge-band-${r.band}" style="font-size:0.625rem; padding:1px 6px;">${escHtml(r.band)}</span>
         </div>
         <div style="font-size:0.6875rem; color:var(--muted); font-family:var(--font-mono); margin-top:2px;">${escHtml(r.vector)}</div>

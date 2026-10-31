@@ -21,8 +21,6 @@
   <script src="/vendor/globe.gl.min.js"></script>
 </head>
 <body>
-  <!-- Fixed 3D Particle Network Canvas -->
-  <canvas id="bg3d-canvas"></canvas>
 
   <div id="main-content" style="display:flex; flex-direction:column; height:calc(100vh - 100px); max-height:calc(100vh - 100px); gap:16px;">
     
@@ -32,7 +30,7 @@
       <div style="display:flex; align-items:center; gap:14px;">
         <div style="display:flex; align-items:center; gap:6px;">
           <span style="font-size:0.75rem; color:var(--muted);">Filter Identity:</span>
-          <select id="select-globe-identity" style="padding:6px 12px; background:rgba(0,0,0,0.4); border:1px solid var(--panel-border); border-radius:var(--radius-control); color:#FFFFFF; font-size:0.8125rem; outline:none;">
+          <select id="select-globe-identity" style="padding:6px 12px; background:var(--surface); border:1px solid var(--panel-border); border-radius:var(--radius-control); color:var(--ink); font-size:0.8125rem; outline:none;">
             <option value="all">All Identities</option>
             <option value="svc-report">svc-report (Impossible Travel)</option>
             <option value="jdoe">jdoe (Engineering)</option>
@@ -74,7 +72,7 @@
       <div class="glass" style="padding:20px; display:flex; flex-direction:column; overflow-y:auto; gap:16px;">
         <div>
           <span style="font-size:0.6875rem; font-family:var(--font-mono); color:var(--crit);">DETECTION D-ACC-01</span>
-          <h3 style="margin:2px 0 0 0; font-size:1rem; color:#FFFFFF;">Impossible Travel Events</h3>
+          <h3 style="margin:2px 0 0 0; font-size:1rem; color:var(--ink);">Impossible Travel Events</h3>
         </div>
 
         <!-- Impossible Travel Events List -->
@@ -97,7 +95,6 @@
 
   <!-- Scripts -->
   <script type="module" src="/v3/js/core/shell.js"></script>
-  <script type="module" src="/v3/js/fx/bg3d.js"></script>
   <script type="module" src="/v3/js/fx/tilt.js"></script>
   <script type="module" src="/v3/js/pages/globe.js"></script>
 </body>

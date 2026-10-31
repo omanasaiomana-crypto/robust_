@@ -125,7 +125,7 @@ function renderAttackChain(data) {
         ${!isLast ? '<div style="position:absolute; left:13px; top:28px; bottom:-16px; width:2px; background:rgba(148,163,184,0.18);"></div>' : ''}
         
         <!-- Step Number Node -->
-        <div style="width:28px; height:28px; border-radius:50%; background:rgba(17,24,39,0.9); border:2px solid var(--brand); display:flex; align-items:center; justify-content:center; font-family:var(--font-mono); font-size:0.75rem; font-weight:700; color:#FFFFFF; z-index:2; flex-shrink:0;">
+        <div style="width:28px; height:28px; border-radius:50%; background:rgba(17,24,39,0.9); border:2px solid var(--brand); display:flex; align-items:center; justify-content:center; font-family:var(--font-mono); font-size:0.75rem; font-weight:700; color:var(--ink); z-index:2; flex-shrink:0;">
           ${step.step_index || idx + 1}
         </div>
 
@@ -133,7 +133,7 @@ function renderAttackChain(data) {
         <div style="flex:1; padding:12px 16px; background:rgba(255,255,255,0.02); border:1px solid var(--panel-border); border-radius:8px;">
           <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:4px; flex-wrap:wrap; gap:8px;">
             <div style="display:flex; align-items:center; gap:8px;">
-              <span style="font-size:0.8125rem; font-weight:700; color:#FFFFFF;">${escHtml(step.event_name || 'Event')}</span>
+              <span style="font-size:0.8125rem; font-weight:700; color:var(--ink);">${escHtml(step.event_name || 'Event')}</span>
               <span style="font-size:0.6875rem; color:var(--muted); font-family:var(--font-mono);">${escHtml(step.source || 'CloudTrail')}</span>
             </div>
             <span style="font-size:0.75rem; color:var(--muted); font-family:var(--font-mono);">${escHtml(step.timestamp || '')}</span>
@@ -226,7 +226,7 @@ function renderCounterfactuals(data) {
     return `
       <div>
         <div style="display:flex; justify-content:space-between; margin-bottom:4px; font-size:0.75rem;">
-          <span style="color:#FFFFFF; font-weight:500;">${escHtml(c.description || c.omitted)}</span>
+          <span style="color:var(--ink); font-weight:500;">${escHtml(c.description || c.omitted)}</span>
           <span style="font-family:var(--font-mono); color:var(--ok); font-weight:700;">-${drop.toFixed(1)} pts (${withoutScore.toFixed(1)})</span>
         </div>
         <div style="height:8px; border-radius:4px; background:rgba(255,255,255,0.06); overflow:hidden; position:relative;">
@@ -309,7 +309,7 @@ function renderActions(data) {
       <div style="padding:10px 14px; background:rgba(0,0,0,0.3); border:1px solid var(--panel-border); border-radius:8px; display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:8px;">
         <div>
           <div style="display:flex; align-items:center; gap:8px;">
-            <span style="font-size:0.8125rem; font-weight:700; color:#FFFFFF; text-transform:uppercase;">${escHtml(act.action_type)}</span>
+            <span style="font-size:0.8125rem; font-weight:700; color:var(--ink); text-transform:uppercase;">${escHtml(act.action_type)}</span>
             <span class="status-pill" style="font-size:0.625rem; padding:1px 6px;">
               <span class="status-dot ${isApplied ? 'ok' : 'warn'}"></span>
               ${escHtml((act.state || 'proposed').toUpperCase())}

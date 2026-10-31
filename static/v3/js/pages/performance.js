@@ -110,7 +110,7 @@ function renderQueueDepth() {
 
   container.innerHTML = topics.map((t) => `
     <div style="display:flex; justify-content:space-between; align-items:center; padding:6px 10px; background:rgba(0,0,0,0.25); border-radius:6px; font-family:var(--font-mono); font-size:0.75rem;">
-      <span style="color:#FFFFFF;">${escHtml(t.name)}</span>
+      <span style="color:var(--ink);">${escHtml(t.name)}</span>
       <div style="display:flex; align-items:center; gap:8px;">
         <span style="color:var(--ok); font-weight:700;">${t.depth} queued</span>
         <span style="color:var(--muted); font-size:0.6875rem;">/ ${t.capacity}</span>

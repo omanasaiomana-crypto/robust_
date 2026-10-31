@@ -159,7 +159,7 @@ function renderFilteredCases() {
           <span class="badge-band badge-band-${band}">${escHtml(band)}</span>
         </td>
         <td>
-          <div style="font-weight:600; color:#FFFFFF;">${escHtml(c.identity_id)}</div>
+          <div style="font-weight:600; color:var(--ink);">${escHtml(c.identity_id)}</div>
           <div style="font-size:0.6875rem; color:var(--muted); font-family:var(--font-mono);">${escHtml(c.case_id)}</div>
         </td>
         <td>
@@ -173,7 +173,7 @@ function renderFilteredCases() {
         <td style="font-family:var(--font-mono); font-size:0.8125rem; color:var(--muted);">
           ${escHtml(conf)}
         </td>
-        <td style="font-family:var(--font-mono); font-size:0.8125rem; color:#FFFFFF;">
+        <td style="font-family:var(--font-mono); font-size:0.8125rem; color:var(--ink);">
           ${stepsCount} steps
         </td>
         <td>

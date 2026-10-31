@@ -74,7 +74,7 @@ function renderAuditTable(entries) {
           ${fmt.date(entry.timestamp)}
         </td>
         <td>
-          <span style="font-weight:600; color:#FFFFFF;">${escHtml(actor)}</span>
+          <span style="font-weight:600; color:var(--ink);">${escHtml(actor)}</span>
         </td>
         <td>
           <span class="status-pill" style="font-size:0.6875rem; color:var(--brand); padding:2px 8px;">

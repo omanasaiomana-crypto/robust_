@@ -20,8 +20,6 @@
   <script src="/vendor/chart.umd.min.js"></script>
 </head>
 <body>
-  <!-- Fixed 3D Particle Network Canvas -->
-  <canvas id="bg3d-canvas"></canvas>
 
   <div id="main-content">
     
@@ -31,7 +29,7 @@
         <div style="font-size:0.75rem; font-family:var(--font-mono); color:var(--cyan); text-transform:uppercase; letter-spacing:0.06em; margin-bottom:4px;">
           Model Telemetry // Ground Truth
         </div>
-        <h1 style="font-size:1.75rem; font-weight:700; margin:0; color:#FFFFFF; letter-spacing:-0.02em;">
+        <h1 style="font-size:1.75rem; font-weight:700; margin:0; color:var(--ink); letter-spacing:-0.02em;">
           Detection Analytics & Calibration
         </h1>
       </div>
@@ -48,7 +46,7 @@
       <!-- Grouped Bar Chart: Rules vs ML vs Hybrid -->
       <div class="glass" style="padding:20px; display:flex; flex-direction:column;">
         <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:14px;">
-          <h3 style="font-size:1rem; font-weight:600; margin:0; color:#FFFFFF;">Model Comparison: Precision / Recall / F1</h3>
+          <h3 style="font-size:1rem; font-weight:600; margin:0; color:var(--ink);">Model Comparison: Precision / Recall / F1</h3>
           <span style="font-size:0.6875rem; color:var(--muted); font-family:var(--font-mono);">OFFICIAL BENCHMARK</span>
         </div>
         <div style="height:240px; position:relative; width:100%;">
@@ -60,7 +58,7 @@
       <div class="glass" style="padding:20px; display:flex; flex-direction:column;">
         <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:14px;">
           <div>
-            <h3 style="font-size:1rem; font-weight:600; margin:0; color:#FFFFFF;">Risk Calibration Reliability</h3>
+            <h3 style="font-size:1rem; font-weight:600; margin:0; color:var(--ink);">Risk Calibration Reliability</h3>
             <div style="font-size:0.6875rem; color:var(--muted); font-family:var(--font-mono);">Predicted Risk vs Observed Empirical Threat Frequency</div>
           </div>
           <span class="status-pill" style="font-size:0.6875rem; color:var(--cyan);">Brier: 0.042</span>
@@ -75,7 +73,7 @@
     <!-- Per-Detector Precision & Recall Table -->
     <div class="glass" style="padding:20px; margin-bottom:24px;">
       <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:14px;">
-        <h3 style="font-size:1rem; font-weight:600; margin:0; color:#FFFFFF;">Per-Detector Performance & Weight Tuning</h3>
+        <h3 style="font-size:1rem; font-weight:600; margin:0; color:var(--ink);">Per-Detector Performance & Weight Tuning</h3>
         <span style="font-size:0.6875rem; color:var(--muted); font-family:var(--font-mono);">All 24 Detection Primitives</span>
       </div>
       <div class="table-wrapper">
@@ -104,7 +102,7 @@
       <!-- Heatmap 1: Temporal Attack Heatmap (Hour x Day) -->
       <div class="glass" style="padding:20px;">
         <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:14px;">
-          <h3 style="font-size:0.9375rem; font-weight:600; margin:0; color:#FFFFFF;">Attack Temporal Distribution (Hour × Day)</h3>
+          <h3 style="font-size:0.9375rem; font-weight:600; margin:0; color:var(--ink);">Attack Temporal Distribution (Hour × Day)</h3>
           <span style="font-size:0.6875rem; color:var(--warn); font-family:var(--font-mono);">OFF-HOURS PEAKS</span>
         </div>
         <div id="heatmap-temporal" style="display:grid; grid-template-columns:repeat(24, 1fr); gap:3px;">
@@ -120,7 +118,7 @@
       <!-- Heatmap 2: Identity x Threat Pattern -->
       <div class="glass" style="padding:20px;">
         <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:14px;">
-          <h3 style="font-size:0.9375rem; font-weight:600; margin:0; color:#FFFFFF;">Identity × Threat Vector Matrix</h3>
+          <h3 style="font-size:0.9375rem; font-weight:600; margin:0; color:var(--ink);">Identity × Threat Vector Matrix</h3>
           <span style="font-size:0.6875rem; color:var(--crit); font-family:var(--font-mono);">MULTI-STAGE CHAINS</span>
         </div>
         <div id="matrix-identity-pattern" style="display:flex; flex-direction:column; gap:6px;">
@@ -134,7 +132,6 @@
 
   <!-- Scripts -->
   <script type="module" src="/v3/js/core/shell.js"></script>
-  <script type="module" src="/v3/js/fx/bg3d.js"></script>
   <script type="module" src="/v3/js/fx/tilt.js"></script>
   <script type="module" src="/v3/js/pages/analytics.js"></script>
 </body>
