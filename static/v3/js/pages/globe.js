@@ -48,7 +48,7 @@ function renderGlobe(container, geoList) {
         startLng: -74.006,
         endLat: 50.1109,
         endLng: 8.6821,
-        color: '#EF4444',
+        color: '#E5484D',
         name: 'svc-report: NYC → Frankfurt (6,200 km in 15m, 24,800 km/h)',
       },
     ];
@@ -56,21 +56,21 @@ function renderGlobe(container, geoList) {
     const globe = window.Globe()(container)
       .width(width)
       .height(height)
-      .backgroundColor('#05070D')
+      .backgroundColor('rgba(0,0,0,0)')
       .showAtmosphere(true)
-      .atmosphereColor('#3B82F6')
-      .atmosphereAltitude(0.18)
+      .atmosphereColor('#BFD4FF')
+      .atmosphereAltitude(0.12)
       .globeImageUrl('//unpkg.com/three-globe/example/img/earth-night.jpg')
       // Login Points
       .pointsData(geoList)
       .pointLat('lat')
       .pointLng('lon')
-      .pointColor((d) => (d.impossible_travel || d.is_threat ? '#EF4444' : '#10B981'))
+      .pointColor((d) => (d.impossible_travel || d.is_threat ? '#E5484D' : '#F08A4B'))
       .pointAltitude((d) => (d.impossible_travel ? 0.08 : 0.03))
       .pointRadius((d) => Math.max(0.6, Math.min(2.5, (d.count || 1) * 0.15)))
       .pointLabel((d) => `
         <div style="background:var(--surface); border:1px solid var(--border); box-shadow:var(--panel-shadow); padding:8px 12px; border:1px solid rgba(148,163,184,0.3); border-radius:6px; font-family:sans-serif; font-size:12px; color:var(--ink);">
-          <div style="font-weight:700; color:${d.impossible_travel ? '#EF4444' : '#10B981'}; font-size:11px;">${d.impossible_travel ? 'IMPOSSIBLE TRAVEL ORIGIN' : 'TRUSTED INGRESS'}</div>
+          <div style="font-weight:700; color:${d.impossible_travel ? '#E5484D' : '#F08A4B'}; font-size:11px;">${d.impossible_travel ? 'IMPOSSIBLE TRAVEL ORIGIN' : 'TRUSTED INGRESS'}</div>
           <div>${escHtml(d.city || 'Unknown')}, ${escHtml(d.country || '')}</div>
           <div style="font-family:monospace; font-size:11px; color:#94A3B8; margin-top:2px;">IP: ${escHtml(d.ip || '')} (${escHtml(d.asn || '')})</div>
           <div style="margin-top:2px; color:#22D3EE;">Identity: ${escHtml(d.identity_id || '')}</div>
@@ -78,7 +78,7 @@ function renderGlobe(container, geoList) {
       `)
       // Animated Arcs
       .arcsData(arcData)
-      .arcColor('color')
+      .arcColor((d) => d.color || (d.impossible_travel ? '#E5484D' : '#3D6FE0'))
       .arcAltitude(0.25)
       .arcStroke(1.5)
       .arcDashLength(0.4)

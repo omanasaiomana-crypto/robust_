@@ -122,15 +122,15 @@ function renderAttackChain(data) {
     return `
       <div style="position:relative; display:flex; gap:16px;">
         <!-- Timeline vertical rule -->
-        ${!isLast ? '<div style="position:absolute; left:13px; top:28px; bottom:-16px; width:2px; background:rgba(148,163,184,0.18);"></div>' : ''}
+        ${!isLast ? '<div style="position:absolute; left:13px; top:28px; bottom:-16px; width:2px; background:#E8E1D6;"></div>' : ''}
         
         <!-- Step Number Node -->
-        <div style="width:28px; height:28px; border-radius:50%; background:rgba(17,24,39,0.9); border:2px solid var(--brand); display:flex; align-items:center; justify-content:center; font-family:var(--font-mono); font-size:0.75rem; font-weight:700; color:var(--ink); z-index:2; flex-shrink:0;">
+        <div style="width:28px; height:28px; border-radius:50%; background:#FFFFFF; border:2px solid #3D6FE0; display:flex; align-items:center; justify-content:center; font-family:var(--font-mono); font-size:0.75rem; font-weight:700; color:var(--ink); z-index:2; flex-shrink:0;">
           ${step.step_index || idx + 1}
         </div>
 
         <!-- Step Content Card -->
-        <div style="flex:1; padding:12px 16px; background:rgba(255,255,255,0.02); border:1px solid var(--panel-border); border-radius:8px;">
+        <div style="flex:1; padding:12px 16px; background:var(--surface-2); border:1px solid var(--panel-border); border-radius:8px;">
           <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:4px; flex-wrap:wrap; gap:8px;">
             <div style="display:flex; align-items:center; gap:8px;">
               <span style="font-size:0.8125rem; font-weight:700; color:var(--ink);">${escHtml(step.event_name || 'Event')}</span>
@@ -186,7 +186,7 @@ function renderReasons(data) {
     );
 
     return `
-      <div style="padding:10px 12px; background:rgba(255,255,255,0.02); border:1px solid var(--panel-border); border-radius:8px; display:flex; gap:10px; align-items:flex-start;">
+      <div style="padding:10px 12px; background:var(--surface-2); border:1px solid var(--panel-border); border-radius:8px; display:flex; gap:10px; align-items:flex-start;">
         <span style="width:20px; height:20px; border-radius:50%; background:rgba(59,130,246,0.15); color:var(--brand); display:flex; align-items:center; justify-content:center; font-size:0.6875rem; font-weight:700; font-family:var(--font-mono); flex-shrink:0;">
           ${i + 1}
         </span>
@@ -229,9 +229,9 @@ function renderCounterfactuals(data) {
           <span style="color:var(--ink); font-weight:500;">${escHtml(c.description || c.omitted)}</span>
           <span style="font-family:var(--font-mono); color:var(--ok); font-weight:700;">-${drop.toFixed(1)} pts (${withoutScore.toFixed(1)})</span>
         </div>
-        <div style="height:8px; border-radius:4px; background:rgba(255,255,255,0.06); overflow:hidden; position:relative;">
-          <div style="position:absolute; left:0; top:0; bottom:0; width:${baseScore}%; background:rgba(239,68,68,0.3);"></div>
-          <div style="position:absolute; left:0; top:0; bottom:0; width:${withoutScore}%; background:var(--brand); border-radius:4px;"></div>
+        <div style="height:8px; border-radius:4px; background:#EFE8DC; overflow:hidden; position:relative;">
+          <div style="position:absolute; left:0; top:0; bottom:0; width:${baseScore}%; background:rgba(229,72,77,0.25);"></div>
+          <div style="position:absolute; left:0; top:0; bottom:0; width:${withoutScore}%; background:#3D6FE0; border-radius:4px;"></div>
         </div>
       </div>
     `;

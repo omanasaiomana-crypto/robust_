@@ -86,14 +86,14 @@ function initConstellation() {
     threeRenderer = renderer;
 
     // Ambient & Point Lighting
-    scene.add(new window.THREE.AmbientLight(0xffffff, 0.8));
-    const pointLight = new window.THREE.PointLight(0x22d3ee, 2, 800);
-    pointLight.position.set(0, 0, 200);
-    scene.add(pointLight);
+    scene.add(new window.THREE.HemisphereLight(0xffffff, 0xf6f1e9, 0.95));
+    const dirLight = new window.THREE.DirectionalLight(0xffffff, 0.6);
+    dirLight.position.set(100, 200, 300);
+    scene.add(dirLight);
 
     // 1. Render 5 Concentric Layer Rings
     const ringRadii = [140, 220, 300, 380, 450];
-    const ringColors = [0x3b82f6, 0x22d3ee, 0xf59e0b, 0xef4444, 0x8b5cf6];
+    const ringColors = [0xe8e1d6, 0xe8e1d6, 0xe8e1d6, 0xe8e1d6, 0xe8e1d6];
 
     ringRadii.forEach((r, idx) => {
       const ringGeom = new window.THREE.RingGeometry(r - 1, r + 1, 64);
@@ -101,7 +101,7 @@ function initConstellation() {
         color: ringColors[idx],
         side: window.THREE.DoubleSide,
         transparent: true,
-        opacity: 0.18,
+        opacity: 0.7,
       });
       const ringMesh = new window.THREE.Mesh(ringGeom, ringMat);
       scene.add(ringMesh);
@@ -113,13 +113,18 @@ function initConstellation() {
       const y = Math.sin(agent.angle) * agent.ringRadius;
 
       // Outer glow sphere
+            // Node layer color mapping (UI_DESIGN.md §2 & §6)
+      let nodeColorHex = 0xdce8ff; // sky
+      let strongOutline = 0x3d6fe0;
+      if (agent.layer === 'Detection') { nodeColorHex = 0xece6ff; strongOutline = 0x6d4fd8; }
+      else if (agent.layer === 'Decision') { nodeColorHex = 0xffe4d3; strongOutline = 0xc2410c; }
+      else if (agent.layer === 'Learning') { nodeColorHex = 0xd9f2ea; strongOutline = 0x0f8a6a; }
+
       const sphereGeom = new window.THREE.SphereGeometry(14, 24, 24);
       const sphereMat = new window.THREE.MeshStandardMaterial({
-        color: 0x3b82f6,
-        emissive: 0x1d4ed8,
-        emissiveIntensity: 0.4,
-        roughness: 0.3,
-        metalness: 0.8,
+        color: nodeColorHex,
+        roughness: 0.4,
+        metalness: 0.1,
       });
       const sphere = new window.THREE.Mesh(sphereGeom, sphereMat);
       sphere.position.set(x, y, 0);
@@ -130,7 +135,7 @@ function initConstellation() {
       canvas.width = 256;
       canvas.height = 64;
       const ctx = canvas.getContext('2d');
-      ctx.fillStyle = '#E5E7EB';
+      ctx.fillStyle = '#1F2430';
       ctx.font = 'bold 24px Inter, sans-serif';
       ctx.textAlign = 'center';
       ctx.fillText(`${agent.id.toUpperCase()}: ${agent.name}`, 128, 40);
@@ -148,7 +153,7 @@ function initConstellation() {
         agent,
         x,
         y,
-        baseColor: 0x3b82f6,
+        baseColor: nodeColorHex,
         state: 'idle',
         pulse: 0,
       };
@@ -205,16 +210,16 @@ function initConstellation() {
           const s = 1 + Math.sin(node.pulse) * 0.2;
           node.mesh.scale.set(s, s, s);
         } else if (node.state === 'finding') {
-          node.mesh.material.color.setHex(0xf59e0b);
-          node.mesh.material.emissive.setHex(0xd97706);
+          node.mesh.material.color.setHex(0xfff3c4);
+          node.mesh.material.color.setHex(0xfff3c4);
         } else if (node.state === 'threat') {
-          node.mesh.material.color.setHex(0xef4444);
-          node.mesh.material.emissive.setHex(0xb91c1c);
+          node.mesh.material.color.setHex(0xe5484d);
+          node.mesh.material.color.setHex(0xe5484d);
           node.mesh.scale.set(1.4, 1.4, 1.4);
         } else {
           node.mesh.scale.set(1, 1, 1);
-          node.mesh.material.color.setHex(0x3b82f6);
-          node.mesh.material.emissive.setHex(0x1d4ed8);
+          node.mesh.material.color.setHex(node.baseColor || 0xdce8ff);
+          
         }
       });
 

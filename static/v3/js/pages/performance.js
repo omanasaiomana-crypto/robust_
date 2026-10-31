@@ -1,3 +1,4 @@
+import { CHART_PALETTE } from '../core/chartTheme.js';
 /**
  * IdentityShield v3 — Performance & Benchmark Page Controller
  * Handles latency SLA tiles, throughput line chart, topic queue depth, and benchmark execution.
@@ -57,12 +58,12 @@ function renderThroughputChart() {
         {
           label: 'Ingest Rate (EPS)',
           data: dataPoints,
-          borderColor: '#3B82F6',
-          backgroundColor: 'rgba(59, 130, 246, 0.1)',
+          borderColor: CHART_PALETTE[0],
+          backgroundColor: 'rgba(61, 111, 224, 0.08)',
           fill: true,
           tension: 0.3,
           pointRadius: 2,
-          pointBackgroundColor: '#22D3EE',
+          pointBackgroundColor: CHART_PALETTE[0],
         },
       ],
     },
@@ -79,14 +80,14 @@ function renderThroughputChart() {
       },
       scales: {
         x: {
-          ticks: { color: '#94A3B8', font: { family: 'monospace', size: 10 } },
-          grid: { color: 'rgba(148, 163, 184, 0.08)' },
+          ticks: { color: '#4B5263', font: { family: 'monospace', size: 10 } },
+          grid: { color: '#EFE8DC' },
         },
         y: {
           min: 500,
           max: 2600,
-          ticks: { color: '#94A3B8', font: { family: 'monospace', size: 10 } },
-          grid: { color: 'rgba(148, 163, 184, 0.08)' },
+          ticks: { color: '#4B5263', font: { family: 'monospace', size: 10 } },
+          grid: { color: '#EFE8DC' },
         },
       },
     },

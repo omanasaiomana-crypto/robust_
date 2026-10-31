@@ -11,13 +11,13 @@ let graphInstance = null;
 let rawGraphData = null;
 
 const NODE_COLORS = {
-  identity: '#3B82F6',
-  session: '#22D3EE',
-  ip: '#64748B',
-  key: '#8B5CF6',
-  role: '#F59E0B',
-  resource: '#10B981',
-  sensitive_resource: '#EF4444',
+  identity: '#3D6FE0',
+  session: '#6D4FD8',
+  ip: '#475569',
+  key: '#A16207',
+  role: '#C2410C',
+  resource: '#0F8A6A',
+  sensitive_resource: '#C81E1E',
 };
 
 export async function initGraphPage() {
@@ -93,7 +93,7 @@ function render3DGraph(container, data) {
     const graph = window.ForceGraph3D()(container)
       .width(width)
       .height(height)
-      .backgroundColor('#05070D')
+      .backgroundColor('#FFFFFF')
       .graphData(data)
       // Node styling
       .nodeLabel((node) => `
@@ -108,12 +108,12 @@ function render3DGraph(container, data) {
       .nodeOpacity(0.9)
       // Edge styling: directional particles along attack paths
       .linkWidth((link) => (link.is_attack_path ? 2.5 : 1))
-      .linkColor((link) => link.color || (link.is_attack_path ? '#EF4444' : 'rgba(148, 163, 184, 0.25)'))
+      .linkColor((link) => link.color || (link.is_attack_path ? '#E5484D' : (link.source?.kind === 'identity' || link.target?.kind === 'role' ? '#3D6FE0' : '#CBD5E1')))
       .linkDirectionalParticles((link) => (link.is_attack_path ? 4 : 0))
       .linkDirectionalParticleWidth(2.5)
       .linkDirectionalParticleSpeed(0.008)
-      .linkDirectionalParticleColor(() => '#EF4444')
-      .linkLabel((link) => `<span style="font-family:monospace; font-size:11px; color:#A5F3FC;">${escHtml(link.label || '')}</span>`)
+      .linkDirectionalParticleColor(() => '#E5484D')
+      .linkLabel((link) => `<span style="font-family:monospace; font-size:11px; color:#3D6FE0; font-weight:600;">${escHtml(link.label || '')}</span>`)
       // Click interaction: camera fly-to and inspector update
       .onNodeClick((node) => {
         // Fly-to

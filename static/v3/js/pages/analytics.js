@@ -1,3 +1,4 @@
+import { CHART_PALETTE, HEATMAP_SCALE, BAND_COLORS } from '../core/chartTheme.js';
 /**
  * IdentityShield v3 — Analytics Page Controller
  * Renders Model Comparison (Rules vs ML vs Hybrid), Calibration Reliability Diagram,
@@ -57,16 +58,16 @@ function renderComparisonChart(metrics) {
         {
           label: 'Behavioral ML (IsolationForest + Markov)',
           data: [0.84, 0.91, 0.87],
-          backgroundColor: 'rgba(34, 211, 238, 0.7)',
-          borderColor: '#22D3EE',
+          backgroundColor: 'rgba(109, 79, 216, 0.85)',
+          borderColor: '#6D4FD8',
           borderWidth: 1,
           borderRadius: 4,
         },
         {
           label: 'Hybrid Fusion (IdentityShield v3)',
           data: [hybridP, hybridR, hybridF1],
-          backgroundColor: 'rgba(59, 130, 246, 0.85)',
-          borderColor: '#3B82F6',
+          backgroundColor: 'rgba(61, 111, 224, 0.85)',
+          borderColor: '#3D6FE0',
           borderWidth: 1,
           borderRadius: 4,
         },
@@ -77,7 +78,7 @@ function renderComparisonChart(metrics) {
       maintainAspectRatio: false,
       plugins: {
         legend: {
-          labels: { color: '#E5E7EB', font: { family: 'Inter', size: 11 } },
+          labels: { color: '#1F2430', font: { family: 'Inter', size: 11 } },
         },
         tooltip: {
           callbacks: {
@@ -87,18 +88,18 @@ function renderComparisonChart(metrics) {
       },
       scales: {
         x: {
-          ticks: { color: '#94A3B8', font: { family: 'Inter' } },
-          grid: { color: 'rgba(148, 163, 184, 0.08)' },
+          ticks: { color: '#4B5263', font: { family: 'Inter' } },
+          grid: { color: '#EFE8DC' },
         },
         y: {
           min: 0.6,
           max: 1.0,
           ticks: {
-            color: '#94A3B8',
+            color: '#4B5263',
             font: { family: 'monospace' },
             callback: (v) => `${(v * 100).toFixed(0)}%`,
           },
-          grid: { color: 'rgba(148, 163, 184, 0.08)' },
+          grid: { color: '#EFE8DC' },
         },
       },
     },
@@ -126,7 +127,7 @@ function renderCalibrationChart() {
         {
           label: 'Empirical Observed Risk',
           data: observedFreqs.map((f) => f * 100),
-          borderColor: '#22D3EE',
+          borderColor: '#6D4FD8',
           backgroundColor: 'rgba(34, 211, 238, 0.2)',
           pointBackgroundColor: '#22D3EE',
           pointRadius: 4,
@@ -135,7 +136,7 @@ function renderCalibrationChart() {
         {
           label: 'Perfect Calibration (y = x)',
           data: binMidpoints.map((b) => b * 100),
-          borderColor: 'rgba(148, 163, 184, 0.4)',
+          borderColor: '#94A3B8',
           borderDash: [5, 5],
           pointRadius: 0,
         },
@@ -145,20 +146,20 @@ function renderCalibrationChart() {
       responsive: true,
       maintainAspectRatio: false,
       plugins: {
-        legend: { labels: { color: '#E5E7EB', font: { size: 11 } } },
+        legend: { labels: { color: '#1F2430', font: { size: 11 } } },
       },
       scales: {
         x: {
-          title: { display: true, text: 'Predicted Risk Score', color: '#94A3B8', font: { size: 11 } },
-          ticks: { color: '#94A3B8' },
-          grid: { color: 'rgba(148, 163, 184, 0.08)' },
+          title: { display: true, text: 'Predicted Risk Score', color: '#4B5263', font: { size: 11 } },
+          ticks: { color: '#4B5263' },
+          grid: { color: '#EFE8DC' },
         },
         y: {
-          title: { display: true, text: 'Empirical Threat Rate (%)', color: '#94A3B8', font: { size: 11 } },
+          title: { display: true, text: 'Empirical Threat Rate (%)', color: '#4B5263', font: { size: 11 } },
           min: 0,
           max: 100,
-          ticks: { color: '#94A3B8' },
-          grid: { color: 'rgba(148, 163, 184, 0.08)' },
+          ticks: { color: '#4B5263' },
+          grid: { color: '#EFE8DC' },
         },
       },
     },
@@ -219,10 +220,11 @@ function renderTemporalHeatmap() {
       const intensity = isOffHours ? Math.random() * 0.7 + 0.3 : Math.random() * 0.2;
 
       cell.style.background = intensity > 0.6
-        ? `rgba(239, 68, 68, ${intensity})`
+        ? '#E5484D'
         : intensity > 0.25
-        ? `rgba(245, 158, 11, ${intensity})`
-        : 'rgba(255, 255, 255, 0.04)';
+        ? '#FFE4D3'
+        : '#FFFDF9';
+      cell.style.border = '1px solid var(--border)';
 
       cell.title = `Day ${d + 1}, ${h}:00 UTC - Relative activity: ${(intensity * 100).toFixed(0)}%`;
       container.appendChild(cell);
@@ -244,7 +246,7 @@ function renderIdentityMatrix() {
   ];
 
   container.innerHTML = rows.map((r) => `
-    <div style="padding:10px 12px; background:rgba(255,255,255,0.02); border:1px solid var(--panel-border); border-radius:6px; display:flex; justify-content:space-between; align-items:center;">
+    <div style="padding:10px 12px; background:var(--surface-2); border:1px solid var(--panel-border); border-radius:6px; display:flex; justify-content:space-between; align-items:center;">
       <div>
         <div style="display:flex; align-items:center; gap:8px;">
           <span style="font-weight:700; color:var(--ink); font-size:0.8125rem;">${escHtml(r.identity)}</span>

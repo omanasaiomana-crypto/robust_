@@ -1,3 +1,4 @@
+import { CHART_PALETTE } from '../core/chartTheme.js';
 /**
  * IdentityShield v3 — Agents Page Controller
  * Handles 15 agent cards grouped by layer, Chart.js throughput sparklines,
@@ -124,7 +125,7 @@ function renderAgentCard(agent, layerColor) {
       </div>
 
       <!-- Metrics Grid -->
-      <div style="display:grid; grid-template-columns:repeat(3, 1fr); gap:6px; background:rgba(0,0,0,0.25); border-radius:6px; padding:8px 6px; text-align:center;">
+      <div style="display:grid; grid-template-columns:repeat(3, 1fr); gap:6px; background:var(--surface-2); border:1px solid var(--border); border-radius:6px; padding:8px 6px; text-align:center;">
         <div>
           <div style="font-size:0.625rem; color:var(--muted); text-transform:uppercase;">Processed</div>
           <div style="font-size:0.8125rem; font-weight:700; font-family:var(--font-mono); color:var(--ink);">${fmt.number(processed)}</div>
@@ -167,12 +168,12 @@ function mountSparkline(agentId) {
       datasets: [
         {
           data: points,
-          borderColor: '#3B82F6',
+          borderColor: CHART_PALETTE[0],
           borderWidth: 1.5,
           pointRadius: 0,
           tension: 0.35,
           fill: true,
-          backgroundColor: 'rgba(59, 130, 246, 0.08)',
+          backgroundColor: 'rgba(61, 111, 224, 0.08)',
         },
       ],
     },

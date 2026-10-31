@@ -236,13 +236,13 @@ async function initMiniGlobe() {
       .height(height)
       .backgroundColor('rgba(0,0,0,0)')
       .showAtmosphere(true)
-      .atmosphereColor('#3B82F6')
-      .atmosphereAltitude(0.15)
+      .atmosphereColor('#BFD4FF')
+      .atmosphereAltitude(0.12)
       .globeImageUrl('//unpkg.com/three-globe/example/img/earth-night.jpg')
       .pointsData(geoData)
       .pointLat('lat')
       .pointLng('lon')
-      .pointColor((d) => (d.impossible_travel || d.is_threat ? '#EF4444' : '#10B981'))
+      .pointColor((d) => (d.impossible_travel || d.is_threat ? '#E5484D' : '#F08A4B'))
       .pointAltitude(0.04)
       .pointRadius(0.8)
       .arcsData(
@@ -253,12 +253,12 @@ async function initMiniGlobe() {
                 startLng: geoData[0].lon,
                 endLat: geoData[1].lat,
                 endLng: geoData[1].lon,
-                color: '#EF4444',
+                color: '#E5484D',
               },
             ]
           : []
       )
-      .arcColor('color')
+      .arcColor((d) => d.color || '#3D6FE0')
       .arcDashLength(0.4)
       .arcDashGap(0.2)
       .arcDashAnimateTime(1500)
