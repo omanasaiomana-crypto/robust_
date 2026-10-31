@@ -29,35 +29,53 @@ export const BAND_COLORS = {
 export function applyChartTheme(Chart) {
   if (!Chart || !Chart.defaults) return;
 
+  const isDark = typeof document !== 'undefined' && document.documentElement.getAttribute('data-theme') === 'dark';
+  const textColor = isDark ? '#94A3B8' : '#4B5263';
+  const gridColor = isDark ? '#232D3F' : '#EFE8DC';
+
   Chart.defaults.font.family = "'Inter', -apple-system, BlinkMacSystemFont, sans-serif";
   Chart.defaults.font.size = 12;
-  Chart.defaults.color = '#4B5263'; // axis text
+  Chart.defaults.color = textColor;
 
   // Global scale defaults
   if (Chart.defaults.scales) {
     if (Chart.defaults.scales.linear) {
-      if (Chart.defaults.scales.linear.grid) Chart.defaults.scales.linear.grid.color = '#EFE8DC';
-      if (Chart.defaults.scales.linear.ticks) Chart.defaults.scales.linear.ticks.color = '#4B5263';
+      if (Chart.defaults.scales.linear.grid) Chart.defaults.scales.linear.grid.color = gridColor;
+      if (Chart.defaults.scales.linear.ticks) Chart.defaults.scales.linear.ticks.color = textColor;
     }
     if (Chart.defaults.scales.category) {
-      if (Chart.defaults.scales.category.grid) Chart.defaults.scales.category.grid.color = '#EFE8DC';
-      if (Chart.defaults.scales.category.ticks) Chart.defaults.scales.category.ticks.color = '#4B5263';
+      if (Chart.defaults.scales.category.grid) Chart.defaults.scales.category.grid.color = gridColor;
+      if (Chart.defaults.scales.category.ticks) Chart.defaults.scales.category.ticks.color = textColor;
     }
   }
 
   // Tooltip defaults
   if (Chart.defaults.plugins && Chart.defaults.plugins.tooltip) {
-    Chart.defaults.plugins.tooltip.backgroundColor = '#FFFFFF';
-    Chart.defaults.plugins.tooltip.titleColor = '#1F2430';
-    Chart.defaults.plugins.tooltip.bodyColor = '#1F2430';
-    Chart.defaults.plugins.tooltip.borderColor = '#E8E1D6';
+    Chart.defaults.plugins.tooltip.backgroundColor = isDark ? '#141923' : '#FFFFFF';
+    Chart.defaults.plugins.tooltip.titleColor = isDark ? '#F8FAFC' : '#1F2430';
+    Chart.defaults.plugins.tooltip.bodyColor = isDark ? '#F8FAFC' : '#1F2430';
+    Chart.defaults.plugins.tooltip.borderColor = isDark ? '#334155' : '#E8E1D6';
     Chart.defaults.plugins.tooltip.borderWidth = 1;
     Chart.defaults.plugins.tooltip.padding = 10;
     Chart.defaults.plugins.tooltip.cornerRadius = 8;
   }
 }
 
-// Auto-apply if global Chart exists
-if (typeof window !== 'undefined' && window.Chart) {
-  applyChartTheme(window.Chart);
+// Auto-apply if global Chart exists and listen for theme toggles
+if (typeof window !== 'undefined') {
+  if (window.Chart) applyChartTheme(window.Chart);
+
+  window.addEventListener('is:theme-change', () => {
+    if (window.Chart) {
+      applyChartTheme(window.Chart);
+      if (window.Chart.instances) {
+        Object.values(window.Chart.instances).forEach((inst) => {
+          if (inst && typeof inst.update === 'function') {
+            inst.update();
+          }
+        });
+      }
+    }
+  });
 }
+

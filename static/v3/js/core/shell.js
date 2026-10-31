@@ -1,8 +1,14 @@
 import { initButtons } from '../fx/buttons.js';
 /**
  * IdentityShield v3 — Navigation Shell, Topbar, Toasts, & Command Palette
- * Context.md Section 18 / PRD §18: Professional Dark Command Center Shell
+ * Context.md Section 18 / PRD §18: Dual Theme (Cream Light & Dark Command Center)
  */
+
+// Anti-flash initial theme apply
+try {
+  const _savedTheme = localStorage.getItem('identityshield_theme') || 'light';
+  document.documentElement.setAttribute('data-theme', _savedTheme);
+} catch (e) {}
 
 import { api } from './api.js';
 import { sse } from './sse.js';
@@ -88,6 +94,7 @@ export class Shell {
     this.ingestText = null;
     this.statusPill = null;
     this.cmdModal = null;
+    this.themeBtn = null;
   }
 
   _loadCollapsed() {
@@ -107,6 +114,7 @@ export class Shell {
   }
 
   init() {
+    this._initTheme();
     this._renderToastContainer();
     this._renderShell();
     this._setupClock();
@@ -306,6 +314,9 @@ export class Shell {
     cmdBtn.addEventListener('click', () => this.openCommandPalette());
     topbarRight.appendChild(cmdBtn);
 
+    // Theme Toggle Button
+    this._renderThemeToggle(topbarRight);
+
     const clock = document.createElement('div');
     clock.className = 'topbar-clock';
     clock.id = 'topbar-clock';
@@ -386,6 +397,10 @@ export class Shell {
         e.preventDefault();
         this.openCommandPalette();
       }
+      if ((e.ctrlKey || e.metaKey) && e.shiftKey && e.key.toLowerCase() === 'd') {
+        e.preventDefault();
+        this.toggleTheme();
+      }
       if (e.key === 'Escape' && this.cmdModal) {
         this.closeCommandPalette();
       }
@@ -428,6 +443,11 @@ export class Shell {
         label: 'Hero Case: E1 (svc-report)',
         sub: 'Open active E1 investigation details',
         action: () => (window.location.href = '/v3/cases.html?case_id=case-e1-svcreport'),
+      },
+      {
+        label: 'Toggle Theme (Light / Dark)',
+        sub: `Currently ${this.getTheme() === 'dark' ? 'Dark Command Center' : 'Cream Light'} Mode (Ctrl+Shift+D)`,
+        action: () => this.toggleTheme(),
       },
       {
         label: 'Toggle Mock Mode (?mock=1)',
@@ -536,6 +556,69 @@ export class Shell {
       this.cmdModal.remove();
       this.cmdModal = null;
     }
+  }
+
+  _initTheme() {
+    const theme = this.getTheme();
+    document.documentElement.setAttribute('data-theme', theme);
+  }
+
+  getTheme() {
+    try {
+      return localStorage.getItem('identityshield_theme') || 'light';
+    } catch {
+      return 'light';
+    }
+  }
+
+  setTheme(theme) {
+    document.documentElement.setAttribute('data-theme', theme);
+    try {
+      localStorage.setItem('identityshield_theme', theme);
+    } catch (e) {
+      console.warn('Failed to save theme in localStorage', e);
+    }
+    this._updateThemeBtn(theme);
+    window.dispatchEvent(new CustomEvent('is:theme-change', { detail: { theme } }));
+    this.showToast(`Switched to ${theme === 'dark' ? 'Dark Command Center' : 'Cream Light'} Mode`, 'info', 2000);
+  }
+
+  toggleTheme() {
+    const next = this.getTheme() === 'dark' ? 'light' : 'dark';
+    this.setTheme(next);
+  }
+
+  _renderThemeToggle(container) {
+    const btn = document.createElement('button');
+    btn.id = 'topbar-theme-toggle';
+    btn.className = 'theme-toggle-btn btn-3d btn-ripple';
+    btn.type = 'button';
+    this.themeBtn = btn;
+    this._updateThemeBtn(this.getTheme());
+
+    btn.addEventListener('click', () => {
+      this.toggleTheme();
+    });
+
+    container.appendChild(btn);
+  }
+
+  _updateThemeBtn(theme) {
+    if (!this.themeBtn) return;
+    const isDark = theme === 'dark';
+    this.themeBtn.title = isDark
+      ? 'Switch to Cream Light Theme (Ctrl+Shift+D)'
+      : 'Switch to Dark Command Center Theme (Ctrl+Shift+D)';
+    this.themeBtn.innerHTML = `
+      <span class="theme-toggle-icon">
+        ${
+          isDark
+            ? `<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>`
+            : `<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg>`
+        }
+      </span>
+      <span>${isDark ? 'Dark' : 'Light'}</span>
+    `;
   }
 }
 

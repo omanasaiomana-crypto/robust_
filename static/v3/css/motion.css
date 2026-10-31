@@ -344,3 +344,30 @@ button:disabled,
     display: none !important;
   }
 }
+
+/* --------------------------------------------------------------------------
+   9. Dark Mode Button 3D Edges & Tactile Ripples
+   -------------------------------------------------------------------------- */
+[data-theme="dark"] .btn-3d {
+  --btn-edge: #0D131D;
+  box-shadow: 0 3px 0 var(--btn-edge), 0 4px 14px rgba(0, 0, 0, 0.45);
+}
+
+[data-theme="dark"] .btn-primary.btn-3d {
+  --btn-edge: #1E3A8A;
+}
+
+[data-theme="dark"] .btn-danger.btn-3d {
+  --btn-edge: #7F1D1D;
+}
+
+[data-theme="dark"] .btn-secondary.btn-3d,
+[data-theme="dark"] .btn-ghost.btn-3d {
+  --btn-edge: #0D131D;
+}
+
+[data-theme="dark"] .btn-primary .ripple { background: rgba(96, 165, 250, 0.35); }
+[data-theme="dark"] .btn-danger .ripple { background: rgba(248, 113, 113, 0.35); }
+[data-theme="dark"] .btn-secondary .ripple,
+[data-theme="dark"] .btn-ghost .ripple { background: rgba(255, 255, 255, 0.12); }
+

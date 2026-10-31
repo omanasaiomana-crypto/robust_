@@ -79,6 +79,157 @@
   --topbar-h: 60px;
 }
 
+/* =============================================================================
+   Dark Mode System Tokens & Overrides ([data-theme="dark"])
+   Cyber Command Center / Deep Obsidian & Slate Theme
+   ============================================================================= */
+[data-theme="dark"] {
+  /* --- 1. Base Dark Tokens --- */
+  --bg: #0B0F17;
+  --bg-grad: linear-gradient(180deg, #0F141F 0%, #0B0F17 55%, #080B11 100%);
+  --surface: #141923;
+  --surface-2: #1A2230;
+  --surface-3: #222C3D;
+  --border: #232D3F;
+  --ink: #F8FAFC;
+  --ink-2: #94A3B8;
+  --muted: #64748B;
+  --focus: #60A5FA;
+
+  /* --- 2. Pastel Accents Adapted for Dark Mode Contrast --- */
+  --sky-pastel: rgba(61, 111, 224, 0.22);
+  --sky-strong: #60A5FA;
+  --mint-pastel: rgba(16, 185, 129, 0.22);
+  --mint-strong: #34D399;
+  --peach-pastel: rgba(240, 138, 75, 0.22);
+  --peach-strong: #FB923C;
+  --butter-pastel: rgba(224, 168, 0, 0.22);
+  --butter-strong: #FBBF24;
+  --rose-pastel: rgba(229, 72, 77, 0.22);
+  --rose-strong: #F87171;
+  --lavender-pastel: rgba(109, 79, 216, 0.22);
+  --lavender-strong: #A78BFA;
+  --stone-pastel: rgba(100, 116, 139, 0.22);
+  --stone-strong: #94A3B8;
+
+  /* --- 3. Backward Compatibility Aliases --- */
+  --panel: var(--surface);
+  --panel-hover: var(--surface-2);
+  --panel-border: var(--border);
+  --panel-border-bright: #334155;
+  --text: var(--ink);
+  --text-secondary: var(--ink-2);
+  --brand: var(--sky-strong);
+  --brand-hover: #3B82F6;
+  --brand-pressed: #2563EB;
+  --cyan: #38BDF8;
+  --cyan-glow: rgba(56, 189, 248, 0.16);
+  --violet: var(--lavender-strong);
+  --ok: var(--mint-strong);
+  --warn: var(--peach-strong);
+  --crit: var(--rose-strong);
+
+  /* --- 4. Band Gauge & Indicator Colors --- */
+  --band-monitor: #64748B;
+  --band-step_up: #FBBF24;
+  --band-step-up: #FBBF24;
+  --band-restrict: #FB923C;
+  --band-revoke: #F87171;
+
+  /* --- 5. Shadows & Depth in Dark Mode --- */
+  --panel-shadow: 0 4px 20px rgba(0, 0, 0, 0.5), 0 1px 3px rgba(0, 0, 0, 0.4);
+  --panel-shadow-raised: 0 8px 32px rgba(0, 0, 0, 0.7), 0 2px 6px rgba(0, 0, 0, 0.5);
+  --top-highlight: inset 0 1px 0 rgba(255, 255, 255, 0.06);
+  --input-inset: inset 0 1px 3px rgba(0, 0, 0, 0.5);
+}
+
+/* Specific Dark Mode Refinements */
+[data-theme="dark"] .glass.is-clickable:hover,
+[data-theme="dark"] [data-tilt]:hover {
+  border-color: #334155 !important;
+}
+
+[data-theme="dark"] ::-webkit-scrollbar-track {
+  background: #0B0F17;
+}
+
+[data-theme="dark"] ::-webkit-scrollbar-thumb {
+  background: #232D3F;
+}
+
+[data-theme="dark"] ::-webkit-scrollbar-thumb:hover {
+  background: #334155;
+}
+
+[data-theme="dark"] .btn-secondary,
+[data-theme="dark"] .btn-ghost {
+  background: var(--surface) !important;
+  border-color: var(--border) !important;
+  color: var(--ink) !important;
+}
+
+[data-theme="dark"] .btn-secondary:hover:not(:disabled),
+[data-theme="dark"] .btn-ghost:hover:not(:disabled) {
+  background: var(--surface-2) !important;
+  border-color: #475569 !important;
+  color: #FFFFFF !important;
+}
+
+[data-theme="dark"] .cmd-palette-backdrop {
+  background: rgba(3, 7, 18, 0.75);
+}
+
+[data-theme="dark"] .cmd-palette-item:hover,
+[data-theme="dark"] .cmd-palette-item.selected {
+  background: rgba(59, 130, 246, 0.2);
+  color: #93C5FD;
+}
+
+/* Theme Toggle Button Styling */
+.theme-toggle-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  height: 34px;
+  padding: 0 12px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-control);
+  color: var(--ink-2);
+  font-size: 0.8125rem;
+  font-weight: 600;
+  cursor: pointer;
+  user-select: none;
+  transition: all 0.15s ease;
+}
+
+.theme-toggle-btn:hover {
+  background: var(--surface-2);
+  color: var(--ink);
+  border-color: var(--panel-border-bright);
+}
+
+.theme-toggle-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 16px;
+  height: 16px;
+  transition: transform 0.3s cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+
+.theme-toggle-btn:hover .theme-toggle-icon {
+  transform: rotate(20deg);
+}
+
+[data-theme="dark"] .theme-toggle-icon {
+  color: #FBBF24; /* Warm golden moon */
+}
+
+:not([data-theme="dark"]) .theme-toggle-icon {
+  color: #D97706; /* Amber sun */
+}
+
 /* Base Styles & Resets */
 *, *::before, *::after {
   box-sizing: border-box;
