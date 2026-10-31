@@ -8,32 +8,30 @@ import { api } from '../core/api.js';
 import { sse } from '../core/sse.js';
 import { fmt, escHtml } from '../core/dom.js';
 
-// 15 Canonical Agent Definitions & Layer Rings
+// 15 Canonical Agent Definitions & 4 Pipeline Layers
 const AGENT_NODES = [
-  // Layer 1: Data (Ring Radius 140)
-  { id: 'a01', name: 'Collector', layer: 1, ringRadius: 140, angle: 0 },
-  { id: 'a02', name: 'Normalizer', layer: 1, ringRadius: 140, angle: Math.PI * 0.5 },
-  { id: 'a03', name: 'Context Intel', layer: 1, ringRadius: 140, angle: Math.PI },
-  { id: 'a04', name: 'Correlation', layer: 1, ringRadius: 140, angle: Math.PI * 1.5 },
+  // Layer 0: Data (blue, radius 150) - 4 agents
+  { id: 'a01', num: 1, name: 'Collector', shortName: '1 Collector', layer: 'Data', ringRadius: 150, angle: 0 },
+  { id: 'a02', num: 2, name: 'Normalizer', shortName: '2 Normalizer', layer: 'Data', ringRadius: 150, angle: Math.PI * 0.5 },
+  { id: 'a03', num: 3, name: 'Context', shortName: '3 Context', layer: 'Data', ringRadius: 150, angle: Math.PI },
+  { id: 'a04', num: 4, name: 'Correlation', shortName: '4 Correlation', layer: 'Data', ringRadius: 150, angle: Math.PI * 1.5 },
 
-  // Layer 2: Access Detection (Ring Radius 220)
-  { id: 'a05', name: 'Access Anomaly', layer: 2, ringRadius: 220, angle: Math.PI * 0.25 },
-  { id: 'a06', name: 'Session Integrity', layer: 2, ringRadius: 220, angle: Math.PI * 1.25 },
+  // Layer 1: Detection (purple, radius 240) - 7 agents
+  { id: 'a05', num: 5, name: 'Access', shortName: '5 Access', layer: 'Detection', ringRadius: 240, angle: 0 },
+  { id: 'a06', num: 6, name: 'Session', shortName: '6 Session', layer: 'Detection', ringRadius: 240, angle: (Math.PI * 2 / 7) * 1 },
+  { id: 'a07', num: 7, name: 'Credentials', shortName: '7 Credentials', layer: 'Detection', ringRadius: 240, angle: (Math.PI * 2 / 7) * 2 },
+  { id: 'a08', num: 8, name: 'Escalation', shortName: '8 Escalation', layer: 'Detection', ringRadius: 240, angle: (Math.PI * 2 / 7) * 3 },
+  { id: 'a09', num: 9, name: 'Evasion', shortName: '9 Evasion', layer: 'Detection', ringRadius: 240, angle: (Math.PI * 2 / 7) * 4 },
+  { id: 'a10', num: 10, name: 'Behavior ML', shortName: '10 Behavior ML', layer: 'Detection', ringRadius: 240, angle: (Math.PI * 2 / 7) * 5 },
+  { id: 'a11', num: 11, name: 'Campaign', shortName: '11 Campaign', layer: 'Detection', ringRadius: 240, angle: (Math.PI * 2 / 7) * 6 },
 
-  // Layer 3: Threat Detection (Ring Radius 300)
-  { id: 'a07', name: 'Credentials', layer: 3, ringRadius: 300, angle: 0 },
-  { id: 'a08', name: 'Privilege Esc', layer: 3, ringRadius: 300, angle: Math.PI * 0.4 },
-  { id: 'a09', name: 'Defense Evasion', layer: 3, ringRadius: 300, angle: Math.PI * 0.8 },
-  { id: 'a10', name: 'Behavioral ML', layer: 3, ringRadius: 300, angle: Math.PI * 1.2 },
-  { id: 'a11', name: 'Campaign', layer: 3, ringRadius: 300, angle: Math.PI * 1.6 },
+  // Layer 2: Decision (orange, radius 330) - 3 agents
+  { id: 'a12', num: 12, name: 'Risk Fusion', shortName: '12 Risk Fusion', layer: 'Decision', ringRadius: 330, angle: 0 },
+  { id: 'a13', num: 13, name: 'Investigation', shortName: '13 Investigation', layer: 'Decision', ringRadius: 330, angle: (Math.PI * 2 / 3) * 1 },
+  { id: 'a14', num: 14, name: 'Response', shortName: '14 Response', layer: 'Decision', ringRadius: 330, angle: (Math.PI * 2 / 3) * 2 },
 
-  // Layer 4: Decision (Ring Radius 380)
-  { id: 'a12', name: 'Risk Fusion', layer: 4, ringRadius: 380, angle: Math.PI * 0.3 },
-  { id: 'a13', name: 'Investigation', layer: 4, ringRadius: 380, angle: Math.PI * 0.9 },
-  { id: 'a14', name: 'Response', layer: 4, ringRadius: 380, angle: Math.PI * 1.5 },
-
-  // Layer 5: Learning (Ring Radius 450)
-  { id: 'a15', name: 'Feedback & Tuning', layer: 5, ringRadius: 450, angle: Math.PI * 0.7 },
+  // Layer 3: Learning (green, radius 420) - 1 agent
+  { id: 'a15', num: 15, name: 'Feedback', shortName: '15 Feedback', layer: 'Learning', ringRadius: 420, angle: 0 },
 ];
 
 let threeScene = null;
@@ -91,58 +89,77 @@ function initConstellation() {
     dirLight.position.set(100, 200, 300);
     scene.add(dirLight);
 
-    // 1. Render 5 Concentric Layer Rings
-    const ringRadii = [140, 220, 300, 380, 450];
-    const ringColors = [0xe8e1d6, 0xe8e1d6, 0xe8e1d6, 0xe8e1d6, 0xe8e1d6];
+    // 1. Render 4 Concentric Pipeline Layer Rings (Data, Detection, Decision, Learning)
+    const ringRadii = [150, 240, 330, 420];
+    const ringColors = [0x3d6fe0, 0x8b5cf6, 0xf97316, 0x10b981];
+    const ringLabels = ['DATA', 'DETECTION', 'DECISION', 'LEARNING'];
 
     ringRadii.forEach((r, idx) => {
-      const ringGeom = new window.THREE.RingGeometry(r - 1, r + 1, 64);
+      const ringGeom = new window.THREE.RingGeometry(r - 1.5, r + 1.5, 96);
       const ringMat = new window.THREE.MeshBasicMaterial({
         color: ringColors[idx],
         side: window.THREE.DoubleSide,
         transparent: true,
-        opacity: 0.7,
+        opacity: 0.45,
       });
       const ringMesh = new window.THREE.Mesh(ringGeom, ringMat);
       scene.add(ringMesh);
+
+      // Ring Caption Sprite at top
+      const cCanvas = document.createElement('canvas');
+      cCanvas.width = 256;
+      cCanvas.height = 64;
+      const cCtx = cCanvas.getContext('2d');
+      cCtx.fillStyle = '#6B7280';
+      cCtx.font = 'bold 20px monospace';
+      cCtx.textAlign = 'center';
+      cCtx.fillText(ringLabels[idx], 128, 40);
+
+      const cTex = new window.THREE.CanvasTexture(cCanvas);
+      const cMat = new window.THREE.SpriteMaterial({ map: cTex, transparent: true, opacity: 0.75 });
+      const cSprite = new window.THREE.Sprite(cMat);
+      cSprite.position.set(0, r + 16, 0);
+      cSprite.scale.set(60, 15, 1);
+      scene.add(cSprite);
     });
 
-    // 2. Render 15 Agent Sphere Nodes with Sprite Labels
+    // 2. Render 15 Agent Sphere Nodes with Exact Names & Number
     AGENT_NODES.forEach((agent) => {
       const x = Math.cos(agent.angle) * agent.ringRadius;
       const y = Math.sin(agent.angle) * agent.ringRadius;
 
-      // Node layer color mapping (UI_DESIGN.md §2 & §6)
-      let nodeColorHex = 0xdce8ff; // sky
-      let strongOutline = 0x3d6fe0;
-      if (agent.layer === 'Detection') { nodeColorHex = 0xece6ff; strongOutline = 0x6d4fd8; }
-      else if (agent.layer === 'Decision') { nodeColorHex = 0xffe4d3; strongOutline = 0xc2410c; }
-      else if (agent.layer === 'Learning') { nodeColorHex = 0xd9f2ea; strongOutline = 0x0f8a6a; }
+      // Node layer color mapping
+      let nodeColorHex = 0x3d6fe0; // Data (blue)
+      if (agent.layer === 'Detection') { nodeColorHex = 0x8b5cf6; } // Detection (purple)
+      else if (agent.layer === 'Decision') { nodeColorHex = 0xf97316; } // Decision (orange)
+      else if (agent.layer === 'Learning') { nodeColorHex = 0x10b981; } // Learning (green)
 
       const sphereGeom = new window.THREE.SphereGeometry(14, 24, 24);
       const sphereMat = new window.THREE.MeshStandardMaterial({
         color: nodeColorHex,
-        roughness: 0.4,
-        metalness: 0.1,
+        emissive: nodeColorHex,
+        emissiveIntensity: 0.25,
+        roughness: 0.35,
+        metalness: 0.15,
       });
       const sphere = new window.THREE.Mesh(sphereGeom, sphereMat);
       sphere.position.set(x, y, 0);
       scene.add(sphere);
 
-      // Text label sprite
+      // Text label sprite with 12px UI font & short name (e.g. "8 Escalation")
       const canvas = document.createElement('canvas');
       canvas.width = 256;
       canvas.height = 64;
       const ctx = canvas.getContext('2d');
-      ctx.fillStyle = '#1F2430';
-      ctx.font = 'bold 24px Inter, sans-serif';
+      ctx.fillStyle = '#FFFFFF';
+      ctx.font = 'bold 22px Inter, sans-serif';
       ctx.textAlign = 'center';
-      ctx.fillText(`${agent.id.toUpperCase()}: ${agent.name}`, 128, 40);
+      ctx.fillText(agent.shortName, 128, 40);
 
       const texture = new window.THREE.CanvasTexture(canvas);
-      const spriteMat = new window.THREE.SpriteMaterial({ map: texture, transparent: true, opacity: 0.85 });
+      const spriteMat = new window.THREE.SpriteMaterial({ map: texture, transparent: true, opacity: 0.9 });
       const sprite = new window.THREE.Sprite(spriteMat);
-      sprite.position.set(x, y - 26, 5);
+      sprite.position.set(x, y - 24, 5);
       sprite.scale.set(64, 16, 1);
       scene.add(sprite);
 

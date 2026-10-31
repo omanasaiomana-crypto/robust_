@@ -965,6 +965,82 @@ tbody tr:hover {
   color: var(--sky-strong);
 }
 
+/* --- 15-Agent 3D Simulation Overlay & Labels --- */
+.shield-labels-overlay {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: 10;
+  overflow: hidden;
+}
+
+.agent-orb-label {
+  position: absolute;
+  transform: translate(-50%, -50%);
+  font-family: var(--font-sans, 'Inter', -apple-system, sans-serif);
+  font-size: 12px;
+  font-weight: 600;
+  line-height: 1;
+  white-space: nowrap;
+  padding: 3px 8px;
+  border-radius: 9999px;
+  background: var(--surface, #FFFFFF);
+  color: var(--ink, #1F2430);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08), 0 0 0 1px rgba(0, 0, 0, 0.04);
+  transition: opacity 0.2s cubic-bezier(0.16, 1, 0.3, 1), transform 0.15s ease-out;
+  pointer-events: none;
+  user-select: none;
+  will-change: transform, left, top;
+}
+
+[data-theme="dark"] .agent-orb-label {
+  background: var(--surface-2, #161E2E);
+  color: var(--ink, #E6EBF2);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
+}
+
+.agent-orb-label.is-error {
+  background: #FEF2F2 !important;
+  color: #DC2626 !important;
+  border-color: #EF4444 !important;
+}
+
+.agent-orb-label .agent-err-badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 13px;
+  height: 13px;
+  border-radius: 50%;
+  background: #EF4444;
+  color: #FFFFFF;
+  font-size: 10px;
+  font-weight: 800;
+  margin-left: 4px;
+}
+
+.ring-caption-label {
+  position: absolute;
+  transform: translate(-50%, -50%);
+  font-family: var(--font-mono, monospace);
+  font-size: 9px;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  padding: 2px 6px;
+  border-radius: 4px;
+  background: var(--surface-2, rgba(246, 241, 233, 0.85));
+  backdrop-filter: blur(4px);
+  pointer-events: none;
+  user-select: none;
+  opacity: 0.75;
+  transition: opacity 0.3s ease;
+}
+
+[data-theme="dark"] .ring-caption-label {
+  background: rgba(22, 30, 46, 0.85);
+}
+
 /* Reduced Motion Overrides */
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after {

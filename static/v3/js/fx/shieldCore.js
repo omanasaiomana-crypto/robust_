@@ -1,6 +1,13 @@
 /**
- * IdentityShield v3 — "Shield Core" Standalone 3D Hero Element
- * Specification: UI_DESIGN.md Section 4
+ * IdentityShield v3 — "Shield Core" 15-Agent 3D Simulation
+ *
+ * Implements:
+ * 1. 15 canonical agents across 4 pipeline rings (Data, Detection, Decision, Learning).
+ * 2. HTML overlay labels projected each frame with Vector3.project + camera, clamped inside container.
+ * 3. 4 concentric orbital rings with steady ~40s speed and layer captions.
+ * 4. Real agent state polling (/api/v3/agents) with reactive visuals (idle, running pulse, amber finding flash,
+ *    red threat ring, error "!" badge) and traveling message particles between layers.
+ * 5. Automatic DEMO fallback sequencer when API is unavailable.
  *
  * Exports: mountShieldCore(container, options) -> { pulse(), threat(), destroy() }
  */
@@ -8,10 +15,39 @@
 import * as THREE from 'three';
 import { RoomEnvironment } from 'three/examples/jsm/environments/RoomEnvironment.js';
 
+// 15 Canonical Agent Definitions & Layer Metadata
+export const AGENTS_15 = [
+  // Layer 0: Data (blue) - 4 agents
+  { num: 1, name: 'Collector', shortName: '1 Collector', layer: 'Data', layerIdx: 0, color: 0x3d6fe0, colorHex: '#3D6FE0', bg: 'rgba(61,111,224,0.12)' },
+  { num: 2, name: 'Normalizer', shortName: '2 Normalizer', layer: 'Data', layerIdx: 0, color: 0x3d6fe0, colorHex: '#3D6FE0', bg: 'rgba(61,111,224,0.12)' },
+  { num: 3, name: 'Context', shortName: '3 Context', layer: 'Data', layerIdx: 0, color: 0x3d6fe0, colorHex: '#3D6FE0', bg: 'rgba(61,111,224,0.12)' },
+  { num: 4, name: 'Correlation', shortName: '4 Correlation', layer: 'Data', layerIdx: 0, color: 0x3d6fe0, colorHex: '#3D6FE0', bg: 'rgba(61,111,224,0.12)' },
+
+  // Layer 1: Detection (purple) - 7 agents
+  { num: 5, name: 'Access', shortName: '5 Access', layer: 'Detection', layerIdx: 1, color: 0x8b5cf6, colorHex: '#8B5CF6', bg: 'rgba(139,92,246,0.12)' },
+  { num: 6, name: 'Session', shortName: '6 Session', layer: 'Detection', layerIdx: 1, color: 0x8b5cf6, colorHex: '#8B5CF6', bg: 'rgba(139,92,246,0.12)' },
+  { num: 7, name: 'Credentials', shortName: '7 Credentials', layer: 'Detection', layerIdx: 1, color: 0x8b5cf6, colorHex: '#8B5CF6', bg: 'rgba(139,92,246,0.12)' },
+  { num: 8, name: 'Escalation', shortName: '8 Escalation', layer: 'Detection', layerIdx: 1, color: 0x8b5cf6, colorHex: '#8B5CF6', bg: 'rgba(139,92,246,0.12)' },
+  { num: 9, name: 'Evasion', shortName: '9 Evasion', layer: 'Detection', layerIdx: 1, color: 0x8b5cf6, colorHex: '#8B5CF6', bg: 'rgba(139,92,246,0.12)' },
+  { num: 10, name: 'Behavior ML', shortName: '10 Behavior ML', layer: 'Detection', layerIdx: 1, color: 0x8b5cf6, colorHex: '#8B5CF6', bg: 'rgba(139,92,246,0.12)' },
+  { num: 11, name: 'Campaign', shortName: '11 Campaign', layer: 'Detection', layerIdx: 1, color: 0x8b5cf6, colorHex: '#8B5CF6', bg: 'rgba(139,92,246,0.12)' },
+
+  // Layer 2: Decision (orange) - 3 agents
+  { num: 12, name: 'Risk Fusion', shortName: '12 Risk Fusion', layer: 'Decision', layerIdx: 2, color: 0xf97316, colorHex: '#F97316', bg: 'rgba(249,115,22,0.12)' },
+  { num: 13, name: 'Investigation', shortName: '13 Investigation', layer: 'Decision', layerIdx: 2, color: 0xf97316, colorHex: '#F97316', bg: 'rgba(249,115,22,0.12)' },
+  { num: 14, name: 'Response', shortName: '14 Response', layer: 'Decision', layerIdx: 2, color: 0xf97316, colorHex: '#F97316', bg: 'rgba(249,115,22,0.12)' },
+
+  // Layer 3: Learning (green) - 1 agent
+  { num: 15, name: 'Feedback', shortName: '15 Feedback', layer: 'Learning', layerIdx: 3, color: 0x10b981, colorHex: '#10B981', bg: 'rgba(16,185,129,0.12)' },
+];
+
 export function mountShieldCore(container, options = {}) {
   if (!container) return { pulse: () => {}, threat: () => {}, destroy: () => {} };
 
   container.setAttribute('aria-hidden', 'true');
+  container.style.position = 'relative';
+  container.style.overflow = 'hidden';
+
   const isStill = !!options.still;
   const isReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
@@ -26,13 +62,9 @@ export function mountShieldCore(container, options = {}) {
   })();
 
   if (!hasWebGL) {
-    // Static CSS Fallback (UI_DESIGN.md §4)
     container.innerHTML = `
       <div style="position:relative; width:100%; height:100%; min-height:280px; display:flex; align-items:center; justify-content:center; overflow:hidden;">
-        <div style="position:absolute; width:180px; height:180px; border-radius:50%; background:radial-gradient(circle, #DCE8FF 0%, transparent 70%); filter:blur(24px); opacity:0.8;"></div>
-        <div style="position:absolute; width:150px; height:150px; border-radius:50%; background:radial-gradient(circle, #ECE6FF 0%, transparent 70%); filter:blur(20px); transform:translate(30px, -20px); opacity:0.7;"></div>
-        <div style="position:absolute; width:140px; height:140px; border-radius:50%; background:radial-gradient(circle, #FFE4D3 0%, transparent 70%); filter:blur(20px); transform:translate(-30px, 25px); opacity:0.7;"></div>
-        <svg width="84" height="100" viewBox="0 0 24 28" fill="none" stroke="#3D6FE0" stroke-width="2" style="position:relative; z-index:2; filter:drop-shadow(0 8px 16px rgba(61,111,224,0.25));">
+        <svg width="84" height="100" viewBox="0 0 24 28" fill="none" stroke="#3D6FE0" stroke-width="2">
           <path d="M12 2L3 6v8c0 6.5 4.5 11 9 12 4.5-1 9-5.5 9-12V6l-9-4z" fill="#FFFFFF" fill-opacity="0.85"/>
           <path d="M12 9v6m-3-3h6" stroke="#3D6FE0" stroke-width="2" stroke-linecap="round"/>
         </svg>
@@ -43,13 +75,13 @@ export function mountShieldCore(container, options = {}) {
 
   // --- Three.js Scene Setup ---
   const scene = new THREE.Scene();
-  const width = container.clientWidth || 440;
-  const height = options.height || container.clientHeight || 340;
+  let width = container.clientWidth || 440;
+  let height = options.height || container.clientHeight || 340;
 
   const camera = new THREE.PerspectiveCamera(40, width / height, 0.1, 100);
-  camera.position.set(0, 0, 16);
+  camera.position.set(0, 0, 16.5);
 
-  const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
+  const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true, powerPreference: 'high-performance' });
   renderer.setSize(width, height);
   renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 2));
   renderer.toneMapping = THREE.ACESFilmicToneMapping;
@@ -67,15 +99,15 @@ export function mountShieldCore(container, options = {}) {
   const envTexture = pmremGen.fromScene(envScene).texture;
   scene.environment = envTexture;
 
-  // Lights (UI_DESIGN.md §4)
-  const hemiLight = new THREE.HemisphereLight(0xffffff, 0xf6f1e9, 0.8);
+  // Lighting
+  const hemiLight = new THREE.HemisphereLight(0xffffff, 0xf6f1e9, 0.9);
   scene.add(hemiLight);
 
-  const warmKeyLight = new THREE.DirectionalLight(0xffe9d6, 1.0);
+  const warmKeyLight = new THREE.DirectionalLight(0xffe9d6, 1.1);
   warmKeyLight.position.set(-6, 8, 8);
   scene.add(warmKeyLight);
 
-  const coolRimLight = new THREE.DirectionalLight(0xdce8ff, 0.8);
+  const coolRimLight = new THREE.DirectionalLight(0xdce8ff, 0.85);
   coolRimLight.position.set(6, -2, -5);
   scene.add(coolRimLight);
 
@@ -83,7 +115,7 @@ export function mountShieldCore(container, options = {}) {
   const rootGroup = new THREE.Group();
   scene.add(rootGroup);
 
-  // a) Soft Contact Shadow Plane
+  // Soft Contact Shadow Plane
   const shadowCanvas = document.createElement('canvas');
   shadowCanvas.width = 256;
   shadowCanvas.height = 256;
@@ -100,213 +132,448 @@ export function mountShieldCore(container, options = {}) {
   const shadowMat = new THREE.MeshBasicMaterial({
     map: shadowTexture,
     transparent: true,
-    opacity: 0.9,
+    opacity: 0.85,
     depthWrite: false,
   });
   const shadowMesh = new THREE.Mesh(shadowGeom, shadowMat);
   shadowMesh.rotation.x = -Math.PI / 2;
   shadowMesh.position.y = -3.8;
-  scene.add(shadowMesh);
+  rootGroup.add(shadowMesh);
 
-  // b) Pearlescent Glass Shield (Extruded 2D Shape with Bevel)
-  const shape = new THREE.Shape();
-  // Shield coordinates: top width 4, height 5.2, curved bottom point
-  shape.moveTo(-1.9, 2.3);
-  shape.lineTo(1.9, 2.3);
-  shape.bezierCurveTo(2.1, 2.3, 2.2, 2.1, 2.2, 1.8);
-  shape.bezierCurveTo(2.2, 0.2, 1.4, -1.8, 0, -2.7);
-  shape.bezierCurveTo(-1.4, -1.8, -2.2, 0.2, -2.2, 1.8);
-  shape.bezierCurveTo(-2.2, 2.1, -2.1, 2.3, -1.9, 2.3);
+  // Shield Core Geometries (3 nested shells)
+  function createShieldShape() {
+    const s = new THREE.Shape();
+    s.moveTo(0, 2.2);
+    s.bezierCurveTo(0.6, 2.2, 1.6, 2.0, 1.9, 1.6);
+    s.bezierCurveTo(2.1, 0.8, 2.0, -0.4, 1.6, -1.2);
+    s.bezierCurveTo(1.2, -1.9, 0.5, -2.4, 0, -2.8);
+    s.bezierCurveTo(-0.5, -2.4, -1.2, -1.9, -1.6, -1.2);
+    s.bezierCurveTo(-2.0, -0.4, -2.1, 0.8, -1.9, 1.6);
+    s.bezierCurveTo(-1.6, 2.0, -0.6, 2.2, 0, 2.2);
+    return s;
+  }
 
-  const extrudeSettings = {
-    depth: 0.24,
+  const shieldGeom = new THREE.ExtrudeGeometry(createShieldShape(), {
+    depth: 0.35,
     bevelEnabled: true,
-    bevelSegments: 4,
+    bevelSegments: 6,
     steps: 1,
-    bevelSize: 0.07,
-    bevelThickness: 0.07,
-  };
-
-  const shieldGeom = new THREE.ExtrudeGeometry(shape, extrudeSettings);
+    bevelSize: 0.12,
+    bevelThickness: 0.12,
+  });
   shieldGeom.center();
 
-  const shieldMat = new THREE.MeshPhysicalMaterial({
+  // Outer Shell
+  const outerMat = new THREE.MeshPhysicalMaterial({
     color: 0xffffff,
+    metalness: 0.15,
     roughness: 0.12,
-    metalness: 0.0,
-    clearcoat: 1.0,
-    clearcoatRoughness: 0.1,
-    iridescence: 0.65,
-    iridescenceIOR: 1.3,
-    transmission: 0.62,
-    thickness: 0.45,
-    ior: 1.42,
-    attenuationColor: new THREE.Color(0xdce8ff),
+    transmission: 0.88,
+    thickness: 1.2,
+    ior: 1.5,
+    reflectivity: 0.5,
     transparent: true,
     opacity: 0.95,
   });
+  const outerMesh = new THREE.Mesh(shieldGeom, outerMat);
+  rootGroup.add(outerMesh);
 
-  const shieldMesh = new THREE.Mesh(shieldGeom, shieldMat);
-  rootGroup.add(shieldMesh);
+  // Mid Metallic Shell
+  const midMat = new THREE.MeshStandardMaterial({
+    color: 0x3d6fe0,
+    metalness: 0.85,
+    roughness: 0.28,
+  });
+  const midMesh = new THREE.Mesh(shieldGeom, midMat);
+  midMesh.scale.set(0.92, 0.92, 0.92);
+  rootGroup.add(midMesh);
 
-  // Shield Ripple Ring (Deflection Effect)
-  const rippleGeom = new THREE.RingGeometry(0.1, 0.15, 32);
+  // Inner Core Shell
+  const innerMat = new THREE.MeshStandardMaterial({
+    color: 0xdce8ff,
+    emissive: 0x3d6fe0,
+    emissiveIntensity: 0.45,
+    metalness: 0.4,
+    roughness: 0.3,
+  });
+  const innerMesh = new THREE.Mesh(shieldGeom, innerMat);
+  innerMesh.scale.set(0.82, 0.82, 0.82);
+  rootGroup.add(innerMesh);
+
+  // Shield Core Arcs (Concentric pulse lines)
+  const arcMeshes = [];
+  [-0.6, 0.0, 0.6].forEach((yOffset) => {
+    const arcCurve = new THREE.EllipseCurve(0, yOffset, 1.1, 0.35, Math.PI * 0.15, Math.PI * 0.85, false, 0);
+    const pts = arcCurve.getPoints(32).map((p) => new THREE.Vector3(p.x, p.y, 0.24));
+    const arcGeom = new THREE.BufferGeometry().setFromPoints(pts);
+    const arcMat = new THREE.LineBasicMaterial({
+      color: 0x3d6fe0,
+      transparent: true,
+      opacity: 0.85,
+      linewidth: 2,
+    });
+    const arcLine = new THREE.Line(arcGeom, arcMat);
+    rootGroup.add(arcLine);
+    arcMeshes.push(arcLine);
+  });
+
+  // Threat Ripple Ring Mesh on Shield Surface
+  const rippleGeom = new THREE.RingGeometry(0.08, 0.18, 32);
   const rippleMat = new THREE.MeshBasicMaterial({
     color: 0xe5484d,
+    side: THREE.DoubleSide,
     transparent: true,
     opacity: 0,
-    side: THREE.DoubleSide,
     depthWrite: false,
   });
   const rippleMesh = new THREE.Mesh(rippleGeom, rippleMat);
-  rippleMesh.position.set(0, 0, 0.22);
+  rippleMesh.position.set(0, 0, 0.26);
   rootGroup.add(rippleMesh);
 
-  // c) Identity Core (Fingerprint Partial Arcs inside Shield)
-  const fpGroup = new THREE.Group();
-  fpGroup.position.set(0, 0.1, 0.18);
-  rootGroup.add(fpGroup);
-
-  const arcMeshes = [];
-  const arcRadii = [0.28, 0.48, 0.68, 0.88, 1.08, 1.28, 1.48];
-  arcRadii.forEach((r, idx) => {
-    const startAngle = (idx % 2 === 0 ? 0.2 : 0.4) * Math.PI;
-    const endAngle = (idx % 2 === 0 ? 1.8 : 1.6) * Math.PI;
-    const curve = new THREE.EllipseCurve(0, 0, r, r * 1.15, startAngle, endAngle, false, 0);
-    const points = curve.getPoints(36);
-    const geom = new THREE.BufferGeometry().setFromPoints(points);
-
-    const mat = new THREE.LineBasicMaterial({
-      color: 0x3d6fe0,
-      linewidth: 2,
-      transparent: true,
-      opacity: 0.85,
-    });
-    const line = new THREE.Line(geom, mat);
-    fpGroup.add(line);
-    arcMeshes.push(line);
-  });
-
-  // Sweeping Scan Line
-  const scanGeom = new THREE.PlaneGeometry(3.2, 0.05);
+  // Scan Line Sweep
+  const scanGeom = new THREE.PlaneGeometry(3.6, 0.04);
   const scanMat = new THREE.MeshBasicMaterial({
-    color: 0x7db9ff,
+    color: 0x22d3ee,
     transparent: true,
-    opacity: 0.6,
-    side: THREE.DoubleSide,
-    depthWrite: false,
+    opacity: 0.75,
   });
   const scanMesh = new THREE.Mesh(scanGeom, scanMat);
   scanMesh.position.set(0, 1.2, 0.2);
   rootGroup.add(scanMesh);
 
-  // d) 15 Agent Orbs on 4 Tilted Orbit Rings + 1 Oversight Ring
+  // --- HTML Overlay for Labels and Captions ---
+  const overlay = document.createElement('div');
+  overlay.className = 'shield-labels-overlay';
+  container.appendChild(overlay);
+
+  // --- 4 Concentric Pipeline Rings (Data, Detection, Decision, Learning) ---
   const ringsGroup = new THREE.Group();
+  // Harmonious orbital tilt
+  ringsGroup.rotation.x = 0.26;
+  ringsGroup.rotation.y = 0.16;
   rootGroup.add(ringsGroup);
 
-  // Ring configurations
-  const RING_SPECS = [
-    { name: 'Data', count: 4, radius: 3.2, tiltX: 0.35, tiltY: 0.2, speed: 0.007, color: 0xb9d0ff, strong: 0x3d6fe0 },
-    { name: 'Detection', count: 7, radius: 4.2, tiltX: -0.45, tiltY: -0.25, speed: -0.0055, color: 0xcdbeff, strong: 0x6d4fd8 },
-    { name: 'Decision', count: 3, radius: 5.1, tiltX: 0.25, tiltY: -0.3, speed: 0.0045, color: 0xffc9a8, strong: 0xc2410c },
-    { name: 'Learning', count: 1, radius: 5.9, tiltX: -0.3, tiltY: 0.35, speed: -0.0035, color: 0xa9e5d3, strong: 0x0f8a6a },
-    { name: 'Oversight', count: 0, radius: 6.6, tiltX: 0.1, tiltY: 0.1, speed: 0.002, color: 0xf7d774, strong: 0xa16207 },
+  const RING_CONFIGS = [
+    {
+      name: 'DATA',
+      radius: 3.3,
+      speed: 0.0028, // ~40s turn
+      color: 0x3d6fe0,
+      colorHex: '#3D6FE0',
+      agents: AGENTS_15.filter((a) => a.layer === 'Data'),
+    },
+    {
+      name: 'DETECTION',
+      radius: 4.3,
+      speed: 0.0026,
+      color: 0x8b5cf6,
+      colorHex: '#8B5CF6',
+      agents: AGENTS_15.filter((a) => a.layer === 'Detection'),
+    },
+    {
+      name: 'DECISION',
+      radius: 5.3,
+      speed: 0.0024,
+      color: 0xf97316,
+      colorHex: '#F97316',
+      agents: AGENTS_15.filter((a) => a.layer === 'Decision'),
+    },
+    {
+      name: 'LEARNING',
+      radius: 6.3,
+      speed: 0.0022,
+      color: 0x10b981,
+      colorHex: '#10B981',
+      agents: AGENTS_15.filter((a) => a.layer === 'Learning'),
+    },
   ];
 
   const ringObjects = [];
-  const orbObjects = [];
-  const detectionOrbs = [];
+  const agentOrbMap = {}; // agent.num -> { agent, mesh, labelEl, ring, angle, baseColor, state, pulseT }
+  const ringCaptionEls = [];
 
-  RING_SPECS.forEach((spec) => {
+  const orbGeom = new THREE.SphereGeometry(0.18, 16, 16);
+  const ringGeomCache = {};
+
+  RING_CONFIGS.forEach((ringSpec, rIdx) => {
     const ringAnchor = new THREE.Group();
-    ringAnchor.rotation.x = spec.tiltX;
-    ringAnchor.rotation.y = spec.tiltY;
     ringsGroup.add(ringAnchor);
 
-    // Torus ring track
-    const torusGeom = new THREE.TorusGeometry(spec.radius, 0.018, 8, 64);
+    // Torus Ring Track
+    const torusGeom = new THREE.TorusGeometry(ringSpec.radius, 0.016, 8, 96);
     const torusMat = new THREE.MeshBasicMaterial({
-      color: spec.color,
+      color: ringSpec.color,
       transparent: true,
-      opacity: spec.count === 0 ? 0.75 : 0.45,
+      opacity: 0.35,
     });
     const torusMesh = new THREE.Mesh(torusGeom, torusMat);
     ringAnchor.add(torusMesh);
 
-    // Spheres
-    const orbs = [];
-    const orbGeom = new THREE.SphereGeometry(0.16, 16, 12);
-    for (let i = 0; i < spec.count; i++) {
-      const angle = (i / spec.count) * Math.PI * 2;
-      const orbMat = new THREE.MeshStandardMaterial({
-        color: spec.color,
-        roughness: 0.45,
-        metalness: 0.08,
-      });
-      const orb = new THREE.Mesh(orbGeom, orbMat);
-      orb.position.set(Math.cos(angle) * spec.radius, Math.sin(angle) * spec.radius, 0);
-      ringAnchor.add(orb);
+    // Ring Caption HTML Overlay
+    const captionEl = document.createElement('div');
+    captionEl.className = 'ring-caption-label';
+    captionEl.textContent = ringSpec.name;
+    captionEl.style.color = ringSpec.colorHex;
+    captionEl.style.borderColor = `${ringSpec.colorHex}44`;
+    overlay.appendChild(captionEl);
 
-      const orbItem = { mesh: orb, baseColor: spec.color, spec };
-      orbs.push(orbItem);
-      orbObjects.push(orbItem);
-      if (spec.name === 'Detection') detectionOrbs.push(orbItem);
+    // Anchor point for ring caption on the ring track
+    const captionAnchorPos = new THREE.Vector3(0, ringSpec.radius, 0);
+
+    ringCaptionEls.push({
+      el: captionEl,
+      anchorMesh: ringAnchor,
+      localPos: captionAnchorPos,
+    });
+
+    // Orbs on this ring
+    const orbsOnRing = [];
+    const count = ringSpec.agents.length;
+
+    ringSpec.agents.forEach((agent, i) => {
+      const angle = (i / count) * Math.PI * 2;
+      const orbMat = new THREE.MeshStandardMaterial({
+        color: ringSpec.color,
+        emissive: ringSpec.color,
+        emissiveIntensity: 0.25,
+        roughness: 0.35,
+        metalness: 0.15,
+        transparent: true,
+        opacity: 0.6,
+      });
+      const orbMesh = new THREE.Mesh(orbGeom, orbMat);
+      orbMesh.position.set(Math.cos(angle) * ringSpec.radius, Math.sin(angle) * ringSpec.radius, 0);
+      ringAnchor.add(orbMesh);
+
+      // Threat ring mesh for "threat" state animation
+      const threatRingGeom = new THREE.RingGeometry(0.2, 0.24, 24);
+      const threatRingMat = new THREE.MeshBasicMaterial({
+        color: 0xef4444,
+        side: THREE.DoubleSide,
+        transparent: true,
+        opacity: 0,
+      });
+      const threatRingMesh = new THREE.Mesh(threatRingGeom, threatRingMat);
+      threatRingMesh.visible = false;
+      orbMesh.add(threatRingMesh);
+
+      // HTML Overlay Label
+      const labelEl = document.createElement('div');
+      labelEl.className = 'agent-orb-label';
+      labelEl.style.borderColor = agent.colorHex;
+      labelEl.textContent = agent.shortName;
+      overlay.appendChild(labelEl);
+
+      const orbItem = {
+        agent,
+        mesh: orbMesh,
+        threatRingMesh,
+        threatRingMat,
+        labelEl,
+        ringSpec,
+        ringAnchor,
+        baseAngle: angle,
+        baseColor: ringSpec.color,
+        state: 'idle',
+        pulseT: 0,
+        flashTimer: 0,
+        threatTimer: 0,
+      };
+
+      orbsOnRing.push(orbItem);
+      agentOrbMap[agent.num] = orbItem;
+    });
+
+    ringObjects.push({
+      anchor: ringAnchor,
+      spec: ringSpec,
+      orbs: orbsOnRing,
+      angle: 0,
+    });
+  });
+
+  // --- Traveling Message Particles (Data -> Detection -> Decision -> Response) ---
+  const travelingParticles = []; // max 20
+  const particleGeom = new THREE.SphereGeometry(0.08, 12, 12);
+  const particleMat = new THREE.MeshBasicMaterial({
+    color: 0x22d3ee,
+    transparent: true,
+    opacity: 0.95,
+  });
+
+  function emitTravelingParticle(fromAgentNum, toAgentNum) {
+    if (travelingParticles.length >= 20) return;
+    const fromItem = agentOrbMap[fromAgentNum];
+    const toItem = agentOrbMap[toAgentNum];
+    if (!fromItem || !toItem) return;
+
+    const pMesh = new THREE.Mesh(particleGeom, particleMat.clone());
+    scene.add(pMesh);
+
+    travelingParticles.push({
+      mesh: pMesh,
+      fromOrb: fromItem,
+      toOrb: toItem,
+      elapsed: 0,
+      duration: 0.6, // 600 ms
+    });
+  }
+
+  // --- Real State Polling & Reactive Visuals ---
+  let lastSuccessfulPoll = Date.now();
+  let isDemoMode = false;
+  let demoCycleTime = 0;
+  let pollInterval = null;
+  let prevAgentStates = {};
+
+  async function pollAgentStatus() {
+    try {
+      const res = await fetch('/api/v3/agents');
+      if (!res.ok) throw new Error('API error');
+      const agentList = await res.json();
+      if (!Array.isArray(agentList) || agentList.length === 0) {
+        throw new Error('Empty agent list');
+      }
+
+      lastSuccessfulPoll = Date.now();
+      isDemoMode = false;
+
+      // Map real states to orbs
+      agentList.forEach((a) => {
+        const num = a.num || (a.agent_id ? parseInt(a.agent_id.replace(/\D/g, ''), 10) : null);
+        const item = agentOrbMap[num];
+        if (!item) return;
+
+        const rawStatus = (a.status || 'idle').toLowerCase();
+        let state = 'idle';
+        if (rawStatus === 'running' || rawStatus === 'active') state = 'running';
+        else if (rawStatus === 'finding' || rawStatus === 'amber') state = 'finding';
+        else if (rawStatus === 'threat' || rawStatus === 'crit' || rawStatus === 'revoked') state = 'threat';
+        else if (rawStatus === 'error' || rawStatus === 'degraded' || rawStatus === 'blocked') state = 'error';
+
+        // Detect transition from running to idle / next layer
+        if (prevAgentStates[num] === 'running' && state === 'idle') {
+          // Send particle to next layer
+          const nextTarget = getNextLayerTarget(item.agent.layerIdx);
+          if (nextTarget) emitTravelingParticle(num, nextTarget);
+        }
+
+        applyOrbState(item, state);
+        prevAgentStates[num] = state;
+      });
+    } catch {
+      // If endpoint is unavailable or returns nothing for 5s, switch to DEMO mode
+      if (Date.now() - lastSuccessfulPoll >= 5000) {
+        isDemoMode = true;
+      }
+    }
+  }
+
+  function getNextLayerTarget(layerIdx) {
+    if (layerIdx === 0) {
+      // Data -> Detection
+      return 5 + Math.floor(Math.random() * 7); // 5..11
+    } else if (layerIdx === 1) {
+      // Detection -> Decision
+      return 12 + Math.floor(Math.random() * 3); // 12..14
+    } else if (layerIdx === 2) {
+      // Decision -> Learning
+      return 15;
+    }
+    return null;
+  }
+
+  function applyOrbState(item, state) {
+    if (item.state !== state) {
+      if (state === 'finding') item.flashTimer = 0.8;
+      if (state === 'threat') item.threatTimer = 1.0;
+    }
+    item.state = state;
+
+    // Error badge logic on label
+    if (state === 'error') {
+      item.labelEl.classList.add('is-error');
+      item.labelEl.innerHTML = `${item.agent.shortName} <span class="agent-err-badge">!</span>`;
+      item.mesh.material.color.setHex(0x6b7280);
+      item.mesh.material.emissive.setHex(0x374151);
+      item.mesh.material.opacity = 0.6;
+    } else {
+      item.labelEl.classList.remove('is-error');
+      item.labelEl.textContent = item.agent.shortName;
+
+      if (state === 'idle') {
+        item.mesh.material.color.setHex(item.baseColor);
+        item.mesh.material.emissive.setHex(item.baseColor);
+        item.mesh.material.emissiveIntensity = 0.2;
+        item.mesh.material.opacity = 0.6;
+      } else if (state === 'running') {
+        item.mesh.material.color.setHex(item.baseColor);
+        item.mesh.material.emissive.setHex(item.baseColor);
+        item.mesh.material.emissiveIntensity = 0.75;
+        item.mesh.material.opacity = 1.0;
+      }
+    }
+  }
+
+  // Demo Sequencer: Replays one complete pipeline cycle 1..15 continuously
+  function tickDemoSequencer(dt) {
+    demoCycleTime += dt;
+    // 12 second full pipeline loop
+    const phase = demoCycleTime % 12.0;
+
+    let activeNum = 1;
+    if (phase < 3.0) {
+      // Data Layer active
+      activeNum = 1 + Math.floor((phase / 3.0) * 4);
+    } else if (phase < 7.0) {
+      // Detection Layer active
+      activeNum = 5 + Math.floor(((phase - 3.0) / 4.0) * 7);
+    } else if (phase < 10.0) {
+      // Decision Layer active
+      activeNum = 12 + Math.floor(((phase - 7.0) / 3.0) * 3);
+    } else {
+      // Learning Layer active
+      activeNum = 15;
     }
 
-    ringObjects.push({ anchor: ringAnchor, spec, orbs, angle: 0 });
-  });
+    AGENTS_15.forEach((agent) => {
+      const item = agentOrbMap[agent.num];
+      if (!item) return;
 
-  // e) Threat Deflection Particle
-  const threatGeom = new THREE.SphereGeometry(0.18, 16, 16);
-  const threatMat = new THREE.MeshStandardMaterial({
-    color: 0xe5484d,
-    emissive: 0x991b1b,
-    emissiveIntensity: 0.5,
-  });
-  const threatParticle = new THREE.Mesh(threatGeom, threatMat);
-  threatParticle.visible = false;
-  scene.add(threatParticle);
+      if (agent.num === activeNum) {
+        if (agent.num === 8 && phase > 5.5 && phase < 6.2) {
+          applyOrbState(item, 'finding');
+        } else if (agent.num === 14 && phase > 9.0 && phase < 9.8) {
+          applyOrbState(item, 'threat');
+        } else {
+          applyOrbState(item, 'running');
+        }
+      } else {
+        applyOrbState(item, 'idle');
+      }
+    });
 
-  let threatAnim = null; // { start, target, progress, reflecting }
-
-  function triggerThreat() {
-    if (threatAnim) return;
-    const spawnAngle = Math.random() * Math.PI * 2;
-    const dist = 9.5;
-    const startX = Math.cos(spawnAngle) * dist;
-    const startY = Math.sin(spawnAngle) * dist;
-    const startZ = (Math.random() - 0.5) * 2;
-
-    threatParticle.position.set(startX, startY, startZ);
-    threatParticle.visible = true;
-
-    threatAnim = {
-      start: new THREE.Vector3(startX, startY, startZ),
-      target: new THREE.Vector3(0, 0, 0),
-      progress: 0,
-      reflecting: false,
-      reflectDir: new THREE.Vector3(startX, startY, startZ).normalize().multiplyScalar(10),
-      hitPoint: new THREE.Vector3(0, 0, 0.22),
-    };
+    // Send particles on layer boundaries in demo
+    const lastEmit = Math.floor(demoCycleTime / 2.5);
+    if (!itemEmitTracker[lastEmit]) {
+      itemEmitTracker[lastEmit] = true;
+      if (activeNum >= 1 && activeNum <= 4) emitTravelingParticle(activeNum, 5 + Math.floor(Math.random() * 7));
+      else if (activeNum >= 5 && activeNum <= 11) emitTravelingParticle(activeNum, 12 + Math.floor(Math.random() * 3));
+      else if (activeNum >= 12 && activeNum <= 14) emitTravelingParticle(activeNum, 15);
+    }
   }
+  const itemEmitTracker = {};
 
-  // f) Pulse Wave Animation State
-  let pulseStartTime = 0;
-  function triggerPulse() {
-    pulseStartTime = performance.now();
-  }
+  // Start status polling every 1000ms
+  pollAgentStatus();
+  pollInterval = setInterval(pollAgentStatus, 1000);
 
-  // Click Trigger
-  container.addEventListener('click', () => {
-    triggerPulse();
-  });
-
-  // Interactive Cursor Tilt
+  // --- Interaction & Hover Handling ---
+  let isHovered = false;
   let targetTiltX = 0;
   let targetTiltY = 0;
   let curTiltX = 0;
   let curTiltY = 0;
-  let isHovered = false;
 
   container.addEventListener('mouseenter', () => { isHovered = true; });
   container.addEventListener('mouseleave', () => {
@@ -319,27 +586,58 @@ export function mountShieldCore(container, options = {}) {
     const rect = container.getBoundingClientRect();
     const nx = ((e.clientX - rect.left) / rect.width) * 2 - 1;
     const ny = -(((e.clientY - rect.top) / rect.height) * 2 - 1);
-    targetTiltY = nx * 0.17; // max ~10 deg
-    targetTiltX = -ny * 0.17;
+    targetTiltY = nx * 0.16;
+    targetTiltX = -ny * 0.16;
   });
 
-  // Animation Loop Variables
-  let isVisible = true;
-  let isTabActive = true;
+  // Pulse & Threat API
+  let pulseStartTime = 0;
+  function triggerPulse() {
+    pulseStartTime = performance.now();
+  }
+  function triggerThreat() {
+    // Flash detection & decision orbs with threat
+    [8, 11, 14].forEach((num) => {
+      const item = agentOrbMap[num];
+      if (item) applyOrbState(item, 'threat');
+    });
+    rippleMesh.scale.set(1, 1, 1);
+    rippleMat.opacity = 0.8;
+  }
+
+  container.addEventListener('click', () => {
+    triggerPulse();
+  });
+
+  // Resize Observer
+  const resizeObserver = new ResizeObserver((entries) => {
+    for (const entry of entries) {
+      const cr = entry.contentRect;
+      if (cr.width > 0 && cr.height > 0) {
+        width = cr.width;
+        height = options.height || cr.height || 340;
+        camera.aspect = width / height;
+        camera.updateProjectionMatrix();
+        renderer.setSize(width, height);
+      }
+    }
+  });
+  resizeObserver.observe(container);
+
+  // --- Main Animation Loop ---
   let rafId = null;
   let lastTime = performance.now();
-  let threatTimer = 0;
 
   function renderFrame(now) {
-    const dt = (now - lastTime) / 1000;
+    const dt = Math.min((now - lastTime) / 1000, 0.1);
     lastTime = now;
 
-    if (!isStill && !isReducedMotion && isVisible && isTabActive) {
+    if (!isStill && !isReducedMotion) {
       const t = now * 0.001;
 
       // 1. Float & Yaw
-      rootGroup.position.y = Math.sin(t * 1.05) * 0.18; // ~6px equivalent
-      rootGroup.rotation.y = Math.sin(t * 0.52) * 0.22; // ~12.5 deg yaw
+      rootGroup.position.y = Math.sin(t * 1.05) * 0.15;
+      rootGroup.rotation.y = Math.sin(t * 0.52) * 0.18;
 
       // 2. Cursor Tilt Damping
       curTiltX += (targetTiltX - curTiltX) * 0.08;
@@ -347,97 +645,165 @@ export function mountShieldCore(container, options = {}) {
       rootGroup.rotation.x = curTiltX;
       rootGroup.rotation.y += curTiltY;
 
-      // 3. Scan Line Sweep (4s cycle top->bottom)
+      // 3. Scan Line Sweep
       const scanPhase = (t % 4.0) / 4.0;
       scanMesh.position.y = 1.6 - scanPhase * 3.2;
 
-      // 4. Orbit Rings
-      const speedMult = isHovered ? 1.4 : 1.0;
+      // 4. Orbit Rings (same direction per ring, slow steady speed ~40s turn)
+      const speedMult = isHovered ? 1.3 : 1.0;
       ringObjects.forEach((ro) => {
         ro.angle += ro.spec.speed * speedMult;
         ro.anchor.rotation.z = ro.angle;
       });
 
-      // 5. Pulse Animation (600ms ring by ring)
+      // 5. Demo sequencer if in demo mode
+      if (isDemoMode) {
+        tickDemoSequencer(dt);
+      }
+
+      // 6. Reactive Orb Animations (pulse, flash, threat)
+      AGENTS_15.forEach((agent) => {
+        const item = agentOrbMap[agent.num];
+        if (!item) return;
+
+        if (item.state === 'running') {
+          item.pulseT += dt;
+          // gentle pulse: scale 1 -> 1.2 over 0.8s cycle
+          const s = 1.0 + (Math.sin(item.pulseT * (Math.PI * 2 / 0.8)) * 0.5 + 0.5) * 0.2;
+          item.mesh.scale.set(s, s, s);
+        } else if (item.flashTimer > 0) {
+          item.flashTimer -= dt;
+          item.mesh.material.color.setHex(0xf59e0b); // Amber flash
+          item.mesh.material.emissive.setHex(0xf59e0b);
+          item.mesh.material.emissiveIntensity = 0.9;
+          item.mesh.scale.set(1.25, 1.25, 1.25);
+          if (item.flashTimer <= 0) {
+            item.mesh.material.color.setHex(item.baseColor);
+            item.mesh.material.emissive.setHex(item.baseColor);
+            item.mesh.scale.set(1, 1, 1);
+          }
+        } else if (item.threatTimer > 0) {
+          item.threatTimer -= dt;
+          const prog = 1.0 - item.threatTimer / 1.0;
+          item.mesh.material.color.setHex(0xef4444);
+          item.mesh.material.emissive.setHex(0xef4444);
+          item.threatRingMesh.visible = true;
+          const ringScale = 1.0 + prog * 2.5;
+          item.threatRingMesh.scale.set(ringScale, ringScale, 1);
+          item.threatRingMat.opacity = Math.max(0, 0.9 - prog);
+          if (item.threatTimer <= 0) {
+            item.threatRingMesh.visible = false;
+            item.mesh.material.color.setHex(item.baseColor);
+            item.mesh.material.emissive.setHex(item.baseColor);
+          }
+        } else {
+          item.mesh.scale.set(1, 1, 1);
+        }
+      });
+
+      // 7. Pulse Effect
       if (pulseStartTime > 0) {
         const pElapsed = now - pulseStartTime;
         if (pElapsed < 700) {
           const arcIdx = Math.floor((pElapsed / 600) * arcMeshes.length);
           arcMeshes.forEach((mesh, idx) => {
-            if (idx === arcIdx) {
-              mesh.material.color.setHex(0xdce8ff);
-              mesh.material.opacity = 1.0;
-            } else {
-              mesh.material.color.setHex(0x3d6fe0);
-              mesh.material.opacity = 0.85;
-            }
-          });
-          // Orb glow pop
-          orbObjects.forEach((o) => {
-            o.mesh.scale.set(1.25, 1.25, 1.25);
+            mesh.material.opacity = idx === arcIdx ? 1.0 : 0.4;
           });
         } else {
           pulseStartTime = 0;
-          arcMeshes.forEach((m) => {
-            m.material.color.setHex(0x3d6fe0);
-            m.material.opacity = 0.85;
-          });
-          orbObjects.forEach((o) => {
-            o.mesh.scale.set(1, 1, 1);
-          });
+          arcMeshes.forEach((m) => { m.material.opacity = 0.85; });
         }
       }
 
-      // 6. Threat Deflection Beat
-      threatTimer += dt;
-      if (threatTimer >= 8.0) {
-        threatTimer = 0;
-        triggerThreat();
-      }
+      // 8. Traveling Message Particles
+      for (let i = travelingParticles.length - 1; i >= 0; i--) {
+        const p = travelingParticles[i];
+        p.elapsed += dt;
+        const progress = p.elapsed / p.duration;
 
-      if (threatAnim) {
-        threatAnim.progress += dt * 1.4;
-
-        if (!threatAnim.reflecting) {
-          if (threatAnim.progress < 1.0) {
-            threatParticle.position.lerpVectors(threatAnim.start, threatAnim.target, threatAnim.progress);
-          } else {
-            // Impact beat: nearest detection orb flashes, ripple ring expands
-            threatAnim.reflecting = true;
-            threatAnim.progress = 0;
-
-            if (detectionOrbs.length > 0) {
-              const nearestOrb = detectionOrbs[Math.floor(Math.random() * detectionOrbs.length)];
-              nearestOrb.mesh.scale.set(1.6, 1.6, 1.6);
-              nearestOrb.mesh.material.color.setHex(0xe5484d);
-              setTimeout(() => {
-                nearestOrb.mesh.scale.set(1, 1, 1);
-                nearestOrb.mesh.material.color.setHex(nearestOrb.baseColor);
-              }, 320);
-            }
-
-            rippleMesh.scale.set(1, 1, 1);
-            rippleMat.opacity = 0.65;
-          }
+        if (progress >= 1.0) {
+          scene.remove(p.mesh);
+          p.mesh.geometry.dispose();
+          p.mesh.material.dispose();
+          travelingParticles.splice(i, 1);
         } else {
-          // Reflecting away and fading
-          const rP = threatAnim.progress;
-          threatParticle.position.lerpVectors(threatAnim.target, threatAnim.reflectDir, rP);
-          threatMat.opacity = 1.0 - rP;
+          // Compute start & end world positions
+          const pStart = new THREE.Vector3();
+          const pEnd = new THREE.Vector3();
+          p.fromOrb.mesh.getWorldPosition(pStart);
+          p.toOrb.mesh.getWorldPosition(pEnd);
 
-          // Expand and fade ripple on shield
-          const ripScale = 1.0 + rP * 6.0;
-          rippleMesh.scale.set(ripScale, ripScale, ripScale);
-          rippleMat.opacity = Math.max(0, 0.65 - rP);
+          // Curved 3D arch midpoint
+          const pMid = new THREE.Vector3()
+            .addVectors(pStart, pEnd)
+            .multiplyScalar(0.5)
+            .add(new THREE.Vector3(0, 0, 1.2));
 
-          if (rP >= 1.0) {
-            threatParticle.visible = false;
-            threatMat.opacity = 1.0;
-            threatAnim = null;
-            rippleMat.opacity = 0;
-          }
+          // Quadratic Bezier interpolation
+          const tP = progress;
+          const oneMinusT = 1 - tP;
+          p.mesh.position.set(
+            oneMinusT * oneMinusT * pStart.x + 2 * oneMinusT * tP * pMid.x + tP * tP * pEnd.x,
+            oneMinusT * oneMinusT * pStart.y + 2 * oneMinusT * tP * pMid.y + tP * tP * pEnd.y,
+            oneMinusT * oneMinusT * pStart.z + 2 * oneMinusT * tP * pMid.z + tP * tP * pEnd.z
+          );
         }
       }
+
+      // 9. Threat ripple decay
+      if (rippleMat.opacity > 0) {
+        rippleMat.opacity = Math.max(0, rippleMat.opacity - dt * 0.8);
+        const s = rippleMesh.scale.x + dt * 3.0;
+        rippleMesh.scale.set(s, s, 1);
+      }
+
+      // 10. Update Projected HTML Overlay Labels & Captions
+      const worldPos = new THREE.Vector3();
+      const shieldCenterZ = 0;
+
+      // Update Agent Labels
+      AGENTS_15.forEach((agent) => {
+        const item = agentOrbMap[agent.num];
+        if (!item || !item.labelEl) return;
+
+        item.mesh.getWorldPosition(worldPos);
+
+        // Hide when behind the shield center unless hovered
+        const isBehind = worldPos.z < shieldCenterZ - 0.2;
+        if (isBehind && !isHovered) {
+          item.labelEl.style.opacity = '0';
+          item.labelEl.style.visibility = 'hidden';
+        } else {
+          const proj = worldPos.clone().project(camera);
+          const screenX = (proj.x * 0.5 + 0.5) * width;
+          const screenY = (-(proj.y * 0.5) + 0.5) * height;
+
+          // Clamp inside container
+          const clampedX = Math.max(48, Math.min(width - 48, screenX));
+          const clampedY = Math.max(16, Math.min(height - 16, screenY));
+
+          item.labelEl.style.left = `${clampedX}px`;
+          item.labelEl.style.top = `${clampedY}px`;
+          item.labelEl.style.opacity = '1';
+          item.labelEl.style.visibility = 'visible';
+        }
+      });
+
+      // Update Ring Captions
+      ringCaptionEls.forEach((cap) => {
+        worldPos.copy(cap.localPos);
+        cap.anchorMesh.localToWorld(worldPos);
+
+        const proj = worldPos.project(camera);
+        const screenX = (proj.x * 0.5 + 0.5) * width;
+        const screenY = (-(proj.y * 0.5) + 0.5) * height;
+
+        const clampedX = Math.max(40, Math.min(width - 40, screenX));
+        const clampedY = Math.max(12, Math.min(height - 12, screenY));
+
+        cap.el.style.left = `${clampedX}px`;
+        cap.el.style.top = `${clampedY}px`;
+      });
     }
 
     renderer.render(scene, camera);
@@ -447,65 +813,26 @@ export function mountShieldCore(container, options = {}) {
     }
   }
 
-  // Start Loop or Render Single Still Frame
-  if (isStill || isReducedMotion) {
-    renderFrame(performance.now());
-  } else {
-    rafId = requestAnimationFrame(renderFrame);
+  rafId = requestAnimationFrame(renderFrame);
+
+  // Destroy / Cleanup Handler
+  function destroy() {
+    if (rafId) cancelAnimationFrame(rafId);
+    if (pollInterval) clearInterval(pollInterval);
+    resizeObserver.disconnect();
+
+    travelingParticles.forEach((p) => {
+      scene.remove(p.mesh);
+      p.mesh.geometry.dispose();
+      p.mesh.material.dispose();
+    });
+
+    container.innerHTML = '';
   }
 
-  // Observers & Listeners
-  const io = new IntersectionObserver(([entry]) => {
-    isVisible = entry.isIntersecting;
-  }, { threshold: 0.05 });
-  io.observe(container);
-
-  const onVisChange = () => {
-    isTabActive = !document.hidden;
-  };
-  document.addEventListener('visibilitychange', onVisChange);
-
-  const ro = new ResizeObserver((entries) => {
-    for (const entry of entries) {
-      const cr = entry.contentRect;
-      if (cr.width > 0 && cr.height > 0) {
-        camera.aspect = cr.width / cr.height;
-        camera.updateProjectionMatrix();
-        renderer.setSize(cr.width, cr.height);
-        if (isStill || isReducedMotion) renderFrame(performance.now());
-      }
-    }
-  });
-  ro.observe(container);
-
-  // Return Controller API
   return {
-    pulse: () => triggerPulse(),
-    threat: () => triggerThreat(),
-    destroy: () => {
-      if (rafId) cancelAnimationFrame(rafId);
-      io.disconnect();
-      ro.disconnect();
-      document.removeEventListener('visibilitychange', onVisChange);
-
-      // Clean disposal
-      pmremGen.dispose();
-      envScene.dispose();
-      envTexture.dispose();
-      shieldGeom.dispose();
-      shieldMat.dispose();
-      shadowGeom.dispose();
-      shadowMat.dispose();
-      shadowTexture.dispose();
-      rippleGeom.dispose();
-      rippleMat.dispose();
-      scanGeom.dispose();
-      scanMat.dispose();
-      threatGeom.dispose();
-      threatMat.dispose();
-
-      renderer.dispose();
-      container.innerHTML = '';
-    },
+    pulse: triggerPulse,
+    threat: triggerThreat,
+    destroy,
   };
 }
